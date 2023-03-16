@@ -1,4 +1,4 @@
-# Dissertation
+# Spectral Methods for Equilibrium Measures
 My MMSC dissertation on general kernel spectral methods for equilibrium measures.
 
 Attractive-repulsive equilibrium measure problems appear in the modeling of the continuous limit of
