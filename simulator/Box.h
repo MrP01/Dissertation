@@ -4,13 +4,13 @@
 #include <stdlib.h>
 
 // be careful to set numeric values as floats here
-#define PARTICLES 40               // number of particles
+#define PARTICLES 130              // number of particles
 #define LJ_EPSILON 1.0             // Lennard-Jones energy
-#define LJ_SIGMA 0.01              // equilibrium distance, 3.4 Angstrom
+#define LJ_SIGMA 0.001             // equilibrium distance, 3.4 Angstrom
 #define PARTICLE_MASS 1.0          // mass of a particle
-#define LJ_CUTOFF_DISTANCE 0.002   // LJ explodes for very close particles, stop earlier
+#define LJ_CUTOFF_DISTANCE 0.0001  // LJ explodes for very close particles, stop earlier
 #define GRAVITY 8.532e1            // 9.81 m/s², actual value in reduced units: 8.532e-05
-#define TAU 8.0e-4                 // time step
+#define TAU 4.0e-5                 // time step
 #define HEIGHT_HISTOGRAM_BINS 16   // into how many height boxes we aggregate particles
 #define VELOCITY_HISTOGRAM_BINS 16 // similarly, number of bins for the velocity histogram
 #define ONE_SECOND 2.1257e-12      // one second in reduced time unit

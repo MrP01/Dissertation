@@ -19,7 +19,8 @@ void ParticleBox::initRandomly(double initialKineticEnergy, double initialGravit
     }
 
     std::cout << "Init particle at " << positions[i][0] << ", " << positions[i][1] << std::endl;
-    velocities[i][0] = ((double)rand() / RAND_MAX) - 0.5;
+    // velocities[i][0] = ((double)rand() / RAND_MAX) - 0.5;
+    velocities[i][0] = 0;
     velocities[i][1] = 0;
   }
 }
@@ -74,9 +75,11 @@ void ParticleBox::reflectParticles() {
     if (positions[i][0] < -1.0) {
       positions[i][0] = -1.0 - (1.0 + positions[i][0]); // assumes linear movement in this timestep
       velocities[i][0] = -velocities[i][0];
+      // velocities[i][0] = 0;
     } else if (positions[i][0] > 1.0) {
       positions[i][0] = 1.0 - (positions[i][0] - 1.0); // assumes linear movement
       velocities[i][0] = -velocities[i][0];
+      // velocities[i][0] = 0;
     }
     if (positions[i][1] < 0) {
       positions[i][1] = -positions[i][1]; // assumes linear movement
