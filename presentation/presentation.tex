@@ -12,6 +12,7 @@
 % \definecolor{applegreen}{rgb}{0.55,0.71,0.0}
 % \definecolor{americanrose}{rgb}{1.0,0.01,0.24}
 % \definecolor{aqua}{rgb}{0.0,1.0,1.0}
+% TODO: add name to footline
 
 \title{General Kernel Spectral Methods for Equilibrium Measures \\ \normalsize MMSC Dissertation}
 \titlegraphic{\includegraphics[width=2cm]{theme/logos/ox-circle.eps}}
@@ -25,13 +26,44 @@
   \section{Intro}
   \begin{frame}{Project Motivation and Goal}
     \begin{itemize}
-      \item Simulate Many-Particle-Systems and find their Equilibrium Distribution
+      \item Simulate Many-Particle-Systems and find their Equilibrium Distribution.
       \item Interactions through (power-law) Attraction-Repulsion Potentials
-            $$K(r) = \frac{r^\alpha}{\alpha} - \frac{r^\beta}{\beta}\,\quad \alpha, \beta \in \R\,.$$
+            $$K(r) = \frac{r^\alpha}{\alpha} - \frac{r^\beta}{\beta}\,,\quad \alpha, \beta \in \R\,.$$
       \item Each particle $i=1, ..., N$ at position $\vec{x_i}$ and time $t$ follows
             $$\frac{\dd^2 \vec{x_i}}{\ddt^2} = f\left(\norm{\frac{\dd \vec{x_i}}{\ddt}}_2\right) \frac{\dd\vec{x_i}}{\ddt} - \frac{1}{N} \sum_{j=1, i\neq j}^{N} \nabla K\left(\norm{\vec{x_i} - \vec{x_j}}_2\right)\,,$$
             \parencite{2020-power-law-kernels, 2021-arbitrary-dimensions}.
     \end{itemize}
+  \end{frame}
+
+  \begin{frame}{An Integral Equation}
+    The total energy is $$E = \sum_{i=1}^{N} \sum_{j=1, j \neq i}^{N} K\left(\norm{\vec{x_i} - \vec{x_j}}_2\right)\,,$$
+    which can be equivalently expressed as
+    $$E = \frac{1}{2} \iint K\left(\norm{\vec{x} - \vec{y}}_2\right) \,\dd\rho(\vec{x})\,\dd\rho(\vec{y})\,,$$ where $\dd\rho = \dd\rho(x)\ddx$ is a measure chosen such that $$M = \int \dd\rho = \int_{\supp(\rho)} \rho(x) \,\ddx = 1\,.$$
+  \end{frame}
+
+  \begin{frame}{Spectral Methods}
+    \begin{itemize}
+      \item In order to find $\rho(x)$, we consider the following Ansatz
+            $$\rho(\vec{x}) = \sum_{n=0}^{\infty} f_n p_n(\vec{x})$$
+            by which we construct a spectral method for the solution of the above integral equation.
+      \item Using the Jacobi polynomial basis.
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}{Project Goals}
+    \begin{itemize}
+      \item Establish theory behind spectral methods in the Jacobi basis.
+      \item Use kernel expansions to construct an equilibrium measure method on $[-1, 1]$.
+      \item Consider the $d$-dimensional unit ball.
+      \item Numerically solve for $\rho(x)$ using a fully implemented spectral solver.
+      \item Implement a particle simulator for the same kernel $K$.
+      \item Compare results of the two methods.
+      \item Potentially, extend to l-Morse potentials.
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}{}
+    Questions?
   \end{frame}
 
   \begin{frame}[allowframebreaks]
