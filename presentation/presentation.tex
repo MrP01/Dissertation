@@ -6,16 +6,16 @@
 \usepackage[backend=biber,citestyle=authoryear,bibstyle=numeric,hyperref=true,maxbibnames=99]{biblatex}
 \usepackage{csquotes}
 \usepackage{fontawesome}
-\addbibresource{sources.bib}
+\addbibresource{../literature/sources.bib}
 \usetheme{oxonian}
 
-\definecolor{applegreen}{rgb}{0.55,0.71,0.0}
-\definecolor{americanrose}{rgb}{1.0,0.01,0.24}
-\definecolor{aqua}{rgb}{0.0,1.0,1.0}
+% \definecolor{applegreen}{rgb}{0.55,0.71,0.0}
+% \definecolor{americanrose}{rgb}{1.0,0.01,0.24}
+% \definecolor{aqua}{rgb}{0.0,1.0,1.0}
 
-\title{General kernel spectral methods for equilibrium measures \\ \normalsize MMSC Dissertation}
+\title{General Kernel Spectral Methods for Equilibrium Measures \\ \normalsize MMSC Dissertation}
 \titlegraphic{\includegraphics[width=2cm]{theme/logos/ox-circle.eps}}
-\author{Peter Waldert}
+\author{Peter Julius Waldert}
 \institute{Mathematical Institute \\ University of Oxford}
 \date{} %\today
 
@@ -23,7 +23,20 @@
   {\setbeamertemplate{footline}{}\frame{\titlepage}}
 
   \section{Intro}
-  \begin{frame}{Motivation for Modelling Batteries}
-    Yes
+  \begin{frame}{Project Motivation and Goal}
+    \begin{itemize}
+      \item Simulate Many-Particle-Systems and find their Equilibrium Distribution
+      \item Interactions through (power-law) Attraction-Repulsion Potentials
+            $$K(r) = \frac{r^\alpha}{\alpha} - \frac{r^\beta}{\beta}\,\quad \alpha, \beta \in \R\,.$$
+      \item Each particle $i=1, ..., N$ at position $\vec{x_i}$ and time $t$ follows
+            $$\frac{\dd^2 \vec{x_i}}{\ddt^2} = f\left(\norm{\frac{\dd \vec{x_i}}{\ddt}}_2\right) \frac{\dd\vec{x_i}}{\ddt} - \frac{1}{N} \sum_{j=1, i\neq j}^{N} \nabla K\left(\norm{\vec{x_i} - \vec{x_j}}_2\right)\,,$$
+            \parencite{2020-power-law-kernels, 2021-arbitrary-dimensions}.
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}[allowframebreaks]
+    \frametitle{Bibliography}
+    \nocite{*}
+    \printbibliography[heading=bibnumbered]
   \end{frame}
 \end{document}
