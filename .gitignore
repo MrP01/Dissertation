@@ -1,3 +1,4 @@
 *.protected.pdf
 build/
+.vscode/
 
