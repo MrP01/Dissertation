@@ -32,6 +32,8 @@
       \item Each particle $i=1, ..., N$ at position $\vec{x_i}$ and time $t$ follows
             $$\frac{\dd^2 \vec{x_i}}{\ddt^2} = f\left(\norm{\frac{\dd \vec{x_i}}{\ddt}}_2\right) \frac{\dd\vec{x_i}}{\ddt} - \frac{1}{N} \sum_{j=1, i\neq j}^{N} \nabla K\left(\norm{\vec{x_i} - \vec{x_j}}_2\right)\,,$$
             \parencite{2020-power-law-kernels, 2021-arbitrary-dimensions}.
+      \item Add tikzpicture of particle box with interaction
+      \item If repulsive part is larger (so $\beta > \alpha$), there is no equilibium distribution as particles simply continue repelling one another out to infinity
     \end{itemize}
   \end{frame}
 
@@ -41,14 +43,27 @@
     $$E = \frac{1}{2} \iint K\left(\norm{\vec{x} - \vec{y}}_2\right) \,\dd\rho(\vec{x})\,\dd\rho(\vec{y})\,,$$ where $\dd\rho = \dd\rho(x)\ddx$ is a measure chosen such that $$M = \int \dd\rho = \int_{\supp(\rho)} \rho(x) \,\ddx = 1\,.$$
   \end{frame}
 
+  \begin{frame}{Simulation Results}
+    What we expect:
+
+    [Plots of simulator equilibium measure]
+  \end{frame}
+
   \begin{frame}{Spectral Methods}
     \begin{itemize}
       \item In order to find $\rho(x)$, we consider the following Ansatz
             $$\rho(\vec{x}) = \sum_{n=0}^{\infty} f_n p_n(\vec{x})$$
             by which we construct a spectral method for the solution of the above integral equation.
       \item Using the Jacobi polynomial basis.
-      \item Remember to have fun!
+      \item Minimization routine of $E$ over coefficients in $\rho$, as a subroutine of outer minimisation over $a$ and $b$ the bounds of the box (simpler: $a = b = r$).
+      \item We see that we do not need the inner optimisation routine, because TODO.
     \end{itemize}
+  \end{frame}
+
+  \begin{frame}{Results from the Spectral Solver}
+    Here are some plots
+
+    If too ambitious, just use those from paper
   \end{frame}
 
   \begin{frame}{Project Goals}
@@ -59,7 +74,8 @@
       \item Numerically solve for $\rho(x)$ using a fully implemented spectral solver.
       \item Implement a particle simulator for the same kernel $K$.
       \item Compare results of the two methods.
-      \item Potentially, extend to l-Morse potentials.
+      \item First numerical method on continuous space problems!! (we are the fastest anyway!).
+      \item Optional: Potentially, extend to l-Morse potentials.
       \item Spread Open Source!
     \end{itemize}
   \end{frame}
