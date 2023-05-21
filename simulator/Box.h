@@ -10,11 +10,11 @@
 #define PARTICLE_MASS 1.0          // mass of a particle
 #define LJ_CUTOFF_DISTANCE 0.0001  // LJ explodes for very close particles, stop earlier
 #define GRAVITY 8.532e1            // 9.81 m/s², actual value in reduced units: 8.532e-05
-#define TAU 8.0e-5                 // time step
+#define TAU 4.0e-4                 // time step
 #define HEIGHT_HISTOGRAM_BINS 16   // into how many height boxes we aggregate particles
 #define VELOCITY_HISTOGRAM_BINS 16 // similarly, number of bins for the velocity histogram
 #define ONE_SECOND 2.1257e-12      // one second in reduced time unit
-#define PLOT_HEIGHT 30             // height of the plot
+#define PLOT_HEIGHT 3              // height of the plot
 #define ALPHA 2                    // (attractive) parameter alpha for the kernel K(r)
 #define BETA 1.5                   // (repulsive) parameter beta for the kernel K(r)
 

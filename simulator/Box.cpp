@@ -10,7 +10,7 @@ void ParticleBox::initRandomly(double initialKineticEnergy, double initialGravit
   for (size_t i = 0; i < PARTICLES; i++) {
     double closestNeighbourDist = 0;
     while (closestNeighbourDist < 0.8 * LJ_SIGMA) {
-      positions[i][0] = ((double)rand() / RAND_MAX) * 2.0 - 1.0;
+      positions[i][0] = ((double)rand() / RAND_MAX) * 2 - 1;
       positions[i][1] = 1.0;
       closestNeighbourDist = LJ_SIGMA;
       for (size_t j = 0; j < i; j++)
@@ -19,8 +19,8 @@ void ParticleBox::initRandomly(double initialKineticEnergy, double initialGravit
     }
 
     std::cout << "Init particle at " << positions[i][0] << ", " << positions[i][1] << std::endl;
-    // velocities[i][0] = ((double)rand() / RAND_MAX) - 0.5;
-    velocities[i][0] = 0;
+    velocities[i][0] = ((double)rand() / RAND_MAX) - 0.5;
+    // velocities[i][0] = 0;
     velocities[i][1] = 0;
   }
 }
@@ -41,7 +41,7 @@ void ParticleBox::f(ParticleVectors &accelerations) {
       // std::cout << "Distance_squared:" << r_squared << std::endl;
     }
     // std::cout << "Force: " << 24 * LJ_EPSILON * force_x << ", " << 24 * LJ_EPSILON * force_y - GRAVITY << std::endl;
-    accelerations[i][0] = 24 * LJ_EPSILON * force_x / PARTICLE_MASS;
+    accelerations[i][0] = force_x / PARTICLE_MASS;
     accelerations[i][1] = 0;
   }
 }
@@ -111,11 +111,11 @@ double ParticleBox::getLJPotential() {
       if (r_squared < LJ_CUT_DIST_SQ)
         r_squared = LJ_CUT_DIST_SQ;
       double r = sqrt(r_squared);
-      energy += abs(std::pow(r, ALPHA) / ALPHA - std::pow(r, BETA) / BETA);
+      energy += std::pow(r, ALPHA) / ALPHA - std::pow(r, BETA) / BETA;
       // std::cout << r_squared << ", " << energy << std::endl;
     }
   }
-  return 4 * LJ_EPSILON * energy;
+  return abs(energy);
 }
 double ParticleBox::getTotalEnergy() { return getKineticEnergy() + getGravitationalPotential() + getLJPotential(); }
 

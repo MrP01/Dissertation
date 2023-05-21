@@ -29,7 +29,7 @@
       \item Simulate Many-Particle-Systems and find their Equilibrium Distribution.
       \item Interactions through (power-law) Attraction-Repulsion Potentials
             $$K(r) = \frac{r^\alpha}{\alpha} - \frac{r^\beta}{\beta}\,,\quad \alpha, \beta \in \R\,.$$
-      \item Each particle $i=1, ..., N$ at position $\vec{x_i}$ and time $t$ follows
+      \item Each particle $i=1, ..., N$ at position $\vec{x_i} \in \R^n$ and time $t \in \R^+$ follows
             $$\frac{\dd^2 \vec{x_i}}{\ddt^2} = f\left(\norm{\frac{\dd \vec{x_i}}{\ddt}}_2\right) \frac{\dd\vec{x_i}}{\ddt} - \frac{1}{N} \sum_{j=1, i\neq j}^{N} \nabla K\left(\norm{\vec{x_i} - \vec{x_j}}_2\right)\,,$$
             \parencite{2020-power-law-kernels, 2021-arbitrary-dimensions}.
       \item Add tikzpicture of particle box with interaction
