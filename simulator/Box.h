@@ -5,7 +5,6 @@
 
 // be careful to set numeric values as floats here
 #define PARTICLES 250              // number of particles
-#define LJ_EPSILON 1.0             // Lennard-Jones energy
 #define LJ_SIGMA 0.001             // equilibrium distance, 3.4 Angstrom
 #define PARTICLE_MASS 1.0          // mass of a particle
 #define LJ_CUTOFF_DISTANCE 0.0001  // LJ explodes for very close particles, stop earlier
@@ -15,7 +14,7 @@
 #define VELOCITY_HISTOGRAM_BINS 16 // similarly, number of bins for the velocity histogram
 #define ONE_SECOND 2.1257e-12      // one second in reduced time unit
 #define PLOT_HEIGHT 3              // height of the plot
-#define ALPHA 2                    // (attractive) parameter alpha for the kernel K(r)
+#define ALPHA 2.0                  // (attractive) parameter alpha for the kernel K(r)
 #define BETA 1.5                   // (repulsive) parameter beta for the kernel K(r)
 
 #define square(x) (x * x)
