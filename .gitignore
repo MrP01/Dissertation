@@ -1,4 +1,4 @@
-*.protected.pdf
-build/
 .vscode/
-
+build/
+stuff/
+*.protected.pdf
