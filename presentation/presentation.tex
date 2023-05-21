@@ -1,9 +1,9 @@
 \PassOptionsToPackage{dvispnames, table}{xcolor}
-\documentclass[aspectratio=169,hyperref={colorlinks=true}]{beamer}
+\documentclass[aspectratio=169, hyperref={colorlinks=true}]{beamer}
 \usepackage[beamer]{prettytex/base}
 \usepackage{prettytex/math}
 \usepackage{prettytex/gfx}
-\usepackage[backend=biber,citestyle=authoryear,bibstyle=numeric,hyperref=true,maxbibnames=99]{biblatex}
+\usepackage[backend=biber, citestyle=numeric, bibstyle=numeric, hyperref=true, maxbibnames=99]{biblatex}
 \usepackage{csquotes}
 \usepackage{fontawesome}
 \addbibresource{../literature/sources.bib}
@@ -12,41 +12,44 @@
 % \definecolor{applegreen}{rgb}{0.55,0.71,0.0}
 % \definecolor{americanrose}{rgb}{1.0,0.01,0.24}
 % \definecolor{aqua}{rgb}{0.0,1.0,1.0}
-% TODO: add name to footline
 
-\title{General Kernel Spectral Methods for Equilibrium Measures \\ \normalsize MMSC Dissertation}
+\title{General Kernel Spectral Methods for Equilibrium Measures \\ \normalsize An MMSC Dissertation}
 \titlegraphic{\includegraphics[width=2cm]{theme/logos/ox-circle.eps}}
 \author{Peter Julius Waldert}
 \institute{Mathematical Institute \\ University of Oxford}
-\date{} %\today
+\date{\today}
 
 \begin{document}
   {\setbeamertemplate{footline}{}\frame{\titlepage}}
 
   \section{Intro}
-  \begin{frame}{Project Motivation and Goal}
-    \begin{itemize}
-      \item Simulate Many-Particle-Systems and find their Equilibrium Distribution.
-      \item Interactions through (power-law) Attraction-Repulsion Potentials
-            $$K(r) = \frac{r^\alpha}{\alpha} - \frac{r^\beta}{\beta}\,,\quad \alpha, \beta \in \R\,.$$
-      \item Each particle $i=1, ..., N$ at position $\vec{x_i} \in \R^n$ and time $t \in \R^+$ follows
-            $$\frac{\dd^2 \vec{x_i}}{\ddt^2} = f\left(\norm{\frac{\dd \vec{x_i}}{\ddt}}_2\right) \frac{\dd\vec{x_i}}{\ddt} - \frac{1}{N} \sum_{j=1, i\neq j}^{N} \nabla K\left(\norm{\vec{x_i} - \vec{x_j}}_2\right)\,,$$
-            \parencite{2020-power-law-kernels, 2021-arbitrary-dimensions}.
-      \item Add tikzpicture of particle box with interaction
-      \item If repulsive part is larger (so $\beta > \alpha$), there is no equilibium distribution as particles simply continue repelling one another out to infinity
-    \end{itemize}
-  \end{frame}
+   {
+    \setbeamertemplate{footline}{}
+    \begin{frame}{Project Motivation and Goal}
+      \vspace{0.4cm}
+      \begin{itemize}
+        \item Simulate Many-Particle-Systems and find their Equilibrium Distribution.
+        \item Interactions through (power-law) Attraction-Repulsion Potentials\footnote{If the repulsive part is larger (so $\beta > \alpha$), there is no equilibium distribution as particles simply continue repelling one another out to infinity.}
+              $$K(r) = \frac{r^\alpha}{\alpha} - \frac{r^\beta}{\beta}\quad \text{ with parameters } \quad \alpha, \beta \in \R \textbackslash \{0\}\,.$$
+        \item Each particle $i=1, ..., N$ at position $\vec{x_i} \in \R^n$ and time $t \in \R^+$ follows
+              $$\frac{\dd^2 \vec{x_i}}{\ddt^2} = f\left(\norm{\frac{\dd \vec{x_i}}{\ddt}}_2\right) \frac{\dd\vec{x_i}}{\ddt} - \frac{1}{N} \sum_{j=1, i\neq j}^{N} \nabla K\left(\norm{\vec{x_i} - \vec{x_j}}_2\right)\,,$$
+              for reference see, for example, \parencite{2020-power-law-kernels, 2021-arbitrary-dimensions}.
+      \end{itemize}
+    \end{frame}
+   }
 
   \begin{frame}{An Integral Equation}
     The total energy is $$E = \sum_{i=1}^{N} \sum_{j=1, j \neq i}^{N} K\left(\norm{\vec{x_i} - \vec{x_j}}_2\right)\,,$$
-    which can be equivalently expressed as
-    $$E = \frac{1}{2} \iint K\left(\norm{\vec{x} - \vec{y}}_2\right) \,\dd\rho(\vec{x})\,\dd\rho(\vec{y})\,,$$ where $\dd\rho = \dd\rho(x)\ddx$ is a measure chosen such that $$M = \int \dd\rho = \int_{\supp(\rho)} \rho(x) \,\ddx = 1\,.$$
+    which, in the continuous limit ($N \rightarrow \infty$), becomes
+    $$E = \frac{1}{2} \iint K\left(\norm{\vec{x} - \vec{y}}_2\right) \,\dd\rho(\vec{x})\,\dd\rho(\vec{y})\,,$$ where $\dd\rho = \rho(\vec{x})\dd\vec{x}$ is a measure chosen such that $$M = \int \dd\rho = \int_{\supp(\rho)} \rho(\vec{x}) \,\dd\vec{x} = 1\,.$$
   \end{frame}
 
   \begin{frame}{Simulation Results}
-    What we expect:
-
-    [Plots of simulator equilibium measure]
+    \begin{figure}
+      \centering
+      \includegraphics[width=0.64\linewidth]{figures/screenshot5.png}
+      \caption{The positional distribution approached by $N = 250$ particles.}
+    \end{figure}
   \end{frame}
 
   \begin{frame}{Spectral Methods}
@@ -57,13 +60,29 @@
       \item Using the Jacobi polynomial basis.
       \item Minimization routine of $E$ over coefficients in $\rho$, as a subroutine of outer minimisation over $a$ and $b$ the bounds of the box (simpler: $a = b = r$).
       \item We see that we do not need the inner optimisation routine, because TODO.
+      \item Yields a banded operator.
     \end{itemize}
   \end{frame}
 
   \begin{frame}{Results from the Spectral Solver}
-    Here are some plots
+    Using the spectral method, we try to immediately solve for the distribution function in the continuous limit.
 
-    If too ambitious, just use those from paper
+    \begin{columns}
+      \begin{column}{0.5\textwidth}
+        \begin{figure}[H]
+          \centering
+          \includegraphics[width=\linewidth]{figures/a2b1-5-measure.pdf}
+          \caption*{Equilibrium distribution for $\alpha = 2$, $\beta = 1.5$}
+        \end{figure}
+      \end{column}
+      \begin{column}{0.5\textwidth}
+        \begin{figure}[H]
+          \centering
+          \includegraphics[width=\linewidth]{figures/a35b16_supplement_3k.pdf}
+          \caption*{Equilibrium distribution for $\alpha = 3.5$, $\beta = 1.6$}
+        \end{figure}
+      \end{column}
+    \end{columns}
   \end{frame}
 
   \begin{frame}{Project Goals}
@@ -76,7 +95,6 @@
       \item Compare results of the two methods.
       \item First numerical method on continuous space problems!! (we are the fastest anyway!).
       \item Optional: Potentially, extend to l-Morse potentials.
-      \item Spread Open Source!
     \end{itemize}
   \end{frame}
 
@@ -86,7 +104,6 @@
 
   \begin{frame}[allowframebreaks]
     \frametitle{Bibliography}
-    \nocite{*}
     \printbibliography[heading=bibnumbered]
   \end{frame}
 \end{document}

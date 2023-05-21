@@ -164,4 +164,8 @@ void ParticleBox::exportToCSV() {
   for (size_t i = 0; i < PARTICLES; i++)
     velocitiesCsv << velocities[i][0] << ", " << velocities[i][1] << "\n";
   velocitiesCsv.close();
+  std::ofstream positionHistCsv("/tmp/position-histogram.csv");
+  for (size_t i = 0; i < HEIGHT_HISTOGRAM_BINS; i++)
+    positionHistCsv << heightHist.heights[i] << "\n";
+  positionHistCsv.close();
 }
