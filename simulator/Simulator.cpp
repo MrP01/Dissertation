@@ -6,11 +6,12 @@ void BoxSimulator::buildUI() {
     particleSeries->setName("Particles");
     renderParticles();
 
-    particleChart->setTitle("Particle Box");
+    // particleChart->setTitle("Particle Box");
     particleChart->addSeries(particleSeries);
     particleChart->createDefaultAxes();
     particleChart->axes(Qt::Horizontal).first()->setRange(-1, 1);
     particleChart->axes(Qt::Vertical).first()->setRange(0, PLOT_HEIGHT);
+    particleChart->axes(Qt::Vertical).first()->hide();
     particleChart->setAnimationOptions(QChart::SeriesAnimations);
     particleView->setRenderHint(QPainter::Antialiasing);
     particleView->setChart(particleChart);
