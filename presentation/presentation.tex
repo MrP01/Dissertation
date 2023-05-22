@@ -3,17 +3,17 @@
 \usepackage[beamer]{prettytex/base}
 \usepackage{prettytex/math}
 \usepackage{prettytex/gfx}
-\usepackage[backend=biber, citestyle=numeric, bibstyle=numeric, hyperref=true, maxbibnames=99]{biblatex}
+\usepackage[backend=biber, citestyle=numeric, bibstyle=numeric, hyperref=true, sorting=none, maxbibnames=99]{biblatex}
 \usepackage{csquotes}
 \usepackage{fontawesome}
 \addbibresource{../literature/sources.bib}
 \usetheme{oxonian}
 
-\title{General Kernel Spectral Methods for Equilibrium Measures \\ \normalsize An MMSC Dissertation}
+\title{General Kernel Spectral Methods for Equilibrium Measures \\ \normalsize An MMSC Dissertation Project}
 \titlegraphic{\includegraphics[width=2cm]{theme/logos/ox-circle.eps}}
 \author{Peter Julius Waldert}
 \institute{Mathematical Institute \\ University of Oxford}
-\date{\today}
+\date{$22^{\rm nd}$ of May, 2023}
 
 \begin{document}
   {\setbeamertemplate{footline}{}\frame{\titlepage}}
@@ -44,7 +44,7 @@
   \begin{frame}{Project Motivation and Goal}
     \vspace{0.4cm}
     \begin{itemize}
-      \item Interactions through (power-law) Attraction-Repulsion Potentials\footnote{If the repulsive part is larger (so $\beta > \alpha$), there is no equilibium distribution as particles simply continue repelling one another out to infinity.}
+      \item Interactions through (power-law) Attraction-Repulsion Potentials\footnote{If the repulsive term is stronger (so $\beta > \alpha$), there is no equilibium distribution as particles simply continue repelling each other out to infinity.}
             $$K(r) = \frac{r^\alpha}{\alpha} - \frac{r^\beta}{\beta}\quad \text{ with parameters } \quad \alpha, \beta \in \R \backslash \{0\}\,.$$
       \item Each particle $i=1, ..., N$ at position $\vec{x_i} \in \R^d$ and time $t \in \R^+$ follows
             $$\frac{\dd^2 \vec{x_i}}{\ddt^2} = f\left(\norm{\frac{\dd \vec{x_i}}{\ddt}}_2\right) \frac{\dd\vec{x_i}}{\ddt} - \frac{1}{N} \sum_{j=1, i\neq j}^{N} \nabla K\left(\norm{\vec{x_i} - \vec{x_j}}_2\right)\,,$$
@@ -78,7 +78,7 @@
             $$\rho(\vec{x}) = \sum_{n=0}^{\infty} c_n P_n^{(a,b)}(\vec{x})\,,\quad c_n \in \R\,,$$
             with which we construct a spectral method for the numerical solution of the above integral equation.
       \item Minimization routine of $E$ over coefficients in $\rho$, as a subroutine of outer minimisation over the bounds of the box (simpler case: use $[-r, r]$, $r \in \R^+$).
-      \item By construction, we find that we do not need the inner optimisation routine.
+      \item By construction, we find that we do not need an iterative approach for the inner optimisation routine.
       \item The outer minimisation can be performed using known methods from continuous optimisation.
     \end{itemize}
   \end{frame}
@@ -133,14 +133,16 @@
   \end{frame}
 
   \begin{frame}{Upcoming Work}
+    \vspace{0.15cm}
+    In this MMSC dissertation project, we will:
     \begin{itemize}
       \item Establish theory behind spectral methods in the Jacobi basis.
       \item Use kernel expansions to construct an equilibrium measure method on $[-1, 1]$.
       \item Numerically solve for $\rho(\vec{x})$ using a fully implemented spectral solver\footnote{This is the first numerical method for particle distribution problems!}.
       \item Implement a particle simulator for the same kernel $K$ (mostly done).
-      \item Compare results of the two methods.
+      \item Compare results of the two methods and analytic solutions of special cases \cite{2014-explicit-flock-solutions-for-quasi-morse-potentials}.
     \end{itemize}
-    Further goals include
+    Further goals include:
     \begin{itemize}
       \item Considering the $d$-dimensional unit ball domain ($d > 1$).
       \item Optionally: Considering external potentials $V(\vec{x})$.
