@@ -1,0 +1,8 @@
+\begin{tikzpicture}
+  \begin{axis}[xlabel=$r$, ylabel=$K(r)$, legend style={at={(0, 1)}, anchor=north west}]
+    \addplot[color=blue, domain=0:2]{x^2/2 - x^1.5/1.5};
+    \addlegendentry{$(\alpha, \beta) = (2.0, 1.5)$.};
+    \addplot[color=red, domain=0:2]{x^3.5/3.5 - x^1.6/1.6};
+    \addlegendentry{$(\alpha, \beta) = (3.5, 1.6)$.};
+  \end{axis}
+\end{tikzpicture}

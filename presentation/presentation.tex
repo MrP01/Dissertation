@@ -9,10 +9,6 @@
 \addbibresource{../literature/sources.bib}
 \usetheme{oxonian}
 
-% \definecolor{applegreen}{rgb}{0.55,0.71,0.0}
-% \definecolor{americanrose}{rgb}{1.0,0.01,0.24}
-% \definecolor{aqua}{rgb}{0.0,1.0,1.0}
-
 \title{General Kernel Spectral Methods for Equilibrium Measures \\ \normalsize An MMSC Dissertation}
 \titlegraphic{\includegraphics[width=2cm]{theme/logos/ox-circle.eps}}
 \author{Peter Julius Waldert}
@@ -23,38 +19,49 @@
   {\setbeamertemplate{footline}{}\frame{\titlepage}}
 
   \section{Intro}
-   {
-    \setbeamertemplate{footline}{}
-    \begin{frame}{Project Motivation and Goal}
-      \vspace{0.4cm}
-      \begin{itemize}
-        \item Simulate Many-Particle-Systems and find their Equilibrium Distribution.
-        \item Interactions through (power-law) Attraction-Repulsion Potentials\footnote{If the repulsive part is larger (so $\beta > \alpha$), there is no equilibium distribution as particles simply continue repelling one another out to infinity.}
-              $$K(r) = \frac{r^\alpha}{\alpha} - \frac{r^\beta}{\beta}\quad \text{ with parameters } \quad \alpha, \beta \in \R \backslash \{0\}\,.$$
-        \item Each particle $i=1, ..., N$ at position $\vec{x_i} \in \R^d$ and time $t \in \R^+$ follows
-              $$\frac{\dd^2 \vec{x_i}}{\ddt^2} = f\left(\norm{\frac{\dd \vec{x_i}}{\ddt}}_2\right) \frac{\dd\vec{x_i}}{\ddt} - \frac{1}{N} \sum_{j=1, i\neq j}^{N} \nabla K\left(\norm{\vec{x_i} - \vec{x_j}}_2\right)\,,$$
-              for reference see, for example, \parencite{2020-power-law-kernels, 2021-arbitrary-dimensions}.
-              For now, we only consider the case without an external potential $V(\vec{x})$.
-      \end{itemize}
-    \end{frame}
-   }
+  \begin{frame}{Problem Setting}
+    \begin{itemize}
+      \item Find the Equilibrium Distribution $\rho(\vec{x})$ of a Many-Particle-System.
+    \end{itemize}
+    \begin{figure}[H]
+      \centering
+      \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \inputtikz{problem-setting}
+        \caption*{$N = 8$ particles interacting with one another through the potential $K(r)$.}
+      \end{subfigure}
+      \hfill
+      \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \scalebox{0.68}{\inputtikz{potential-function}}
+        \caption*{Plot of attractive-repulsive potential functions $K(r) = \frac{r^\alpha}{\alpha} - \frac{r^\beta}{\beta}$ for different $\alpha, \beta$.}
+      \end{subfigure}
+    \end{figure}
+  \end{frame}
 
-  \begin{frame}{Problem Setting: An Integral Equation}
+  {
+  \setbeamertemplate{footline}{}
+  \begin{frame}{Project Motivation and Goal}
     \vspace{0.4cm}
-    \begin{columns}
-      \begin{column}{0.7\textwidth}
-        The total energy is $$E = \sum_{i=1}^{N} \sum_{j=1, j \neq i}^{N} K\left(\norm{\vec{x_i} - \vec{x_j}}_2\right)\,,$$
-        which, in the continuous limit ($N \rightarrow \infty$), becomes
-        $$E = \frac{1}{2} \iint K\left(\norm{\vec{x} - \vec{y}}_2\right) \,\dd\rho(\vec{x})\,\dd\rho(\vec{y})\,,$$ where $\dd\rho = \rho(\vec{x})\dd\vec{x}$ is a measure chosen such that $$M = \int \dd\rho = \int_{\supp(\rho)} \rho(\vec{x}) \,\dd\vec{x} = 1\,.$$
-      \end{column}
-      \begin{column}{0.3\textwidth}
-        \begin{figure}[H]
-          \hspace*{-1.8cm}
-          \centering
-          \scalebox{0.9}{\inputtikz{problem-setting}}
-        \end{figure}
-      \end{column}
-    \end{columns}
+    \begin{itemize}
+      \item Interactions through (power-law) Attraction-Repulsion Potentials\footnote{If the repulsive part is larger (so $\beta > \alpha$), there is no equilibium distribution as particles simply continue repelling one another out to infinity.}
+            $$K(r) = \frac{r^\alpha}{\alpha} - \frac{r^\beta}{\beta}\quad \text{ with parameters } \quad \alpha, \beta \in \R \backslash \{0\}\,.$$
+      \item Each particle $i=1, ..., N$ at position $\vec{x_i} \in \R^d$ and time $t \in \R^+$ follows
+            $$\frac{\dd^2 \vec{x_i}}{\ddt^2} = f\left(\norm{\frac{\dd \vec{x_i}}{\ddt}}_2\right) \frac{\dd\vec{x_i}}{\ddt} - \frac{1}{N} \sum_{j=1, i\neq j}^{N} \nabla K\left(\norm{\vec{x_i} - \vec{x_j}}_2\right)\,,$$
+            for reference see, for example, \parencite{2020-power-law-kernels, 2021-arbitrary-dimensions}.
+            For now, we only consider the case without an external potential $V(\vec{x})$.
+    \end{itemize}
+  \end{frame}
+  }
+
+  \begin{frame}{An Integral Equation}
+    \vspace{0.4cm}
+    The total energy of an $N$-particle system is given by
+    $$E = \sum_{i=1}^{N} \sum_{j=1, j \neq i}^{N} K\left(\norm{\vec{x_i} - \vec{x_j}}_2\right)\,,$$
+    which, in the continuous limit ($N \rightarrow \infty$), becomes
+    $$E = \frac{1}{2} \iint K\left(\norm{\vec{x} - \vec{y}}_2\right) \,\dd\rho(\vec{x})\,\dd\rho(\vec{y})\,,$$
+    where $\dd\rho = \rho(\vec{x})\dd\vec{x}$ is a measure chosen such that
+    $$M = \int \dd\rho = \int_{\supp(\rho)} \rho(\vec{x}) \,\dd\vec{x} = 1\,.$$
   \end{frame}
 
   \begin{frame}{Simulation Results}
@@ -67,10 +74,9 @@
 
   \begin{frame}{Spectral Methods}
     \begin{itemize}
-      \item In order to find $\rho(x)$, we consider the following ansatz
-            $$\rho(\vec{x}) = \sum_{n=0}^{\infty} f_n p_n(\vec{x})\,,$$
+      \item In order to find $\rho(\vec{x})$, we consider the following ansatz
+            $$\rho(\vec{x}) = \sum_{n=0}^{\infty} c_n P_n^{(a,b)}(\vec{x})\,,\quad c_n \in \R\,,$$
             with which we construct a spectral method for the numerical solution of the above integral equation.
-            % \item Using the Jacobi polynomial basis (see next slide).
       \item Minimization routine of $E$ over coefficients in $\rho$, as a subroutine of outer minimisation over the bounds of the box (simpler case: use $[-r, r]$, $r \in \R^+$).
       \item By construction, we find that we do not need the inner optimisation routine.
       \item The outer minimisation can be performed using known methods from continuous optimisation.
@@ -80,13 +86,13 @@
   \begin{frame}{Complete Polynomial Basis}
     Jacobi polynomials $P_n^{(a,b)}(x)$ are orthogonal on $[-1,1]$ w.r.t. the weight function
     \begin{equation*}
-      w^{(a,b)}(x)=(1-x)^a (1+x)^b,
+      w^{(a,b)}(x)=(1-x)^a (1+x)^b\,,
     \end{equation*}
     so they satisfy
     \begin{align*}\label{eq:orthogonalityconditionJacobi}
-      \int_{-1}^1(1-x)^a(1+x)^bP_n^{(a,b)}P_m^{(a,b)}\ddx = \frac{2^{a+b+1} \Gamma (a+n+1) \Gamma (b+n+1)}{n! (a+b+2 n+1) \Gamma (a+b+n+1)} \delta _{n,m},
+      \int_{-1}^1(1-x)^a(1+x)^bP_n^{(a,b)}P_m^{(a,b)}\,\ddx = \frac{2^{a+b+1} \Gamma (a+n+1) \Gamma (b+n+1)}{n! (a+b+2 n+1) \Gamma (a+b+n+1)} \delta_{n,m}\,,
     \end{align*}
-    with $a	,b>-1$, which uniquely determines $P_n^{(a,b)}(x)$. The special case of $a=b$ corresponds to the ultraspherical or Gegenbauer polynomials, while the case $a=b=0$ corresponds to the Legendre polynomials \cite[Table 18.3.1]{2018-nist}.
+    with $a	,b>-1$, which uniquely determines $P_n^{(a,b)}(x)$. The special case of $a=b$ corresponds to the ultraspherical or Gegenbauer polynomials, while the case $a=b=0$ corresponds to the Legendre polynomials \cite{2018-nist}.
 
     \begin{itemize}
       \item This basis yields a \textbf{sparse}, and in particular, \textbf{banded} operator.
@@ -103,14 +109,14 @@
         \begin{figure}[H]
           \centering
           \includegraphics[width=0.9\linewidth]{figures/a2b1-5-measure.pdf}
-          \caption*{Equilibrium distribution for $\alpha = 2$, $\beta = 1.5$}
+          \caption*{Equilibrium distribution $(\alpha,\beta) = (2, 1.5)$ \cite{2020-power-law-kernels}.}
         \end{figure}
       \end{column}
       \begin{column}{0.5\textwidth}
         \begin{figure}[H]
           \centering
           \includegraphics[width=0.9\linewidth]{figures/a35b16_supplement_3k.pdf}
-          \caption*{Equilibrium distribution for $\alpha = 3.5$, $\beta = 1.6$}
+          \caption*{Equilib. distribution $(\alpha, \beta) = (3.5, 1.6)$ \cite{2020-power-law-kernels}.}
         \end{figure}
       \end{column}
     \end{columns}
@@ -122,7 +128,7 @@
     \begin{figure}[H]
       \centering
       \includegraphics[width=0.5\linewidth]{figures/spectral-solution-2d.pdf}
-      \caption*{The radially symmetric equilibrium distribution $\rho(\vec{x})$ for $\alpha = 1.2$, $\beta = 0.1993$ in $d = 2$ dimensions.}
+      \caption*{The radially symmetric equilibrium distribution $\rho(\vec{x})$ for $\alpha = 1.2$, $\beta = 0.1993$ in $d = 2$ dimensions, obtained using a spectral method \cite{2021-arbitrary-dimensions}.}
     \end{figure}
   \end{frame}
 
@@ -130,14 +136,15 @@
     \begin{itemize}
       \item Establish theory behind spectral methods in the Jacobi basis.
       \item Use kernel expansions to construct an equilibrium measure method on $[-1, 1]$.
-      \item Numerically solve for $\rho(x)$ using a fully implemented spectral solver\footnote{This is the first numerical method for particle distribution problems!}.
+      \item Numerically solve for $\rho(\vec{x})$ using a fully implemented spectral solver\footnote{This is the first numerical method for particle distribution problems!}.
       \item Implement a particle simulator for the same kernel $K$ (mostly done).
       \item Compare results of the two methods.
     \end{itemize}
     Further goals include
     \begin{itemize}
       \item Considering the $d$-dimensional unit ball domain ($d > 1$).
-      \item Optionally: Extend to l-Morse potentials.
+      \item Optionally: Considering external potentials $V(\vec{x})$.
+      \item Optionally: Extending to l-Morse potentials $K(r) = C_1 \e^{r / l_1} - C_2 \e^{r / l_2}$.
     \end{itemize}
   \end{frame}
 

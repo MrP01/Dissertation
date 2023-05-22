@@ -58,12 +58,12 @@
   \par
   \begin{tikzpicture}[remember picture,overlay]
     \coordinate (LeftEnd) at (-1, 0.5);
-    \coordinate (LeftEndUnder) at (-1, 0.1);
-    \coordinate (RightEnd) at (3,0.5);
+    \coordinate (LeftEndUnder) at (-1, 0.25);
+    \coordinate (RightEnd) at (5,0.5);
     \draw[oxfordblue, thick, fill=oxfordblue] (LeftEnd)--(RightEnd)--(LeftEndUnder) -- (LeftEnd);
 
     \coordinate (RightEnd) at (\paperwidth, 0.5);
-    \coordinate (PreRightEnd) at (10, 0.5);
+    \coordinate (PreRightEnd) at (14, 0.5);
     \draw[oxfordblue,thick] (RightEnd) -- (PreRightEnd);
   \end{tikzpicture}
   \vspace*{-1cm}
