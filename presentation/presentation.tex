@@ -9,6 +9,8 @@
 \addbibresource{../literature/sources.bib}
 \usetheme{oxonian}
 
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
 \title{General Kernel Spectral Methods for Equilibrium Measures \\ \normalsize An MMSC Dissertation Project}
 \titlegraphic{\includegraphics[width=2cm]{theme/logos/ox-circle.eps}}
 \author{Peter Julius Waldert}
@@ -54,22 +56,22 @@
   \end{frame}
   }
 
-  \begin{frame}{An Integral Equation}
-    \vspace{0.4cm}
-    The total energy of an $N$-particle system is given by
-    $$E = \sum_{i=1}^{N} \sum_{j=1, j \neq i}^{N} K\left(\norm{\vec{x_i} - \vec{x_j}}_2\right)\,,$$
-    which, in the continuous limit ($N \rightarrow \infty$), becomes
-    $$E = \frac{1}{2} \iint K\left(\norm{\vec{x} - \vec{y}}_2\right) \,\dd\rho(\vec{x})\,\dd\rho(\vec{y})\,,$$
-    where $\dd\rho = \rho(\vec{x})\dd\vec{x}$ is a measure chosen such that
-    $$M = \int \dd\rho = \int_{\supp(\rho)} \rho(\vec{x}) \,\dd\vec{x} = 1\,.$$
-  \end{frame}
-
   \begin{frame}{Simulation Results}
     \begin{figure}
       \centering
       \includegraphics[width=0.64\linewidth]{figures/screenshot5.png}
       \caption*{The positional distribution approached by $N = 250$ particles.}
     \end{figure}
+  \end{frame}
+
+  \begin{frame}{An Integral Equation}
+    \vspace{0.4cm}
+    The total potential energy of an $N$-particle system is then given by
+    $$E = \sum_{i=1}^{N} \sum_{j=1, j \neq i}^{N} K\left(\norm{\vec{x_i} - \vec{x_j}}_2\right)\,,$$
+    which, in the continuous limit as $N \rightarrow \infty$, becomes
+    $$E = \frac{1}{2} \iint K\left(\norm{\vec{x} - \vec{y}}_2\right) \,\dd\rho(\vec{x})\,\dd\rho(\vec{y})\,,$$
+    where $\dd\rho = \rho(\vec{x})\dd\vec{x}$ is a measure (the equilibrium distribution) chosen such that
+    $$M = \int \dd\rho = \int_{\supp(\rho)} \rho(\vec{x}) \,\dd\vec{x} = 1\,.$$
   \end{frame}
 
   \begin{frame}{Spectral Methods}
@@ -133,9 +135,9 @@
   \end{frame}
 
   \begin{frame}{Upcoming Work}
-    \vspace{0.15cm}
     In this MMSC dissertation project, we will:
     \begin{itemize}
+      \tightlist
       \item Establish theory behind spectral methods in the Jacobi basis.
       \item Use kernel expansions to construct an equilibrium measure method on $[-1, 1]$.
       \item Numerically solve for $\rho(\vec{x})$ using a fully implemented spectral solver\footnote{This is the first numerical method for particle distribution problems!}.
@@ -144,6 +146,7 @@
     \end{itemize}
     Further goals include:
     \begin{itemize}
+      \tightlist
       \item Considering the $d$-dimensional unit ball domain ($d > 1$).
       \item Optionally: Considering external potentials $V(\vec{x})$.
       \item Optionally: Extending to l-Morse potentials $K(r) = C_1 \e^{r / l_1} - C_2 \e^{r / l_2}$.
