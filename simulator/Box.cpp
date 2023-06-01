@@ -10,7 +10,7 @@ void ParticleBox::initRandomly(double initialKineticEnergy, double initialGravit
   for (size_t i = 0; i < PARTICLES; i++) {
     double closestNeighbourDist = 0;
     while (closestNeighbourDist < 0.8 * LJ_SIGMA) {
-      positions[i][0] = ((double)rand() / RAND_MAX) * 2 - 1;
+      positions[i][0] = ((double)rand() / RAND_MAX - 0.5) * INIT_WINDOW_LENGTH;
       positions[i][1] = 1.0;
       closestNeighbourDist = LJ_SIGMA;
       for (size_t j = 0; j < i; j++)

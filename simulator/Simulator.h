@@ -41,6 +41,8 @@ class BoxSimulator : public ParticleBox, public QMainWindow {
   QBarSet *heightHistSet = new QBarSet("Position Histogram");
   QChart *velocityHistChart = new QChart();
   QBarSet *velocityHistSet = new QBarSet("Velocity Histogram");
+  QChart *phaseSpaceChart = new QChart();
+  QScatterSeries *phaseSpaceSeries = new QScatterSeries();
 
   QPushButton *stepBtn = new QPushButton("Step");
   QPushButton *controlBtn = new QPushButton("Start");

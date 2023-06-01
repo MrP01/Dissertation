@@ -4,7 +4,8 @@
 #include <stdlib.h>
 
 // be careful to set numeric values as floats here
-#define PARTICLES 300              // number of particles
+#define PARTICLES 120              // number of particles
+#define INIT_WINDOW_LENGTH 2.0     // width of the initialisation interval for particles (default [-1, 1], so width 2)
 #define LJ_SIGMA 0.001             // equilibrium distance, 3.4 Angstrom
 #define PARTICLE_MASS 1.0          // mass of a particle
 #define LJ_CUTOFF_DISTANCE 0.0001  // LJ explodes for very close particles, stop earlier

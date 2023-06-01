@@ -20,6 +20,20 @@ void BoxSimulator::buildUI() {
     particleView->setSizePolicy(policy);
   }
 
+  QChartView *phaseSpaceView = new QChartView(this);
+  {
+    phaseSpaceSeries->setName("Velocity / Position Phase Plot");
+
+    // particleChart->setTitle("Particle Box");
+    phaseSpaceChart->addSeries(phaseSpaceSeries);
+    phaseSpaceChart->createDefaultAxes();
+    phaseSpaceChart->axes(Qt::Horizontal).first()->setRange(-1, 1);
+    phaseSpaceChart->axes(Qt::Vertical).first()->setRange(-10, 10);
+    phaseSpaceView->setRenderHint(QPainter::Antialiasing);
+    phaseSpaceView->setChart(phaseSpaceChart);
+    phaseSpaceView->setMinimumWidth(450);
+  }
+
   QChartView *energyView = new QChartView(this);
   {
     kineticEnergySeries->setName("Kinetic Energy");
@@ -166,6 +180,7 @@ void BoxSimulator::buildUI() {
   rightChartLayout->addWidget(velocityHistView);
   mainLayout->addLayout(rightChartLayout, 0, 1, 2, 1);
   mainLayout->addWidget(statsLabel, 2, 0);
+  mainLayout->addWidget(phaseSpaceView, 0, 2);
   auto buttonLayout = new QHBoxLayout();
   buttonLayout->addWidget(controlBtn);
   buttonLayout->addWidget(stepBtn);
@@ -231,6 +246,11 @@ void BoxSimulator::measure() {
                           .arg(QString::number(_step * TAU * ONE_SECOND, 'E', 3), QString::number(E_kin, 'E', 3),
                                QString::number(E_pot, 'E', 3), QString::number(E_pot_LJ, 'E', 3),
                                QString::number(max_height, 'g', 4)));
+
+  phaseSpaceSeries->clear();
+  for (size_t i = 0; i < PARTICLES; i++) {
+    phaseSpaceSeries->append(QPointF(positions[i][0], velocities[i][0]));
+  }
 }
 
 void BoxSimulator::step() {
