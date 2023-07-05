@@ -131,8 +131,25 @@ void ParticleBox::computeHeightHistogram() {
     heightHist.heights[bin]++;
   }
   heightHist.maxHeight = 0;
-  for (size_t bin = 0; bin < VELOCITY_HISTOGRAM_BINS; bin++)
+  for (size_t bin = 0; bin < HEIGHT_HISTOGRAM_BINS; bin++)
     heightHist.maxHeight = std::max(heightHist.maxHeight, heightHist.heights[bin]);
+
+  for (size_t i = HISTOGRAM_AVERAGE_N - 1; i > 0; i--)
+    pastHistograms[i] = pastHistograms[i - 1];
+  pastHistograms[0] = heightHist;
+
+  averagedHeightHistogram.min = -1;
+  averagedHeightHistogram.max = 1;
+  for (size_t j = 0; j < HEIGHT_HISTOGRAM_BINS; j++)
+    averagedHeightHistogram.heights[j] = 0;
+  for (size_t i = 0; i < HISTOGRAM_AVERAGE_N; i++) {
+    for (size_t j = 0; j < HEIGHT_HISTOGRAM_BINS; j++)
+      averagedHeightHistogram.heights[j] += pastHistograms[i].heights[j] / HISTOGRAM_AVERAGE_N;
+  }
+  averagedHeightHistogram.maxHeight = 0;
+  for (size_t bin = 0; bin < HEIGHT_HISTOGRAM_BINS; bin++)
+    averagedHeightHistogram.maxHeight =
+        std::max(averagedHeightHistogram.maxHeight, averagedHeightHistogram.heights[bin]);
 }
 
 void ParticleBox::computeVelocityHistogram() {
@@ -145,13 +162,13 @@ void ParticleBox::computeVelocityHistogram() {
   const double delta = velocityHist.max - velocityHist.min;
   std::fill(std::begin(velocityHist.heights), std::end(velocityHist.heights), 0);
   for (size_t i = 0; i < PARTICLES; i++) {
-    size_t bin = floor((values[i] - velocityHist.min) / delta * VELOCITY_HISTOGRAM_BINS);
-    if (bin >= VELOCITY_HISTOGRAM_BINS)
-      bin = VELOCITY_HISTOGRAM_BINS - 1;
+    size_t bin = floor((values[i] - velocityHist.min) / delta * HEIGHT_HISTOGRAM_BINS);
+    if (bin >= HEIGHT_HISTOGRAM_BINS)
+      bin = HEIGHT_HISTOGRAM_BINS - 1;
     velocityHist.heights[bin]++;
   }
   velocityHist.maxHeight = 0;
-  for (size_t bin = 0; bin < VELOCITY_HISTOGRAM_BINS; bin++)
+  for (size_t bin = 0; bin < HEIGHT_HISTOGRAM_BINS; bin++)
     velocityHist.maxHeight = std::max(velocityHist.maxHeight, velocityHist.heights[bin]);
 }
 
