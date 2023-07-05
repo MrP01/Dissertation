@@ -37,3 +37,14 @@ f_N = P[:, 1:N] \ f.(r)
 x = range(0, 1, 101)
 plot(x, f.(x), lw=2, label="Original function")
 plot!(x, [vec(sum(f_N[1:k] .* P[x, 1:k]', dims=1)) for k in 1:5], label=reshape([format("Expansion in {} terms", k) for k in 1:5], 1, 5))
+savefig("expansions.pdf");
+
+# Plot numerical error
+K = 5:10
+plot(
+  x,
+  [vec(abs.(sum(f_N[1:k] .* P[x, 1:k]', dims=1) - f.(x)')) for k in K],
+  label=reshape([format("Error for {} terms", k) for k in K], 1, length(K)),
+  yaxis=:log10
+)
+savefig("expansions-error.pdf");
