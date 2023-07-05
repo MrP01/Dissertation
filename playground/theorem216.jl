@@ -10,6 +10,8 @@ beta = 1
 @assert -d < beta
 x = 3 + 0im
 
+pochhammer(x, n) = prod([x-k for k in 0:n-1])
+
 prefactor =
     pi^(d / 2) *
     gamma(1 + beta / 2) *
