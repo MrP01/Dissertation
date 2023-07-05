@@ -1,0 +1,57 @@
+\documentclass[12pt]{report}
+\PassOptionsToPackage{sharp}{prettytex/boxes}
+\usepackage{prettytex/base}
+\usepackage{prettytex/math}
+\usepackage[cleveref]{prettytex/math-theorems}
+\usepackage{prettytex/gfx}
+\usepackage{prettytex/code}
+\usepackage{prettytex/thesis}
+\input{customisations.tex}
+
+\tikzexternalize[prefix=tikz/]
+
+\title{General Kernel Spectral Methods for Equilibrium Measures}
+\author{Peter Julius Waldert}
+% \institute{Mathematical Institute \\ University of Oxford}
+
+% \thesistitle{
+%   Secure Classification as a Service \\
+%   \small\normalfont Levelled Homomorphic, Post-Quantum Secure Machine Learning Inference \\
+%   based on the CKKS Encryption Scheme
+% }
+% \thesisauthor{Peter Julius Waldert}
+% \thesisdate{July 2022}
+% \supervisor{
+%   Dipl.-Ing. Roman Walch\textsuperscript{a} \\
+%   Univ.-Prof. Dipl.-Phys. Dr.rer.nat. Wolfgang von der Linden\textsuperscript{b} \\
+%   \vspace{0.4cm}
+%   \href{https://www.iaik.tugraz.at/}{\textcolor{black}
+%     {\textsuperscript{a}Institute of Applied Information Processing and Communications (IAIK)}} \\
+% }
+% \curriculum{\textit{Physics} and \textit{Information \& Computer Engineering}}
+
+\input{macros.tex}
+\addbibresource{../literature/sources.bib}
+
+\begin{document}
+  % \printthesistitle
+  \include{chapters/abstract}
+  \tableofcontents
+  \include{chapters/introduction}
+  \include{chapters/conclusion}
+
+  \renewcommand{\glossarypreamble}{\vspace{-1cm}}
+  \printnoidxglossary[type=acronym, title={Acronyms, Definitions and Theorems}]
+  \thispagestyle{plain}
+  \tcblistof[\section*]{def}{Definitions}
+  \tcblistof[\section*]{thm}{Theorems}
+  \tcblistof[\section*]{lemma}{Lemmata}
+  \tcblistof[\section*]{remark}{Remarks}
+
+  \printbibliography[heading=bibintoc]
+  \chapter*{List of Figures and Tables}
+  \addcontentsline{toc}{chapter}{List of Figures and Tables}
+  \listoffigures
+  \listoftables
+  \include{chapters/appendix}
+\end{document}
