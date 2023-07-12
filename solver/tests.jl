@@ -15,4 +15,4 @@ include("./solver.jl")
   end
 end
 
-println("Done.")
+println("Keep testing!")

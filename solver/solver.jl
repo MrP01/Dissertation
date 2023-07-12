@@ -1,6 +1,5 @@
 using ClassicalOrthogonalPolynomials, ContinuumArrays, Plots, Formatting, HypergeometricFunctions, SpecialFunctions
 import ContinuumArrays: MappedWeightedBasisLayout, Map, WeightedBasisLayout
-gaston()
 
 d = 1  # dimension
 m = 2  # integer
