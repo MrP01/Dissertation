@@ -3,8 +3,8 @@ import ContinuumArrays: MappedWeightedBasisLayout, Map, WeightedBasisLayout
 
 d = 1  # dimension
 m = 2  # integer
-alpha = 2.2
-beta = 1.6
+alpha = 3.5  # attractive parameter
+beta = 1.6  # repulsive parameter
 R = 8  # radius of the interval [-R, R]
 @assert -d < alpha < 2 + 2 * m - d
 @assert beta > -d
@@ -108,6 +108,7 @@ function recursivelyConstructOperator(N, beta)
   Matrix = zeros(N, N)
   OldestFunction = theorem216(r, 1, beta)
   OldFunction = theorem216(r, 2, beta)
+
   Matrix[:, 1] = P[:, 1:N] \ OldestFunction
   if N < 2
     return Matrix
