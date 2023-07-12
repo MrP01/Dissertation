@@ -47,6 +47,7 @@ function recurrence(oldestValue, oldValue, r, n, beta=beta)
 end
 
 function totalEnergy(solution, r=0)
+  # more details in section 3.2
   attractive, repulsive = 0, 0
   for k in eachindex(solution)
     attractive += solution[k] * theorem216(r, k, alpha)
@@ -57,6 +58,8 @@ function totalEnergy(solution, r=0)
 end
 
 function totalMass(solution)
+  # using Lemma 2.20
+  a = m - (alpha + d) / 2
   return pi^(d / 2) * gamma(a + 1) / gamma(a + d / 2 + 1) * solution[1]
 end
 
@@ -86,18 +89,21 @@ r = axes(P, 1)
 @assert x.domain == (-1 .. 1)  # Chebyshev
 @assert r.domain == (0 .. 1)  # Radial
 
-function solve(N)
-  AttractiveMatrix = zeros(N, N)
-  RepulsiveMatrix = zeros(N, N)
+function constructOperator(N, beta)
+  Matrix = zeros(N, N)
   for column in 1:N
-    attractiveFunction = theorem216(r, column, alpha)
-    repulsiveFunction = theorem216(r, column, beta)
-    attractiveExpansionCoeffs = P[:, 1:N] \ attractiveFunction
-    repulsiveExpansionCoeffs = P[:, 1:N] \ repulsiveFunction
-    AttractiveMatrix[:, column] .= attractiveExpansionCoeffs
-    RepulsiveMatrix[:, column] .= repulsiveExpansionCoeffs
+    Function = theorem216(r, column, beta)
+    ExpansionCoeffs = P[:, 1:N] \ Function
+    Matrix[:, column] .= ExpansionCoeffs
   end
+  return Matrix
+end
 
+function solve(N)
+  AttractiveMatrix = constructOperator(N, alpha)
+  RepulsiveMatrix = constructOperator(N, beta)
+  # @show AttractiveMatrix
+  # @show RepulsiveMatrix
   BigMatrix = (R^(alpha + d) / alpha) * AttractiveMatrix - (R^(beta + d) / beta) * RepulsiveMatrix
   BigRHS = zeros(N)
   BigRHS[1] = 1
