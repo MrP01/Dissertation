@@ -11,9 +11,10 @@ R = 8  # radius of the interval [-R, R]
 @assert beta > -d
 @assert m >= 0 && m == floor(m)
 
+"""Docstring for the function"""
 function theorem216(r, n, beta=beta)
   # Explicit value of the integral from Theorem 2.16
-  @show r, n, beta
+  # @show r, n, beta
   prefactor =
     pi^(d / 2) *
     gamma(1 + beta / 2) *
@@ -35,6 +36,7 @@ function theorem216(r, n, beta=beta)
   return integral_value
 end
 
+"""Docstring for the function"""
 function recurrence(oldestValue, oldValue, r, n, beta=beta)
   # using Corollary 2.18
   c_a = -((-alpha + 2 * m + 4 * n) * (-alpha + 2 * m + 4 * n + 2) * (alpha + d - 2 * (m + n + 1))) /
@@ -46,6 +48,7 @@ function recurrence(oldestValue, oldValue, r, n, beta=beta)
   return (c_a * r^2 + c_b) * oldValue + c_c * oldestValue
 end
 
+"""Docstring for the function"""
 function totalEnergy(solution, r=0)
   # more details in section 3.2
   attractive, repulsive = 0, 0
@@ -57,6 +60,7 @@ function totalEnergy(solution, r=0)
   return E
 end
 
+"""Docstring for the function"""
 function totalMass(solution)
   # using Lemma 2.20
   a = m - (alpha + d) / 2
@@ -89,16 +93,42 @@ r = axes(P, 1)
 @assert x.domain == (-1 .. 1)  # Chebyshev
 @assert r.domain == (0 .. 1)  # Radial
 
+"""Docstring for the function"""
 function constructOperator(N, beta)
   Matrix = zeros(N, N)
   for column in 1:N
     Function = theorem216(r, column, beta)
-    ExpansionCoeffs = P[:, 1:N] \ Function
+    ExpansionCoeffs = P[:, 1:N] \ Function  # expands the function in the P basis
     Matrix[:, column] .= ExpansionCoeffs
   end
   return Matrix
 end
 
+"""Docstring for the function"""
+function recursivelyConstructOperator(N, beta)
+  Matrix = zeros(N, N)
+  OldestFunction = theorem216(r, 1, beta)
+  OldFunction = theorem216(r, 2, beta)
+  Matrix[:, 1] = P[:, 1:N] \ OldestFunction
+  if N < 2
+    return Matrix
+  end
+
+  Matrix[:, 2] = P[:, 1:N] \ OldFunction
+  if N < 3
+    return Matrix
+  end
+
+  for remainingColumn in 3:N
+    Function = recurrence.(OldestFunction, OldFunction, r, remainingColumn - 1, beta)
+    Matrix[:, remainingColumn] = P[:, 1:N] \ Function
+    OldestFunction = OldFunction
+    OldFunction = Function
+  end
+  return Matrix
+end
+
+"""Docstring for the function"""
 function solve(N)
   AttractiveMatrix = constructOperator(N, alpha)
   RepulsiveMatrix = constructOperator(N, beta)
@@ -112,13 +142,4 @@ function solve(N)
   return BigSolution
 end
 
-r_vec = 0:0.01:1
-x_vec = -1:0.01:1
-
-# y_vec_radial = vec(sum(BigSolution .* P[r_vec, 1:N]', dims=1));
-# plot(x_vec, vec(sum(solve(2) .* P[abs.(x_vec), 1:2]', dims=1)), label="N = 2");
-# plot!(x_vec, vec(sum(solve(3) .* P[abs.(x_vec), 1:3]', dims=1)), label="N = 3");
-# plot!(x_vec, vec(sum(solve(4) .* P[abs.(x_vec), 1:4]', dims=1)), label="N = 4");
-# plot!(x_vec, vec(sum(solve(5) .* P[abs.(x_vec), 1:5]', dims=1)), label="N = 5");
-
-# spy(BigMatrix, ms=20, markershape=:rect)
+println("Have fun solving!")
