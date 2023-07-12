@@ -34,6 +34,16 @@ function theorem216(r, n, beta)
   return integral_value
 end
 
+function totalEnergy(solution, r=0)
+  attractive, repulsive = 0, 0
+  for k in eachindex(solution)
+    attractive += solution[k] * theorem216(r, k, alpha)
+    repulsive += solution[k] * theorem216(r, k, beta)
+  end
+  E = (R^(alpha + d) / alpha) * attractive - (R^(beta + d) / beta) * repulsive
+  return E
+end
+
 # These definitions allow the use of the radially shifted Jacobi bases
 struct QuadraticMap{T} <: Map{T} end
 struct InvQuadraticMap{T} <: Map{T} end
