@@ -6,7 +6,7 @@ m = 2  # integer
 alpha = 3.5  # attractive parameter
 beta = 1.6  # repulsive parameter
 R = 8  # radius of the interval [-R, R]
-@assert -d < alpha < 2 + 2 * m - d
+@assert -d < alpha < 2 + 2m - d
 @assert beta > -d
 @assert m >= 0 && m == floor(m)
 
@@ -38,12 +38,12 @@ end
 """Docstring for the function"""
 function recurrence(oldestValue, oldValue, r, n, beta=beta)
   # using Corollary 2.18
-  c_a = -((-alpha + 2 * m + 4 * n) * (-alpha + 2 * m + 4 * n + 2) * (alpha + d - 2 * (m + n + 1))) /
-        (2 * (n + 1) * (-alpha + beta + 2 * m + 2 * n + 2) * (-alpha + beta + d + 2 * m + 2 * n))
-  c_b = -((-alpha + 2 * m + 4 * n) * (alpha + d - 2(m + n + 1)) * (d * (-alpha + 2 * beta + 2 * m + 2) - 2 * (2 * n - beta) * (-alpha + beta + 2 * m + 2 * n))) /
-        (2 * (n + 1) * (-alpha + 2 * m + 4 * n - 2) * (-alpha + beta + 2 * m + 2 * n + 2) * (-alpha + beta + d + 2 * m + 2 * n))
-  c_c = ((-beta + 2 * n - 2) * (beta + d - 2 * n) * (-alpha + 2 * m + 4 * n + 2) * (alpha + d - 2 * (m + n)) * (alpha + d - 2 * (m + n + 1))) /
-        (4 * n * (n + 1) * (-alpha + 2 * m + 4 * n - 2) * (-alpha + beta + 2 * m + 2 * n + 2) * (-alpha + beta + d + 2 * m + 2 * n))
+  c_a = -((-alpha + 2m + 4n) * (-alpha + 2m + 4n + 2) * (alpha + d - 2 * (m + n + 1))) /
+        (2 * (n + 1) * (-alpha + beta + 2m + 2n + 2) * (-alpha + beta + d + 2m + 2n))
+  c_b = -((-alpha + 2m + 4n) * (alpha + d - 2(m + n + 1)) * (d * (-alpha + 2 * beta + 2m + 2) - 2 * (2n - beta) * (-alpha + beta + 2m + 2n))) /
+        (2 * (n + 1) * (-alpha + 2m + 4n - 2) * (-alpha + beta + 2m + 2n + 2) * (-alpha + beta + d + 2m + 2n))
+  c_c = ((-beta + 2n - 2) * (beta + d - 2n) * (-alpha + 2m + 4n + 2) * (alpha + d - 2 * (m + n)) * (alpha + d - 2 * (m + n + 1))) /
+        (4n * (n + 1) * (-alpha + 2m + 4n - 2) * (-alpha + beta + 2m + 2n + 2) * (-alpha + beta + d + 2m + 2n))
   return (c_a * r^2 + c_b) * oldValue + c_c * oldestValue
 end
 
