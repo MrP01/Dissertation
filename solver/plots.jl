@@ -20,9 +20,9 @@ end
 function plotOperators()
   fig = Figure(resolution=(890, 460))
   ax = Axis(fig[1, 1], yreversed=true)
-  spy!(ax, sparse(log10.(abs.(constructOperator(20, alpha)))), markersize=20, markershape=:rect)
+  spy!(ax, sparse(log10.(abs.(constructOperator(20, alpha)))), markersize=20, framesize=0)
   ax = Axis(fig[1, 2], yreversed=true)
-  spy!(ax, sparse(log10.(abs.(constructOperator(20, beta)))), markersize=20, markershape=:rect)
+  spy!(ax, sparse(log10.(abs.(constructOperator(20, beta)))), markersize=20, framesize=0)
   save(joinpath(RESULTS_FOLDER, "attractive-repulsive-operator.png"), fig)
   return fig
 end
