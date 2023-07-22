@@ -1,4 +1,4 @@
-using ClassicalOrthogonalPolynomials, ContinuumArrays, Plots, Formatting, HypergeometricFunctions, SpecialFunctions
+using ClassicalOrthogonalPolynomials, ContinuumArrays, Formatting, HypergeometricFunctions, SpecialFunctions
 import ContinuumArrays: MappedWeightedBasisLayout, Map, WeightedBasisLayout
 
 d = 1  # dimension
