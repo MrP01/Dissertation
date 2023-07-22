@@ -1,11 +1,11 @@
 using ClassicalOrthogonalPolynomials, ContinuumArrays, Formatting, HypergeometricFunctions, SpecialFunctions
 import ContinuumArrays: MappedWeightedBasisLayout, Map, WeightedBasisLayout
 
-d = 1  # dimension
-m = 2  # integer
-alpha = 3.5  # attractive parameter
-beta = 1.6  # repulsive parameter
-R = 8  # radius of the interval [-R, R]
+d = 2  # dimension
+m = 1  # integer
+alpha = 1.31  # attractive parameter
+beta = 1.23  # repulsive parameter
+R = 0.8372415  # radius of the interval [-R, R]
 @assert -d < alpha < 2 + 2m - d
 @assert beta > -d
 @assert m >= 0 && m == floor(m)
@@ -29,7 +29,7 @@ function theorem216(r, n, beta=beta)
       n - beta / 2,
       -m - n + (alpha - beta) / 2,
       d / 2,
-      r .^ 2,
+      abs.(r .^ 2),
     )
   # @show integral_value
   return integral_value
@@ -84,7 +84,8 @@ map = QuadraticMap();
 imap = InvQuadraticMap();
 
 # represent the basis P_n^(a,b)(2r^2-1)
-B = Jacobi(m - (alpha + d) / 2, (d - 2) / 2);
+# apparently this is wrong: B = Jacobi(m - (alpha + d) / 2, (d - 2) / 2); the following is correct
+B = Jacobi(m - (beta + d) / 2, (d - 2) / 2);
 P = B[map, :];
 x = axes(B, 1)
 r = axes(P, 1)
@@ -95,10 +96,10 @@ r = axes(P, 1)
 """Docstring for the function"""
 function constructOperator(N, beta)
   Matrix = zeros(N, N)
-  for column in 1:N
-    Function = theorem216(r, column, beta)
+  for n in 0:N-1
+    Function = theorem216(r, n, beta)
     ExpansionCoeffs = P[:, 1:N] \ Function  # expands the function in the P basis
-    Matrix[:, column] .= ExpansionCoeffs
+    Matrix[:, n+1] .= ExpansionCoeffs
   end
   return Matrix
 end
@@ -106,8 +107,8 @@ end
 """Docstring for the function"""
 function recursivelyConstructOperator(N, beta)
   Matrix = zeros(N, N)
-  OldestFunction = theorem216(r, 1, beta)
-  OldFunction = theorem216(r, 2, beta)
+  OldestFunction = theorem216(r, 0, beta)
+  OldFunction = theorem216(r, 1, beta)
 
   Matrix[:, 1] = P[:, 1:N] \ OldestFunction
   if N < 2
