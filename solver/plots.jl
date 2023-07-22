@@ -4,16 +4,20 @@ include("./solver.jl");
 
 const RESULTS_FOLDER = joinpath(@__DIR__, "..", "figures", "results")
 
-r_vec = 0:0.01:1
-x_vec = -1:0.01:1
+r_vec = 0:0.002:1
+x_vec = -1:0.002:1
 
 function plotDifferentOrderSolutions()
-  # y_vec_radial = vec(sum(BigSolution .* P[r_vec, 1:N]', dims=1));
   fig = Figure()
-  lines(fig[1, 1], x_vec, vec(sum(solve(2) .* P[abs.(x_vec), 1:2]', dims=1)), label="N = 2")
-  lines!(fig[1, 1], x_vec, vec(sum(solve(3) .* P[abs.(x_vec), 1:3]', dims=1)), label="N = 3")
-  lines!(fig[1, 1], x_vec, vec(sum(solve(4) .* P[abs.(x_vec), 1:4]', dims=1)), label="N = 4")
-  lines!(fig[1, 1], x_vec, vec(sum(solve(5) .* P[abs.(x_vec), 1:5]', dims=1)), label="N = 5")
+  ax = Axis(fig[1, 1])
+  x_vec_noends = x_vec[2:end-1]
+  # lines!(ax, x_vec_noends, obtainMeasure(x_vec_noends, 2), label="N = 2")
+  lines!(ax, x_vec_noends, rho(x_vec_noends, solve(3)), label="N = 3")
+  lines!(ax, x_vec_noends, rho(x_vec_noends, solve(4)), label="N = 4")
+  lines!(ax, x_vec_noends, rho(x_vec_noends, solve(5)), label="N = 5")
+  lines!(ax, x_vec_noends, rho(x_vec_noends, solve(6)), label="N = 6")
+  lines!(ax, x_vec_noends, rho(x_vec_noends, solve(7)), label="N = 7")
+  axislegend(ax)
   save(joinpath(RESULTS_FOLDER, "solution-increasing-order.pdf"), fig)
   return fig
 end

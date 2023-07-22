@@ -62,8 +62,7 @@ end
 """Docstring for the function"""
 function totalMass(solution)
   # using Lemma 2.20
-  a = m - (alpha + d) / 2
-  return pi^(d / 2) * gamma(a + 1) / gamma(a + d / 2 + 1) * solution[1]
+  return pi^(d / 2) * gamma(B.a + 1) / gamma(B.a + d / 2 + 1) * solution[1]
 end
 
 # These definitions allow the use of the radially shifted Jacobi bases
@@ -133,14 +132,17 @@ end
 function solve(N)
   AttractiveMatrix = constructOperator(N, alpha)
   RepulsiveMatrix = constructOperator(N, beta)
-  # @show AttractiveMatrix
-  # @show RepulsiveMatrix
-  BigMatrix = (R^(alpha + d) / alpha) * AttractiveMatrix - (R^(beta + d) / beta) * RepulsiveMatrix
+  BigMatrix = (R^(alpha) / alpha) * AttractiveMatrix - (R^(beta) / beta) * RepulsiveMatrix
   BigRHS = zeros(N)
   BigRHS[1] = 1
 
   BigSolution = BigMatrix \ BigRHS
-  return BigSolution
+  return BigSolution / totalMass(BigSolution)
+end
+
+"""In possession of a solution, evaluates the measure (function) at given values of x."""
+function rho(x_vec, solution)
+  return (1 .- x_vec .^ 2) .^ B.a .* vec(sum(solution .* P[abs.(x_vec), 1:length(solution)]', dims=1))
 end
 
 println("Have fun solving!")
