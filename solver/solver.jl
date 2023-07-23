@@ -8,12 +8,11 @@ beta = 1.23  # repulsive parameter
 R = 0.8372415  # radius of the interval [-R, R]
 @assert -d < alpha < 2 + 2m - d
 @assert beta > -d
-@assert m >= 0 && m == floor(m)
+@assert m >= 0 && typeof(m) == Int64
 
 """Docstring for the function"""
 function theorem216(r, n, beta=beta)
   # Explicit value of the integral from Theorem 2.16
-  # @show r, n, beta
   prefactor =
     pi^(d / 2) *
     gamma(1 + beta / 2) *
@@ -120,7 +119,7 @@ function recursivelyConstructOperator(N, beta)
   end
 
   for remainingColumn in 3:N
-    Function = recurrence.(OldestFunction, OldFunction, r, remainingColumn - 1, beta)
+    Function = recurrence.(OldestFunction, OldFunction, r, remainingColumn - 2, beta)
     Matrix[:, remainingColumn] = P[:, 1:N] \ Function
     OldestFunction = OldFunction
     OldFunction = Function

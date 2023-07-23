@@ -13,6 +13,9 @@ include("./solver.jl")
       @test constructOperator(n, beta) ≈ recursivelyConstructOperator(n, beta)
     end
   end
+  @testset "solution is normalised" begin
+    @test totalMass(solve(12)) ≈ 1.0 atol = 1e-15
+  end
 end
 
 println("Keep testing!")
