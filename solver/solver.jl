@@ -8,10 +8,10 @@ beta = 1.23  # repulsive parameter
 R = 0.8372415  # radius of the interval [-R, R]
 @assert -d < alpha < 2 + 2m - d
 @assert beta > -d
-@assert m >= 0 && typeof(m) == Int64
+@assert m >= 0 && isinteger(m)
 
 """Docstring for the function"""
-function theorem216(r, n, beta=beta)
+function theorem216(r::Float64, n::Unsigned, beta::Float64=beta)::Float64
   # Explicit value of the integral from Theorem 2.16
   prefactor =
     pi^(d / 2) *
@@ -47,9 +47,9 @@ function recurrence(oldestValue, oldValue, r, n, beta=beta)
 end
 
 """Docstring for the function"""
-function totalEnergy(solution, r=0)
+function totalEnergy(solution::Vector{Float64}, r=0.0)::Float64
   # more details in section 3.2
-  attractive, repulsive = 0, 0
+  attractive, repulsive = 0.0, 0.0
   for k in eachindex(solution)
     attractive += solution[k] * theorem216(r, k, alpha)
     repulsive += solution[k] * theorem216(r, k, beta)
@@ -59,7 +59,7 @@ function totalEnergy(solution, r=0)
 end
 
 """Docstring for the function"""
-function totalMass(solution)
+function totalMass(solution::Vector{Float64})::Float64
   # using Lemma 2.20
   return pi^(d / 2) * gamma(B.a + 1) / gamma(B.a + d / 2 + 1) * solution[1]
 end
@@ -92,7 +92,7 @@ r = axes(P, 1)
 @assert r.domain == (0 .. 1)  # Radial
 
 """Docstring for the function"""
-function constructOperator(N, beta)
+function constructOperator(N::Unsigned, beta::Float64)::Matrix{Float64}
   Matrix = zeros(N, N)
   for n in 0:N-1
     Function = theorem216(r, n, beta)
@@ -103,7 +103,7 @@ function constructOperator(N, beta)
 end
 
 """Docstring for the function"""
-function recursivelyConstructOperator(N, beta)
+function recursivelyConstructOperatorWithReprojection(N::Unsigned, beta::Float64)::Matrix{Float64}
   Matrix = zeros(N, N)
   OldestFunction = theorem216(r, 0, beta)
   OldFunction = theorem216(r, 1, beta)
@@ -128,7 +128,7 @@ function recursivelyConstructOperator(N, beta)
 end
 
 """Docstring for the function"""
-function solve(N)
+function solve(N::Unsigned)::Vector{Float64}
   AttractiveMatrix = constructOperator(N, alpha)
   RepulsiveMatrix = constructOperator(N, beta)
   BigMatrix = (R^(alpha) / alpha) * AttractiveMatrix - (R^(beta) / beta) * RepulsiveMatrix
@@ -140,7 +140,7 @@ function solve(N)
 end
 
 """In possession of a solution, evaluates the measure (function) at given values of x."""
-function rho(x_vec, solution)
+function rho(x_vec, solution::Vector{Float64})
   return (1 .- x_vec .^ 2) .^ B.a .* vec(sum(solution .* P[abs.(x_vec), 1:length(solution)]', dims=1))
 end
 

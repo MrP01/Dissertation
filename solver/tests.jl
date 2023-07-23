@@ -10,7 +10,7 @@ include("./solver.jl")
   end
   @testset "compare operator construction methods" begin
     for n in 1:5
-      @test constructOperator(n, beta) ≈ recursivelyConstructOperator(n, beta)
+      @test constructOperator(n, beta) ≈ recursivelyConstructOperatorWithReprojection(n, beta)
     end
   end
   @testset "solution is normalised" begin
