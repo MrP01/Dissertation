@@ -35,10 +35,14 @@ function plotOperators()
 end
 
 function plotSpatialEnergyDependence()
-  solution = solve(5)
   fig = Figure()
-  TE(r) = totalEnergy(solution, r)
-  lines(fig[1, 1], r_vec[1:end-1], TE.(r_vec[1:end-1]))
+  ax = Axis(fig[1, 1])
+  for N in 4:4:20
+    solution = solve(N)
+    TE(r) = totalEnergy(solution, r)
+    lines!(ax, r_vec[1:end-1], TE.(r_vec[1:end-1]), label=L"N = %$N")
+  end
+  axislegend(ax)
   save(joinpath(RESULTS_FOLDER, "energy-dependence-on-r.pdf"), fig)
   return fig
 end
