@@ -47,4 +47,24 @@ function plotSpatialEnergyDependence()
   return fig
 end
 
+function plotSolutionConvergence()
+  Ns = 3:1:22
+  errors = zeros(length(Ns))
+  previous = rho(r_vec[1:end-1], solve(2))
+  for k in eachindex(Ns)
+    N = Ns[k]
+    solution = solve(N)
+    this = rho(r_vec[1:end-1], solution)
+    errors[k] = sum((this - previous) .^ 2)
+    previous = this
+  end
+
+  fig = Figure()
+  ax = Axis(fig[1, 1], yscale=log10, xlabel=L"N", ylabel="Squared Error")
+  lines!(ax, Ns, errors)
+  scatter!(ax, Ns, errors, color=:red)
+  save(joinpath(RESULTS_FOLDER, "convergence.pdf"), fig)
+  return fig
+end
+
 println("All plotted for today?")
