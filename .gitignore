@@ -2,6 +2,7 @@
 .cache/
 build/
 stuff/
+thesis/chapters/out/
 *.protected.pdf
 *.todo
 
