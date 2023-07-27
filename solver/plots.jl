@@ -67,4 +67,12 @@ function plotSolutionConvergence()
   return fig
 end
 
+function plotAll()
+  plotDifferentOrderSolutions()
+  plotOperators()
+  plotSolutionConvergence()
+  plotSpatialEnergyDependence()
+  return
+end
+
 println("All plotted for today?")

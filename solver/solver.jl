@@ -11,7 +11,7 @@ R = 0.8372415  # radius of the interval [-R, R]
 @assert m >= 0 && isinteger(m)
 
 """Docstring for the function"""
-function theorem216(r::Float64, n::Unsigned, beta::Float64=beta)::Float64
+function theorem216(r::Float64, n::Int64, beta::Float64=beta)::Float64
   # Explicit value of the integral from Theorem 2.16
   prefactor =
     pi^(d / 2) *
@@ -92,10 +92,10 @@ r = axes(P, 1)
 @assert r.domain == (0 .. 1)  # Radial
 
 """Docstring for the function"""
-function constructOperator(N::Unsigned, beta::Float64)::Matrix{Float64}
+function constructOperator(N::Int64, beta::Float64)::Array{Float64,2}
   Matrix = zeros(N, N)
   for n in 0:N-1
-    Function = theorem216(r, n, beta)
+    Function = theorem216.(r, n, beta)
     ExpansionCoeffs = P[:, 1:N] \ Function  # expands the function in the P basis
     Matrix[:, n+1] .= ExpansionCoeffs
   end
@@ -103,10 +103,10 @@ function constructOperator(N::Unsigned, beta::Float64)::Matrix{Float64}
 end
 
 """Docstring for the function"""
-function recursivelyConstructOperatorWithReprojection(N::Unsigned, beta::Float64)::Matrix{Float64}
+function recursivelyConstructOperatorWithReprojection(N::Int64, beta::Float64)::Array{Float64,2}
   Matrix = zeros(N, N)
-  OldestFunction = theorem216(r, 0, beta)
-  OldFunction = theorem216(r, 1, beta)
+  OldestFunction = theorem216.(r, 0, beta)
+  OldFunction = theorem216.(r, 1, beta)
 
   Matrix[:, 1] = P[:, 1:N] \ OldestFunction
   if N < 2
@@ -128,7 +128,7 @@ function recursivelyConstructOperatorWithReprojection(N::Unsigned, beta::Float64
 end
 
 """Docstring for the function"""
-function solve(N::Unsigned)::Vector{Float64}
+function solve(N::Int64)::Vector{Float64}
   AttractiveMatrix = constructOperator(N, alpha)
   RepulsiveMatrix = constructOperator(N, beta)
   BigMatrix = (R^(alpha) / alpha) * AttractiveMatrix - (R^(beta) / beta) * RepulsiveMatrix
