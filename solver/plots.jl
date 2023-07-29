@@ -23,13 +23,15 @@ function plotDifferentOrderSolutions()
 end
 
 function plotOperators()
-  op1 = constructOperator(20, alpha)
-  op2 = constructOperator(20, beta)
+  op1 = constructOperator(40, alpha)
+  op2 = constructOperator(40, beta)
   fig = Figure(resolution=(920, 460))
-  ax = Axis(fig[1, 1], yreversed=true, title=L"\text{Attractive Operator}~(\alpha = %$alpha)")
-  spy!(ax, sparse(log10.(abs.(op1))), marker=:rect, markersize=32, framesize=0)
-  ax = Axis(fig[1, 2], yreversed=true, title=L"\text{Repulsive Operator}~(\beta = %$beta)")
-  spy!(ax, sparse(log10.(abs.(op2))), marker=:rect, markersize=32, framesize=0)
+  ax = Axis(fig[1, 1][1, 1], yreversed=true, title=L"\text{Attractive Operator}~(\alpha = %$alpha)")
+  s = spy!(ax, sparse(log10.(abs.(op1))), marker=:rect, markersize=32, framesize=0)
+  Colorbar(fig[1, 1][1, 2], s, flipaxis=false)
+  ax = Axis(fig[1, 2][1, 1], yreversed=true, title=L"\text{Repulsive Operator}~(\beta = %$beta)")
+  s = spy!(ax, sparse(log10.(abs.(op2))), marker=:rect, markersize=32, framesize=0)
+  Colorbar(fig[1, 2][1, 2], s, flipaxis=false)
   save(joinpath(RESULTS_FOLDER, "attractive-repulsive-operator.pdf"), fig)
   return fig
 end
