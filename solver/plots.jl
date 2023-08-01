@@ -70,11 +70,22 @@ function plotSolutionConvergence()
   return fig
 end
 
+function plotOuterOptimisation()
+  R_vec = 0.3:0.02:1.4
+  F(R) = totalEnergy(solve(20, R))
+  fig = Figure()
+  ax = Axis(fig[1, 1])
+  lines!(ax, R_vec, F.(R_vec))
+  save(joinpath(RESULTS_FOLDER, "outer-optimisation.pdf"), fig)
+  return fig
+end
+
 function plotAll()
   plotDifferentOrderSolutions()
   plotOperators()
   plotSolutionConvergence()
   plotSpatialEnergyDependence()
+  plotOuterOptimisation()
   return
 end
 

@@ -1,11 +1,11 @@
-using ClassicalOrthogonalPolynomials, ContinuumArrays, Formatting, HypergeometricFunctions, SpecialFunctions
+using ClassicalOrthogonalPolynomials, ContinuumArrays, Formatting, HypergeometricFunctions, SpecialFunctions, Optim
 import ContinuumArrays: MappedWeightedBasisLayout, Map, WeightedBasisLayout
 
 d = 2  # dimension
 m = 1  # integer
 alpha = 1.31  # attractive parameter
 beta = 1.23  # repulsive parameter
-R = 0.8372415  # radius of the interval [-R, R]
+R0 = 0.8  # radius of the interval [-R, R]
 @assert -d < alpha < 2 + 2m - d
 @assert beta > -d
 @assert m >= 0 && isinteger(m)
@@ -47,7 +47,7 @@ function recurrence(oldestValue, oldValue, r, n, beta=beta)
 end
 
 """Docstring for the function"""
-function totalEnergy(solution::Vector{Float64}, r=0.0)::Float64
+function totalEnergy(solution::Vector{Float64}, R=R0, r=0.0)::Float64
   # more details in section 3.2
   attractive, repulsive = 0.0, 0.0
   for k in eachindex(solution)
@@ -82,8 +82,8 @@ map = QuadraticMap();
 imap = InvQuadraticMap();
 
 # represent the basis P_n^(a,b)(2r^2-1)
-# apparently this is wrong: B = Jacobi(m - (alpha + d) / 2, (d - 2) / 2); the following is correct
-B = Jacobi(m - (beta + d) / 2, (d - 2) / 2);
+# TODO: which is it? alpha or beta?
+B = Jacobi(m - (alpha + d) / 2, (d - 2) / 2);
 P = B[map, :];
 x = axes(B, 1)
 r = axes(P, 1)
@@ -128,15 +128,22 @@ function recursivelyConstructOperatorWithReprojection(N::Int64, beta::Float64)::
 end
 
 """Docstring for the function"""
-function solve(N::Int64)::Vector{Float64}
+function solve(N::Int64, R=R0)::Vector{Float64}
   AttractiveMatrix = constructOperator(N, alpha)
   RepulsiveMatrix = constructOperator(N, beta)
-  BigMatrix = (R^(alpha) / alpha) * AttractiveMatrix - (R^(beta) / beta) * RepulsiveMatrix
+  BigMatrix = (R^alpha / alpha) * AttractiveMatrix - (R^beta / beta) * RepulsiveMatrix
   BigRHS = zeros(N)
   BigRHS[1] = 1
 
   BigSolution = BigMatrix \ BigRHS
   return BigSolution / totalMass(BigSolution)
+end
+
+function outerOptimisation(N::Int64=20)
+  F(R) = totalEnergy(solve(N, R))
+  f(x) = F(x[1])  # because optimize() only accepts vector inputs
+  solution = optimize(f, [R0])
+  return solution
 end
 
 """In possession of a solution, evaluates the measure (function) at given values of x."""
