@@ -6,6 +6,7 @@ const RESULTS_FOLDER = joinpath(@__DIR__, "..", "figures", "results")
 
 r_vec = 0:0.002:1
 x_vec = -1:0.002:1
+pow10tickformat(values) = [L"10^{%$(Int(value))}" for value in values]
 
 function plotDifferentOrderSolutions()
   fig = Figure()
@@ -28,10 +29,10 @@ function plotOperators()
   fig = Figure(resolution=(920, 400))
   ax = Axis(fig[1, 1][1, 1], yreversed=true, title=L"\text{Attractive Operator}~(\alpha = %$alpha)")
   s = spy!(ax, sparse(log10.(abs.(op1))), marker=:rect, markersize=32, framesize=0)
-  Colorbar(fig[1, 1][1, 2], s, flipaxis=false)
+  Colorbar(fig[1, 1][1, 2], s, flipaxis=false, tickformat=pow10tickformat)
   ax = Axis(fig[1, 2][1, 1], yreversed=true, title=L"\text{Repulsive Operator}~(\beta = %$beta)")
   s = spy!(ax, sparse(log10.(abs.(op2))), marker=:rect, markersize=32, framesize=0)
-  Colorbar(fig[1, 2][1, 2], s, flipaxis=false)
+  Colorbar(fig[1, 2][1, 2], s, flipaxis=false, tickformat=pow10tickformat)
   save(joinpath(RESULTS_FOLDER, "attractive-repulsive-operator.pdf"), fig)
   return fig
 end
