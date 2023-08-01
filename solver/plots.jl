@@ -23,9 +23,9 @@ function plotDifferentOrderSolutions()
 end
 
 function plotOperators()
-  op1 = constructOperator(40, alpha)
-  op2 = constructOperator(40, beta)
-  fig = Figure(resolution=(920, 460))
+  op1 = constructOperator(30, alpha)
+  op2 = constructOperator(30, beta)
+  fig = Figure(resolution=(920, 400))
   ax = Axis(fig[1, 1][1, 1], yreversed=true, title=L"\text{Attractive Operator}~(\alpha = %$alpha)")
   s = spy!(ax, sparse(log10.(abs.(op1))), marker=:rect, markersize=32, framesize=0)
   Colorbar(fig[1, 1][1, 2], s, flipaxis=false)
