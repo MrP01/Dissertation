@@ -6,6 +6,9 @@ m = 1  # integer
 alpha = 1.31  # attractive parameter
 beta = 1.23  # repulsive parameter
 R0 = 0.8  # radius of the interval [-R, R]
+p = 1.0  # power parameter of the morse potential
+InteractionPotential(r) = exp(-r^p / p)  # actual interaction potential function
+M = 5  # number of basis elements to expand the function in
 @assert -d < alpha < 2 + 2m - d
 @assert beta > -d
 @assert m >= 0 && isinteger(m)
@@ -90,6 +93,11 @@ r = axes(P, 1)
 
 @assert x.domain == (-1 .. 1)  # Chebyshev
 @assert r.domain == (0 .. 1)  # Radial
+
+# expand the interaction potential in the basis
+BasisConversionMat = mapreduce(permutedims, vcat, [P[:, 1:M] \ r .^ k for k in 0:M-1])'
+InteractionCoeffs = P[:, 1:M] \ InteractionPotential.(r)  # in Jacobi basis
+MonomialInteractionCoeffs = BasisConversionMat \ InteractionCoeffs  # in monomial basis
 
 """Docstring for the function"""
 function constructOperator(N::Int64, beta::Float64)::Array{Float64,2}
