@@ -14,7 +14,7 @@ M = 5  # number of basis elements to expand the function in
 @assert m >= 0 && isinteger(m)
 
 """Docstring for the function"""
-function theorem216(r::Float64, n::Int64, beta::Float64=beta)::Float64
+function theorem216(r::Float64, n::Int64, beta::Float64=beta)::BigFloat
   # Explicit value of the integral from Theorem 2.16
   prefactor =
     pi^(d / 2) *
@@ -28,10 +28,10 @@ function theorem216(r::Float64, n::Int64, beta::Float64=beta)::Float64
     )
   integral_value =
     prefactor * HypergeometricFunctions._₂F₁.(
-      n - beta / 2,
-      -m - n + (alpha - beta) / 2,
-      d / 2,
-      abs.(r .^ 2),
+      big(n - beta / 2),
+      big(-m - n + (alpha - beta) / 2),
+      big(d / 2),
+      big(abs.(r .^ 2)),
     )
   # @show integral_value
   return integral_value
@@ -100,39 +100,39 @@ InteractionCoeffs = convert(Vector{Float64}, P[:, 1:M] \ InteractionPotential.(r
 MonomialInteractionCoeffs = BasisConversionMat \ InteractionCoeffs  # in monomial basis
 
 """Docstring for the function"""
-function constructOperator(N::Int64, beta::Float64)::Array{Float64,2}
-  Matrix = zeros(N, N)
+function constructOperator(N::Int64, beta::Float64)::Array{BigFloat,2}
+  Mat = zeros(BigFloat, N, N)
   for n in 0:N-1
     Function = theorem216.(r, n, beta)
     ExpansionCoeffs = P[:, 1:N] \ Function  # expands the function in the P basis
-    Matrix[:, n+1] .= ExpansionCoeffs
+    Mat[:, n+1] .= ExpansionCoeffs
   end
-  return Matrix
+  return Mat
 end
 
 """Docstring for the function"""
-function recursivelyConstructOperatorWithReprojection(N::Int64, beta::Float64)::Array{Float64,2}
-  Matrix = zeros(N, N)
+function recursivelyConstructOperatorWithReprojection(N::Int64, beta::Float64)::Array{BigFloat,2}
+  Mat = zeros(BigFloat, N, N)
   OldestFunction = theorem216.(r, 0, beta)
   OldFunction = theorem216.(r, 1, beta)
 
-  Matrix[:, 1] = P[:, 1:N] \ OldestFunction
+  Mat[:, 1] = P[:, 1:N] \ OldestFunction
   if N < 2
-    return Matrix
+    return Mat
   end
 
-  Matrix[:, 2] = P[:, 1:N] \ OldFunction
+  Mat[:, 2] = P[:, 1:N] \ OldFunction
   if N < 3
-    return Matrix
+    return Mat
   end
 
   for remainingColumn in 3:N
     Function = recurrence.(OldestFunction, OldFunction, r, remainingColumn - 2, beta)
-    Matrix[:, remainingColumn] = P[:, 1:N] \ Function
+    Mat[:, remainingColumn] = P[:, 1:N] \ Function
     OldestFunction = OldFunction
     OldFunction = Function
   end
-  return Matrix
+  return Mat
 end
 
 """Docstring for the function"""
