@@ -100,6 +100,11 @@ BasisConversionMat = mapreduce(permutedims, hcat, [P[:, 1:M] \ r .^ k for k in 0
 InteractionCoeffs = convert(Vector{Float64}, P[:, 1:M] \ InteractionPotential.(r))  # in Jacobi basis
 MonomialInteractionCoeffs = BasisConversionMat \ InteractionCoeffs  # in monomial basis
 
+"""Sets small values in a matrix to zero. Improves accuracy of the solutions by a tiny bit!"""
+function zeroOutTinyValues!(M::Array{BigFloat,2})
+  M[abs.(M).<big"1e-12"] .= 0
+end
+
 """Docstring for the function"""
 function constructOperator(N::Int64, beta::Float64)::Array{BigFloat,2}
   Mat = zeros(BigFloat, N, N)
@@ -108,10 +113,11 @@ function constructOperator(N::Int64, beta::Float64)::Array{BigFloat,2}
     ExpansionCoeffs = P[:, 1:N] \ Function  # expands the function in the P basis
     Mat[:, n+1] .= ExpansionCoeffs
   end
+  zeroOutTinyValues!(Mat)
   return Mat
 end
 
-"""Docstring for the function"""
+"""Recursively constructs with reprojection, terrible because the types keep on nesting inside of one another."""
 function recursivelyConstructOperatorWithReprojection(N::Int64, beta::Float64)::Array{BigFloat,2}
   Mat = zeros(BigFloat, N, N)
   OldestFunction = theorem216.(r, 0, beta)
@@ -133,6 +139,7 @@ function recursivelyConstructOperatorWithReprojection(N::Int64, beta::Float64)::
     OldestFunction = OldFunction
     OldFunction = Function
   end
+  zeroOutTinyValues!(Mat)
   return Mat
 end
 

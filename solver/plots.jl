@@ -24,8 +24,8 @@ function plotDifferentOrderSolutions()
 end
 
 function plotOperators(N=30)
-  op1 = recursivelyConstructOperatorWithReprojection(N, alpha)
-  op2 = recursivelyConstructOperatorWithReprojection(N, beta)
+  op1 = constructOperator(N, alpha)
+  op2 = constructOperator(N, beta)
   fig = Figure(resolution=(920, 400))
   ax = Axis(fig[1, 1][1, 1], yreversed=true, title=L"\text{Attractive Operator}~(\alpha = %$alpha)")
   s = spy!(ax, sparse(log10.(abs.(op1))), marker=:rect, markersize=32, framesize=0)
