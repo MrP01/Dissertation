@@ -5,16 +5,16 @@ include("./solver.jl")
   @testset "recurrence relation" begin
     for n in 1:8
       r = rand()
-      @test recurrence(theorem216(r, n - 1), theorem216(r, n), r, n) ≈ theorem216(r, n + 1)
+      @test recurrence(theorem216(r, n - 1), theorem216(r, n), r, n) ≈ theorem216(r, n + 1) atol = 1e-16
     end
   end
   @testset "compare operator construction methods" begin
     for n in 1:5
-      @test constructOperator(n, beta) ≈ recursivelyConstructOperatorWithReprojection(n, beta)
+      @test constructOperator(n, beta) ≈ recursivelyConstructOperatorWithReprojection(n, beta) atol = 1e-15
     end
   end
   @testset "solution is normalised" begin
-    @test totalMass(solve(12)) ≈ 1.0 atol = 1e-15
+    @test totalMass(solve(12)) ≈ 1.0 atol = 1e-16
   end
   @testset "jacobi to monomial basis conversion" begin
     monomialCoeffs = zeros(M)

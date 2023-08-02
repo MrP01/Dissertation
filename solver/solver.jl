@@ -1,5 +1,6 @@
 using ClassicalOrthogonalPolynomials, ContinuumArrays, Formatting, HypergeometricFunctions, SpecialFunctions, Optim
 import ContinuumArrays: MappedWeightedBasisLayout, Map, WeightedBasisLayout
+import LinearAlgebra: cond
 
 d = 2  # dimension
 m = 1  # integer
@@ -14,7 +15,7 @@ M = 5  # number of basis elements to expand the function in
 @assert m >= 0 && isinteger(m)
 
 """Docstring for the function"""
-function theorem216(r::Float64, n::Int64, beta::Float64=beta)::BigFloat
+function theorem216(r::Real, n::Int64, beta::Float64=beta)::BigFloat
   # Explicit value of the integral from Theorem 2.16
   prefactor =
     pi^(d / 2) *
@@ -50,7 +51,7 @@ function recurrence(oldestValue, oldValue, r, n, beta=beta)
 end
 
 """Docstring for the function"""
-function totalEnergy(solution::Vector{Float64}, R=R0, r=0.0)::Float64
+function totalEnergy(solution::Vector{BigFloat}, R=R0::Float64, r=0.0::Float64)::BigFloat
   # more details in section 3.2
   attractive, repulsive = 0.0, 0.0
   for k in eachindex(solution)
@@ -62,7 +63,7 @@ function totalEnergy(solution::Vector{Float64}, R=R0, r=0.0)::Float64
 end
 
 """Docstring for the function"""
-function totalMass(solution::Vector{Float64})::Float64
+function totalMass(solution::Vector{BigFloat})::BigFloat
   # using Lemma 2.20
   return pi^(d / 2) * gamma(B.a + 1) / gamma(B.a + d / 2 + 1) * solution[1]
 end
@@ -136,10 +137,13 @@ function recursivelyConstructOperatorWithReprojection(N::Int64, beta::Float64)::
 end
 
 """Docstring for the function"""
-function solve(N::Int64, R=R0)::Vector{Float64}
+function solve(N::Int64, R=R0::Float64)::Vector{BigFloat}
   AttractiveMatrix = constructOperator(N, alpha)
   RepulsiveMatrix = constructOperator(N, beta)
+  @show cond(convert(Matrix{Float64}, AttractiveMatrix))
+  @show cond(convert(Matrix{Float64}, RepulsiveMatrix))
   BigMatrix = (R^alpha / alpha) * AttractiveMatrix - (R^beta / beta) * RepulsiveMatrix
+  @show cond(convert(Matrix{Float64}, BigMatrix))
   BigRHS = zeros(N)
   BigRHS[1] = 1
 
@@ -155,7 +159,7 @@ function outerOptimisation(N::Int64=20)
 end
 
 """In possession of a solution, evaluates the measure (function) at given values of x."""
-function rho(x_vec, solution::Vector{Float64})
+function rho(x_vec, solution::Vector{BigFloat})
   return (1 .- x_vec .^ 2) .^ B.a .* vec(sum(solution .* P[abs.(x_vec), 1:length(solution)]', dims=1))
 end
 
