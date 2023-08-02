@@ -95,8 +95,8 @@ r = axes(P, 1)
 @assert r.domain == (0 .. 1)  # Radial
 
 # expand the interaction potential in the basis
-BasisConversionMat = mapreduce(permutedims, vcat, [P[:, 1:M] \ r .^ k for k in 0:M-1])'
-InteractionCoeffs = P[:, 1:M] \ InteractionPotential.(r)  # in Jacobi basis
+BasisConversionMat = mapreduce(permutedims, hcat, [P[:, 1:M] \ r .^ k for k in 0:M-1]')
+InteractionCoeffs = convert(Vector{Float64}, P[:, 1:M] \ InteractionPotential.(r))  # in Jacobi basis
 MonomialInteractionCoeffs = BasisConversionMat \ InteractionCoeffs  # in monomial basis
 
 """Docstring for the function"""
