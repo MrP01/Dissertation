@@ -1,7 +1,7 @@
-Based on the {[}{[}Three-Term Recurrence Relationship{]}{]}.
+Based on the Three-Term Recurrence Relationship (cf. \Cref{def:three-term-recurrence-relationship}).
 
 One can even determine an explicit relationship between the coefficients
-in the Jacobi expansion by considering the {[}{[}Jacobi Matrix{]}{]}.
+in the Jacobi expansion by considering the Jacobi Matrix (cf. \Cref{def:jacobi-matrix}).
 
-Considering the operator $\hat{Q}^\beta[\rho]$ as in \Cref{thm:theorem216}, from the [[Ansatz]] $\rho(x)$ we have
-$$\hat{Q}^{\beta}(x) = \sum_{k=1}^{N} \rho_{k} \int \norm{x-y}^{\beta}(1-\norm{y}^2)^{a}P_{k}^{(a, b)}(2\norm{y}^{2}- 1) \,\ddy$$
+Considering the operator $\hat{Q}^\beta[\rho]$ as in \Cref{thm:theorem216}, from the ansatz $\rho(\vec{x})$ (cf. \Cref{def:ansatz}) we have
+$$\hat{Q}^{\beta}(x) = \sum_{k=1}^{N} \rho_{k} \int_{B_1(\vec{0})} \norm{\vec{x}-\vec{y}}^{\beta} \weight{y}\jacobi{y} \,\dd\vec{y}\,.$$
