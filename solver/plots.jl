@@ -50,16 +50,15 @@ function plotSpatialEnergyDependence()
   return fig
 end
 
-function plotSolutionConvergence()
-  Ns = 3:1:22
+function plotConvergence()
+  Ns = 1:1:22
   errors = zeros(length(Ns))
-  previous = rho(r_vec[1:end-1], solve(2))
+  best = rho(r_vec[1:end-1], solve(24))
   for k in eachindex(Ns)
     N = Ns[k]
     solution = solve(N)
     this = rho(r_vec[1:end-1], solution)
-    errors[k] = sum((this - previous) .^ 2)
-    previous = this
+    errors[k] = sum((this - best) .^ 2) / length(r_vec)
   end
 
   fig = Figure()
@@ -83,7 +82,7 @@ end
 function plotAll()
   plotDifferentOrderSolutions()
   plotOperators()
-  plotSolutionConvergence()
+  plotConvergence()
   plotSpatialEnergyDependence()
   plotOuterOptimisation()
   return
