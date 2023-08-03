@@ -2,7 +2,7 @@ module GeneralKernelSolver
 import ..Utils
 import ..Parameters, ..defaultParams
 
-B, P = Utils.createBasis()
+B, P = Utils.createBasis(defaultParams)
 r = axes(P, 1)
 
 # expand the interaction potential in the basis

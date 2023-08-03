@@ -10,12 +10,12 @@ import ..Utils: SolutionEnvironment, defaultEnv, Parameters, defaultParams
 
 OpMem = LRUCache.LRU{Tuple{Int64,Float64,SolutionEnvironment},Matrix{BigFloat}}(maxsize=20)
 """Creates an operator given alpha and beta={alpha, beta}. Caches it."""
-function constructOperator(N::Int64, beta::Float64, env::SolutionEnvironment=defaultEnv)::Matrix{BigFloat}
+function constructOperator(N::Int64, beta::Float64, env::SolutionEnvironment)::Matrix{BigFloat}
   get!(OpMem, (N, beta, env)) do
     Mat = zeros(BigFloat, N, N)
-    r = axes(env.P, 1)
+    r_axis = axes(env.P, 1)
     for n in 0:N-1
-      Function = Utils.theorem216.(r, n, beta, env.p)
+      Function = Utils.theorem216.(r_axis; n=n, beta=beta, p=env.p)
       ExpansionCoeffs = env.P[:, 1:N] \ Function  # expands the function in the P basis
       Mat[:, n+1] .= ExpansionCoeffs
     end
@@ -25,11 +25,11 @@ function constructOperator(N::Int64, beta::Float64, env::SolutionEnvironment=def
 end
 
 """Recursively constructs with reprojection, terrible because the types keep on nesting inside of one another."""
-function recursivelyConstructOperatorWithReprojection(N::Int64, beta::Float64, env::SolutionEnvironment=defaultEnv)::Matrix{BigFloat}
+function recursivelyConstructOperatorWithReprojection(N::Int64, beta::Float64, env::SolutionEnvironment)::Matrix{BigFloat}
   Mat = zeros(BigFloat, N, N)
-  r = axes(env.P, 1)
-  OldestFunction = Utils.theorem216.(r, 0, beta)
-  OldFunction = Utils.theorem216.(r, 1, beta)
+  r_axis = axes(env.P, 1)
+  OldestFunction = Utils.theorem216.(r_axis; n=0, beta=beta, p=env.p)
+  OldFunction = Utils.theorem216.(r_axis; n=1, beta=beta, p=env.p)
 
   Mat[:, 1] = env.P[:, 1:N] \ OldestFunction
   if N < 2
@@ -42,7 +42,7 @@ function recursivelyConstructOperatorWithReprojection(N::Int64, beta::Float64, e
   end
 
   for remainingColumn in 3:N
-    Function = Utils.recurrence.(OldestFunction, OldFunction, r, remainingColumn - 2, beta)
+    Function = Utils.recurrence.(r_axis; oldestValue=OldestFunction, oldValue=OldFunction, n=remainingColumn - 2, beta=beta, p=env.p)
     Mat[:, remainingColumn] = env.P[:, 1:N] \ Function
     OldestFunction = OldFunction
     OldFunction = Function
@@ -51,7 +51,7 @@ function recursivelyConstructOperatorWithReprojection(N::Int64, beta::Float64, e
   return Mat
 end
 
-function constructFullOperator(N::Int64, R::Float64, env::SolutionEnvironment=defaultEnv)::Matrix{BigFloat}
+function constructFullOperator(N::Int64, R::Float64, env::SolutionEnvironment)::Matrix{BigFloat}
   p::Parameters = env.p
   AttractiveMatrix = constructOperator(N, p.alpha, env)
   RepulsiveMatrix = constructOperator(N, p.beta, env)
@@ -61,7 +61,7 @@ function constructFullOperator(N::Int64, R::Float64, env::SolutionEnvironment=de
 end
 
 """Docstring for the function"""
-function solve(N::Int64, R=defaultParams.R0::Float64, env::SolutionEnvironment=defaultEnv)::Vector{BigFloat}
+function solve(N::Int64, R::Float64, env::SolutionEnvironment)::Vector{BigFloat}
   BigMatrix = constructFullOperator(N, R, env)
   # @show cond(convert(Matrix{Float64}, BigMatrix))
   BigRHS = zeros(N)
@@ -72,7 +72,7 @@ function solve(N::Int64, R=defaultParams.R0::Float64, env::SolutionEnvironment=d
 end
 
 """Docstring for the function"""
-function outerOptimisation(N::Int64=20, env::SolutionEnvironment=defaultEnv)
+function outerOptimisation(N::Int64, env::SolutionEnvironment)
   F(R) = Utils.totalEnergy(solve(N, R, env), R, 0.0, env)
   f(x) = F(x[1])  # because optimize() only accepts vector inputs
   solution = Optim.optimize(f, [R0])

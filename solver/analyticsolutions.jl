@@ -2,7 +2,7 @@ module AnalyticSolutions
 import SpecialFunctions
 import ..Parameters, ..defaultParams
 
-function explicitSolution(x::Real, p::Parameters=defaultParams)
+function explicitSolution(x::Real, p::Parameters)
   if isapprox(p.alpha, 2.0; atol=1e-3) && -1.0 < p.beta < 2.0
     # Solution from Carillo, 2017-explicit-solutions
     prefactor = cos((2 - p.beta) * pi / 2) / ((p.beta - 1) * pi)
