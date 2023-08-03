@@ -78,7 +78,7 @@ end
 
 function plotOuterOptimisation()
   R_vec = 0.3:0.02:1.4
-  F(R) = Utils.totalEnergy(Solver.solve(8, R))
+  F(R) = Utils.totalEnergy(solve(8, R, env), R, 0.0, env)
   fig = Figure()
   ax = Axis(fig[1, 1], xlabel=L"R", ylabel=L"E")
   lines!(ax, R_vec, F.(R_vec))

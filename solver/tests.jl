@@ -26,7 +26,8 @@ import .Solver
     monomialCoeffs = zeros(defaultParams.M)
     monomialCoeffs[1] = 0.3  # r^0 coefficient
     monomialCoeffs[3] = 2.0  # r^2 coefficient
-    @test BasisConversionMat * monomialCoeffs ≈
+    r = axes(GeneralKernelSolver.P, 1)
+    @test GeneralKernelSolver.BasisConversionMat * monomialCoeffs ≈
           Solver.defaultEnv.P[:, 1:defaultParams.M] \ (monomialCoeffs[1] * r .^ 0 + monomialCoeffs[3] * r .^ 2)
 
     jacobiCoeff = zeros(defaultParams.M)
@@ -34,7 +35,7 @@ import .Solver
     jacobiCoeff[3] = -1.0  # P_2^{(a, b)} coeff
 
     r_vec = 0:0.002:1
-    @test sum((BasisConversionMat \ jacobiCoeff) .* [r_vec .^ k for k in 0:defaultParams.M-1], dims=1)[1] ≈
+    @test sum((GeneralKernelSolver.BasisConversionMat \ jacobiCoeff) .* [r_vec .^ k for k in 0:defaultParams.M-1], dims=1)[1] ≈
           vec(sum(jacobiCoeff .* Solver.defaultEnv.P[r_vec, 1:defaultParams.M]', dims=1))
   end
 end
