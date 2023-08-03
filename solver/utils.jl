@@ -93,10 +93,10 @@ function totalEnergy(solution::Vector{BigFloat}, R=defaultParams.R0::Float64, r=
   p::Parameters = env.p
   attractive, repulsive = 0.0, 0.0
   for k in eachindex(solution)
-    attractive += solution[k] * theorem216(r, k, p.alpha)
-    repulsive += solution[k] * theorem216(r, k, p.beta)
+    attractive += solution[k] * theorem216(r, k - 1, p.alpha)
+    repulsive += solution[k] * theorem216(r, k - 1, p.beta)
   end
-  E = (R^(p.alpha + p.d) / p.alpha) * attractive - (R^(p.beta + p.d) / p.beta) * repulsive
+  E = (R^p.alpha / p.alpha) * attractive - (R^p.beta / p.beta) * repulsive
   return E
 end
 
@@ -108,7 +108,7 @@ function totalMass(solution::Vector{BigFloat}, env::SolutionEnvironment=defaultE
 end
 
 """Sets small values in a matrix to zero. Improves accuracy of the solutions by a tiny bit!"""
-function zeroOutTinyValues!(M::Array{BigFloat,2})
+function zeroOutTinyValues!(M::Matrix{BigFloat})
   M[abs.(M).<big"1e-12"] .= 0
 end
 end
