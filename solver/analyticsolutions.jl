@@ -1,8 +1,8 @@
 module AnalyticSolutions
-include("./parameters.jl")
 import SpecialFunctions
+import ..Parameters, ..defaultParams
 
-function explicitSolution(x::Real)
+function explicitSolution(x::Real, p::Parameters=defaultParams)
   if isapprox(p.alpha, 2.0; atol=1e-3) && -1.0 < p.beta < 2.0
     # Solution from Carillo, 2017-explicit-solutions
     prefactor = cos((2 - p.beta) * pi / 2) / ((p.beta - 1) * pi)

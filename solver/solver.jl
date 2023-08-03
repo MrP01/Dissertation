@@ -4,9 +4,8 @@ import LinearAlgebra: cond
 import SpecialFunctions: gamma
 import Optim
 
-include("./parameters.jl")
 import ..Utils
-import ..Utils: SolutionEnvironment, defaultEnv
+import ..Utils: SolutionEnvironment, defaultEnv, Parameters, defaultParams
 
 """Docstring for the function"""
 function constructOperator(N::Int64, beta::Float64, env::SolutionEnvironment=defaultEnv)::Array{BigFloat,2}
@@ -49,7 +48,8 @@ function recursivelyConstructOperatorWithReprojection(N::Int64, beta::Float64, e
 end
 
 """Docstring for the function"""
-function solve(N::Int64, R=p.R0::Float64, env::SolutionEnvironment=defaultEnv)::Vector{BigFloat}
+function solve(N::Int64, R=defaultParams.R0::Float64, env::SolutionEnvironment=defaultEnv)::Vector{BigFloat}
+  p::Parameters = env.p
   AttractiveMatrix = constructOperator(N, p.alpha, env)
   RepulsiveMatrix = constructOperator(N, p.beta, env)
   @show cond(convert(Matrix{Float64}, AttractiveMatrix))

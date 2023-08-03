@@ -1,6 +1,7 @@
 using CairoMakie
 using SparseArrays
 
+include("./parameters.jl")
 include("./utils.jl")
 include("./solver.jl")
 include("./analyticsolutions.jl")
@@ -29,7 +30,7 @@ function plotDifferentOrderSolutions()
 end
 
 function plotOperators(N=30)
-  alpha, beta = p.alpha, p.beta
+  alpha, beta = defaultParams.alpha, defaultParams.beta
   op1 = Solver.constructOperator(N, alpha)
   op2 = Solver.constructOperator(N, beta)
   fig = Figure(resolution=(920, 400))
@@ -77,18 +78,20 @@ end
 
 function plotOuterOptimisation()
   R_vec = 0.3:0.02:1.4
-  F(R) = Utils.totalEnergy(Solver.solve(20, R))
+  F(R) = Utils.totalEnergy(Solver.solve(8, R))
   fig = Figure()
-  ax = Axis(fig[1, 1])
+  ax = Axis(fig[1, 1], xlabel=L"R", ylabel=L"E")
   lines!(ax, R_vec, F.(R_vec))
   save(joinpath(RESULTS_FOLDER, "outer-optimisation.pdf"), fig)
   return fig
 end
 
 function plotAnalyticSolution()
+  knownAnalyticParams = Parameters(d=1, alpha=2.0001, beta=1.5)
   fig = Figure()
-  ax = Axis(fig[1, 1], xlabel=L"x", ylabel=L"\rho(x)")
-  lines!(ax, x_vec[2:end-1], AnalyticSolutions.explicitSolution.(x_vec[2:end-1]))
+  alpha, beta = knownAnalyticParams.alpha, knownAnalyticParams.beta
+  ax = Axis(fig[1, 1], title=L"\text{Analytic Solution with } \alpha=%$alpha \text{ and } \beta=%$beta", xlabel=L"x", ylabel=L"\rho(x)")
+  lines!(ax, x_vec[2:end-1], AnalyticSolutions.explicitSolution.(x_vec[2:end-1], (knownAnalyticParams,)))
   save(joinpath(RESULTS_FOLDER, "analytic-solution.pdf"), fig)
   return fig
 end

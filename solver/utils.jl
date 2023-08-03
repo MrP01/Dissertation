@@ -4,8 +4,7 @@ import ClassicalOrthogonalPolynomials: Jacobi
 import HypergeometricFunctions
 import ContinuumArrays: Map
 import SpecialFunctions: gamma
-
-include("./parameters.jl")
+import ..Parameters, ..defaultParams
 
 # These definitions allow the use of the radially shifted Jacobi bases
 struct QuadraticMap{T} <: Map{T} end
@@ -25,7 +24,7 @@ qmap = QuadraticMap()
 iqmap = InvQuadraticMap()
 
 """Represent the basis P_n^(a,b)(2r^2-1)"""
-function createBasis(p::Parameters=p)
+function createBasis(p::Parameters=defaultParams)
   # TODO: which is it? alpha or beta?
   B = Jacobi(p.m - (p.alpha + p.d) / 2, (p.d - 2) / 2)
   P = B[Utils.qmap, :]
@@ -39,15 +38,15 @@ struct SolutionEnvironment
 end
 
 """Creates a fresh environment based on the parameters."""
-function createEnvironment(p::Parameters=p)
+function createEnvironment(p::Parameters=defaultParams)
   B, P = createBasis()
   return SolutionEnvironment(p, B, P)
 end
 
-defaultEnv = createEnvironment(p)
+defaultEnv = createEnvironment(defaultParams)
 
 """Docstring for the function"""
-function theorem216(r::Real, n::Int64, beta::Float64=p.beta)::BigFloat
+function theorem216(r::Real, n::Int64, beta::Float64=defaultParams.beta, p::Parameters=defaultParams)::BigFloat
   # Explicit value of the integral from Theorem 2.16
   prefactor =
     pi^(p.d / 2) *
@@ -71,7 +70,7 @@ function theorem216(r::Real, n::Int64, beta::Float64=p.beta)::BigFloat
 end
 
 """Docstring for the function"""
-function recurrence(oldestValue, oldValue, r, n, beta=p.beta)
+function recurrence(oldestValue, oldValue, r, n, beta=defaultParams.beta, p::Parameters=defaultParams)
   # using Corollary 2.18
   m = p.m
   c_a = -((-p.alpha + 2m + 4n) * (-p.alpha + 2m + 4n + 2) * (p.alpha + p.d - 2 * (p.m + n + 1))) /
@@ -89,8 +88,9 @@ function rho(x_vec, solution::Vector{BigFloat}, env::SolutionEnvironment=default
 end
 
 """Docstring for the function"""
-function totalEnergy(solution::Vector{BigFloat}, R=p.R0::Float64, r=0.0::Float64)::BigFloat
+function totalEnergy(solution::Vector{BigFloat}, R=defaultParams.R0::Float64, r=0.0::Float64, env::SolutionEnvironment=defaultEnv)::BigFloat
   # more details in section 3.2
+  p::Parameters = env.p
   attractive, repulsive = 0.0, 0.0
   for k in eachindex(solution)
     attractive += solution[k] * theorem216(r, k, p.alpha)
@@ -103,6 +103,7 @@ end
 """Docstring for the function"""
 function totalMass(solution::Vector{BigFloat}, env::SolutionEnvironment=defaultEnv)::BigFloat
   # using Lemma 2.20
+  p::Parameters = env.p
   return pi^(p.d / 2) * gamma(env.B.a + 1) / gamma(env.B.a + p.d / 2 + 1) * solution[1]
 end
 
