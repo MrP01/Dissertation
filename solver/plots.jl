@@ -1,6 +1,11 @@
 using CairoMakie
 using SparseArrays
-include("./solver.jl");
+
+include("./utils.jl")
+include("./solver.jl")
+include("./analyticsolutions.jl")
+import .Solver
+import .AnalyticSolutions
 
 const RESULTS_FOLDER = joinpath(@__DIR__, "..", "figures", "results")
 
@@ -13,19 +18,20 @@ function plotDifferentOrderSolutions()
   ax = Axis(fig[1, 1])
   x_vec_noends = x_vec[2:end-1]
   # lines!(ax, x_vec_noends, obtainMeasure(x_vec_noends, 2), label="N = 2")
-  lines!(ax, x_vec_noends, rho(x_vec_noends, solve(3)), label="N = 3")
-  lines!(ax, x_vec_noends, rho(x_vec_noends, solve(4)), label="N = 4")
-  lines!(ax, x_vec_noends, rho(x_vec_noends, solve(5)), label="N = 5")
-  lines!(ax, x_vec_noends, rho(x_vec_noends, solve(6)), label="N = 6")
-  lines!(ax, x_vec_noends, rho(x_vec_noends, solve(7)), label="N = 7")
+  lines!(ax, x_vec_noends, Solver.rho(x_vec_noends, Solver.solve(3)), label="N = 3")
+  lines!(ax, x_vec_noends, Solver.rho(x_vec_noends, Solver.solve(4)), label="N = 4")
+  lines!(ax, x_vec_noends, Solver.rho(x_vec_noends, Solver.solve(5)), label="N = 5")
+  lines!(ax, x_vec_noends, Solver.rho(x_vec_noends, Solver.solve(6)), label="N = 6")
+  lines!(ax, x_vec_noends, Solver.rho(x_vec_noends, Solver.solve(7)), label="N = 7")
   axislegend(ax)
   save(joinpath(RESULTS_FOLDER, "solution-increasing-order.pdf"), fig)
   return fig
 end
 
 function plotOperators(N=30)
-  op1 = constructOperator(N, alpha)
-  op2 = constructOperator(N, beta)
+  alpha, beta = p.alpha, p.beta
+  op1 = Solver.constructOperator(N, alpha)
+  op2 = Solver.constructOperator(N, beta)
   fig = Figure(resolution=(920, 400))
   ax = Axis(fig[1, 1][1, 1], yreversed=true, title=L"\text{Attractive Operator}~(\alpha = %$alpha)")
   s = spy!(ax, sparse(log10.(abs.(op1))), marker=:rect, markersize=32, framesize=0)
@@ -41,8 +47,8 @@ function plotSpatialEnergyDependence()
   fig = Figure()
   ax = Axis(fig[1, 1])
   for R in 0.4:0.1:1.2
-    solution = solve(12, R)
-    TE(r) = totalEnergy(solution, r)
+    solution = Solver.solve(12, R)
+    TE(r) = Utils.totalEnergy(solution, r)
     lines!(ax, r_vec[1:end-1], TE.(r_vec[1:end-1]), label=L"R = %$R")
   end
   axislegend(ax)
@@ -76,6 +82,14 @@ function plotOuterOptimisation()
   ax = Axis(fig[1, 1])
   lines!(ax, R_vec, F.(R_vec))
   save(joinpath(RESULTS_FOLDER, "outer-optimisation.pdf"), fig)
+  return fig
+end
+
+function plotAnalyticSolution()
+  fig = Figure()
+  ax = Axis(fig[1, 1], xlabel=L"x", ylabel=L"\rho(x)")
+  lines!(ax, x_vec[2:end-1], explicitSolution.(x_vec[2:end-1]))
+  save(joinpath(RESULTS_FOLDER, "analytic-solution.pdf"), fig)
   return fig
 end
 
