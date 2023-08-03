@@ -18,11 +18,11 @@ function plotDifferentOrderSolutions()
   ax = Axis(fig[1, 1])
   x_vec_noends = x_vec[2:end-1]
   # lines!(ax, x_vec_noends, obtainMeasure(x_vec_noends, 2), label="N = 2")
-  lines!(ax, x_vec_noends, Solver.rho(x_vec_noends, Solver.solve(3)), label="N = 3")
-  lines!(ax, x_vec_noends, Solver.rho(x_vec_noends, Solver.solve(4)), label="N = 4")
-  lines!(ax, x_vec_noends, Solver.rho(x_vec_noends, Solver.solve(5)), label="N = 5")
-  lines!(ax, x_vec_noends, Solver.rho(x_vec_noends, Solver.solve(6)), label="N = 6")
-  lines!(ax, x_vec_noends, Solver.rho(x_vec_noends, Solver.solve(7)), label="N = 7")
+  lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(3)), label="N = 3")
+  lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(4)), label="N = 4")
+  lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(5)), label="N = 5")
+  lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(6)), label="N = 6")
+  lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(7)), label="N = 7")
   axislegend(ax)
   save(joinpath(RESULTS_FOLDER, "solution-increasing-order.pdf"), fig)
   return fig
@@ -59,11 +59,11 @@ end
 function plotConvergence()
   Ns = 1:1:22
   errors = zeros(length(Ns))
-  best = rho(r_vec[1:end-1], solve(24))
+  best = Utils.rho(r_vec[1:end-1], Solver.solve(24))
   for k in eachindex(Ns)
     N = Ns[k]
-    solution = solve(N)
-    this = rho(r_vec[1:end-1], solution)
+    solution = Solver.solve(N)
+    this = Utils.rho(r_vec[1:end-1], solution)
     errors[k] = sum((this - best) .^ 2) / length(r_vec)
   end
 
@@ -77,7 +77,7 @@ end
 
 function plotOuterOptimisation()
   R_vec = 0.3:0.02:1.4
-  F(R) = totalEnergy(solve(20, R))
+  F(R) = Utils.totalEnergy(Solver.solve(20, R))
   fig = Figure()
   ax = Axis(fig[1, 1])
   lines!(ax, R_vec, F.(R_vec))
@@ -88,7 +88,7 @@ end
 function plotAnalyticSolution()
   fig = Figure()
   ax = Axis(fig[1, 1], xlabel=L"x", ylabel=L"\rho(x)")
-  lines!(ax, x_vec[2:end-1], explicitSolution.(x_vec[2:end-1]))
+  lines!(ax, x_vec[2:end-1], AnalyticSolutions.explicitSolution.(x_vec[2:end-1]))
   save(joinpath(RESULTS_FOLDER, "analytic-solution.pdf"), fig)
   return fig
 end
@@ -99,6 +99,7 @@ function plotAll()
   plotConvergence()
   plotSpatialEnergyDependence()
   plotOuterOptimisation()
+  plotAnalyticSolution()
   return
 end
 

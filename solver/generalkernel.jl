@@ -1,7 +1,7 @@
 include("./parameters.jl")
-import .Solver
+import .Utils
 
-B, P = Solver.createBasis()
+B, P = Utils.createBasis()
 r = axes(P, 1)
 # expand the interaction potential in the basis
 BasisConversionMat = mapreduce(permutedims, hcat, [P[:, 1:p.M] \ r .^ k for k in 0:p.M-1]')

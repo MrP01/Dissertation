@@ -19,7 +19,7 @@ import .Solver
     end
   end
   @testset "solution is normalised" begin
-    @test Solver.totalMass(Solver.solve(12)) ≈ 1.0 atol = 1e-16
+    @test Utils.totalMass(Solver.solve(12)) ≈ 1.0 atol = 1e-16
   end
   @testset "jacobi to monomial basis conversion" begin
     monomialCoeffs = zeros(p.M)
