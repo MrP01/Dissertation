@@ -93,8 +93,8 @@ function totalEnergy(solution::Vector{BigFloat}, R::Float64, r::Float64, env::So
   p::Parameters = env.p
   attractive, repulsive = 0.0, 0.0
   for k in eachindex(solution)
-    attractive += solution[k] * theorem216(r, k - 1, p.alpha)
-    repulsive += solution[k] * theorem216(r, k - 1, p.beta)
+    attractive += solution[k] * theorem216(r; n=k - 1, beta=p.alpha, p=env.p)
+    repulsive += solution[k] * theorem216(r; n=k - 1, beta=p.beta, p=env.p)
   end
   E = (R^p.alpha / p.alpha) * attractive - (R^p.beta / p.beta) * repulsive
   return E
