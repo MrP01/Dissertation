@@ -15,7 +15,7 @@ function constructOperator(N::Int64, beta::Float64, env::SolutionEnvironment=def
     Mat = zeros(BigFloat, N, N)
     r = axes(env.P, 1)
     for n in 0:N-1
-      Function = Utils.theorem216.(r, n, beta)
+      Function = Utils.theorem216.(r, n, beta, env.p)
       ExpansionCoeffs = env.P[:, 1:N] \ Function  # expands the function in the P basis
       Mat[:, n+1] .= ExpansionCoeffs
     end

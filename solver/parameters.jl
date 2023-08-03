@@ -10,7 +10,14 @@
   M = 5  # number of basis elements to expand the function in
 end
 
+function checkParameters(p::Parameters)
+  @assert -p.d < p.alpha < 2 + 2 * p.m - p.d
+  @assert p.beta > -p.d
+  @assert p.m >= 0 && isinteger(p.m)
+end
+
 defaultParams = Parameters()
-@assert -defaultParams.d < defaultParams.alpha < 2 + 2 * defaultParams.m - defaultParams.d
-@assert defaultParams.beta > -defaultParams.d
-@assert defaultParams.m >= 0 && isinteger(defaultParams.m)
+knownAnalyticParams = Parameters(d=1, alpha=2.0001, beta=1.5)
+
+checkParameters(defaultParams)
+checkParameters(knownAnalyticParams)

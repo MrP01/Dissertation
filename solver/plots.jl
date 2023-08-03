@@ -87,7 +87,6 @@ function plotOuterOptimisation()
 end
 
 function plotAnalyticSolution()
-  knownAnalyticParams = Parameters(d=1, alpha=2.0001, beta=1.5)
   fig = Figure()
   alpha, beta = knownAnalyticParams.alpha, knownAnalyticParams.beta
   ax = Axis(fig[1, 1], title=L"\text{Analytic Solution with } \alpha=%$alpha \text{ and } \beta=%$beta", xlabel=L"x", ylabel=L"\rho(x)")
