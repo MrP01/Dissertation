@@ -11,13 +11,14 @@ import .AnalyticSolutions
 const RESULTS_FOLDER = joinpath(@__DIR__, "..", "figures", "results")
 
 r_vec = 0:0.002:1
+r_vec_noend = r_vec[1:end-1]
 x_vec = -1:0.002:1
+x_vec_noends = x_vec[2:end-1]
 pow10tickformat(values) = [L"10^{%$(Int(value))}" for value in values]
 
 function plotDifferentOrderSolutions()
   fig = Figure()
   ax = Axis(fig[1, 1])
-  x_vec_noends = x_vec[2:end-1]
   R = defaultParams.R0
   env = Utils.defaultEnv
   # lines!(ax, x_vec_noends, obtainMeasure(x_vec_noends, 2), label="N = 2")
@@ -59,7 +60,7 @@ function plotSpatialEnergyDependence()
   return fig
 end
 
-function plotConvergence()
+function plotStepByStepConvergence()
   Ns = 1:1:22
   env = Utils.defaultEnv
   errors = zeros(length(Ns))
@@ -81,7 +82,7 @@ function plotConvergence()
 end
 
 function plotOuterOptimisation()
-  R_vec = 0.3:0.02:1.4
+  R_vec = 0.98:0.0001:1.15
   env = Utils.defaultEnv
   F(R) = Utils.totalEnergy(Solver.solve(8, R, env), R, 0.0, env)
   fig = Figure()
@@ -94,9 +95,40 @@ end
 function plotAnalyticSolution()
   fig = Figure()
   alpha, beta = knownAnalyticParams.alpha, knownAnalyticParams.beta
+  env = Utils.createEnvironment(knownAnalyticParams)
+  R, analytic = AnalyticSolutions.explicitSolution(x_vec_noends; p=knownAnalyticParams)
   ax = Axis(fig[1, 1], title=L"\text{Analytic Solution with } \alpha=%$alpha \text{ and } \beta=%$beta", xlabel=L"x", ylabel=L"\rho(x)")
-  lines!(ax, x_vec[2:end-1], AnalyticSolutions.explicitSolution.(x_vec[2:end-1], (knownAnalyticParams,)))
+  lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(4, R, env), env), label=L"N = 4")
+  lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(8, R, env), env), label=L"N = 8")
+  lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(20, R, env), env), label=L"N = 20")
+  lines!(ax, x_vec_noends, analytic, linewidth=3.0, linestyle=:dash, label="Analytic")
+  axislegend(ax)
+  ax = Axis(fig[2, 1], title="Squared Error", yscale=log10, xlabel=L"x", ylabel=L"\rho_N(x) - \rho(x)")
+  lines!(ax, x_vec_noends, abs.(Utils.rho(x_vec_noends, Solver.solve(4, R, env), env) .- analytic), label=L"N = 4")
+  lines!(ax, x_vec_noends, abs.(Utils.rho(x_vec_noends, Solver.solve(8, R, env), env) .- analytic), label=L"N = 8")
+  lines!(ax, x_vec_noends, abs.(Utils.rho(x_vec_noends, Solver.solve(20, R, env), env) .- analytic), label=L"N = 20")
+  axislegend(ax)
   save(joinpath(RESULTS_FOLDER, "analytic-solution.pdf"), fig)
+  return fig
+end
+
+function plotConvergenceToAnalytic()
+  Ns = 1:1:34
+  env = Utils.createEnvironment(knownAnalyticParams)
+  errors = zeros(length(Ns))
+  R, analytic = AnalyticSolutions.explicitSolution(r_vec[1:end-1]; p=knownAnalyticParams)
+  for k in eachindex(Ns)
+    N = Ns[k]
+    solution = Solver.solve(N, R, env)
+    this = Utils.rho(r_vec[1:end-1], solution, env)
+    errors[k] = sum((this - analytic) .^ 2) / length(r_vec)
+  end
+
+  fig = Figure()
+  ax = Axis(fig[1, 1], yscale=log10, xlabel=L"N", ylabel="Squared Error")
+  lines!(ax, Ns, errors)
+  scatter!(ax, Ns, errors, color=:red)
+  save(joinpath(RESULTS_FOLDER, "convergence-to-analytic.pdf"), fig)
   return fig
 end
 
