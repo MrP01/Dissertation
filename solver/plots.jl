@@ -189,6 +189,11 @@ function plotSimulationHistogram()
   ax = Axis(fig[1, 1], xlabel=L"\text{Position}~x", ylabel=LT"Density",
     title=L"\text{Particle Simulation Output Distribution}~(\alpha, \beta, d) = (%$alpha, %$beta, %$d)")
   barplot!(ax, df.hist)
+  df = CSV.read("/tmp/velocities.csv", DataFrames.DataFrame, header=["x", "y"])
+  velocity = hypot.(df.x, df.y)
+  ax = Axis(fig[2, 1], xlabel=L"\text{Velocity}~x", ylabel=LT"Density",
+    title=L"\text{Particle Simulation Output Distribution}")
+  hist!(ax, velocity, bins=20)
   saveFig(fig, "simulation-histogram")
   return fig
 end

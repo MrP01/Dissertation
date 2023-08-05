@@ -193,6 +193,7 @@ void BoxSimulator::buildUI() {
   mainLayout->addLayout(buttonLayout, 3, 0, 1, 2);
   setCentralWidget(mainWidget);
   setWindowTitle("Particle Box Simulator");
+  controlBtn->setFocus();
 
   QShortcut *closeShortcut = new QShortcut(Qt::CTRL | Qt::Key_W, this);
   QObject::connect(closeShortcut, &QShortcut::activated, this, [=]() { close(); });
@@ -201,7 +202,7 @@ void BoxSimulator::buildUI() {
 void BoxSimulator::renderParticles() {
   particleSeries->clear();
   for (size_t i = 0; i < PARTICLES; i++)
-    *particleSeries << QPointF(positions[i][0], positions[i][1]);
+    *particleSeries << QPointF(positions[i][0], DIMENSION > 1 ? positions[i][1] : 1.0);
 }
 
 void BoxSimulator::updateHistograms() {
@@ -238,14 +239,10 @@ void BoxSimulator::measure() {
     energyChart->axes(Qt::Horizontal).first()->setRange((measurement - MEASUREMENTS_IN_ENERGY_PLOT), measurement);
   updateHistograms();
 
-  double max_radius = 0;
-  for (size_t i = 0; i < PARTICLES; i++)
-    max_radius = std::max(max_radius, positions[i][1]);
-
-  statsLabel->setText(QString("t = %1 tu,\t\t E_kin = %2,\t E_pot = %3,\t E_LJ = %4 eu,\t max(h) = %5")
-                          .arg(QString::number(_step * TAU * ONE_SECOND, 'E', 3), QString::number(E_kin, 'E', 3),
-                               QString::number(E_pot, 'E', 3), QString::number(E_pot_LJ, 'E', 3),
-                               QString::number(max_radius, 'g', 4)));
+  statsLabel->setText(QString("Step %1:\t t = %2 tu,\t E_kin = %3,\t E_pot = %4,\t E_LJ = %5 eu")
+                          .arg(QString::number(_step), QString::number(_step * TAU * ONE_SECOND, 'E', 1),
+                               QString::number(E_kin, 'E', 3), QString::number(E_pot, 'E', 3),
+                               QString::number(E_pot_LJ, 'E', 3)));
 
   phaseSpaceSeries->clear();
   for (size_t i = 0; i < PARTICLES; i++) {
