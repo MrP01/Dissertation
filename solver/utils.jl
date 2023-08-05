@@ -88,13 +88,13 @@ function rho(x_vec, solution::Vector{BigFloat}, env::SolutionEnvironment)
 end
 
 """Docstring for the function"""
-function totalEnergy(solution::Vector{BigFloat}, R::Float64, r::Float64, env::SolutionEnvironment)::BigFloat
+function totalEnergy(solution::Vector{BigFloat}, R::Float64, r::Union{Float64,AbstractVector{Float64}}, env::SolutionEnvironment)
   # more details in section 3.2
   p::Parameters = env.p
-  attractive, repulsive = 0.0, 0.0
+  attractive, repulsive = zero(r), zero(r)
   for k in eachindex(solution)
-    attractive += solution[k] * theorem216(r; n=k - 1, beta=p.alpha, p=env.p)
-    repulsive += solution[k] * theorem216(r; n=k - 1, beta=p.beta, p=env.p)
+    attractive += solution[k] * Float64.(theorem216.(r; n=k - 1, beta=p.alpha, p=env.p))
+    repulsive += solution[k] * Float64.(theorem216.(r; n=k - 1, beta=p.beta, p=env.p))
   end
   E = (R^p.alpha / p.alpha) * attractive - (R^p.beta / p.beta) * repulsive
   return E
