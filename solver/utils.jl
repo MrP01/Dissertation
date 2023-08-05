@@ -38,12 +38,12 @@ struct SolutionEnvironment
 end
 
 """Creates a fresh environment based on the parameters."""
-function createEnvironment(p::Parameters)
+function createEnvironment(p::Parameters)::SolutionEnvironment
   B, P = createBasis(p)
   return SolutionEnvironment(p, B, P)
 end
 
-defaultEnv = createEnvironment(defaultParams)
+defaultEnv::SolutionEnvironment = createEnvironment(defaultParams)
 
 """Docstring for the function"""
 function theorem216(r::Real; n::Int64, beta::Float64, p::Parameters)::BigFloat

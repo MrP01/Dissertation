@@ -193,6 +193,20 @@ function plotSimulationHistogram()
   return fig
 end
 
+function plotJacobiConvergence()
+  P = Utils.defaultEnv.P
+  f(x) = exp(x^2) # function we want to expand
+  f_N = P[:, 1:10] \ f.(axes(P, 1))
+  fig = Figure()
+  ax = Axis(fig[1, 1], yscale=log10, xlabel=L"x", ylabel=LT"Absolute Error",
+    title=L"\text{Expansion of the function}~f(x) = \exp(x^2)")
+  for k in 2:10
+    lines!(ax, r_vec, vec(abs.(sum(f_N[1:k] .* P[r_vec, 1:k]', dims=1) - f.(r_vec)')), label=L"N = %$k")
+  end
+  saveFig(fig, "jacobi-expansions")
+  return fig
+end
+
 function plotAll()
   plotDifferentOrderSolutions()
   plotOperators()
