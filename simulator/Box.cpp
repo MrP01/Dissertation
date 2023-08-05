@@ -6,7 +6,7 @@
 #include <string.h>
 
 void ParticleBox::initRandomly(double initialKineticEnergy, double initialGravitationalPotential) {
-  double approxHeight = initialGravitationalPotential / (PARTICLE_MASS * GRAVITY);
+  double approxRadius = initialGravitationalPotential / (PARTICLE_MASS * GRAVITY);
   for (size_t i = 0; i < PARTICLES; i++) {
     double closestNeighbourDist = 0;
     while (closestNeighbourDist < 0.8 * LJ_SIGMA) {
@@ -95,10 +95,10 @@ double ParticleBox::getKineticEnergy() {
   return PARTICLE_MASS / 2 * energy;
 }
 double ParticleBox::getGravitationalPotential() {
-  double totalHeight = 0;
+  double totalRadius = 0;
   for (size_t i = 0; i < PARTICLES; i++)
-    totalHeight += positions[i][1];
-  return PARTICLE_MASS * GRAVITY * totalHeight;
+    totalRadius += positions[i][1];
+  return PARTICLE_MASS * GRAVITY * totalRadius;
 }
 double ParticleBox::getLJPotential() {
   double energy = 0;
@@ -119,37 +119,37 @@ double ParticleBox::getLJPotential() {
 }
 double ParticleBox::getTotalEnergy() { return getKineticEnergy() + getGravitationalPotential() + getLJPotential(); }
 
-void ParticleBox::computeHeightHistogram() {
-  heightHist.min = -1;
-  heightHist.max = 1;
-  const double delta = heightHist.max - heightHist.min;
-  std::fill(std::begin(heightHist.heights), std::end(heightHist.heights), 0);
+void ParticleBox::computeRadiusHistogram() {
+  radiusHist.min = -1;
+  radiusHist.max = 1;
+  const double delta = radiusHist.max - radiusHist.min;
+  std::fill(std::begin(radiusHist.heights), std::end(radiusHist.heights), 0);
   for (size_t i = 0; i < PARTICLES; i++) {
-    size_t bin = floor((positions[i][0] - heightHist.min) / delta * HEIGHT_HISTOGRAM_BINS);
-    if (bin >= HEIGHT_HISTOGRAM_BINS) // true for the last value
-      bin = HEIGHT_HISTOGRAM_BINS - 1;
-    heightHist.heights[bin]++;
+    size_t bin = floor((positions[i][0] - radiusHist.min) / delta * RADIAL_HISTOGRAM_BINS);
+    if (bin >= RADIAL_HISTOGRAM_BINS) // true for the last value
+      bin = RADIAL_HISTOGRAM_BINS - 1;
+    radiusHist.heights[bin]++;
   }
-  heightHist.maxHeight = 0;
-  for (size_t bin = 0; bin < HEIGHT_HISTOGRAM_BINS; bin++)
-    heightHist.maxHeight = std::max(heightHist.maxHeight, heightHist.heights[bin]);
+  radiusHist.maxHeight = 0;
+  for (size_t bin = 0; bin < RADIAL_HISTOGRAM_BINS; bin++)
+    radiusHist.maxHeight = std::max(radiusHist.maxHeight, radiusHist.heights[bin]);
 
   for (size_t i = HISTOGRAM_AVERAGE_N - 1; i > 0; i--)
     pastHistograms[i] = pastHistograms[i - 1];
-  pastHistograms[0] = heightHist;
+  pastHistograms[0] = radiusHist;
 
-  averagedHeightHistogram.min = -1;
-  averagedHeightHistogram.max = 1;
-  for (size_t j = 0; j < HEIGHT_HISTOGRAM_BINS; j++)
-    averagedHeightHistogram.heights[j] = 0;
+  averagedRadiusHistogram.min = -1;
+  averagedRadiusHistogram.max = 1;
+  for (size_t j = 0; j < RADIAL_HISTOGRAM_BINS; j++)
+    averagedRadiusHistogram.heights[j] = 0;
   for (size_t i = 0; i < HISTOGRAM_AVERAGE_N; i++) {
-    for (size_t j = 0; j < HEIGHT_HISTOGRAM_BINS; j++)
-      averagedHeightHistogram.heights[j] += pastHistograms[i].heights[j] / HISTOGRAM_AVERAGE_N;
+    for (size_t j = 0; j < RADIAL_HISTOGRAM_BINS; j++)
+      averagedRadiusHistogram.heights[j] += pastHistograms[i].heights[j] / HISTOGRAM_AVERAGE_N;
   }
-  averagedHeightHistogram.maxHeight = 0;
-  for (size_t bin = 0; bin < HEIGHT_HISTOGRAM_BINS; bin++)
-    averagedHeightHistogram.maxHeight =
-        std::max(averagedHeightHistogram.maxHeight, averagedHeightHistogram.heights[bin]);
+  averagedRadiusHistogram.maxHeight = 0;
+  for (size_t bin = 0; bin < RADIAL_HISTOGRAM_BINS; bin++)
+    averagedRadiusHistogram.maxHeight =
+        std::max(averagedRadiusHistogram.maxHeight, averagedRadiusHistogram.heights[bin]);
 }
 
 void ParticleBox::computeVelocityHistogram() {
@@ -162,13 +162,13 @@ void ParticleBox::computeVelocityHistogram() {
   const double delta = velocityHist.max - velocityHist.min;
   std::fill(std::begin(velocityHist.heights), std::end(velocityHist.heights), 0);
   for (size_t i = 0; i < PARTICLES; i++) {
-    size_t bin = floor((values[i] - velocityHist.min) / delta * HEIGHT_HISTOGRAM_BINS);
-    if (bin >= HEIGHT_HISTOGRAM_BINS)
-      bin = HEIGHT_HISTOGRAM_BINS - 1;
+    size_t bin = floor((values[i] - velocityHist.min) / delta * RADIAL_HISTOGRAM_BINS);
+    if (bin >= RADIAL_HISTOGRAM_BINS)
+      bin = RADIAL_HISTOGRAM_BINS - 1;
     velocityHist.heights[bin]++;
   }
   velocityHist.maxHeight = 0;
-  for (size_t bin = 0; bin < HEIGHT_HISTOGRAM_BINS; bin++)
+  for (size_t bin = 0; bin < RADIAL_HISTOGRAM_BINS; bin++)
     velocityHist.maxHeight = std::max(velocityHist.maxHeight, velocityHist.heights[bin]);
 }
 
@@ -182,7 +182,7 @@ void ParticleBox::exportToCSV() {
     velocitiesCsv << velocities[i][0] << ", " << velocities[i][1] << "\n";
   velocitiesCsv.close();
   std::ofstream positionHistCsv("/tmp/position-histogram.csv");
-  for (size_t i = 0; i < HEIGHT_HISTOGRAM_BINS; i++)
-    positionHistCsv << heightHist.heights[i] << "\n";
+  for (size_t i = 0; i < RADIAL_HISTOGRAM_BINS; i++)
+    positionHistCsv << averagedRadiusHistogram.heights[i] << "\n";
   positionHistCsv.close();
 }

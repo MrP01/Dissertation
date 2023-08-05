@@ -4,18 +4,18 @@
 #include <stdlib.h>
 
 // be careful to set numeric values as floats here
-#define PARTICLES 150              // number of particles
+#define PARTICLES 600              // number of particles
 #define INIT_WINDOW_LENGTH 2.0     // width of the initialisation interval for particles (default [-1, 1], so width 2)
 #define LJ_SIGMA 0.001             // equilibrium distance, 3.4 Angstrom
 #define PARTICLE_MASS 1.0          // mass of a particle
 #define LJ_CUTOFF_DISTANCE 0.0001  // LJ explodes for very close particles, stop earlier
 #define GRAVITY 8.532e1            // 9.81 m/s², actual value in reduced units: 8.532e-05
 #define TAU 5.0e-4                 // time step
-#define HEIGHT_HISTOGRAM_BINS 20   // into how many height boxes we aggregate particles
+#define RADIAL_HISTOGRAM_BINS 40   // into how many radius boxes we aggregate particles
 #define VELOCITY_HISTOGRAM_BINS 12 // similarly, number of bins for the velocity histogram
 #define HISTOGRAM_AVERAGE_N 200    // histogram averaging
 #define ONE_SECOND 2.1257e-12      // one second in reduced time unit
-#define PLOT_HEIGHT 3              // height of the plot
+#define PLOT_HEIGHT 3              // radius of the plot
 #define ALPHA 2                    // (attractive) parameter alpha for the kernel K(r)
 #define BETA 1.5                   // (repulsive) parameter beta for the kernel K(r)
 
@@ -26,15 +26,15 @@
 
 using ParticleVectors = double (&)[PARTICLES][2];
 
-struct HeightHistogram {
+struct RadiusHistogram {
   double min, max;
-  float heights[HEIGHT_HISTOGRAM_BINS] = {0};
+  float heights[RADIAL_HISTOGRAM_BINS] = {0};
   float maxHeight = 1;
 };
 
 struct VelocityHistogram {
   double min, max;
-  size_t heights[HEIGHT_HISTOGRAM_BINS] = {0};
+  size_t heights[RADIAL_HISTOGRAM_BINS] = {0};
   size_t maxHeight = 1;
 };
 
@@ -42,9 +42,9 @@ class ParticleBox {
  protected:
   double positions[PARTICLES][2];
   double velocities[PARTICLES][2];
-  struct HeightHistogram heightHist;
-  struct HeightHistogram pastHistograms[HISTOGRAM_AVERAGE_N];
-  struct HeightHistogram averagedHeightHistogram;
+  struct RadiusHistogram radiusHist;
+  struct RadiusHistogram pastHistograms[HISTOGRAM_AVERAGE_N];
+  struct RadiusHistogram averagedRadiusHistogram;
   struct VelocityHistogram velocityHist;
   double totalMeanVelocity = 0;
 
@@ -62,7 +62,7 @@ class ParticleBox {
   double getGravitationalPotential();
   double getLJPotential();
   double getTotalEnergy();
-  void computeHeightHistogram();
+  void computeRadiusHistogram();
   void computeVelocityHistogram();
   void exportToCSV();
 };

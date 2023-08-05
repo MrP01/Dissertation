@@ -57,35 +57,35 @@ void BoxSimulator::buildUI() {
     energyView->setChart(energyChart);
   }
 
-  QChartView *heightHistView = new QChartView(this);
+  QChartView *radiusHistView = new QChartView(this);
   {
-    for (size_t bin = 0; bin < HEIGHT_HISTOGRAM_BINS; bin++)
-      *heightHistSet << 1;
+    for (size_t bin = 0; bin < RADIAL_HISTOGRAM_BINS; bin++)
+      *radiusHistSet << 1;
     QStackedBarSeries *series = new QStackedBarSeries();
-    series->append(heightHistSet);
-    heightHistChart->addSeries(series);
-    heightHistChart->addAxis(new QValueAxis(), Qt::AlignBottom);
+    series->append(radiusHistSet);
+    radiusHistChart->addSeries(series);
+    radiusHistChart->addAxis(new QValueAxis(), Qt::AlignBottom);
     series->attachAxis(new QValueAxis()); // this axis is not shown, only used for scaling
-    // heightHistChart->axes(Qt::Horizontal).first()->setRange(0, HEIGHT_HISTOGRAM_BINS);
+    // radiusHistChart->axes(Qt::Horizontal).first()->setRange(0, RADIAL_HISTOGRAM_BINS);
     QValueAxis *axisY = new QValueAxis();
-    heightHistChart->addAxis(axisY, Qt::AlignLeft);
+    radiusHistChart->addAxis(axisY, Qt::AlignLeft);
     series->attachAxis(axisY);
-    heightHistChart->setAnimationOptions(QChart::SeriesAnimations);
-    heightHistView->setRenderHint(QPainter::Antialiasing);
-    heightHistView->setChart(heightHistChart);
-    heightHistView->setMinimumWidth(260);
+    radiusHistChart->setAnimationOptions(QChart::SeriesAnimations);
+    radiusHistView->setRenderHint(QPainter::Antialiasing);
+    radiusHistView->setChart(radiusHistChart);
+    radiusHistView->setMinimumWidth(260);
   }
 
   QChartView *velocityHistView = new QChartView(this);
   {
-    for (size_t bin = 0; bin < HEIGHT_HISTOGRAM_BINS; bin++)
+    for (size_t bin = 0; bin < RADIAL_HISTOGRAM_BINS; bin++)
       *velocityHistSet << 1;
     QStackedBarSeries *series = new QStackedBarSeries();
     series->append(velocityHistSet);
     velocityHistChart->addSeries(series);
     velocityHistChart->addAxis(new QValueAxis(), Qt::AlignBottom);
     series->attachAxis(new QValueAxis()); // this axis is not shown, only used for scaling
-    velocityHistChart->axes(Qt::Horizontal).first()->setRange(0, HEIGHT_HISTOGRAM_BINS);
+    velocityHistChart->axes(Qt::Horizontal).first()->setRange(0, RADIAL_HISTOGRAM_BINS);
     QValueAxis *axisY = new QValueAxis();
     velocityHistChart->addAxis(axisY, Qt::AlignLeft);
     series->attachAxis(axisY);
@@ -101,7 +101,7 @@ void BoxSimulator::buildUI() {
     if (controlBtn->text() == "Start") {
       _timerId = startTimer(10);
       particleView->chart()->setAnimationOptions(QChart::NoAnimation);
-      heightHistChart->setAnimationOptions(QChart::NoAnimation);
+      radiusHistChart->setAnimationOptions(QChart::NoAnimation);
       velocityHistChart->setAnimationOptions(QChart::NoAnimation);
       // std::cout << "Resetting squared mean velocity measurement" << std::endl;
       _start_step = _step;
@@ -174,7 +174,7 @@ void BoxSimulator::buildUI() {
   auto mainWidget = new QWidget(this);
   auto mainLayout = new QGridLayout(mainWidget);
   mainLayout->addWidget(particleView, 0, 0);
-  mainLayout->addWidget(heightHistView, 1, 0);
+  mainLayout->addWidget(radiusHistView, 1, 0);
   auto rightChartLayout = new QVBoxLayout();
   rightChartLayout->addWidget(energyView);
   rightChartLayout->addWidget(velocityHistView);
@@ -205,18 +205,18 @@ void BoxSimulator::renderParticles() {
 }
 
 void BoxSimulator::updateHistograms() {
-  computeHeightHistogram();
-  heightHistChart->axes(Qt::Horizontal).first()->setRange(averagedHeightHistogram.min, averagedHeightHistogram.max);
-  heightHistChart->axes(Qt::Vertical).first()->setRange(0, (double)averagedHeightHistogram.maxHeight);
-  heightHistSet->remove(0, HEIGHT_HISTOGRAM_BINS);
-  for (size_t bin = 0; bin < HEIGHT_HISTOGRAM_BINS; bin++)
-    *heightHistSet << averagedHeightHistogram.heights[bin];
+  computeRadiusHistogram();
+  radiusHistChart->axes(Qt::Horizontal).first()->setRange(averagedRadiusHistogram.min, averagedRadiusHistogram.max);
+  radiusHistChart->axes(Qt::Vertical).first()->setRange(0, (double)averagedRadiusHistogram.maxHeight);
+  radiusHistSet->remove(0, RADIAL_HISTOGRAM_BINS);
+  for (size_t bin = 0; bin < RADIAL_HISTOGRAM_BINS; bin++)
+    *radiusHistSet << averagedRadiusHistogram.heights[bin];
 
   computeVelocityHistogram();
   velocityHistChart->axes(Qt::Horizontal).first()->setRange(velocityHist.min, velocityHist.max);
   velocityHistChart->axes(Qt::Vertical).first()->setRange(0, (double)velocityHist.maxHeight);
-  velocityHistSet->remove(0, HEIGHT_HISTOGRAM_BINS);
-  for (size_t bin = 0; bin < HEIGHT_HISTOGRAM_BINS; bin++)
+  velocityHistSet->remove(0, RADIAL_HISTOGRAM_BINS);
+  for (size_t bin = 0; bin < RADIAL_HISTOGRAM_BINS; bin++)
     *velocityHistSet << velocityHist.heights[bin];
 }
 
@@ -238,14 +238,14 @@ void BoxSimulator::measure() {
     energyChart->axes(Qt::Horizontal).first()->setRange((measurement - MEASUREMENTS_IN_ENERGY_PLOT), measurement);
   updateHistograms();
 
-  double max_height = 0;
+  double max_radius = 0;
   for (size_t i = 0; i < PARTICLES; i++)
-    max_height = std::max(max_height, positions[i][1]);
+    max_radius = std::max(max_radius, positions[i][1]);
 
   statsLabel->setText(QString("t = %1 tu,\t\t E_kin = %2,\t E_pot = %3,\t E_LJ = %4 eu,\t max(h) = %5")
                           .arg(QString::number(_step * TAU * ONE_SECOND, 'E', 3), QString::number(E_kin, 'E', 3),
                                QString::number(E_pot, 'E', 3), QString::number(E_pot_LJ, 'E', 3),
-                               QString::number(max_height, 'g', 4)));
+                               QString::number(max_radius, 'g', 4)));
 
   phaseSpaceSeries->clear();
   for (size_t i = 0; i < PARTICLES; i++) {
@@ -266,7 +266,7 @@ void BoxSimulator::timerEvent(QTimerEvent *event) { step(); }
 
 void BoxSimulator::setTheme(QChart::ChartTheme theme) {
   energyChart->setTheme(theme);
-  heightHistChart->setTheme(theme);
+  radiusHistChart->setTheme(theme);
   velocityHistChart->setTheme(theme);
   particleChart->setTheme(theme);
 };
