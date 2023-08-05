@@ -1,6 +1,8 @@
 using CairoMakie
 using SparseArrays
 using LaTeXStrings
+import CSV
+import DataFrames
 
 include("./parameters.jl")
 include("./utils.jl")
@@ -116,7 +118,7 @@ function plotAnalyticSolution()
   lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(20, R, env), env), label=L"N = 20")
   lines!(ax, x_vec_noends, analytic, linewidth=4.0, linestyle=:dash, label=LT"Analytic")
   axislegend(ax)
-  ax = Axis(fig[2, 1], title=LT"Squared Error", yscale=log10, xlabel=L"x", ylabel=L"\rho_N(x) - \rho(x)")
+  ax = Axis(fig[2, 1], title=LT"Absolute Error", yscale=log10, xlabel=L"x", ylabel=L"|\rho_N(x) - \rho(x)|")
   lines!(ax, x_vec_noends, abs.(Utils.rho(x_vec_noends, Solver.solve(4, R, env), env) .- analytic), label=L"N = 4")
   lines!(ax, x_vec_noends, abs.(Utils.rho(x_vec_noends, Solver.solve(8, R, env), env) .- analytic), label=L"N = 8")
   lines!(ax, x_vec_noends, abs.(Utils.rho(x_vec_noends, Solver.solve(20, R, env), env) .- analytic), label=L"N = 20")
@@ -144,6 +146,50 @@ function plotConvergenceToAnalytic()
   lines!(ax, Ns, errors)
   scatter!(ax, Ns, errors, color=:red)
   saveFig(fig, "convergence-to-analytic")
+  return fig
+end
+
+function plotParameterVariations()
+  fig = Figure(resolution=(650, 900))
+  R = 0.8
+  p = Parameters()
+  alpha, beta, d = round(p.alpha, digits=2), round(p.beta, digits=2), p.d
+  ax = Axis(fig[1, 1], ylabel=L"\rho(r)", title=L"\text{Varying}~\alpha~\text{with}~(\beta, d) = (%$beta, %$d)")
+  for alpha in 0.3:0.6:2.7
+    env = Utils.createEnvironment(Parameters(alpha=alpha))
+    lines!(ax, r_vec_noend, Utils.rho(r_vec_noend, Solver.solve(8, R, env), env), label=L"\alpha = %$alpha")
+  end
+  axislegend(ax, position=:lt)
+  ax = Axis(fig[2, 1], ylabel=L"\rho(r)", title=L"\text{Varying}~\beta~\text{with}~(\alpha, d) = (%$alpha, %$d)")
+  for beta in 0.3:0.6:2.7
+    env = Utils.createEnvironment(Parameters(beta=beta))
+    lines!(ax, r_vec_noend, Utils.rho(r_vec_noend, Solver.solve(8, R, env), env), label=L"\beta = %$beta")
+  end
+  axislegend(ax, position=:lt)
+  ax = Axis(fig[3, 1], ylabel=L"\rho(r)", title=L"\text{Varying}~m~\text{with}~(\alpha, \beta, d) = (%$alpha, %$beta, %$d)")
+  for m in 1:4
+    env = Utils.createEnvironment(Parameters(m=m))
+    lines!(ax, r_vec_noend, Utils.rho(r_vec_noend, Solver.solve(8, R, env), env), label=L"m = %$m")
+  end
+  axislegend(ax, position=:lt)
+  ax = Axis(fig[4, 1], xlabel=L"r", ylabel=L"\rho(r)", title=L"\text{Varying}~d~\text{with}~(\alpha, \beta) = (%$alpha, %$beta)")
+  for d in 1:5
+    env = Utils.createEnvironment(Parameters(d=d, m=3))
+    lines!(ax, r_vec_noend, Utils.rho(r_vec_noend, Solver.solve(8, R, env), env), label=L"d = %$d")
+  end
+  axislegend(ax, position=:lt)
+  saveFig(fig, "varying-parameters")
+  return fig
+end
+
+function plotSimulationHistogram()
+  fig = Figure()
+  alpha, beta, d = defaultParams.alpha, defaultParams.beta, defaultParams.d
+  df = CSV.read("/tmp/position-histogram.csv", DataFrames.DataFrame, header=["hist"])
+  ax = Axis(fig[1, 1], xlabel=L"\text{Position}~x", ylabel=LT"Density",
+    title=L"\text{Particle Simulation Output Distribution}~(\alpha, \beta, d) = (%$alpha, %$beta, %$d)")
+  barplot!(ax, df.hist)
+  saveFig(fig, "simulation-histogram")
   return fig
 end
 
