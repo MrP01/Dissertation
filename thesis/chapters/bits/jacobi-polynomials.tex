@@ -1,19 +1,27 @@
 \begin{definition}{Jacobi Polynomials}{jacobi-polynomials}
-  Are given by \[J^{(a,b)}_n(x) = \mathrm{prefactor} \cdot {}_2F_1(...)\]
-  So are defined using the Gaussian Hypergeometric Function (cf. \Cref{def:gaussian-hypergeometric-function}).
-
-  \hypertarget{nice-spectral-properties}{%
-    \subsection{Nice Spectral Properties}\label{nice-spectral-properties}}
-
-  \begin{itemize}
-    \item
-          Differentiation
-    \item
-          Three-Term Recurrence
-    \item
-          {[} {]} why are they better than just Chebyshev?
-  \end{itemize}
+  Let $P^{(a, b)}: \C \mapsto \C$ with
+  \[P^{(a,b)}_n(x) = {\frac{(a +1)_{n}}{n!}}\,{}_{2}F_{1}\left(-n,1+a +b +n;a +1;{\tfrac  {1}{2}}(1-x)\right)\]
+  So are defined using the Gaussian Hypergeometric Function (cf. \Cref{def:gaussian-hypergeometric-function}) and the Pochhammer symbol.
+  Which is equivalent to
+  $$P_{n}^{{(a, b)}}(x)={\frac  {\Gamma (a +n+1)}{n!\,\Gamma (a +b +n+1)}}\sum _{{m=0}}^{n}{n \choose m}{\frac  {\Gamma (a +b +n+m+1)}{\Gamma (a +m+1)}}\left({\frac{x-1}{2}}\right)^{m}\,.$$
+  where $\Gamma (x)=\int _{0}^{\infty }t^{x-1}e^{-t}\,\ddt$ (with $\Re(x)>0$) is the gamma function \footnote{Recall that for integer arguments $k \in \N$, it equals the factorial of $(k-1)$ so $\Gamma(k) = (k-1)!$.}.
 
   Gegenbauer Polynomials (cf. \Cref{def:gegenbauer-polynomials}) are a special case. And
   Chebyshev Polynomials (cf. \Cref{def:chebyshev-polynomials}) are a special case of them.
 \end{definition}
+
+Following from this definition,
+\begin{align*}
+  P_0^{(a, b)}(x)   & = 1                            \\
+  P_{1}^{(a, b)}(x) & = (a+1)+(a+b+2){\frac{x-1}{2}}
+\end{align*}
+and so on. Note that obviously, $\deg\left(P_k^{(a, b)}\right) = k$.
+
+\hypertarget{nice-spectral-properties}{%
+  \subsection{Nice Spectral Properties}\label{nice-spectral-properties}}
+
+\begin{itemize}
+  \item Differentiation
+  \item Three-Term Recurrence
+  \item why are they better than just Chebyshev?
+\end{itemize}
