@@ -38,7 +38,7 @@ class BoxSimulator : public ParticleBox, public QMainWindow {
   QLineSeries *totalEnergySeries = new QLineSeries();
 
   QChart *radiusHistChart = new QChart();
-  QBarSet *radiusHistSet = new QBarSet("Position Histogram");
+  QBarSet *radiusHistSet = new QBarSet("Radial Distance Histogram");
   QChart *velocityHistChart = new QChart();
   QBarSet *velocityHistSet = new QBarSet("Velocity Histogram");
   QChart *phaseSpaceChart = new QChart();

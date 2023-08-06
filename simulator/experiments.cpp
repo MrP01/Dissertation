@@ -2,7 +2,7 @@
 
 void simpleExperiment() {
   auto box = ParticleBox();
-  box.initRandomly(40, PLOT_HEIGHT * PARTICLE_MASS * GRAVITY);
+  box.initRandomly();
   box.simulate(1000);
 
   for (size_t i = 0; i < 10; i++) {

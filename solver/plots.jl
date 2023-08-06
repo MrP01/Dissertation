@@ -198,6 +198,9 @@ function plotSimulationHistogram()
   return fig
 end
 
+function plotPhaseSpace()
+end
+
 function plotJacobiConvergence()
   P = Utils.defaultEnv.P
   f(x) = exp(x^2) # function we want to expand

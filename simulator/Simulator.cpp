@@ -10,8 +10,9 @@ void BoxSimulator::buildUI() {
     particleChart->addSeries(particleSeries);
     particleChart->createDefaultAxes();
     particleChart->axes(Qt::Horizontal).first()->setRange(-1, 1);
-    particleChart->axes(Qt::Vertical).first()->setRange(0, PLOT_HEIGHT);
-    particleChart->axes(Qt::Vertical).first()->hide();
+    particleChart->axes(Qt::Vertical).first()->setRange(-1, 1);
+    if (DIMENSION == 1)
+      particleChart->axes(Qt::Vertical).first()->hide();
     particleChart->setAnimationOptions(QChart::SeriesAnimations);
     particleView->setRenderHint(QPainter::Antialiasing);
     particleView->setChart(particleChart);
@@ -117,7 +118,7 @@ void BoxSimulator::buildUI() {
   });
   connect(liftBtn, &QPushButton::clicked, [=]() {
     for (size_t i = 0; i < PARTICLES; i++)
-      positions[i][1] += PLOT_HEIGHT / 3;
+      positions[i][1] += 1 / 3;
     renderParticles();
     measure();
   });
@@ -130,13 +131,13 @@ void BoxSimulator::buildUI() {
   });
   connect(bringDownBtn, &QPushButton::clicked, [=]() {
     for (size_t i = 0; i < PARTICLES; i++)
-      if (positions[i][1] > PLOT_HEIGHT * 0.8)
+      if (positions[i][1] > 0.8)
         positions[i][1] = pow(abs(positions[i][1]), 0.6);
     renderParticles();
     measure();
   });
   connect(reinitBtn, &QPushButton::clicked, [=]() {
-    initRandomly(10, PLOT_HEIGHT * GRAVITY * PARTICLE_MASS);
+    initRandomly();
     renderParticles();
     measure();
   });
@@ -202,7 +203,7 @@ void BoxSimulator::buildUI() {
 void BoxSimulator::renderParticles() {
   particleSeries->clear();
   for (size_t i = 0; i < PARTICLES; i++)
-    *particleSeries << QPointF(positions[i][0], DIMENSION > 1 ? positions[i][1] : 1.0);
+    *particleSeries << QPointF(positions[i][0], DIMENSION > 1 ? positions[i][1] : 0.0);
 }
 
 void BoxSimulator::updateHistograms() {
@@ -223,16 +224,14 @@ void BoxSimulator::updateHistograms() {
 
 void BoxSimulator::measure() {
   double E_kin = getKineticEnergy();
-  double E_pot = getGravitationalPotential();
   double E_pot_LJ = getLJPotential();
-  double E_total = E_kin + E_pot + E_pot_LJ;
+  double E_total = E_kin + E_pot_LJ;
 
   _energyMax = std::max(_energyMax, E_total);
   energyChart->axes(Qt::Vertical).first()->setRange(0, log10(_energyMax) + 1.5);
 
   double measurement = _step / STEPS_PER_MEASUREMENT;
   *kineticEnergySeries << QPointF(measurement, log10(E_kin));
-  *potentialEnergySeries << QPointF(measurement, log10(E_pot));
   *LJpotentialEnergySeries << QPointF(measurement, log10(E_pot_LJ));
   *totalEnergySeries << QPointF(measurement, log10(E_total));
   if (measurement > MEASUREMENTS_IN_ENERGY_PLOT)
@@ -241,8 +240,7 @@ void BoxSimulator::measure() {
 
   statsLabel->setText(QString("Step %1:\t t = %2 tu,\t E_kin = %3,\t E_pot = %4,\t E_LJ = %5 eu")
                           .arg(QString::number(_step), QString::number(_step * TAU * ONE_SECOND, 'E', 1),
-                               QString::number(E_kin, 'E', 3), QString::number(E_pot, 'E', 3),
-                               QString::number(E_pot_LJ, 'E', 3)));
+                               QString::number(E_kin, 'E', 3), QString::number(E_pot_LJ, 'E', 3)));
 
   phaseSpaceSeries->clear();
   for (size_t i = 0; i < PARTICLES; i++) {

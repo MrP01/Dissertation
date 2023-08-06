@@ -6,7 +6,7 @@ int main(int argc, char **argv) {
   srand(time(NULL));
 
   BoxSimulator simulator;
-  simulator.initRandomly(40, PLOT_HEIGHT * PARTICLE_MASS * GRAVITY);
+  simulator.initRandomly();
   simulator.buildUI();
   simulator.resize(1380, 892);
   simulator.show();

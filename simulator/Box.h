@@ -6,19 +6,18 @@
 // be careful to set numeric values as floats here
 #define PARTICLES 100              // number of particles
 #define DIMENSION 1                // dimension
-#define INIT_WINDOW_LENGTH 2.0     // width of the initialisation interval for particles (default [-1, 1], so width 2)
+#define INIT_WINDOW_LENGTH 1.0     // width of the initialisation interval for particles (default [-1, 1], so width 2)
 #define LJ_SIGMA 0.001             // equilibrium distance, 3.4 Angstrom
 #define PARTICLE_MASS 1.0          // mass of a particle
-#define LJ_CUTOFF_DISTANCE 0.0001  // LJ explodes for very close particles, stop earlier
+#define LJ_CUTOFF_DISTANCE 0.00001 // LJ explodes for very close particles, stop earlier
 #define GRAVITY 8.532e1            // 9.81 m/s², actual value in reduced units: 8.532e-05
-#define TAU 5.0e-4                 // time step
+#define TAU 2.0e-4                 // time step
 #define RADIAL_HISTOGRAM_BINS 20   // into how many radius boxes we aggregate particles
 #define VELOCITY_HISTOGRAM_BINS 12 // similarly, number of bins for the velocity histogram
 #define HISTOGRAM_AVERAGE_N 200    // histogram averaging
 #define ONE_SECOND 2.1257e-12      // one second in reduced time unit
-#define PLOT_HEIGHT 3              // radius of the plot
-#define ALPHA 2.0                  // (attractive) parameter alpha for the kernel K(r)
-#define BETA 1.5                   // (repulsive) parameter beta for the kernel K(r)
+#define ALPHA 2.5                  // (attractive) parameter alpha for the kernel K(r)
+#define BETA 1.6                   // (repulsive) parameter beta for the kernel K(r)
 
 #define square(x) ((x) * (x))
 
@@ -59,12 +58,11 @@ class ParticleBox {
 
  public:
   ParticleBox() = default;
-  void initRandomly(double initialKineticEnergy, double initialGravitationalPotential);
+  void initRandomly();
   void simulate(size_t timesteps);
   void f(ParticleVectors &accelerations);
   void reflectParticles();
   double getKineticEnergy();
-  double getGravitationalPotential();
   double getLJPotential();
   double getTotalEnergy();
   void computeRadiusHistogram();

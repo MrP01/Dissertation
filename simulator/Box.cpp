@@ -5,8 +5,7 @@
 #include <iostream>
 #include <string.h>
 
-void ParticleBox::initRandomly(double initialKineticEnergy, double initialGravitationalPotential) {
-  double approxRadius = initialGravitationalPotential / (PARTICLE_MASS * GRAVITY);
+void ParticleBox::initRandomly() {
   for (size_t i = 0; i < PARTICLES; i++) {
     double closestNeighbourDist = 0;
     while (closestNeighbourDist < 0.8 * LJ_SIGMA) {
@@ -90,15 +89,7 @@ double ParticleBox::getKineticEnergy() {
   for (size_t i = 0; i < PARTICLES; i++)
     for (size_t d = 0; d < DIMENSION; d++)
       energy += square(velocities[i][d]);
-  std::cout << "Energy: " << energy << std::endl;
   return PARTICLE_MASS / 2 * energy;
-}
-double ParticleBox::getGravitationalPotential() {
-  double totalRadius = 0;
-  for (size_t i = 0; i < PARTICLES; i++)
-    totalRadius += positions[i][1];
-  // return PARTICLE_MASS * GRAVITY * totalRadius;
-  return 0.0;
 }
 double ParticleBox::getLJPotential() {
   double energy = 0;
@@ -115,11 +106,11 @@ double ParticleBox::getLJPotential() {
   }
   return abs(energy);
 }
-double ParticleBox::getTotalEnergy() { return getKineticEnergy() + getGravitationalPotential() + getLJPotential(); }
+double ParticleBox::getTotalEnergy() { return getKineticEnergy() + getLJPotential(); }
 
 void ParticleBox::computeRadiusHistogram() {
   radiusHist.min = 0;
-  radiusHist.max = 1;
+  radiusHist.max = sqrt(DIMENSION);
   const double delta = radiusHist.max - radiusHist.min;
   std::fill(std::begin(radiusHist.heights), std::end(radiusHist.heights), 0);
   for (size_t i = 0; i < PARTICLES; i++) {
@@ -140,8 +131,8 @@ void ParticleBox::computeRadiusHistogram() {
     pastHistograms[i] = pastHistograms[i - 1];
   pastHistograms[0] = radiusHist;
 
-  averagedRadiusHistogram.min = -1;
-  averagedRadiusHistogram.max = 1;
+  averagedRadiusHistogram.min = radiusHist.min;
+  averagedRadiusHistogram.max = radiusHist.max;
   for (size_t j = 0; j < RADIAL_HISTOGRAM_BINS; j++)
     averagedRadiusHistogram.heights[j] = 0;
   for (size_t i = 0; i < HISTOGRAM_AVERAGE_N; i++) {
@@ -155,7 +146,7 @@ void ParticleBox::computeRadiusHistogram() {
 }
 
 void ParticleBox::computeVelocityHistogram() {
-  std::array<double, PARTICLES> values;
+  std::array<double, PARTICLES> values = {0};
   for (size_t i = 0; i < PARTICLES; i++) {
     for (size_t d = 0; d < DIMENSION; d++)
       values[i] += square(velocities[i][d]);
