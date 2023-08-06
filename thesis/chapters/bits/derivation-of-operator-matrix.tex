@@ -15,30 +15,36 @@ As every finite-dimensional linear operator must have a matrix representation, w
 $$\hat{Q}^\beta[\rho](\vec{x}) = \jacobivec{x} \cdot Q^\beta \vec{\rho}\,,$$
 where $\jacobivec{x} \in \R^N$ is the vector of Jacobi polynomials $P^{(a, b)}_0(x)$, $P^{(a, b)}_1(x)$, ..., $P^{(a, b)}_{N-1}(x)$ evaluated at $2\norm{\vec{x}} - 1$ as introduced in and after \Cref{def:jacobi-polynomials}.
 
+% TODO: this section has weird indexing (start at 0 or 1?) and needs some work.
 Therefore, starting from \Cref{eq:theorem216-in-derivation}, we obtain
 \begin{align*}
-  \hat{Q}^\beta[\rho](\vec{x}) & = \sum_{k=0}^{N-1} \rho_k \hat{Q}^\beta[wP_k](\vec{x})       \\
-                               & = \sum_{k=0}^{N-1} \rho_k \sum_{j=0}^{N-1} q_{kj} \jacobi{x} \\
-                               & = \sum_{j=0}^{N-1} \sum_{k=0}^{N-1} \rho_k q_{kj} \jacobi{x} \\
-                               & = \jacobivec{x} \cdot \begin{pmatrix}
-                                                         \sum_{k=0}^{N-1} \rho_k q_{k,1} \\
-                                                         \sum_{k=0}^{N-1} \rho_k q_{k,2} \\
-                                                         \vdots                          \\
-                                                         \sum_{k=0}^{N-1} \rho_k q_{k,N}
-                                                       \end{pmatrix}        \\
-                               & = \jacobivec{x} \cdot \begin{pmatrix}
-                                                         q_{11} & q_{12} & \dots & q_{1N} \\
-                                                         q_{21} & \ddots & \dots & q_{2N} \\
-                                                         \vdots & \ddots &       &        \\
-                                                         q_{N1} & \dots  &       & q_{NN} \\
-                                                       \end{pmatrix} \begin{pmatrix}
-                                                                       \rho_0 \\
-                                                                       \rho_1 \\
-                                                                       \vdots \\
-                                                                       \rho_{N-1}
-                                                                     \end{pmatrix}       \\
-                               & = \jacobivec{x} Q^\beta \vec{\rho}
+  \hat{Q}^\beta[\rho](\vec{x}) & = \sum_{k=0}^{N-1} \rho_k \hat{Q}^\beta[wP_k](\vec{x}) = \sum_{k=0}^{N-1} \rho_k \sum_{j=0}^{N-1} q_{kj} \jacobi{x} \\
+                               & = \sum_{j=0}^{N-1} \sum_{k=0}^{N-1} \rho_k q_{kj} \jacobi{x}\,,
 \end{align*}
-which yields us the form of the operator.
+which we will rewrite in matrix-form,
+\begin{align*}
+  \hat{Q}^\beta[\rho](\vec{x}) & = \vec{P}(\vec{x}) \cdot
+  \begin{pmatrix}
+    \sum_{k=0}^{N-1} \rho_k q_{k,1} \\
+    \vdots                          \\
+    \sum_{k=0}^{N-1} \rho_k q_{k,N}
+  \end{pmatrix} = \vec{P}(\vec{x}) \cdot
+  \underbrace{
+    \begin{pmatrix}
+      q_{11} & \dots  & q_{1N} \\
+      \vdots & \ddots & \vdots \\
+      q_{N1} & \dots  & q_{NN} \\
+    \end{pmatrix}
+  }_{=: Q^\beta}
+  \begin{pmatrix}
+    \rho_0 \\
+    \vdots \\
+    \rho_{N-1}
+  \end{pmatrix}                                                          \\
+                               & = \jacobivec{x} \cdot Q^\beta \vec{\rho}
+\end{align*}
+where we used $\vec{P}(\vec{x}) = \jacobivec{x}$ as a shorthand
+giving us the form of the operator matrix.
+Each value $q_{kj}$ in it is therefore chosen to satisfy
 
 \pagebreak

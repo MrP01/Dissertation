@@ -8,10 +8,10 @@
 void ParticleBox::initRandomly() {
   for (size_t i = 0; i < PARTICLES; i++) {
     double closestNeighbourDist = 0;
-    while (closestNeighbourDist < 0.8 * LJ_SIGMA) {
+    while (closestNeighbourDist < 0.01) {
       for (size_t d = 0; d < DIMENSION; d++)
         positions[i][d] = ((double)rand() / RAND_MAX - 0.5) * INIT_WINDOW_LENGTH;
-      closestNeighbourDist = LJ_SIGMA;
+      closestNeighbourDist = 0.01;
       for (size_t j = 0; j < i; j++)
         closestNeighbourDist = std::min(closestNeighbourDist, distanceBetween(i, j));
       std::cout << "." << std::flush;
@@ -35,7 +35,7 @@ void ParticleBox::f(ParticleVectors &accelerations) {
         r_squared = LJ_CUT_DIST_SQ;
       double r = sqrt(r_squared);
       for (size_t d = 0; d < DIMENSION; d++)
-        forces[d] += (positions[i][d] - positions[j][d]) * (pow(r, ALPHA - 1) - pow(r, BETA - 1));
+        forces[d] += (positions[i][d] - positions[j][d]) * (pow(r, ALPHA - 1.0) - pow(r, BETA - 1.0));
       // std::cout << (positions[i][0] - positions[j][0]) << std::endl;
     }
     // std::cout << "force " << forces[0] << std::endl;
@@ -56,14 +56,11 @@ void ParticleBox::simulate(size_t timesteps) {
     }
 
     f(after_accelerations);
-    // double totalVelocity = 0;
     for (size_t i = 0; i < PARTICLES; i++) {
       for (size_t d = 0; d < DIMENSION; d++) {
         velocities[i][d] += TAU / 2 * (before_accelerations[i][d] + after_accelerations[i][d]);
-        // totalVelocity += square(velocities[i][d]);
       }
     }
-    // totalMeanVelocity += totalVelocity / PARTICLES;
     // std::cout << "Position:" << positions[0][0] << ", " << positions[1][0] << ", " << positions[2][0] << std::endl;
     reflectParticles();
     // time += TIME_STEP

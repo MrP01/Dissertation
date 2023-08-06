@@ -238,9 +238,10 @@ void BoxSimulator::measure() {
     energyChart->axes(Qt::Horizontal).first()->setRange((measurement - MEASUREMENTS_IN_ENERGY_PLOT), measurement);
   updateHistograms();
 
-  statsLabel->setText(QString("Step %1:\t t = %2 tu,\t E_kin = %3,\t E_pot = %4,\t E_LJ = %5 eu")
-                          .arg(QString::number(_step), QString::number(_step * TAU * ONE_SECOND, 'E', 1),
-                               QString::number(E_kin, 'E', 3), QString::number(E_pot_LJ, 'E', 3)));
+  statsLabel->setText(QString("Step %1:\t t = %2 tu,\t E_kin = %3,\t E_pot = %4,\t E_total = %5 eu")
+                          .arg(QString::number(_step), QString::number(_step * TAU, 'E', 1),
+                               QString::number(E_kin, 'E', 3), QString::number(E_pot_LJ, 'E', 3),
+                               QString::number(E_total, 'E', 3)));
 
   phaseSpaceSeries->clear();
   for (size_t i = 0; i < PARTICLES; i++) {

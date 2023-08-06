@@ -21,8 +21,8 @@
 #include <QtCharts/QStackedBarSeries>
 #include <QtCharts/QValueAxis>
 
-#define STEPS_PER_FRAME 4        // number of timesteps per frame
-#define FRAMES_PER_MEASUREMENT 1 // how often we measure
+#define STEPS_PER_FRAME 8        // number of timesteps per frame
+#define FRAMES_PER_MEASUREMENT 2 // how often we measure
 #define STEPS_PER_MEASUREMENT (STEPS_PER_FRAME * FRAMES_PER_MEASUREMENT)
 #define MEASUREMENTS_IN_ENERGY_PLOT 600
 
