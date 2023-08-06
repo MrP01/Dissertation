@@ -234,8 +234,12 @@ void BoxSimulator::measure() {
   *kineticEnergySeries << QPointF(measurement, log10(E_kin));
   *LJpotentialEnergySeries << QPointF(measurement, log10(E_pot_LJ));
   *totalEnergySeries << QPointF(measurement, log10(E_total));
-  if (measurement > MEASUREMENTS_IN_ENERGY_PLOT)
+  if (measurement > MEASUREMENTS_IN_ENERGY_PLOT) {
+    kineticEnergySeries->remove(0);
+    LJpotentialEnergySeries->remove(0);
+    totalEnergySeries->remove(0);
     energyChart->axes(Qt::Horizontal).first()->setRange((measurement - MEASUREMENTS_IN_ENERGY_PLOT), measurement);
+  }
   updateHistograms();
 
   statsLabel->setText(QString("Step %1:\t t = %2 tu,\t E_kin = %3,\t E_pot = %4,\t E_total = %5 eu")

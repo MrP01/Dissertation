@@ -8,10 +8,10 @@
 void ParticleBox::initRandomly() {
   for (size_t i = 0; i < PARTICLES; i++) {
     double closestNeighbourDist = 0;
-    while (closestNeighbourDist < 0.01) {
+    while (closestNeighbourDist < 0.1 / PARTICLES) {
       for (size_t d = 0; d < DIMENSION; d++)
         positions[i][d] = ((double)rand() / RAND_MAX - 0.5) * INIT_WINDOW_LENGTH;
-      closestNeighbourDist = 0.01;
+      closestNeighbourDist = 0.1 / PARTICLES;
       for (size_t j = 0; j < i; j++)
         closestNeighbourDist = std::min(closestNeighbourDist, distanceBetween(i, j));
       std::cout << "." << std::flush;
@@ -110,11 +110,17 @@ void ParticleBox::computeRadiusHistogram() {
   radiusHist.max = sqrt(DIMENSION);
   const double delta = radiusHist.max - radiusHist.min;
   std::fill(std::begin(radiusHist.heights), std::end(radiusHist.heights), 0);
+  double center[DIMENSION] = {0.0};
+  for (size_t d = 0; d < DIMENSION; d++) {
+    for (size_t i = 0; i < PARTICLES; i++)
+      center[d] += positions[i][d];
+    center[d] /= PARTICLES;
+  }
+
   for (size_t i = 0; i < PARTICLES; i++) {
     double r_squared = 0;
     for (size_t d = 0; d < DIMENSION; d++)
-      r_squared += square(positions[i][d]);
-    // TODO: the max radius is not 1 in a square domain
+      r_squared += square(positions[i][d] - center[d]);
     size_t bin = floor((std::sqrt(r_squared) - radiusHist.min) / delta * RADIAL_HISTOGRAM_BINS);
     if (bin >= RADIAL_HISTOGRAM_BINS) // true for the last value
       bin = RADIAL_HISTOGRAM_BINS - 1;
