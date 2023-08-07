@@ -21,7 +21,7 @@ void ParticleBox::initRandomly() {
 
     std::cout << "Init particle at " << positions[i][0] << std::endl;
     for (size_t d = 0; d < DIMENSION; d++)
-      velocities[i][d] = (((double)rand() / RAND_MAX) - 0.5) / 1.4;
+      velocities[i][d] = (((double)rand() / RAND_MAX) - 0.1);
   }
 }
 
@@ -35,7 +35,7 @@ void ParticleBox::f(ParticleVectors &accelerations) {
       if (r < LJ_CUTOFF_DISTANCE)
         r = LJ_CUTOFF_DISTANCE;
       for (size_t d = 0; d < DIMENSION; d++)
-        forces[d] += ((positions[i][d] > positions[j][d]) ? 1.0 : -1.0) * interaction->force(r);
+        forces[d] += sign(positions[i][d] - positions[j][d]) * interaction->force(r);
     }
     // std::cout << "force " << forces[0] << std::endl;
     double v = totalVelocity(i); // is positive

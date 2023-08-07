@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 // be careful to set numeric values as floats here
-#define PARTICLES 100              // number of particles
+#define PARTICLES 120              // number of particles
 #define DIMENSION 2                // dimension
 #define PARTICLE_MASS 1.0          // mass of a particle
 #define LJ_CUTOFF_DISTANCE 0.00001 // LJ explodes for very close particles, stop earlier
@@ -29,7 +29,7 @@ class AttractiveRepulsive : public InteractionPotential {
 class MorsePotential : public InteractionPotential {
  public:
   double C_att = 0.5;
-  double l_att = 2.0;
+  double l_att = 4.0;
   double C_rep = 1.0;
   double l_rep = 0.5;
   double potential(double r) { return -(C_att * exp(-r / l_att) - C_rep * exp(-r / l_rep)); };
@@ -37,14 +37,15 @@ class MorsePotential : public InteractionPotential {
 };
 
 struct Parameters {
-  double tau = 15.0e-4;          // time step
+  double tau = 30.0e-4;          // time step
   double boxScaling = 4.0;       // size of the box: [-1, 1] * boxScaling
   double initWindowLength = 0.5; // 0.0 < window length <= 2.0
-  double selfPropulsion = 1.0;   // "alpha" parameter in 2006-self-propelled
+  double selfPropulsion = 1.6;   // "alpha" parameter in 2006-self-propelled
   double friction = 0.5;         // "beta" parameter in 2006-self-propelled
 };
 
 #define square(x) ((x) * (x))
+#define sign(x) (((x) >= 0) ? 1.0 : -1.0)
 
 using ParticleVectors = double (&)[PARTICLES][DIMENSION];
 
