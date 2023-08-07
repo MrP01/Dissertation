@@ -35,7 +35,7 @@ void ParticleBox::f(ParticleVectors &accelerations) {
       if (r < LJ_CUTOFF_DISTANCE)
         r = LJ_CUTOFF_DISTANCE;
       for (size_t d = 0; d < DIMENSION; d++)
-        forces[d] += sign(positions[i][d] - positions[j][d]) * interaction->force(r);
+        forces[d] += (positions[j][d] - positions[i][d]) / r * interaction->force(r);
     }
     // std::cout << "force " << forces[0] << std::endl;
     double v = totalVelocity(i); // is positive
@@ -52,13 +52,13 @@ void ParticleBox::simulate(size_t timesteps, bool dot) {
     memcpy(beforeAccelerations, afterAccelerations, PARTICLES * DIMENSION * sizeof(double));
     for (size_t i = 0; i < PARTICLES; i++) {
       for (size_t d = 0; d < DIMENSION; d++)
-        positions[i][d] += (p.tau * velocities[i][d] + square(p.tau) / 2 * beforeAccelerations[i][d]) / p.boxScaling;
+        positions[i][d] += p.tau * velocities[i][d] + square(p.tau) / 2 * beforeAccelerations[i][d];
     }
 
     f(afterAccelerations);
     for (size_t i = 0; i < PARTICLES; i++) {
       for (size_t d = 0; d < DIMENSION; d++) {
-        velocities[i][d] += p.tau / 2 * (beforeAccelerations[i][d] + afterAccelerations[i][d]);
+        velocities[i][d] += (p.tau / 2 * (beforeAccelerations[i][d] + afterAccelerations[i][d])) / p.boxScaling;
       }
     }
     reflectParticles();

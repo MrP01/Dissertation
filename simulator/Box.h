@@ -28,18 +28,18 @@ class AttractiveRepulsive : public InteractionPotential {
 
 class MorsePotential : public InteractionPotential {
  public:
-  double C_att = 0.5;
+  double C_att = 1.5;
   double l_att = 2.0;
   double C_rep = 1.0;
   double l_rep = 0.5;
-  double potential(double r) { return -(C_att * exp(-r / l_att) - C_rep * exp(-r / l_rep)); };
-  double force(double r) { return -C_att / l_att * exp(-r / l_att) + C_rep / l_rep * exp(-r / l_rep); };
+  double potential(double r) { return C_att * exp(-r / l_att) - C_rep * exp(-r / l_rep); };
+  double force(double r) { return C_att / l_att * exp(-r / l_att) - C_rep / l_rep * exp(-r / l_rep); };
 };
 
 struct Parameters {
   double tau = 20.0e-4;          // time step
-  double boxScaling = 5.0;       // size of the box: [-1, 1] * boxScaling
-  double initWindowLength = 0.5; // 0.0 < window length <= 2.0
+  double boxScaling = 1.0;       // size of the box: [-1, 1] * boxScaling
+  double initWindowLength = 1.0; // 0.0 < window length <= 2.0
   double selfPropulsion = 1.6;   // "alpha" parameter in 2006-self-propelled
   double friction = 0.5;         // "beta" parameter in 2006-self-propelled
 };
