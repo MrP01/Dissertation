@@ -182,25 +182,29 @@ function plotParameterVariations()
   return fig
 end
 
-function plotSimulationHistogram()
+function plotSimulationHistograms()
   fig = Figure()
-  alpha, beta, d = defaultParams.alpha, defaultParams.beta, defaultParams.d
-  df = CSV.read("/tmp/positions.csv", DataFrames.DataFrame, header=["x", "y"])
-  center = sum(df.x) / length(df.x)
-  radialDistance = abs.(df.x .- center)
-  ax = Axis(fig[1, 1], xlabel=L"\text{Radial Distance}~r", ylabel=LT"Density",
+  df = CSV.read("/tmp/positions.csv", DataFrames.DataFrame, header=false)
+  dimension = length(axes(df, 2))
+  center = [sum(df[!, k]) / length(df[!, k]) for k in 1:dimension]
+  @show center
+  radialDistance = hypot.([df[!, k] for k in 1:dimension]...)
+  ax = Axis(fig[1, 1], xlabel=L"\text{Radial distance}~r", ylabel=LT"Density",
     title=L"\text{Particle Simulation Output Distribution}")
   hist!(ax, radialDistance, bins=20)
-  xlims!(ax, 0, 1)
+  xlims!(ax, 0, maximum(radialDistance))
+
   df = CSV.read("/tmp/position-histogram.csv", DataFrames.DataFrame, header=["hist"])
   ax = Axis(fig[2, 1], xlabel=L"\text{Radial distance}~r", ylabel=LT"Density",
-    title=L"\text{Particle Simulation Output Distribution}~(\alpha, \beta, d) = (%$alpha, %$beta, %$d)")
-  barplot!(ax, df.hist)
-  df = CSV.read("/tmp/velocities.csv", DataFrames.DataFrame, header=["x", "y"])
-  velocity = hypot.(df.x)
+    title=L"\text{Averaged Simulation Output Distribution over 20 runs}")
+  barplot!(ax, df.hist, dodge_gap=0)
+
+  df = CSV.read("/tmp/velocities.csv", DataFrames.DataFrame, header=false)
+  velocity = hypot.([df[!, k] for k in 1:dimension]...)
   ax = Axis(fig[3, 1], xlabel=L"\text{Velocity}~v", ylabel=LT"Density",
-    title=L"\text{Particle Simulation Output Distribution}")
+    title=L"\text{Simulation Output Velocity Distribution}")
   hist!(ax, velocity, bins=20)
+
   saveFig(fig, "simulation-histogram")
   return fig
 end

@@ -3,10 +3,10 @@
 void simpleExperiment() {
   auto box = ParticleBox();
   box.initRandomly();
-  box.simulate(35000);
+  box.simulate(10000);
 
   double minimalPotential = box.getLJPotential();
-  for (size_t i = 0; i < 2000; i++) {
+  for (size_t i = 0; i < 8000; i++) {
     box.simulate(2);
     double potential = box.getLJPotential();
     if (potential < minimalPotential) {
@@ -26,6 +26,7 @@ void simpleExperiment() {
 }
 
 int main() {
+  srand(time(NULL));
   simpleExperiment();
   return 0;
 }

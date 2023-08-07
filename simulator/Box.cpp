@@ -175,12 +175,18 @@ void ParticleBox::computeVelocityHistogram() {
 
 void ParticleBox::exportToCSV() {
   std::ofstream positionsCsv("/tmp/positions.csv");
-  for (size_t i = 0; i < PARTICLES; i++)
-    positionsCsv << positions[i][0] << ", " << positions[i][1] << "\n";
+  for (size_t i = 0; i < PARTICLES; i++) {
+    for (size_t d = 0; d < DIMENSION - 1; d++)
+      positionsCsv << positions[i][d] << ", ";
+    positionsCsv << positions[i][DIMENSION - 1] << "\n";
+  }
   positionsCsv.close();
   std::ofstream velocitiesCsv("/tmp/velocities.csv");
-  for (size_t i = 0; i < PARTICLES; i++)
-    velocitiesCsv << velocities[i][0] << ", " << velocities[i][1] << "\n";
+  for (size_t i = 0; i < PARTICLES; i++) {
+    for (size_t d = 0; d < DIMENSION - 1; d++)
+      velocitiesCsv << velocities[i][d] << ", ";
+    velocitiesCsv << velocities[i][DIMENSION - 1] << "\n";
+  }
   velocitiesCsv.close();
   std::ofstream positionHistCsv("/tmp/position-histogram.csv");
   for (size_t i = 0; i < RADIAL_HISTOGRAM_BINS; i++)
