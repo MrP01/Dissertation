@@ -4,21 +4,22 @@
 #include <stdlib.h>
 
 // be careful to set numeric values as floats here
-#define PARTICLES 500              // number of particles
+#define PARTICLES 300              // number of particles
 #define DIMENSION 1                // dimension
-#define INIT_WINDOW_LENGTH 0.4     // width of the initialisation interval for particles (default [-1, 1], so width 2)
 #define PARTICLE_MASS 10.0         // mass of a particle
 #define LJ_CUTOFF_DISTANCE 0.00001 // LJ explodes for very close particles, stop earlier
-#define TAU 12.0e-4                // time step
 #define RADIAL_HISTOGRAM_BINS 20   // into how many radius boxes we aggregate particles
 #define VELOCITY_HISTOGRAM_BINS 12 // similarly, number of bins for the velocity histogram
 #define HISTOGRAM_AVERAGE_N 20     // histogram averaging
-#define ALPHA 2.0                  // (attractive) parameter alpha for the kernel K(r)
-#define BETA 1.5                   // (repulsive) parameter beta for the kernel K(r)
+
+struct Parameters {
+  double alpha = 2.0;
+  double beta = 1.5;
+  double initWindowLength = 0.5;
+  double tau = 12.0e-4;
+};
 
 #define square(x) ((x) * (x))
-
-#define LJ_CUT_DIST_SQ (LJ_CUTOFF_DISTANCE * LJ_CUTOFF_DISTANCE)
 
 using ParticleVectors = double (&)[PARTICLES][DIMENSION];
 
@@ -36,6 +37,7 @@ struct VelocityHistogram {
 
 class ParticleBox {
  protected:
+  Parameters params;
   double positions[PARTICLES][DIMENSION];
   double velocities[PARTICLES][DIMENSION];
   struct RadiusHistogram radiusHist;

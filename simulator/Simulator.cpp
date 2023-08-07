@@ -110,7 +110,7 @@ void BoxSimulator::buildUI() {
       controlBtn->setText("Stop");
     } else {
       killTimer(_timerId);
-      double meanVel = totalMeanVelocity / ((_step - _start_step) * TAU);
+      double meanVel = totalMeanVelocity / ((_step - _start_step) * params.tau);
       // std::cout << "Squared Mean velocity result: " << meanVel << std::endl;
       // std::cout << "k_B * T / m = " << meanVel / 2 << std::endl;
       controlBtn->setText("Start");
@@ -243,7 +243,7 @@ void BoxSimulator::measure() {
   updateHistograms();
 
   statsLabel->setText(QString("Step %1:\t t = %2 tu,\t E_kin = %3,\t E_pot = %4,\t E_total = %5 eu")
-                          .arg(QString::number(_step), QString::number(_step * TAU, 'E', 1),
+                          .arg(QString::number(_step), QString::number(_step * params.tau, 'E', 1),
                                QString::number(E_kin, 'E', 3), QString::number(E_pot_LJ, 'E', 3),
                                QString::number(E_total, 'E', 3)));
 

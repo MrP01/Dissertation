@@ -15,7 +15,7 @@ void simpleExperiment() {
       minimalPotential = potential;
       box.exportToCSV();
       std::cout << "new min!" << std::endl;
-      n = 100;
+      n = 200;
     }
     std::cout << n << ": " << potential << std::endl;
   }

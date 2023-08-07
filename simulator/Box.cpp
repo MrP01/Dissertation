@@ -10,7 +10,7 @@ void ParticleBox::initRandomly() {
     double closestNeighbourDist = 0;
     while (closestNeighbourDist < 0.1 / PARTICLES) {
       for (size_t d = 0; d < DIMENSION; d++)
-        positions[i][d] = ((double)rand() / RAND_MAX - 0.5) * INIT_WINDOW_LENGTH;
+        positions[i][d] = ((double)rand() / RAND_MAX - 0.5) * params.initWindowLength;
       closestNeighbourDist = 0.1 / PARTICLES;
       for (size_t j = 0; j < i; j++)
         closestNeighbourDist = std::min(closestNeighbourDist, distanceBetween(i, j));
@@ -31,13 +31,11 @@ void ParticleBox::f(ParticleVectors &accelerations) {
     for (size_t j = 0; j < PARTICLES; j++) {
       if (i == j)
         continue;
-      double r_squared = squaredDistanceBetween(i, j);
-      // std::cout << "r sq" << r_squared << std::endl;
-      if (r_squared < LJ_CUT_DIST_SQ)
-        r_squared = LJ_CUT_DIST_SQ;
-      double r = sqrt(r_squared);
+      double r = distanceBetween(i, j);
+      if (r < LJ_CUTOFF_DISTANCE)
+        r = LJ_CUTOFF_DISTANCE;
       for (size_t d = 0; d < DIMENSION; d++)
-        forces[d] += (positions[i][d] - positions[j][d]) * (pow(r, ALPHA - 1.0) - pow(r, BETA - 1.0));
+        forces[d] += (positions[i][d] - positions[j][d]) * (pow(r, params.alpha - 1.0) - pow(r, params.beta - 1.0));
     }
     // std::cout << "force " << forces[0] << std::endl;
     double v = totalVelocity(i); // is positive
@@ -54,13 +52,13 @@ void ParticleBox::simulate(size_t timesteps, bool dot) {
     memcpy(before_accelerations, after_accelerations, PARTICLES * DIMENSION * sizeof(double));
     for (size_t i = 0; i < PARTICLES; i++) {
       for (size_t d = 0; d < DIMENSION; d++)
-        positions[i][d] += TAU * velocities[i][d] + square(TAU) / 2 * before_accelerations[i][d];
+        positions[i][d] += params.tau * velocities[i][d] + square(params.tau) / 2 * before_accelerations[i][d];
     }
 
     f(after_accelerations);
     for (size_t i = 0; i < PARTICLES; i++) {
       for (size_t d = 0; d < DIMENSION; d++) {
-        velocities[i][d] += TAU / 2 * (before_accelerations[i][d] + after_accelerations[i][d]);
+        velocities[i][d] += params.tau / 2 * (before_accelerations[i][d] + after_accelerations[i][d]);
       }
     }
     // std::cout << "Position:" << positions[0][0] << ", " << positions[1][0] << ", " << positions[2][0] << std::endl;
@@ -98,11 +96,10 @@ double ParticleBox::getLJPotential() {
     for (size_t j = 0; j < PARTICLES; j++) {
       if (i == j)
         continue;
-      double r_squared = squaredDistanceBetween(i, j);
-      if (r_squared < LJ_CUT_DIST_SQ)
-        r_squared = LJ_CUT_DIST_SQ;
-      double r = sqrt(r_squared);
-      energy -= std::pow(r, ALPHA) / ALPHA - std::pow(r, BETA) / BETA;
+      double r = distanceBetween(i, j);
+      if (r < LJ_CUTOFF_DISTANCE)
+        r = LJ_CUTOFF_DISTANCE;
+      energy -= std::pow(r, params.alpha) / params.alpha - std::pow(r, params.beta) / params.beta;
     }
   }
   return energy;
