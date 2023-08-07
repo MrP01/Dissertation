@@ -20,7 +20,7 @@ class InteractionPotential {
 
 class AttractiveRepulsive : public InteractionPotential {
  public:
-  double alpha = 1.68;
+  double alpha = 1.8;
   double beta = 1.5;
   double potential(double r) { return pow(r, alpha) / alpha - pow(r, beta) / beta; }
   double force(double r) { return pow(r, alpha - 1.0) - pow(r, beta - 1.0); }
@@ -29,7 +29,7 @@ class AttractiveRepulsive : public InteractionPotential {
 class MorsePotential : public InteractionPotential {
  public:
   double C_att = 0.5;
-  double l_att = 4.0;
+  double l_att = 2.0;
   double C_rep = 1.0;
   double l_rep = 0.5;
   double potential(double r) { return -(C_att * exp(-r / l_att) - C_rep * exp(-r / l_rep)); };
@@ -37,8 +37,8 @@ class MorsePotential : public InteractionPotential {
 };
 
 struct Parameters {
-  double tau = 30.0e-4;          // time step
-  double boxScaling = 4.0;       // size of the box: [-1, 1] * boxScaling
+  double tau = 20.0e-4;          // time step
+  double boxScaling = 5.0;       // size of the box: [-1, 1] * boxScaling
   double initWindowLength = 0.5; // 0.0 < window length <= 2.0
   double selfPropulsion = 1.6;   // "alpha" parameter in 2006-self-propelled
   double friction = 0.5;         // "beta" parameter in 2006-self-propelled

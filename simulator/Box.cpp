@@ -21,7 +21,7 @@ void ParticleBox::initRandomly() {
 
     std::cout << "Init particle at " << positions[i][0] << std::endl;
     for (size_t d = 0; d < DIMENSION; d++)
-      velocities[i][d] = (((double)rand() / RAND_MAX) - 0.1);
+      velocities[i][d] = (((double)rand() / RAND_MAX) - 0.5);
   }
 }
 
@@ -40,7 +40,7 @@ void ParticleBox::f(ParticleVectors &accelerations) {
     // std::cout << "force " << forces[0] << std::endl;
     double v = totalVelocity(i); // is positive
     for (size_t d = 0; d < DIMENSION; d++)
-      accelerations[i][d] = forces[d] / PARTICLE_MASS + friction(v) * velocities[i][d];
+      accelerations[i][d] = (forces[d] / PARTICLE_MASS + friction(v) * velocities[i][d]);
   }
 }
 

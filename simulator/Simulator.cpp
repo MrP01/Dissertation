@@ -180,7 +180,7 @@ void BoxSimulator::buildUI() {
   rightChartLayout->addWidget(energyView);
   rightChartLayout->addWidget(velocityHistView);
   mainLayout->addLayout(rightChartLayout, 0, 1, 2, 1);
-  mainLayout->addWidget(statsLabel, 2, 0);
+  mainLayout->addWidget(statsLabel, 2, 0, 1, 3);
   mainLayout->addWidget(phaseSpaceView, 0, 2);
   auto buttonLayout = new QHBoxLayout();
   buttonLayout->addWidget(controlBtn);
