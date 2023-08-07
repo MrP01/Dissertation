@@ -5,12 +5,14 @@
 #include <iostream>
 #include <string.h>
 
+double ParticleBox::friction(double v) { return p.selfPropulsion - p.friction * v * v; }
+
 void ParticleBox::initRandomly() {
   for (size_t i = 0; i < PARTICLES; i++) {
     double closestNeighbourDist = 0;
     while (closestNeighbourDist < 0.1 / PARTICLES) {
       for (size_t d = 0; d < DIMENSION; d++)
-        positions[i][d] = ((double)rand() / RAND_MAX - 0.5) * params.initWindowLength;
+        positions[i][d] = ((double)rand() / RAND_MAX - 0.5) * p.initWindowLength;
       closestNeighbourDist = 0.1 / PARTICLES;
       for (size_t j = 0; j < i; j++)
         closestNeighbourDist = std::min(closestNeighbourDist, distanceBetween(i, j));
@@ -23,12 +25,6 @@ void ParticleBox::initRandomly() {
   }
 }
 
-double ParticleBox::potential(double r) {
-  return std::pow(r, params.alpha) / params.alpha - std::pow(r, params.beta) / params.beta;
-}
-double ParticleBox::force(double r) { return pow(r, params.alpha - 1.0) - pow(r, params.beta - 1.0); }
-double ParticleBox::friction(double v) { return params.selfPropulsion - params.friction * v * v; }
-
 void ParticleBox::f(ParticleVectors &accelerations) {
   for (size_t i = 0; i < PARTICLES; i++) {
     double forces[DIMENSION] = {0.0};
@@ -39,7 +35,7 @@ void ParticleBox::f(ParticleVectors &accelerations) {
       if (r < LJ_CUTOFF_DISTANCE)
         r = LJ_CUTOFF_DISTANCE;
       for (size_t d = 0; d < DIMENSION; d++)
-        forces[d] += ((positions[i][d] > positions[j][d]) ? 1.0 : -1.0) * force(r);
+        forces[d] += ((positions[i][d] > positions[j][d]) ? 1.0 : -1.0) * interaction->force(r);
     }
     // std::cout << "force " << forces[0] << std::endl;
     double v = totalVelocity(i); // is positive
@@ -49,25 +45,23 @@ void ParticleBox::f(ParticleVectors &accelerations) {
 }
 
 void ParticleBox::simulate(size_t timesteps, bool dot) {
-  double after_accelerations[PARTICLES][DIMENSION];
-  f(after_accelerations);
+  double afterAccelerations[PARTICLES][DIMENSION];
+  f(afterAccelerations);
   for (size_t t = 0; t < timesteps; t++) {
-    ParticleVectors before_accelerations = after_accelerations;
-    memcpy(before_accelerations, after_accelerations, PARTICLES * DIMENSION * sizeof(double));
+    ParticleVectors beforeAccelerations = afterAccelerations;
+    memcpy(beforeAccelerations, afterAccelerations, PARTICLES * DIMENSION * sizeof(double));
     for (size_t i = 0; i < PARTICLES; i++) {
       for (size_t d = 0; d < DIMENSION; d++)
-        positions[i][d] += params.tau * velocities[i][d] + square(params.tau) / 2 * before_accelerations[i][d];
+        positions[i][d] += (p.tau * velocities[i][d] + square(p.tau) / 2 * beforeAccelerations[i][d]) / p.boxScaling;
     }
 
-    f(after_accelerations);
+    f(afterAccelerations);
     for (size_t i = 0; i < PARTICLES; i++) {
       for (size_t d = 0; d < DIMENSION; d++) {
-        velocities[i][d] += params.tau / 2 * (before_accelerations[i][d] + after_accelerations[i][d]);
+        velocities[i][d] += p.tau / 2 * (beforeAccelerations[i][d] + afterAccelerations[i][d]);
       }
     }
-    // std::cout << "Position:" << positions[0][0] << ", " << positions[1][0] << ", " << positions[2][0] << std::endl;
     reflectParticles();
-    // time += TIME_STEP
     if (dot && t % 5 == 0)
       std::cout << "." << std::flush;
   }
@@ -103,7 +97,7 @@ double ParticleBox::getLJPotential() {
       double r = distanceBetween(i, j);
       if (r < LJ_CUTOFF_DISTANCE)
         r = LJ_CUTOFF_DISTANCE;
-      energy -= potential(r);
+      energy -= interaction->potential(r);
     }
   }
   return energy;

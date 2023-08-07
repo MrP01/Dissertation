@@ -12,13 +12,36 @@
 #define VELOCITY_HISTOGRAM_BINS 12 // similarly, number of bins for the velocity histogram
 #define HISTOGRAM_AVERAGE_N 20     // histogram averaging
 
-struct Parameters {
+class InteractionPotential {
+ public:
+  virtual double potential(double r) { return 0.0; };
+  virtual double force(double r) { return 0.0; };
+};
+
+class AttractiveRepulsive : public InteractionPotential {
+ public:
   double alpha = 1.68;
   double beta = 1.5;
-  double initWindowLength = 0.5;
-  double tau = 15.0e-4;
-  double selfPropulsion = 1.0; // "alpha" parameter in 2006-self-propelled
-  double friction = 0.5;       // "beta" parameter in 2006-self-propelled
+  double potential(double r) { return pow(r, alpha) / alpha - pow(r, beta) / beta; }
+  double force(double r) { return pow(r, alpha - 1.0) - pow(r, beta - 1.0); }
+};
+
+class MorsePotential : public InteractionPotential {
+ public:
+  double C_att = 0.5;
+  double l_att = 2.0;
+  double C_rep = 1.0;
+  double l_rep = 0.5;
+  double potential(double r) { return -(C_att * exp(-r / l_att) - C_rep * exp(-r / l_rep)); };
+  double force(double r) { return -C_att / l_att * exp(-r / l_att) + C_rep / l_rep * exp(-r / l_rep); };
+};
+
+struct Parameters {
+  double tau = 15.0e-4;          // time step
+  double boxScaling = 4.0;       // size of the box: [-1, 1] * boxScaling
+  double initWindowLength = 0.5; // 0.0 < window length <= 2.0
+  double selfPropulsion = 1.0;   // "alpha" parameter in 2006-self-propelled
+  double friction = 0.5;         // "beta" parameter in 2006-self-propelled
 };
 
 #define square(x) ((x) * (x))
@@ -39,7 +62,8 @@ struct VelocityHistogram {
 
 class ParticleBox {
  protected:
-  Parameters params;
+  Parameters p;
+  InteractionPotential *interaction = new MorsePotential();
   double positions[PARTICLES][DIMENSION];
   double velocities[PARTICLES][DIMENSION];
   struct RadiusHistogram radiusHist;
@@ -52,7 +76,7 @@ class ParticleBox {
     double sum = 0.0;
     for (size_t d = 0; d < DIMENSION; d++)
       sum += square(positions[i][d] - positions[j][d]);
-    return sum;
+    return square(p.boxScaling) * sum;
   }
   double distanceBetween(size_t i, size_t j) { return std::sqrt(squaredDistanceBetween(i, j)); }
   double totalVelocity(size_t i) {
@@ -68,8 +92,6 @@ class ParticleBox {
   void simulate(size_t timesteps, bool dot = false);
   void f(ParticleVectors &accelerations);
   void reflectParticles();
-  double potential(double r);
-  double force(double r);
   double friction(double v);
   double getKineticEnergy();
   double getLJPotential();

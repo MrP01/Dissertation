@@ -17,6 +17,7 @@ r_vec = 0:0.002:1
 r_vec_noend = r_vec[1:end-1]
 x_vec = -1:0.002:1
 x_vec_noends = x_vec[2:end-1]
+dissColours = Makie.wong_colors()
 pow10tickformat(values) = [L"10^{%$(Int(value))}" for value in values]
 
 function saveFig(fig::Figure, name::String)
@@ -188,21 +189,21 @@ function plotSimulationHistograms()
   dimension = length(axes(df, 2))
   center = [sum(df[!, k]) / length(df[!, k]) for k in 1:dimension]
   @show center
-  radialDistance = hypot.([df[!, k] - center[k] for k in 1:dimension]...)
+  radialDistance = hypot.([df[!, k] .- center[k] for k in 1:dimension]...)
   ax = Axis(fig[1, 1], xlabel=L"\text{Radial distance}~r", ylabel=LT"Density",
     title=L"\text{Particle Simulation Output Distribution}")
-  hist!(ax, radialDistance, bins=0:0.02:(maximum(radialDistance)*1.05))
+  hist!(ax, radialDistance, bins=0:0.02:(maximum(radialDistance)*1.05), color=dissColours[1])
 
   df = CSV.read("/tmp/position-histogram.csv", DataFrames.DataFrame, header=["hist"])
   ax = Axis(fig[2, 1], xlabel=L"\text{Radial distance}~r", ylabel=LT"Density",
     title=L"\text{Averaged Simulation Output Distribution over 20 runs}")
-  barplot!(ax, df.hist, gap=0)
+  barplot!(ax, df.hist, gap=0, color=dissColours[2])
 
   df = CSV.read("/tmp/velocities.csv", DataFrames.DataFrame, header=false)
   velocity = hypot.([df[!, k] for k in 1:dimension]...)
   ax = Axis(fig[3, 1], xlabel=L"\text{Velocity}~v", ylabel=LT"Density",
     title=L"\text{Simulation Output Velocity Distribution}")
-  hist!(ax, velocity, bins=20)
+  hist!(ax, velocity, bins=20, color=dissColours[3])
 
   saveFig(fig, "simulation-histogram")
   return fig
@@ -238,9 +239,9 @@ function plotSimulationQuiver()
 
   fig = Figure()
   ax = Axis(fig[1, 1], xlabel=L"x", ylabel=L"y", title=L"\text{Simulation Output}~(d = %$dimension)")
-  scatter!(ax, posidf[!, 1], posidf[!, 2], color=Makie.wong_colors()[4])
+  scatter!(ax, posidf[!, 1], posidf[!, 2], color=dissColours[1])
   quiver!(ax, posidf[!, 1], posidf[!, 2], velodf[!, 1] / 20, velodf[!, 2] / 20,
-    color=Makie.wong_colors()[1], linewidth=2)
+    color=dissColours[4], linewidth=2)
   saveFig(fig, "simulation-quiver")
   return fig
 end
