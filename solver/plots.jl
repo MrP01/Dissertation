@@ -221,14 +221,46 @@ function plotSimulationAndSolverComparison()
   fig = Figure()
   ax = Axis(fig[1, 1], xlabel=L"\text{Radial distance}~r", ylabel=LT"Density",
     title=L"\text{Particle Simulation Output Distribution}")
-  hist!(ax, radialDistance, bins=0:0.03:(maximum(radialDistance)*1.05), scale_to=maximum(solution))
-  lines!(ax, r, solution, color=:red, linewidth=3.0)
+  hist!(ax, radialDistance, bins=0:0.03:(maximum(radialDistance)*1.05), scale_to=maximum(solution),
+    label=LT"Particle Simulation")
+  lines!(ax, r, solution, color=:red, linewidth=3.0, label=LT"Spectral Method")
   ylims!(ax, 0, maximum(solution) * 1.05)
+  axislegend(ax, position=:lt)
   saveFig(fig, "simulation-solver-comparison")
   return fig
 end
 
+function plotSimulationQuiver()
+  posidf = CSV.read("/tmp/positions.csv", DataFrames.DataFrame, header=false)
+  velodf = CSV.read("/tmp/velocities.csv", DataFrames.DataFrame, header=false)
+  dimension = length(axes(posidf, 2))
+  @assert dimension >= 2
+
+  fig = Figure()
+  ax = Axis(fig[1, 1], xlabel=L"x", ylabel=L"y", title=L"\text{Simulation Output}~(d = %$dimension)")
+  scatter!(ax, posidf[!, 1], posidf[!, 2], color=Makie.wong_colors()[4])
+  quiver!(ax, posidf[!, 1], posidf[!, 2], velodf[!, 1] / 20, velodf[!, 2] / 20,
+    color=Makie.wong_colors()[1], linewidth=2)
+  saveFig(fig, "simulation-quiver")
+  return fig
+end
+
 function plotPhaseSpace()
+  posidf = CSV.read("/tmp/positions.csv", DataFrames.DataFrame, header=false)
+  velodf = CSV.read("/tmp/velocities.csv", DataFrames.DataFrame, header=false)
+  dimension = length(axes(posidf, 2))
+
+  fig = Figure()
+  ax = Axis(fig[1, 1], xlabel=L"\text{First coordinate}~x", ylabel=L"\text{First velocity component}~v_x",
+    title=L"\text{Simulation Output Phase Space}~(d = %$dimension)")
+  scatter!(ax, posidf[!, 1], velodf[!, 1])
+  ax = Axis(fig[2, 1], xlabel=L"\text{Radial distance}~r", ylabel=L"\text{Velocity}~v",
+    title=L"\text{Simulation Output Phase Space}~(d = %$dimension)")
+  radialDistance = hypot.([posidf[!, k] for k in 1:dimension]...)
+  velocity = hypot.([velodf[!, k] for k in 1:dimension]...)
+  scatter!(ax, radialDistance, velocity)
+  saveFig(fig, "phase-space-plot")
+  return fig
 end
 
 function plotJacobiConvergence()

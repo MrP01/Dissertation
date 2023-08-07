@@ -23,7 +23,7 @@ void ParticleBox::initRandomly() {
   }
 }
 
-double friction(double v) { return 0.7 - 0.5 * v * v; }
+double ParticleBox::friction(double v) { return params.selfPropulsion - params.friction * v * v; }
 
 void ParticleBox::f(ParticleVectors &accelerations) {
   for (size_t i = 0; i < PARTICLES; i++) {
@@ -64,7 +64,7 @@ void ParticleBox::simulate(size_t timesteps, bool dot) {
     // std::cout << "Position:" << positions[0][0] << ", " << positions[1][0] << ", " << positions[2][0] << std::endl;
     reflectParticles();
     // time += TIME_STEP
-    if (dot)
+    if (dot && t % 5 == 0)
       std::cout << "." << std::flush;
   }
 }

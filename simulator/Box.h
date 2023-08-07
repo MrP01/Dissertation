@@ -4,8 +4,8 @@
 #include <stdlib.h>
 
 // be careful to set numeric values as floats here
-#define PARTICLES 300              // number of particles
-#define DIMENSION 1                // dimension
+#define PARTICLES 100              // number of particles
+#define DIMENSION 2                // dimension
 #define PARTICLE_MASS 10.0         // mass of a particle
 #define LJ_CUTOFF_DISTANCE 0.00001 // LJ explodes for very close particles, stop earlier
 #define RADIAL_HISTOGRAM_BINS 20   // into how many radius boxes we aggregate particles
@@ -17,6 +17,8 @@ struct Parameters {
   double beta = 1.5;
   double initWindowLength = 0.5;
   double tau = 12.0e-4;
+  double selfPropulsion = 0.7;
+  double friction = 0.5;
 };
 
 #define square(x) ((x) * (x))
@@ -66,6 +68,7 @@ class ParticleBox {
   void simulate(size_t timesteps, bool dot = false);
   void f(ParticleVectors &accelerations);
   void reflectParticles();
+  double friction(double v);
   double getKineticEnergy();
   double getLJPotential();
   double getTotalEnergy();
