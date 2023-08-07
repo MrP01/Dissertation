@@ -225,15 +225,15 @@ void BoxSimulator::updateHistograms() {
 void BoxSimulator::measure() {
   double E_kin = getKineticEnergy();
   double E_pot_LJ = getLJPotential();
-  double E_total = E_kin + E_pot_LJ + 1e5;
+  double E_total = E_kin + E_pot_LJ;
 
   _energyMax = std::max(_energyMax, E_total);
   energyChart->axes(Qt::Vertical).first()->setRange(0, log10(_energyMax) + 1.5);
 
   double measurement = _step / STEPS_PER_MEASUREMENT;
-  *kineticEnergySeries << QPointF(measurement, log10(E_kin));
-  *LJpotentialEnergySeries << QPointF(measurement, log10(E_pot_LJ));
-  *totalEnergySeries << QPointF(measurement, log10(E_total));
+  *kineticEnergySeries << QPointF(measurement, log10(abs(E_kin)));
+  *LJpotentialEnergySeries << QPointF(measurement, log10(abs(E_pot_LJ)));
+  *totalEnergySeries << QPointF(measurement, log10(abs(E_total)));
   if (measurement > MEASUREMENTS_IN_ENERGY_PLOT) {
     kineticEnergySeries->remove(0);
     LJpotentialEnergySeries->remove(0);

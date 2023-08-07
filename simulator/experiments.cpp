@@ -1,9 +1,10 @@
 #include "Box.h"
 
-void simpleExperiment() {
+int main() {
+  srand(time(NULL));
   auto box = ParticleBox();
   box.initRandomly();
-  box.simulate((size_t)(10000 * (PARTICLES / 500.0)), true);
+  box.simulate((size_t)(10000 * (PARTICLES / 200.0)), true);
 
   double minimalPotential = box.getLJPotential();
   size_t n = 200;
@@ -25,10 +26,5 @@ void simpleExperiment() {
   //   box.computeRadiusHistogram();
   // }
   // box.exportToCSV();
-}
-
-int main() {
-  srand(time(NULL));
-  simpleExperiment();
   return 0;
 }

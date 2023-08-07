@@ -188,7 +188,7 @@ function plotSimulationHistograms()
   dimension = length(axes(df, 2))
   center = [sum(df[!, k]) / length(df[!, k]) for k in 1:dimension]
   @show center
-  radialDistance = hypot.([df[!, k] for k in 1:dimension]...)
+  radialDistance = hypot.([df[!, k] - center[k] for k in 1:dimension]...)
   ax = Axis(fig[1, 1], xlabel=L"\text{Radial distance}~r", ylabel=LT"Density",
     title=L"\text{Particle Simulation Output Distribution}")
   hist!(ax, radialDistance, bins=0:0.02:(maximum(radialDistance)*1.05))
@@ -213,7 +213,7 @@ function plotSimulationAndSolverComparison()
   df = CSV.read("/tmp/positions.csv", DataFrames.DataFrame, header=false)
   dimension = length(axes(df, 2))
   @show center = [sum(df[!, k]) / length(df[!, k]) for k in 1:dimension]
-  radialDistance = hypot.([df[!, k] for k in 1:dimension]...)
+  radialDistance = hypot.([df[!, k] .- center[k] for k in 1:dimension]...)
   maxR = maximum(radialDistance)
   solution = Utils.rho(r_vec_noend, Solver.solve(12, maxR, env), env)
   r = r_vec_noend * maxR

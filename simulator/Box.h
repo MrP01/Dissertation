@@ -6,19 +6,19 @@
 // be careful to set numeric values as floats here
 #define PARTICLES 100              // number of particles
 #define DIMENSION 2                // dimension
-#define PARTICLE_MASS 10.0         // mass of a particle
+#define PARTICLE_MASS 1.0          // mass of a particle
 #define LJ_CUTOFF_DISTANCE 0.00001 // LJ explodes for very close particles, stop earlier
 #define RADIAL_HISTOGRAM_BINS 20   // into how many radius boxes we aggregate particles
 #define VELOCITY_HISTOGRAM_BINS 12 // similarly, number of bins for the velocity histogram
 #define HISTOGRAM_AVERAGE_N 20     // histogram averaging
 
 struct Parameters {
-  double alpha = 2.0;
+  double alpha = 1.68;
   double beta = 1.5;
   double initWindowLength = 0.5;
-  double tau = 12.0e-4;
-  double selfPropulsion = 0.7;
-  double friction = 0.5;
+  double tau = 15.0e-4;
+  double selfPropulsion = 1.0; // "alpha" parameter in 2006-self-propelled
+  double friction = 0.5;       // "beta" parameter in 2006-self-propelled
 };
 
 #define square(x) ((x) * (x))
@@ -68,6 +68,8 @@ class ParticleBox {
   void simulate(size_t timesteps, bool dot = false);
   void f(ParticleVectors &accelerations);
   void reflectParticles();
+  double potential(double r);
+  double force(double r);
   double friction(double v);
   double getKineticEnergy();
   double getLJPotential();

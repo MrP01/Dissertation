@@ -23,6 +23,10 @@ void ParticleBox::initRandomly() {
   }
 }
 
+double ParticleBox::potential(double r) {
+  return std::pow(r, params.alpha) / params.alpha - std::pow(r, params.beta) / params.beta;
+}
+double ParticleBox::force(double r) { return pow(r, params.alpha - 1.0) - pow(r, params.beta - 1.0); }
 double ParticleBox::friction(double v) { return params.selfPropulsion - params.friction * v * v; }
 
 void ParticleBox::f(ParticleVectors &accelerations) {
@@ -35,7 +39,7 @@ void ParticleBox::f(ParticleVectors &accelerations) {
       if (r < LJ_CUTOFF_DISTANCE)
         r = LJ_CUTOFF_DISTANCE;
       for (size_t d = 0; d < DIMENSION; d++)
-        forces[d] += (positions[i][d] - positions[j][d]) * (pow(r, params.alpha - 1.0) - pow(r, params.beta - 1.0));
+        forces[d] += ((positions[i][d] > positions[j][d]) ? 1.0 : -1.0) * force(r);
     }
     // std::cout << "force " << forces[0] << std::endl;
     double v = totalVelocity(i); // is positive
@@ -99,7 +103,7 @@ double ParticleBox::getLJPotential() {
       double r = distanceBetween(i, j);
       if (r < LJ_CUTOFF_DISTANCE)
         r = LJ_CUTOFF_DISTANCE;
-      energy -= std::pow(r, params.alpha) / params.alpha - std::pow(r, params.beta) / params.beta;
+      energy -= potential(r);
     }
   }
   return energy;
