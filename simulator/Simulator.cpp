@@ -225,7 +225,7 @@ void BoxSimulator::updateHistograms() {
 void BoxSimulator::measure() {
   double E_kin = getKineticEnergy();
   double E_pot_LJ = getLJPotential();
-  double E_total = E_kin + E_pot_LJ;
+  double E_total = E_kin + E_pot_LJ + 1e5;
 
   _energyMax = std::max(_energyMax, E_total);
   energyChart->axes(Qt::Vertical).first()->setRange(0, log10(_energyMax) + 1.5);

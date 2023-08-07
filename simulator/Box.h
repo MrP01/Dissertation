@@ -4,17 +4,17 @@
 #include <stdlib.h>
 
 // be careful to set numeric values as floats here
-#define PARTICLES 100              // number of particles
+#define PARTICLES 180              // number of particles
 #define DIMENSION 1                // dimension
-#define INIT_WINDOW_LENGTH 1.0     // width of the initialisation interval for particles (default [-1, 1], so width 2)
+#define INIT_WINDOW_LENGTH 0.4     // width of the initialisation interval for particles (default [-1, 1], so width 2)
 #define PARTICLE_MASS 10.0         // mass of a particle
 #define LJ_CUTOFF_DISTANCE 0.00001 // LJ explodes for very close particles, stop earlier
-#define TAU 3.0e-3                 // time step
+#define TAU 12.0e-4                // time step
 #define RADIAL_HISTOGRAM_BINS 20   // into how many radius boxes we aggregate particles
 #define VELOCITY_HISTOGRAM_BINS 12 // similarly, number of bins for the velocity histogram
-#define HISTOGRAM_AVERAGE_N 200    // histogram averaging
-#define ALPHA 2.5                  // (attractive) parameter alpha for the kernel K(r)
-#define BETA 1.6                   // (repulsive) parameter beta for the kernel K(r)
+#define HISTOGRAM_AVERAGE_N 20     // histogram averaging
+#define ALPHA 2.0                  // (attractive) parameter alpha for the kernel K(r)
+#define BETA 1.5                   // (repulsive) parameter beta for the kernel K(r)
 
 #define square(x) ((x) * (x))
 
@@ -51,6 +51,12 @@ class ParticleBox {
     return sum;
   }
   double distanceBetween(size_t i, size_t j) { return std::sqrt(squaredDistanceBetween(i, j)); }
+  double totalVelocity(size_t i) {
+    double sum = 0.0;
+    for (size_t d = 0; d < DIMENSION; d++)
+      sum += square(velocities[i][d]);
+    return sqrt(sum);
+  };
 
  public:
   ParticleBox() = default;

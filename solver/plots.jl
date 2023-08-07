@@ -185,13 +185,20 @@ end
 function plotSimulationHistogram()
   fig = Figure()
   alpha, beta, d = defaultParams.alpha, defaultParams.beta, defaultParams.d
+  df = CSV.read("/tmp/positions.csv", DataFrames.DataFrame, header=["x", "y"])
+  center = sum(df.x) / length(df.x)
+  radialDistance = abs.(df.x .- center)
+  ax = Axis(fig[1, 1], xlabel=L"\text{Radial Distance}~r", ylabel=LT"Density",
+    title=L"\text{Particle Simulation Output Distribution}")
+  hist!(ax, radialDistance, bins=20)
+  xlims!(ax, 0, 1)
   df = CSV.read("/tmp/position-histogram.csv", DataFrames.DataFrame, header=["hist"])
-  ax = Axis(fig[1, 1], xlabel=L"\text{Position}~x", ylabel=LT"Density",
+  ax = Axis(fig[2, 1], xlabel=L"\text{Radial distance}~r", ylabel=LT"Density",
     title=L"\text{Particle Simulation Output Distribution}~(\alpha, \beta, d) = (%$alpha, %$beta, %$d)")
   barplot!(ax, df.hist)
   df = CSV.read("/tmp/velocities.csv", DataFrames.DataFrame, header=["x", "y"])
-  velocity = hypot.(df.x, df.y)
-  ax = Axis(fig[2, 1], xlabel=L"\text{Velocity}~x", ylabel=LT"Density",
+  velocity = hypot.(df.x)
+  ax = Axis(fig[3, 1], xlabel=L"\text{Velocity}~v", ylabel=LT"Density",
     title=L"\text{Particle Simulation Output Distribution}")
   hist!(ax, velocity, bins=20)
   saveFig(fig, "simulation-histogram")

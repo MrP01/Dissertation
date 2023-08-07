@@ -19,9 +19,11 @@ void ParticleBox::initRandomly() {
 
     std::cout << "Init particle at " << positions[i][0] << std::endl;
     for (size_t d = 0; d < DIMENSION; d++)
-      velocities[i][d] = (((double)rand() / RAND_MAX) - 0.5) / 2;
+      velocities[i][d] = (((double)rand() / RAND_MAX) - 0.5) / 1.4;
   }
 }
+
+double friction(double v) { return 0.7 - 0.5 * v * v; }
 
 void ParticleBox::f(ParticleVectors &accelerations) {
   for (size_t i = 0; i < PARTICLES; i++) {
@@ -35,11 +37,12 @@ void ParticleBox::f(ParticleVectors &accelerations) {
         r_squared = LJ_CUT_DIST_SQ;
       double r = sqrt(r_squared);
       for (size_t d = 0; d < DIMENSION; d++)
-        forces[d] += (positions[j][d] - positions[i][d]) * (pow(r, ALPHA - 1.0) - pow(r, BETA - 1.0));
+        forces[d] += (positions[i][d] - positions[j][d]) * (pow(r, ALPHA - 1.0) - pow(r, BETA - 1.0));
     }
     // std::cout << "force " << forces[0] << std::endl;
+    double v = totalVelocity(i); // is positive
     for (size_t d = 0; d < DIMENSION; d++)
-      accelerations[i][d] = forces[d] / PARTICLE_MASS;
+      accelerations[i][d] = forces[d] / PARTICLE_MASS + friction(v) * velocities[i][d];
   }
 }
 

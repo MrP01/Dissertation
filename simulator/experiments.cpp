@@ -3,13 +3,26 @@
 void simpleExperiment() {
   auto box = ParticleBox();
   box.initRandomly();
-  box.simulate(1000);
+  box.simulate(35000);
 
-  for (size_t i = 0; i < 10; i++) {
-    box.simulate(5);
-    box.computeRadiusHistogram();
+  double minimalPotential = box.getLJPotential();
+  for (size_t i = 0; i < 2000; i++) {
+    box.simulate(2);
+    double potential = box.getLJPotential();
+    if (potential < minimalPotential) {
+      box.computeRadiusHistogram();
+      minimalPotential = potential;
+      box.exportToCSV();
+      std::cout << "new min!" << std::endl;
+    }
+    std::cout << potential << std::endl;
   }
-  box.exportToCSV();
+
+  // for (size_t i = 0; i < 10; i++) {
+  //   box.simulate(1);
+  //   box.computeRadiusHistogram();
+  // }
+  // box.exportToCSV();
 }
 
 int main() {
