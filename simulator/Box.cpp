@@ -46,7 +46,7 @@ void ParticleBox::f(ParticleVectors &accelerations) {
   }
 }
 
-void ParticleBox::simulate(size_t timesteps) {
+void ParticleBox::simulate(size_t timesteps, bool dot) {
   double after_accelerations[PARTICLES][DIMENSION];
   f(after_accelerations);
   for (size_t t = 0; t < timesteps; t++) {
@@ -66,6 +66,8 @@ void ParticleBox::simulate(size_t timesteps) {
     // std::cout << "Position:" << positions[0][0] << ", " << positions[1][0] << ", " << positions[2][0] << std::endl;
     reflectParticles();
     // time += TIME_STEP
+    if (dot)
+      std::cout << "." << std::flush;
   }
 }
 

@@ -3,10 +3,11 @@
 void simpleExperiment() {
   auto box = ParticleBox();
   box.initRandomly();
-  box.simulate(10000);
+  box.simulate(10000, true);
 
   double minimalPotential = box.getLJPotential();
-  for (size_t i = 0; i < 8000; i++) {
+  size_t n = 200;
+  while ((n--) > 0) {
     box.simulate(2);
     double potential = box.getLJPotential();
     if (potential < minimalPotential) {
@@ -14,8 +15,9 @@ void simpleExperiment() {
       minimalPotential = potential;
       box.exportToCSV();
       std::cout << "new min!" << std::endl;
+      n = 100;
     }
-    std::cout << potential << std::endl;
+    std::cout << n << ": " << potential << std::endl;
   }
 
   // for (size_t i = 0; i < 10; i++) {

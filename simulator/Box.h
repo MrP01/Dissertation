@@ -4,8 +4,8 @@
 #include <stdlib.h>
 
 // be careful to set numeric values as floats here
-#define PARTICLES 50               // number of particles
-#define DIMENSION 3                // dimension
+#define PARTICLES 500              // number of particles
+#define DIMENSION 1                // dimension
 #define INIT_WINDOW_LENGTH 0.4     // width of the initialisation interval for particles (default [-1, 1], so width 2)
 #define PARTICLE_MASS 10.0         // mass of a particle
 #define LJ_CUTOFF_DISTANCE 0.00001 // LJ explodes for very close particles, stop earlier
@@ -61,7 +61,7 @@ class ParticleBox {
  public:
   ParticleBox() = default;
   void initRandomly();
-  void simulate(size_t timesteps);
+  void simulate(size_t timesteps, bool dot = false);
   void f(ParticleVectors &accelerations);
   void reflectParticles();
   double getKineticEnergy();
