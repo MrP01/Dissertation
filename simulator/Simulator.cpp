@@ -198,6 +198,7 @@ void BoxSimulator::buildUI() {
 
   QShortcut *closeShortcut = new QShortcut(Qt::CTRL | Qt::Key_W, this);
   QObject::connect(closeShortcut, &QShortcut::activated, this, [=]() { close(); });
+  QObject::connect(new QShortcut(Qt::Key_S, this), &QShortcut::activated, this, [=]() { controlBtn->click(); });
 }
 
 void BoxSimulator::renderParticles() {

@@ -19,7 +19,7 @@ void ParticleBox::initRandomly() {
       std::cout << "." << std::flush;
     }
 
-    std::cout << "Init particle at " << positions[i][0] << std::endl;
+    // std::cout << "Init particle at " << positions[i][0] << std::endl;
     for (size_t d = 0; d < DIMENSION; d++)
       velocities[i][d] = (((double)rand() / RAND_MAX) - 0.5);
   }
@@ -40,7 +40,7 @@ void ParticleBox::f(ParticleVectors &accelerations) {
     // std::cout << "force " << forces[0] << std::endl;
     double v = totalVelocity(i); // is positive
     for (size_t d = 0; d < DIMENSION; d++)
-      accelerations[i][d] = (forces[d] / PARTICLE_MASS + friction(v) * velocities[i][d]);
+      accelerations[i][d] = (forces[d] / PARTICLE_MASS + friction(p.boxScaling * v) * velocities[i][d]);
   }
 }
 
@@ -98,6 +98,7 @@ double ParticleBox::getLJPotential() {
       if (r < LJ_CUTOFF_DISTANCE)
         r = LJ_CUTOFF_DISTANCE;
       energy -= interaction->potential(r);
+      // std::cout << r << ", " << energy << std::endl;
     }
   }
   return energy;
@@ -189,4 +190,46 @@ void ParticleBox::exportToCSV() {
   for (size_t i = 0; i < RADIAL_HISTOGRAM_BINS; i++)
     positionHistCsv << averagedRadiusHistogram.heights[i] << "\n";
   positionHistCsv.close();
+}
+
+int ParticleBox::setupFromArgv(int argc, char **argv) {
+  if (argc < 2) {
+    std::cerr << "Usage: ./experiments (morse|attrep) dimension [iterations] [C_a, C_r, l_a, l_b | alpha, beta]"
+              << std::endl;
+    return 1;
+  }
+
+  char *potentialType = argv[1];
+
+  size_t dimension = atol(argv[2]);
+  if (dimension != DIMENSION) {
+    std::cerr << "DIMENSION SHOULD BE " << DIMENSION << std::endl;
+    std::cerr << "(Otherwise, have to recompile or use a different binary) " << DIMENSION << std::endl;
+    return 1;
+  }
+
+  if (strcmp(potentialType, "attrep") == 0) {
+    std::cout << "Using attractive-repulsive interaction potential" << std::endl;
+    auto poti = new AttractiveRepulsive();
+    if (argc >= 6) {
+      poti->alpha = atof(argv[4]);
+      poti->beta = atof(argv[5]);
+    }
+    std::cout << poti->alpha << ", " << poti->beta << std::endl;
+    interaction = poti;
+  } else if (strcmp(potentialType, "morse") == 0) {
+    std::cout << "Using Morse interaction potential" << std::endl;
+    auto poti = new MorsePotential();
+    if (argc >= 8) {
+      poti->C_att = atof(argv[4]);
+      poti->C_rep = atof(argv[5]);
+      poti->l_att = atof(argv[6]);
+      poti->l_rep = atof(argv[7]);
+    }
+    interaction = poti;
+  } else {
+    std::cerr << "Unknown potential. Choices: attrep, morse." << std::endl;
+    return 1;
+  }
+  return 0;
 }

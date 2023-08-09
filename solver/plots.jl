@@ -20,6 +20,22 @@ x_vec_noends = x_vec[2:end-1]
 dissColours = Makie.wong_colors()
 pow10tickformat(values) = [L"10^{%$(Int(value))}" for value in values]
 
+function runSimulator(env::Utils.SolutionEnvironment)
+  mode = "attrep"
+  iterations = 5000
+  alpha, beta, dimension = env.p.alpha, env.p.beta, env.p.d
+  cmd = `./build/simulator/experiments $mode $dimension $iterations $alpha $beta`
+  @show cmd
+  println("----- Running simulation -----")
+  run(cmd)
+  println("----- Simulation done -----")
+end
+function loadSimulatorData()
+  posidf = CSV.read("/tmp/positions.csv", DataFrames.DataFrame, header=false)
+  velodf = CSV.read("/tmp/velocities.csv", DataFrames.DataFrame, header=false)
+  dimension = length(axes(posidf, 2))
+  return posidf, velodf, dimension
+end
 function saveFig(fig::Figure, name::String)
   save(joinpath(RESULTS_FOLDER, "$name.pdf"), fig)
   @info "Exported $name.pdf"
@@ -211,6 +227,8 @@ end
 
 function plotSimulationAndSolverComparison()
   env = Utils.createEnvironment(knownAnalyticParams)
+  runSimulator(env)
+
   df = CSV.read("/tmp/positions.csv", DataFrames.DataFrame, header=false)
   dimension = length(axes(df, 2))
   @show center = [sum(df[!, k]) / length(df[!, k]) for k in 1:dimension]
@@ -232,9 +250,7 @@ function plotSimulationAndSolverComparison()
 end
 
 function plotSimulationQuiver()
-  posidf = CSV.read("/tmp/positions.csv", DataFrames.DataFrame, header=false)
-  velodf = CSV.read("/tmp/velocities.csv", DataFrames.DataFrame, header=false)
-  dimension = length(axes(posidf, 2))
+  posidf, velodf, dimension = loadSimulatorData()
   @assert dimension >= 2
 
   fig = Figure()
@@ -247,11 +263,8 @@ function plotSimulationQuiver()
 end
 
 function plotPhaseSpace()
-  posidf = CSV.read("/tmp/positions.csv", DataFrames.DataFrame, header=false)
-  velodf = CSV.read("/tmp/velocities.csv", DataFrames.DataFrame, header=false)
-  dimension = length(axes(posidf, 2))
-
   fig = Figure()
+  posidf, velodf, dimension = loadSimulatorData()
   ax = Axis(fig[1, 1], xlabel=L"\text{First coordinate}~x", ylabel=L"\text{First velocity component}~v_x",
     title=L"\text{Simulation Output Phase Space}~(d = %$dimension)")
   scatter!(ax, posidf[!, 1], velodf[!, 1])

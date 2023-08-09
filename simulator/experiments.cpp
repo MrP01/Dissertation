@@ -1,12 +1,21 @@
 #include "Box.h"
+#include <string.h>
 
-int main() {
+int main(int argc, char *argv[]) {
   srand(time(NULL));
   auto box = ParticleBox();
+  if (box.setupFromArgv(argc, argv) != 0)
+    return 1;
+
+  size_t iterations = (10000 * (PARTICLES / 200.0));
+  if (argc >= 4)
+    iterations = atol(argv[3]);
+
   box.initRandomly();
-  box.simulate((size_t)(10000 * (PARTICLES / 200.0)), true);
+  box.simulate(iterations, true);
 
   double minimalPotential = box.getLJPotential();
+  box.exportToCSV();
   size_t n = 200;
   while ((n--) > 0) {
     box.simulate(2);

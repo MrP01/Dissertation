@@ -5,7 +5,7 @@
 
 // be careful to set numeric values as floats here
 #define PARTICLES 120              // number of particles
-#define DIMENSION 2                // dimension
+#define DIMENSION 1                // dimension
 #define PARTICLE_MASS 1.0          // mass of a particle
 #define LJ_CUTOFF_DISTANCE 0.00001 // LJ explodes for very close particles, stop earlier
 #define RADIAL_HISTOGRAM_BINS 20   // into how many radius boxes we aggregate particles
@@ -20,7 +20,7 @@ class InteractionPotential {
 
 class AttractiveRepulsive : public InteractionPotential {
  public:
-  double alpha = 1.8;
+  double alpha = 2.0;
   double beta = 1.5;
   double potential(double r) { return pow(r, alpha) / alpha - pow(r, beta) / beta; }
   double force(double r) { return pow(r, alpha - 1.0) - pow(r, beta - 1.0); }
@@ -32,13 +32,13 @@ class MorsePotential : public InteractionPotential {
   double l_att = 2.0;
   double C_rep = 1.0;
   double l_rep = 0.5;
-  double potential(double r) { return C_att * exp(-r / l_att) - C_rep * exp(-r / l_rep); };
+  double potential(double r) { return C_rep * exp(-r / l_rep) - C_att * exp(-r / l_att); };
   double force(double r) { return C_att / l_att * exp(-r / l_att) - C_rep / l_rep * exp(-r / l_rep); };
 };
 
 struct Parameters {
   double tau = 20.0e-4;          // time step
-  double boxScaling = 1.0;       // size of the box: [-1, 1] * boxScaling
+  double boxScaling = 4.0;       // size of the box: [-1, 1] * boxScaling
   double initWindowLength = 1.0; // 0.0 < window length <= 2.0
   double selfPropulsion = 1.6;   // "alpha" parameter in 2006-self-propelled
   double friction = 0.5;         // "beta" parameter in 2006-self-propelled
@@ -62,7 +62,7 @@ struct VelocityHistogram {
 };
 
 class ParticleBox {
- protected:
+ public:
   Parameters p;
   InteractionPotential *interaction = new MorsePotential();
   double positions[PARTICLES][DIMENSION];
@@ -89,6 +89,7 @@ class ParticleBox {
 
  public:
   ParticleBox() = default;
+  int setupFromArgv(int argc, char **argv);
   void initRandomly();
   void simulate(size_t timesteps, bool dot = false);
   void f(ParticleVectors &accelerations);
