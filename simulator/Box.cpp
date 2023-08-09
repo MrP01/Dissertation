@@ -35,7 +35,7 @@ void ParticleBox::f(ParticleVectors &accelerations) {
       if (r < LJ_CUTOFF_DISTANCE)
         r = LJ_CUTOFF_DISTANCE;
       for (size_t d = 0; d < DIMENSION; d++)
-        forces[d] += (positions[j][d] - positions[i][d]) / r * interaction->force(r);
+        forces[d] += (positions[j][d] - positions[i][d]) / r * interaction->force(p.boxScaling * r);
     }
     // std::cout << "force " << forces[0] << std::endl;
     double v = totalVelocity(i); // is positive
@@ -97,7 +97,7 @@ double ParticleBox::getLJPotential() {
       double r = distanceBetween(i, j);
       if (r < LJ_CUTOFF_DISTANCE)
         r = LJ_CUTOFF_DISTANCE;
-      energy -= interaction->potential(r);
+      energy -= interaction->potential(p.boxScaling * r);
       // std::cout << r << ", " << energy << std::endl;
     }
   }

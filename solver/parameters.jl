@@ -18,6 +18,7 @@ function checkParameters(p::Parameters)
 end
 
 defaultParams = Parameters()
+known2dParams = Parameters(alpha=1.2, beta=0.1993, d=2)
 knownAnalyticParams = Parameters(d=1, alpha=2.0001, beta=1.5)
 
 checkParameters(defaultParams)

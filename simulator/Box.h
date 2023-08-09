@@ -5,12 +5,15 @@
 
 // be careful to set numeric values as floats here
 #define PARTICLES 120              // number of particles
-#define DIMENSION 1                // dimension
 #define PARTICLE_MASS 1.0          // mass of a particle
 #define LJ_CUTOFF_DISTANCE 0.00001 // LJ explodes for very close particles, stop earlier
 #define RADIAL_HISTOGRAM_BINS 20   // into how many radius boxes we aggregate particles
 #define VELOCITY_HISTOGRAM_BINS 12 // similarly, number of bins for the velocity histogram
 #define HISTOGRAM_AVERAGE_N 20     // histogram averaging
+
+#ifndef DIMENSION
+#define DIMENSION 1 // dimension
+#endif
 
 class InteractionPotential {
  public:
@@ -38,10 +41,10 @@ class MorsePotential : public InteractionPotential {
 
 struct Parameters {
   double tau = 20.0e-4;          // time step
-  double boxScaling = 4.0;       // size of the box: [-1, 1] * boxScaling
+  double boxScaling = 2.0;       // size of the box: [-1, 1] * boxScaling
   double initWindowLength = 1.0; // 0.0 < window length <= 2.0
-  double selfPropulsion = 1.6;   // "alpha" parameter in 2006-self-propelled
-  double friction = 0.5;         // "beta" parameter in 2006-self-propelled
+  double selfPropulsion = 0.0;   // "alpha" parameter in 2006-self-propelled
+  double friction = 0.0;         // "beta" parameter in 2006-self-propelled
 };
 
 #define square(x) ((x) * (x))
@@ -77,7 +80,7 @@ class ParticleBox {
     double sum = 0.0;
     for (size_t d = 0; d < DIMENSION; d++)
       sum += square(positions[i][d] - positions[j][d]);
-    return square(p.boxScaling) * sum;
+    return sum;
   }
   double distanceBetween(size_t i, size_t j) { return std::sqrt(squaredDistanceBetween(i, j)); }
   double totalVelocity(size_t i) {

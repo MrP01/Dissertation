@@ -13,18 +13,16 @@ import .AnalyticSolutions
 
 const RESULTS_FOLDER = joinpath(@__DIR__, "..", "figures", "results")
 
-r_vec = 0:0.002:1
+r_vec = 0:0.005:1
 r_vec_noend = r_vec[1:end-1]
 x_vec = -1:0.002:1
 x_vec_noends = x_vec[2:end-1]
 dissColours = Makie.wong_colors()
 pow10tickformat(values) = [L"10^{%$(Int(value))}" for value in values]
 
-function runSimulator(env::Utils.SolutionEnvironment)
+function runSimulator(env::Utils.SolutionEnvironment, iterations=2000)
   mode = "attrep"
-  iterations = 5000
-  alpha, beta, dimension = env.p.alpha, env.p.beta, env.p.d
-  cmd = `./build/simulator/experiments $mode $dimension $iterations $alpha $beta`
+  cmd = `./build/simulator/experiments$(env.p.d)d $mode $(env.p.d) $iterations $(env.p.alpha) $(env.p.beta)`
   @show cmd
   println("----- Running simulation -----")
   run(cmd)
@@ -225,8 +223,8 @@ function plotSimulationHistograms()
   return fig
 end
 
-function plotSimulationAndSolverComparison()
-  env = Utils.createEnvironment(knownAnalyticParams)
+function plotSimulationAndSolverComparison(p::Parameters=known2dParams)
+  env = Utils.createEnvironment(p)
   runSimulator(env)
 
   df = CSV.read("/tmp/positions.csv", DataFrames.DataFrame, header=false)
