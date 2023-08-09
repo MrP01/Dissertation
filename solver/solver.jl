@@ -78,6 +78,4 @@ function outerOptimisation(N::Int64, env::SolutionEnvironment)
   solution = Optim.optimize(f, [R0])
   return solution
 end
-
-println("Have fun solving!")
 end

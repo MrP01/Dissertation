@@ -8,6 +8,7 @@ include("./parameters.jl")
 include("./utils.jl")
 include("./solver.jl")
 include("./analyticsolutions.jl")
+include("./generalkernel.jl")
 import .Solver
 import .AnalyticSolutions
 

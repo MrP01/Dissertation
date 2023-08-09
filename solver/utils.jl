@@ -4,7 +4,9 @@ import ClassicalOrthogonalPolynomials: Jacobi
 import HypergeometricFunctions
 import ContinuumArrays: Map
 import SpecialFunctions: gamma
-import ..Parameters, ..defaultParams
+import ..Parameters, ..defaultParams, ..AttractiveRepulsive, ..MorsePotential
+
+PARAMETER_TO_FIND = 2.5
 
 # These definitions allow the use of the radially shifted Jacobi bases
 struct QuadraticMap{T} <: Map{T} end
@@ -26,7 +28,12 @@ iqmap = InvQuadraticMap()
 """Represent the basis P_n^(a,b)(2r^2-1)"""
 function createBasis(p::Parameters)
   # TODO: which is it? alpha or beta?
-  B = Jacobi(p.m - (p.alpha + p.d) / 2, (p.d - 2) / 2)
+  if isa(p.potential, AttractiveRepulsive)
+    alpha = p.potential.alpha
+  elseif isa(p.potential, MorsePotential)
+    alpha = PARAMETER_TO_FIND  # TODO: what should we put here?
+  end
+  B = Jacobi(p.m - (alpha + p.d) / 2, (p.d - 2) / 2)
   P = B[Utils.qmap, :]
   return B, P
 end
@@ -48,20 +55,25 @@ defaultEnv::SolutionEnvironment = createEnvironment(defaultParams)
 """Docstring for the function"""
 function theorem216(r::Real; n::Int64, beta::Float64, p::Parameters)::BigFloat
   # Explicit value of the integral from Theorem 2.16
+  if isa(p.potential, AttractiveRepulsive)
+    alpha = p.potential.alpha
+  elseif isa(p.potential, MorsePotential)
+    alpha = PARAMETER_TO_FIND  # TODO: what should we put here?
+  end
   prefactor =
     pi^(p.d / 2) *
     gamma(1 + beta / 2) *
     gamma((beta + p.d) / 2) *
-    gamma(p.m + n - (p.alpha + p.d) / 2 + 1) / (
+    gamma(p.m + n - (alpha + p.d) / 2 + 1) / (
       gamma(p.d / 2) *
       gamma(n + 1) *
       gamma(beta / 2 - n + 1) *
-      gamma((beta - p.alpha) / 2 + p.m + n + 1)
+      gamma((beta - alpha) / 2 + p.m + n + 1)
     )
   integral_value =
     prefactor * HypergeometricFunctions._₂F₁.(
       big(n - beta / 2),
-      big(-p.m - n + (p.alpha - beta) / 2),
+      big(-p.m - n + (alpha - beta) / 2),
       big(p.d / 2),
       big(abs.(r .^ 2)),
     )
@@ -73,12 +85,14 @@ end
 function recurrence(r; oldestValue, oldValue, n, beta, p::Parameters)
   # using Corollary 2.18
   m = p.m
-  c_a = -((-p.alpha + 2m + 4n) * (-p.alpha + 2m + 4n + 2) * (p.alpha + p.d - 2 * (p.m + n + 1))) /
-        (2 * (n + 1) * (-p.alpha + beta + 2m + 2n + 2) * (-p.alpha + beta + p.d + 2m + 2n))
-  c_b = -((-p.alpha + 2m + 4n) * (p.alpha + p.d - 2(p.m + n + 1)) * (p.d * (-p.alpha + 2 * beta + 2m + 2) - 2 * (2n - beta) * (-p.alpha + beta + 2m + 2n))) /
-        (2 * (n + 1) * (-p.alpha + 2m + 4n - 2) * (-p.alpha + beta + 2m + 2n + 2) * (-p.alpha + beta + p.d + 2m + 2n))
-  c_c = ((-beta + 2n - 2) * (beta + p.d - 2n) * (-p.alpha + 2m + 4n + 2) * (p.alpha + p.d - 2 * (p.m + n)) * (p.alpha + p.d - 2 * (p.m + n + 1))) /
-        (4n * (n + 1) * (-p.alpha + 2m + 4n - 2) * (-p.alpha + beta + 2m + 2n + 2) * (-p.alpha + beta + p.d + 2m + 2n))
+  @assert isa(p.potential, AttractiveRepulsive)
+  alpha = p.potential.alpha
+  c_a = -((-alpha + 2m + 4n) * (-alpha + 2m + 4n + 2) * (alpha + p.d - 2 * (p.m + n + 1))) /
+        (2 * (n + 1) * (-alpha + beta + 2m + 2n + 2) * (-alpha + beta + p.d + 2m + 2n))
+  c_b = -((-alpha + 2m + 4n) * (alpha + p.d - 2(p.m + n + 1)) * (p.d * (-alpha + 2 * beta + 2m + 2) - 2 * (2n - beta) * (-alpha + beta + 2m + 2n))) /
+        (2 * (n + 1) * (-alpha + 2m + 4n - 2) * (-alpha + beta + 2m + 2n + 2) * (-alpha + beta + p.d + 2m + 2n))
+  c_c = ((-beta + 2n - 2) * (beta + p.d - 2n) * (-alpha + 2m + 4n + 2) * (alpha + p.d - 2 * (p.m + n)) * (alpha + p.d - 2 * (p.m + n + 1))) /
+        (4n * (n + 1) * (-alpha + 2m + 4n - 2) * (-alpha + beta + 2m + 2n + 2) * (-alpha + beta + p.d + 2m + 2n))
   return (c_a * r^2 + c_b) * oldValue + c_c * oldestValue
 end
 
@@ -90,13 +104,14 @@ end
 """Docstring for the function"""
 function totalEnergy(solution::Vector{BigFloat}, R::Float64, r::Union{Float64,AbstractVector{Float64}}, env::SolutionEnvironment)
   # more details in section 3.2
-  p::Parameters = env.p
+  @assert isa(env.p.potential, AttractiveRepulsive)
+  alpha, beta = env.p.potential.alpha, env.p.potential.beta
   attractive, repulsive = zero(r), zero(r)
   for k in eachindex(solution)
-    attractive += solution[k] * Float64.(theorem216.(r; n=k - 1, beta=p.alpha, p=env.p))
-    repulsive += solution[k] * Float64.(theorem216.(r; n=k - 1, beta=p.beta, p=env.p))
+    attractive += solution[k] * Float64.(theorem216.(r; n=k - 1, beta=alpha, p=env.p))
+    repulsive += solution[k] * Float64.(theorem216.(r; n=k - 1, beta=beta, p=env.p))
   end
-  E = (R^p.alpha / p.alpha) * attractive - (R^p.beta / p.beta) * repulsive
+  E = (R^alpha / alpha) * attractive - (R^p.beta / p.beta) * repulsive
   return E
 end
 
