@@ -1,9 +1,9 @@
 using Test
 
 include("./parameters.jl")
-include("./utils.jl")
 include("./solver.jl")
-include("./generalkernel.jl")
+
+using Params
 
 @testset "Solver" begin
   # @testset "recurrence relation" begin

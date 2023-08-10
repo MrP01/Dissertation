@@ -4,9 +4,9 @@ import ClassicalOrthogonalPolynomials: Jacobi
 import HypergeometricFunctions
 import ContinuumArrays: Map
 import SpecialFunctions: gamma
-import ..Parameters, ..defaultParams, ..AttractiveRepulsive, ..MorsePotential
+import ..Params
 
-PARAMETER_TO_FIND = 2.5
+PARAMETER_TO_FIND = 2.5  # probably, most dominant term in the monomial expansion, so maximum(abs(monomial))
 
 # These definitions allow the use of the radially shifted Jacobi bases
 struct QuadraticMap{T} <: Map{T} end
@@ -26,9 +26,9 @@ qmap = QuadraticMap()
 iqmap = InvQuadraticMap()
 
 """Represent the basis P_n^(a,b)(2r^2-1)"""
-function createBasis(p::Parameters)
+function createBasis(p::Params.Parameters)
   # TODO: which is it? alpha or beta?
-  if isa(p.potential, AttractiveRepulsive)
+  if isa(p.potential, Params.AttractiveRepulsive)
     alpha = p.potential.alpha
   elseif isa(p.potential, MorsePotential)
     alpha = PARAMETER_TO_FIND  # TODO: what should we put here?
@@ -39,23 +39,23 @@ function createBasis(p::Parameters)
 end
 
 struct SolutionEnvironment
-  p::Parameters
+  p::Params.Parameters
   B::Jacobi  # Jacobi Basis
   P::ContinuumArrays.QuasiArrays.SubQuasiArray # with argument mapping
 end
 
-"""Creates a fresh environment based on the parameters."""
-function createEnvironment(p::Parameters)::SolutionEnvironment
+"""Creates a fresh environment based on the Params.Parameters."""
+function createEnvironment(p::Params.Parameters)::SolutionEnvironment
   B, P = createBasis(p)
   return SolutionEnvironment(p, B, P)
 end
 
-defaultEnv::SolutionEnvironment = createEnvironment(defaultParams)
+defaultEnv::SolutionEnvironment = createEnvironment(Params.defaultParams)
 
 """Docstring for the function"""
-function theorem216(r::Real; n::Int64, beta::Float64, p::Parameters)::BigFloat
+function theorem216(r::Real; n::Int64, beta::Float64, p::Params.Parameters)::BigFloat
   # Explicit value of the integral from Theorem 2.16
-  if isa(p.potential, AttractiveRepulsive)
+  if isa(p.potential, Params.AttractiveRepulsive)
     alpha = p.potential.alpha
   elseif isa(p.potential, MorsePotential)
     alpha = PARAMETER_TO_FIND  # TODO: what should we put here?
@@ -82,10 +82,10 @@ function theorem216(r::Real; n::Int64, beta::Float64, p::Parameters)::BigFloat
 end
 
 """Docstring for the function"""
-function recurrence(r; oldestValue, oldValue, n, beta, p::Parameters)
+function recurrence(r; oldestValue, oldValue, n, beta, p::Params.Parameters)
   # using Corollary 2.18
   m = p.m
-  @assert isa(p.potential, AttractiveRepulsive)
+  @assert isa(p.potential, Params.AttractiveRepulsive)
   alpha = p.potential.alpha
   c_a = -((-alpha + 2m + 4n) * (-alpha + 2m + 4n + 2) * (alpha + p.d - 2 * (p.m + n + 1))) /
         (2 * (n + 1) * (-alpha + beta + 2m + 2n + 2) * (-alpha + beta + p.d + 2m + 2n))
@@ -104,21 +104,21 @@ end
 """Docstring for the function"""
 function totalEnergy(solution::Vector{BigFloat}, R::Float64, r::Union{Float64,AbstractVector{Float64}}, env::SolutionEnvironment)
   # more details in section 3.2
-  @assert isa(env.p.potential, AttractiveRepulsive)
+  @assert isa(env.p.potential, Params.AttractiveRepulsive)
   alpha, beta = env.p.potential.alpha, env.p.potential.beta
   attractive, repulsive = zero(r), zero(r)
   for k in eachindex(solution)
     attractive += solution[k] * Float64.(theorem216.(r; n=k - 1, beta=alpha, p=env.p))
     repulsive += solution[k] * Float64.(theorem216.(r; n=k - 1, beta=beta, p=env.p))
   end
-  E = (R^alpha / alpha) * attractive - (R^p.beta / p.beta) * repulsive
+  E = (R^alpha / alpha) * attractive - (R^beta / beta) * repulsive
   return E
 end
 
 """Docstring for the function"""
 function totalMass(solution::Vector{BigFloat}, env::SolutionEnvironment)::BigFloat
   # using Lemma 2.20
-  p::Parameters = env.p
+  p::Params.Parameters = env.p
   return pi^(p.d / 2) * gamma(env.B.a + 1) / gamma(env.B.a + p.d / 2 + 1) * solution[1]
 end
 

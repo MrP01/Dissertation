@@ -1,6 +1,7 @@
+module Params
 @kwdef struct AttractiveRepulsive
-  alpha = 2.0  # attractive parameter
-  beta = 1.0  # repulsive parameter
+  alpha = 2.5  # attractive parameter
+  beta = 1.2  # repulsive parameter
 end
 
 @kwdef struct MorsePotential
@@ -48,3 +49,4 @@ checkParameters(defaultParams)
 checkParameters(known2dParams)
 checkParameters(knownAnalyticParams)
 checkParameters(morsePotiParams)
+end

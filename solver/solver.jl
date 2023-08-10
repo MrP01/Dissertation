@@ -1,68 +1,20 @@
+include("./utils.jl")
+include("./attractiverepulsive.jl")
+include("./generalkernel.jl")
+
 module Solver
-import ContinuumArrays: MappedWeightedBasisLayout, WeightedBasisLayout
-import LinearAlgebra: cond
-import SpecialFunctions: gamma
-import LRUCache
-import Optim
-
+import ..Params
 import ..Utils
-import ..Utils: SolutionEnvironment, defaultEnv, Parameters, defaultParams
-
-OpMem = LRUCache.LRU{Tuple{Int64,Float64,SolutionEnvironment},Matrix{BigFloat}}(maxsize=20)
-"""Creates an operator given alpha and beta={alpha, beta}. Caches it."""
-function constructOperator(N::Int64, beta::Float64, env::SolutionEnvironment)::Matrix{BigFloat}
-  get!(OpMem, (N, beta, env)) do
-    Mat = zeros(BigFloat, N, N)
-    r_axis = axes(env.P, 1)
-    for n in 0:N-1
-      Function = Utils.theorem216.(r_axis; n=n, beta=beta, p=env.p)
-      ExpansionCoeffs = env.P[:, 1:N] \ Function  # expands the function in the P basis
-      Mat[:, n+1] .= ExpansionCoeffs
-    end
-    Utils.zeroOutTinyValues!(Mat)
-    Mat
-  end
-end
-
-"""Recursively constructs with reprojection, terrible because the types keep on nesting inside of one another."""
-function recursivelyConstructOperatorWithReprojection(N::Int64, beta::Float64, env::SolutionEnvironment)::Matrix{BigFloat}
-  Mat = zeros(BigFloat, N, N)
-  r_axis = axes(env.P, 1)
-  OldestFunction = Utils.theorem216.(r_axis; n=0, beta=beta, p=env.p)
-  OldFunction = Utils.theorem216.(r_axis; n=1, beta=beta, p=env.p)
-
-  Mat[:, 1] = env.P[:, 1:N] \ OldestFunction
-  if N < 2
-    return Mat
-  end
-
-  Mat[:, 2] = env.P[:, 1:N] \ OldFunction
-  if N < 3
-    return Mat
-  end
-
-  for remainingColumn in 3:N
-    Function = Utils.recurrence.(r_axis; oldestValue=OldestFunction, oldValue=OldFunction, n=remainingColumn - 2, beta=beta, p=env.p)
-    Mat[:, remainingColumn] = env.P[:, 1:N] \ Function
-    OldestFunction = OldFunction
-    OldFunction = Function
-  end
-  Utils.zeroOutTinyValues!(Mat)
-  return Mat
-end
-
-function constructFullOperator(N::Int64, R::Float64, env::SolutionEnvironment)::Matrix{BigFloat}
-  p::Parameters = env.p
-  AttractiveMatrix = constructOperator(N, p.alpha, env)
-  RepulsiveMatrix = constructOperator(N, p.beta, env)
-  # @show cond(convert(Matrix{Float64}, AttractiveMatrix))
-  # @show cond(convert(Matrix{Float64}, RepulsiveMatrix))
-  return (R^p.alpha / p.alpha) * AttractiveMatrix - (R^p.beta / p.beta) * RepulsiveMatrix
-end
+import ..AttractiveRepulsiveSolver
+import ..GeneralKernelSolver
 
 """Docstring for the function"""
-function solve(N::Int64, R::Float64, env::SolutionEnvironment)::Vector{BigFloat}
-  BigMatrix = constructFullOperator(N, R, env)
+function solve(N::Int64, R::Float64, env::Utils.SolutionEnvironment)::Vector{BigFloat}
+  if isa(env.p.potential, Params.AttractiveRepulsive)
+    BigMatrix = AttractiveRepulsiveSolver.constructFullOperator(N, R, env)
+  else
+    BigMatrix = GeneralKernelSolver.constructGeneralOperator(N, R, env)
+  end
   # @show cond(convert(Matrix{Float64}, BigMatrix))
   BigRHS = zeros(N)
   BigRHS[1] = 1.0
@@ -72,7 +24,7 @@ function solve(N::Int64, R::Float64, env::SolutionEnvironment)::Vector{BigFloat}
 end
 
 """Docstring for the function"""
-function outerOptimisation(N::Int64, env::SolutionEnvironment)
+function outerOptimisation(N::Int64, env::Utils.SolutionEnvironment)
   F(R) = Utils.totalEnergy(solve(N, R, env), R, 0.0, env)
   f(x) = F(x[1])  # because optimize() only accepts vector inputs
   solution = Optim.optimize(f, [R0])
