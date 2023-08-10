@@ -3,32 +3,37 @@ using Test
 include("./parameters.jl")
 include("./solver.jl")
 
-using Params
+import .Params
+import .Solver
+import .AttractiveRepulsiveSolver
 
 @testset "Solver" begin
-  # @testset "recurrence relation" begin
-  #   for n in 1:8
-  #     r = rand()
-  #     beta = defaultParams.beta
-  #     @test Utils.recurrence(
-  #       r;
-  #       oldestValue=Utils.theorem216(r; n=n - 1, beta=beta, p=defaultParams),
-  #       oldValue=Utils.theorem216(r; n=n, beta=beta, p=defaultParams),
-  #       n=n, beta=beta, p=defaultParams
-  #     ) ≈ Utils.theorem216(r; n=n + 1, beta=beta, p=defaultParams) atol = 1e-16
-  #   end
-  # end
-  # @testset "compare operator construction methods" begin
-  #   for n in 1:2
-  #     @test Solver.constructOperator(n, defaultParams.beta, Utils.defaultEnv) ≈
-  #           Solver.recursivelyConstructOperatorWithReprojection(n, defaultParams.beta, Utils.defaultEnv) atol = 1e-15
-  #   end
-  # end
-  # @testset "solution is normalised" begin
-  #   @test Utils.totalMass(Solver.solve(12, defaultParams.R0, Utils.defaultEnv), Utils.defaultEnv) ≈ 1.0 atol = 1e-16
-  # end
+  @testset "recurrence relation" begin
+    p = Params.defaultParams
+    for n in 1:8
+      r = rand()
+      beta = p.potential.beta
+      @test Utils.recurrence(
+        r;
+        oldestValue=Utils.theorem216(r; n=n - 1, beta=beta, p=p),
+        oldValue=Utils.theorem216(r; n=n, beta=beta, p=p),
+        n=n, beta=beta, p=p
+      ) ≈ Utils.theorem216(r; n=n + 1, beta=beta, p=p) atol = 1e-16
+    end
+  end
+  @testset "compare operator construction methods" begin
+    env = Utils.defaultEnv
+    for n in 1:2
+      @test AttractiveRepulsiveSolver.constructOperator(n, env.p.potential.beta, env) ≈
+            AttractiveRepulsiveSolver.recursivelyConstructOperatorWithReprojection(n, env.p.potential.beta, env) atol = 1e-15
+    end
+  end
+  @testset "solution is normalised" begin
+    env = Utils.defaultEnv
+    @test Utils.totalMass(Solver.solve(12, env.p.R0, env), env) ≈ 1.0 atol = 1e-16
+  end
   @testset "jacobi to monomial basis conversion" begin
-    env = Utils.createEnvironment(defaultParams)
+    env = Utils.defaultEnv
     monomialCoeffs = zeros(env.p.M)
     monomialCoeffs[1] = 0.3  # r^0 coefficient
     monomialCoeffs[3] = 2.0  # r^2 coefficient
