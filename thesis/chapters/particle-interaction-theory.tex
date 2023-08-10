@@ -2,3 +2,22 @@
 \label{chap:particle-interaction-theory}
 
 \input{chapters/out/Particle Interaction Theory.md.tex}
+
+\section{Kinetic Theory: The Vlasov Equation}
+A very common tool in Plasma physics.
+$$\frac{\partial f}{\partial t}+{\frac {\mathrm {d} \mathbf {r} }{\mathrm {d} t}}\cdot {\frac {\partial f}{\partial \mathbf {r} }}+{\frac {\mathrm {d} \mathbf {p} }{\mathrm {d} t}}\cdot {\frac {\partial f}{\partial \mathbf {p} }}=0,$$
+
+This is the collisionless Boltzmann equation.
+Vlasov replaces the collision term with long-range interactions.
+
+\section{Vicsek Model}
+For the study of active matter (a number of individual agents).
+
+\section{Swarming}
+A 2010 paper by \citeauthor{2010-starlings} showed the surprising result that correlation between movement of individual starlings in bird flocks over Rome is scale-free.
+In contrast to the assumption that birds only mirror their neighbours' behaviour and swarming behaviour emerges as a result of that, this observation suggests that bird flocks exert collective behaviour beyond local interactions.
+\begin{quote}
+  The change in the behavioral state of one animal affects and is affected by that of all other animals in the group, no matter how large the group is
+  \parencite{2010-starlings}.
+\end{quote}
+This work was done by individually tracking each starling in the flock and using tracking algorithms to represent their 3 dimensional positions and velocities.

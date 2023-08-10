@@ -12,7 +12,7 @@
 #define HISTOGRAM_AVERAGE_N 20     // histogram averaging
 
 #ifndef DIMENSION
-#define DIMENSION 1 // dimension
+#define DIMENSION 2 // dimension
 #endif
 
 class InteractionPotential {
@@ -41,10 +41,10 @@ class MorsePotential : public InteractionPotential {
 
 struct Parameters {
   double tau = 20.0e-4;          // time step
-  double boxScaling = 2.0;       // size of the box: [-1, 1] * boxScaling
+  double boxScaling = 1.0;       // size of the box: [-1, 1] * boxScaling
   double initWindowLength = 1.0; // 0.0 < window length <= 2.0
-  double selfPropulsion = 0.0;   // "alpha" parameter in 2006-self-propelled
-  double friction = 0.0;         // "beta" parameter in 2006-self-propelled
+  double selfPropulsion = 1.6;   // "alpha" parameter in 2006-self-propelled
+  double friction = 0.5;         // "beta" parameter in 2006-self-propelled
 };
 
 #define square(x) ((x) * (x))
