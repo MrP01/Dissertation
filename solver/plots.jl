@@ -62,6 +62,17 @@ function plotDifferentOrderSolutions()
   return fig
 end
 
+function plotGeneralOperator(N=30)
+  fig = Figure(resolution=(600, 500))
+  p = Params.morsePotiParams
+  op1 = GeneralKernelSolver.constructGeneralOperator(N, p.R0, Utils.defaultEnv)
+  ax = Axis(fig[1, 1][1, 1], yreversed=true, title=L"\text{Morse Operator}")
+  s = spy!(ax, sparse(log10.(abs.(op1))), marker=:rect, markersize=32, framesize=0)
+  Colorbar(fig[1, 1][1, 2], s, flipaxis=false, tickformat=pow10tickformat)
+  saveFig(fig, "morse-operator")
+  return fig
+end
+
 function plotOperators(N=30)
   p = Params.defaultParams
   alpha, beta = p.potential.alpha, p.potential.beta
