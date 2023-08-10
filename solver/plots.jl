@@ -47,10 +47,10 @@ end
 
 function plotDifferentOrderSolutions()
   fig = Figure()
-  p = Params.defaultParams
+  env = Utils.defaultEnv
+  p = env.p
   ax = Axis(fig[1, 1], xlabel=L"\text{Radial Position}~x", ylabel=L"\text{Probability Density}~\rho(|x|)",
     title=L"\text{Solutions of different order}~N~\text{with}~(\alpha, \beta, d) = (%$(p.potential.alpha), %$(p.potential.beta), %$(p.d))")
-  env = Utils.defaultEnv
   # lines!(ax, x_vec_noends, obtainMeasure(x_vec_noends, 2), label="N = 2")
   lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(3, p.R0, env), env), label="N = 3")
   lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(4, p.R0, env), env), label="N = 4")
@@ -62,14 +62,19 @@ function plotDifferentOrderSolutions()
   return fig
 end
 
-function plotGeneralOperator(N=30)
-  fig = Figure(resolution=(600, 500))
+function plotMorseSolutions()
+  fig = Figure()
   p = Params.morsePotiParams
-  op1 = GeneralKernelSolver.constructGeneralOperator(N, p.R0, Utils.defaultEnv)
-  ax = Axis(fig[1, 1][1, 1], yreversed=true, title=L"\text{Morse Operator}")
-  s = spy!(ax, sparse(log10.(abs.(op1))), marker=:rect, markersize=32, framesize=0)
-  Colorbar(fig[1, 1][1, 2], s, flipaxis=false, tickformat=pow10tickformat)
-  saveFig(fig, "morse-operator")
+  env = Utils.createEnvironment(p)
+  ax = Axis(fig[1, 1], xlabel=L"\text{Radial Position}~x", ylabel=L"\text{Probability Density}~\rho(|x|)",
+    title=L"\text{Solutions of different order}~N~\text{with}~(C_a, l_a, C_r, l_r, d) = (..., %$(p.d))")
+  lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(3, p.R0, env), env), label="N = 3")
+  lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(4, p.R0, env), env), label="N = 4")
+  lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(5, p.R0, env), env), label="N = 5")
+  lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(6, p.R0, env), env), label="N = 6")
+  lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(7, p.R0, env), env), label="N = 7")
+  axislegend(ax)
+  saveFig(fig, "morse-solutions")
   return fig
 end
 
@@ -86,6 +91,17 @@ function plotOperators(N=30)
   s = spy!(ax, sparse(log10.(abs.(op2))), marker=:rect, markersize=32, framesize=0)
   Colorbar(fig[1, 2][1, 2], s, flipaxis=false, tickformat=pow10tickformat)
   saveFig(fig, "attractive-repulsive-operators")
+  return fig
+end
+
+function plotGeneralOperator(N=30)
+  fig = Figure(resolution=(600, 500))
+  p = Params.morsePotiParams
+  op1 = GeneralKernelSolver.constructGeneralOperator(N, p.R0, Utils.defaultEnv)
+  ax = Axis(fig[1, 1][1, 1], yreversed=true, title=L"\text{Morse Operator}")
+  s = spy!(ax, sparse(log10.(abs.(op1))), marker=:rect, markersize=32, framesize=0)
+  Colorbar(fig[1, 1][1, 2], s, flipaxis=false, tickformat=pow10tickformat)
+  saveFig(fig, "morse-operator")
   return fig
 end
 

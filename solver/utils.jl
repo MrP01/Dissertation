@@ -30,8 +30,10 @@ function createBasis(p::Params.Parameters)
   # TODO: which is it? alpha or beta?
   if isa(p.potential, Params.AttractiveRepulsive)
     alpha = p.potential.alpha
-  elseif isa(p.potential, MorsePotential)
+  elseif isa(p.potential, Params.MorsePotential)
     alpha = PARAMETER_TO_FIND  # TODO: what should we put here?
+  else
+    error("Unkown potential")
   end
   B = Jacobi(p.m - (alpha + p.d) / 2, (p.d - 2) / 2)
   P = B[Utils.qmap, :]
@@ -57,8 +59,10 @@ function theorem216(r::Real; n::Int64, beta::Float64, p::Params.Parameters)::Big
   # Explicit value of the integral from Theorem 2.16
   if isa(p.potential, Params.AttractiveRepulsive)
     alpha = p.potential.alpha
-  elseif isa(p.potential, MorsePotential)
+  elseif isa(p.potential, Params.MorsePotential)
     alpha = PARAMETER_TO_FIND  # TODO: what should we put here?
+  else
+    error("Unkown potential")
   end
   prefactor =
     pi^(p.d / 2) *
