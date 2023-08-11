@@ -147,6 +147,28 @@ function plotStepByStepConvergence()
   return fig
 end
 
+function plotMonomialBasisConvergence(p=Params.morsePotiParams)
+  Ms = 1:10
+  R = p.R0
+  errors = zeros(length(Ms))
+  env = Utils.createEnvironment(p, 12)
+  best = Utils.rho(r_vec_noend, Solver.solve(24, R, env), env)
+  for k in eachindex(Ms)
+    M = Ms[k]
+    env = Utils.createEnvironment(p, M)
+    solution = Solver.solve(24, R, env)
+    this = Utils.rho(r_vec_noend, solution, env)
+    errors[k] = sum((this - best) .^ 2) / length(r_vec)
+  end
+
+  fig = Figure()
+  ax = Axis(fig[1, 1], yscale=log10, xlabel=L"M", ylabel=LT"Squared Error", title=LT"Step by Step Convergence")
+  lines!(ax, Ms, errors)
+  scatter!(ax, Ms, errors, color=:red)
+  saveFig(fig, "monomial-basis-convergence")
+  return fig
+end
+
 function plotOuterOptimisation(p=Params.knownAnalyticParams)
   R_vec = 0.25:0.02:1.5
   env = Utils.createEnvironment(p)
