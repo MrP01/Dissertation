@@ -23,9 +23,17 @@ x_vec_noends = x_vec[2:end-1]
 dissColours = Makie.wong_colors()
 pow10tickformat(values) = [L"10^{%$(value)}" for value in values]
 
-function runSimulator(env::Utils.SolutionEnvironment, iterations=2000)
-  mode = "attrep"
-  cmd = `./build/simulator/experiments$(env.p.d)d $mode $(env.p.d) $iterations $(env.p.potential.alpha) $(env.p.potential.beta)`
+function runSimulator(p::Params.Parameters, iterations=2000)
+  if isa(p.potential, Params.AttractiveRepulsive)
+    mode = "attrep"
+    potentialParams = [p.potential.alpha, p.potential.beta]
+  elseif isa(p.potential, Params.MorsePotential)
+    mode = "morse"
+    potentialParams = [p.potential.C_att, p.potential.l_att, p.potential.C_rep, p.potential.l_rep]
+  else
+    error("Unkown potential")
+  end
+  cmd = Cmd(string.(["./build/simulator/experiments$(p.d)d", mode, p.d, iterations, potentialParams...]))
   @show cmd
   println("----- Running simulation -----")
   run(cmd)
@@ -280,7 +288,10 @@ function plotSimulationAndSolverComparison(p::Params.Parameters=Params.known2dPa
   return fig
 end
 
-function plotSimulationQuiver()
+function plotSimulationQuiver(p::Union{Params.Parameters,Symbol}=:nothing, iterations::Int64=2000)
+  if p != :nothing
+    runSimulator(p, iterations)
+  end
   posidf, velodf, dimension = loadSimulatorData()
   @assert dimension >= 2
 

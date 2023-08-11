@@ -3,17 +3,17 @@ import ..Params
 import ..Utils
 import ..AttractiveRepulsiveSolver
 
-"""Docstring for the function"""
-function basisConversionMatrix(env::Utils.SolutionEnvironment)
+"""Docstring for the function. M: number of basis elements to expand the general kernel in."""
+function basisConversionMatrix(env::Utils.SolutionEnvironment, M=5)
   r = axes(env.P, 1)
-  return mapreduce(permutedims, hcat, [env.P[:, 1:env.p.M] \ r .^ k for k in 0:env.p.M-1]')
+  return mapreduce(permutedims, hcat, [env.P[:, 1:M] \ r .^ k for k in 0:M-1]')
 end
 
-"""Docstring for the function"""
-function expandKernelInMonomials(env::Utils.SolutionEnvironment)
+"""Docstring for the function. M: number of basis elements to expand the general kernel in."""
+function expandKernelInMonomials(env::Utils.SolutionEnvironment, M=5)
   r = axes(env.P, 1)
   BasisConversionMat = basisConversionMatrix(env)
-  InteractionCoeffs = convert(Vector{Float64}, env.P[:, 1:env.p.M] \ Params.potentialFunction.(r; pot=env.p.potential))  # in Jacobi basis
+  InteractionCoeffs = convert(Vector{Float64}, env.P[:, 1:M] \ Params.potentialFunction.(r; pot=env.p.potential))  # in Jacobi basis
   MonomialInteractionCoeffs = BasisConversionMat \ InteractionCoeffs  # in monomial basis
   return MonomialInteractionCoeffs
 end

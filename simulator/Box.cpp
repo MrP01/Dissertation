@@ -222,8 +222,8 @@ int ParticleBox::setupFromArgv(int argc, char **argv) {
     auto poti = new MorsePotential();
     if (argc >= 8) {
       poti->C_att = atof(argv[4]);
-      poti->C_rep = atof(argv[5]);
-      poti->l_att = atof(argv[6]);
+      poti->l_att = atof(argv[5]);
+      poti->C_rep = atof(argv[6]);
       poti->l_rep = atof(argv[7]);
     }
     interaction = poti;

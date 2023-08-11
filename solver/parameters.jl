@@ -11,6 +11,11 @@ end
   l_rep = 0.5
 end
 
+@kwdef struct QuadraticSelfPropulsion
+  selfPropulsion = 1.6
+  frictionCoeff = 0.5
+end
+
 """Evaluates the potential function. Multiple dispatch is not supported in the parameters."""
 function potentialFunction(r; pot)
   if isa(pot, AttractiveRepulsive)
@@ -28,7 +33,7 @@ end
   m = 1  # integer
   R0 = 0.8  # radius of the interval [-R, R]
   potential = AttractiveRepulsive()  # potential parameters
-  M = 5  # number of basis elements to expand the general kernel in
+  friction = QuadraticSelfPropulsion()  # friction
 end
 
 function checkParameters(p::Parameters)
@@ -44,6 +49,7 @@ defaultParams = Parameters()
 known2dParams = Parameters(potential=AttractiveRepulsive(alpha=1.2, beta=0.1993), d=2)
 knownAnalyticParams = Parameters(potential=AttractiveRepulsive(alpha=2.0001, beta=1.5), d=1)
 morsePotiParams = Parameters(potential=MorsePotential(), d=1)
+morsePotiParams2d = Parameters(potential=MorsePotential(), d=2)
 
 checkParameters(defaultParams)
 checkParameters(known2dParams)
