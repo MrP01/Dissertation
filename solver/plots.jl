@@ -21,7 +21,7 @@ r_vec_noend = r_vec[1:end-1]
 x_vec = -1:0.002:1
 x_vec_noends = x_vec[2:end-1]
 dissColours = Makie.wong_colors()
-pow10tickformat(values) = [L"10^{%$(value)}" for value in values]
+pow10tickformat(values) = [L"10^{%$(Int64(round(value)))}" for value in values]
 
 function runSimulator(p::Params.Parameters, iterations=2000)
   if isa(p.potential, Params.AttractiveRepulsive)
@@ -53,12 +53,11 @@ macro LT_str(s::String)
   return latexstring(raw"\text{" * s * "}")
 end
 
-function plotDifferentOrderSolutions()
+function plotDifferentOrderSolutions(p=Params.defaultParams)
   fig = Figure()
-  env = Utils.defaultEnv
-  p = env.p
+  env = Utils.createEnvironment(p)
   ax = Axis(fig[1, 1], xlabel=L"\text{Radial Position}~x", ylabel=L"\text{Probability Density}~\rho(|x|)",
-    title=L"\text{Solutions of different order}~N~\text{with}~(\alpha, \beta, d) = (%$(p.potential.alpha), %$(p.potential.beta), %$(p.d))")
+    title=L"\text{Solutions of different order}~N~\text{with}~%$(Params.potentialParamsToLatex(p.potential)),~d=%$(p.d)")
   # lines!(ax, x_vec_noends, obtainMeasure(x_vec_noends, 2), label="N = 2")
   lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(3, p.R0, env), env), label="N = 3")
   lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(4, p.R0, env), env), label="N = 4")
@@ -70,27 +69,26 @@ function plotDifferentOrderSolutions()
   return fig
 end
 
-function plotMorseSolutions()
+function plotGeneralSolutionApproximation(p=Params.morsePotiParams)
   fig = Figure()
-  p = Params.morsePotiParams
-  env = Utils.createEnvironment(p)
   ax = Axis(fig[1, 1], xlabel=L"\text{Radial Position}~x", ylabel=L"\text{Probability Density}~\rho(|x|)",
-    title=L"\text{Solutions of different order}~N~\text{with}~(C_a, l_a, C_r, l_r, d) = (..., %$(p.d))")
-  lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(3, p.R0, env), env), label="N = 3")
-  lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(4, p.R0, env), env), label="N = 4")
-  lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(5, p.R0, env), env), label="N = 5")
-  lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(6, p.R0, env), env), label="N = 6")
-  lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(7, p.R0, env), env), label="N = 7")
+    title=L"\text{Monomial Terms}")
+  for M in 2:6
+    env = Utils.createEnvironment(p, M)
+    # env = Utils.createEnvironment(Params.Parameters(d=p.d, m=p.m, R0=p.R0, potential=p.potential, friction=p.friction, M=M))
+    lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(8, p.R0, env), env), label="M = $M")
+  end
   axislegend(ax)
   saveFig(fig, "morse-solutions")
   return fig
 end
 
-function plotOperators(N=30)
+function plotAttRepOperators(N=30)
   p = Params.defaultParams
+  env = Utils.createEnvironment(p)
   alpha, beta = p.potential.alpha, p.potential.beta
-  op1 = AttractiveRepulsiveSolver.constructOperator(N, alpha, Utils.defaultEnv)
-  op2 = AttractiveRepulsiveSolver.constructOperator(N, beta, Utils.defaultEnv)
+  op1 = AttractiveRepulsiveSolver.constructOperator(N, alpha, env)
+  op2 = AttractiveRepulsiveSolver.constructOperator(N, beta, env)
   fig = Figure(resolution=(920, 400))
   ax = Axis(fig[1, 1][1, 1], yreversed=true, title=L"\text{Attractive Operator}~(\alpha = %$alpha)")
   s = spy!(ax, sparse(log10.(abs.(op1))), marker=:rect, markersize=32, framesize=0)
@@ -102,11 +100,11 @@ function plotOperators(N=30)
   return fig
 end
 
-function plotGeneralOperator(N=30)
+function plotFullOperator(N=30, p=Params.morsePotiParams)
   fig = Figure(resolution=(600, 500))
-  p = Params.morsePotiParams
-  op1 = GeneralKernelSolver.constructGeneralOperator(N, p.R0, Utils.defaultEnv)
-  ax = Axis(fig[1, 1][1, 1], yreversed=true, title=L"\text{Morse Operator}")
+  env = Utils.createEnvironment(p)
+  op1 = Solver.constructOperatorFromEnv(N, p.R0, env)
+  ax = Axis(fig[1, 1][1, 1], yreversed=true, title=L"\text{Operator}")
   s = spy!(ax, sparse(log10.(abs.(op1))), marker=:rect, markersize=32, framesize=0)
   Colorbar(fig[1, 1][1, 2], s, flipaxis=false, tickformat=pow10tickformat)
   saveFig(fig, "morse-operator")
@@ -149,14 +147,13 @@ function plotStepByStepConvergence()
   return fig
 end
 
-function plotOuterOptimisation()
-  p = Params.knownAnalyticParams
+function plotOuterOptimisation(p=Params.knownAnalyticParams)
   R_vec = 0.25:0.02:1.5
-  env = Utils.defaultEnv
+  env = Utils.createEnvironment(p)
   F(R) = Utils.totalEnergy(Solver.solve(8, R, env), R, 0.0, env)
   fig = Figure()
-  alpha, beta, d = round(p.potential.alpha, digits=2), round(p.potential.beta, digits=2), p.d
-  ax = Axis(fig[1, 1], xlabel=L"R", ylabel=L"E(R)", title=L"\text{Energy Optimisation with}~(\alpha, \beta, d) = (%$alpha, %$beta, %$d)")
+  ax = Axis(fig[1, 1], xlabel=L"R", ylabel=L"E(R)",
+    title=L"\text{Energy Optimisation with}~%$(Params.potentialParamsToLatex(p.potential)),~d=%$(p.d)")
   lines!(ax, R_vec, F.(R_vec))
   saveFig(fig, "outer-optimisation")
   return fig
@@ -168,7 +165,7 @@ function plotAnalyticSolution()
   alpha, beta, d = round(p.potential.alpha, digits=2), round(p.potential.beta, digits=2), p.d
   env = Utils.createEnvironment(p)
   R, analytic = AnalyticSolutions.explicitSolution(x_vec_noends; p=p)
-  ax = Axis(fig[1, 1], title=L"\text{Analytic Solution with}~(\alpha, \beta, d) = (%$alpha, %$beta, %$d)", xlabel=L"x", ylabel=L"\rho(x)")
+  ax = Axis(fig[1, 1], title=L"\text{Analytic Solution with}~", xlabel=L"x", ylabel=L"\rho(x)")
   lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(4, R, env), env), label=L"N = 4")
   lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(8, R, env), env), label=L"N = 8")
   lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(20, R, env), env), label=L"N = 20")
@@ -266,7 +263,7 @@ end
 
 function plotSimulationAndSolverComparison(p::Params.Parameters=Params.known2dParams)
   env = Utils.createEnvironment(p)
-  runSimulator(env)
+  runSimulator(env.p)
 
   df = CSV.read("/tmp/positions.csv", DataFrames.DataFrame, header=false)
   dimension = length(axes(df, 2))
@@ -279,7 +276,7 @@ function plotSimulationAndSolverComparison(p::Params.Parameters=Params.known2dPa
   fig = Figure()
   ax = Axis(fig[1, 1], xlabel=L"\text{Radial distance}~r", ylabel=LT"Density",
     title=L"\text{Particle Simulation Output Distribution}")
-  hist!(ax, radialDistance, bins=0:0.03:(maximum(radialDistance)*1.05), scale_to=maximum(solution),
+  hist!(ax, radialDistance, bins=0:0.06:(maximum(radialDistance)*1.05), scale_to=maximum(solution),
     label=LT"Particle Simulation")
   lines!(ax, r, solution, color=:red, linewidth=3.0, label=LT"Spectral Method")
   ylims!(ax, 0, maximum(solution) * 1.05)
@@ -335,7 +332,7 @@ end
 
 function plotAll()
   plotDifferentOrderSolutions()
-  plotOperators()
+  plotAttRepOperators()
   plotOuterOptimisation()
   plotAnalyticSolution()
   plotConvergenceToAnalytic()

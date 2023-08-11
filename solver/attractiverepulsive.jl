@@ -25,6 +25,21 @@ function constructOperator(N::Int64, beta::Float64, env::SolutionEnvironment)::M
   end
 end
 
+"""Docstring for the function"""
+function recurrence(r; oldestValue, oldValue, n, beta, p::Params.Parameters)
+  # using Corollary 2.18
+  m = p.m
+  @assert isa(p.potential, Params.AttractiveRepulsive)
+  alpha = p.potential.alpha
+  c_a = -((-alpha + 2m + 4n) * (-alpha + 2m + 4n + 2) * (alpha + p.d - 2 * (p.m + n + 1))) /
+        (2 * (n + 1) * (-alpha + beta + 2m + 2n + 2) * (-alpha + beta + p.d + 2m + 2n))
+  c_b = -((-alpha + 2m + 4n) * (alpha + p.d - 2(p.m + n + 1)) * (p.d * (-alpha + 2 * beta + 2m + 2) - 2 * (2n - beta) * (-alpha + beta + 2m + 2n))) /
+        (2 * (n + 1) * (-alpha + 2m + 4n - 2) * (-alpha + beta + 2m + 2n + 2) * (-alpha + beta + p.d + 2m + 2n))
+  c_c = ((-beta + 2n - 2) * (beta + p.d - 2n) * (-alpha + 2m + 4n + 2) * (alpha + p.d - 2 * (p.m + n)) * (alpha + p.d - 2 * (p.m + n + 1))) /
+        (4n * (n + 1) * (-alpha + 2m + 4n - 2) * (-alpha + beta + 2m + 2n + 2) * (-alpha + beta + p.d + 2m + 2n))
+  return (c_a * r^2 + c_b) * oldValue + c_c * oldestValue
+end
+
 """Recursively constructs with reprojection, terrible because the types keep on nesting inside of one another."""
 function recursivelyConstructOperatorWithReprojection(N::Int64, beta::Float64, env::SolutionEnvironment)::Matrix{BigFloat}
   Mat = zeros(BigFloat, N, N)

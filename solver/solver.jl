@@ -8,14 +8,19 @@ import ..Utils
 import ..AttractiveRepulsiveSolver
 import ..GeneralKernelSolver
 
-"""Docstring for the function"""
-function solve(N::Int64, R::Float64, env::Utils.SolutionEnvironment)::Vector{BigFloat}
+function constructOperatorFromEnv(N::Int64, R::Float64, env::Utils.SolutionEnvironment)
   if isa(env.p.potential, Params.AttractiveRepulsive)
     BigMatrix = AttractiveRepulsiveSolver.constructFullOperator(N, R, env)
   else
     BigMatrix = GeneralKernelSolver.constructGeneralOperator(N, R, env)
   end
   # @show cond(convert(Matrix{Float64}, BigMatrix))
+  return BigMatrix
+end
+
+"""Docstring for the function"""
+function solve(N::Int64, R::Float64, env::Utils.SolutionEnvironment)::Vector{BigFloat}
+  BigMatrix = constructOperatorFromEnv(N, R, env)
   BigRHS = zeros(N)
   BigRHS[1] = 1.0
 

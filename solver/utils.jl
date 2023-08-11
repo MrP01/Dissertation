@@ -40,16 +40,36 @@ function createBasis(p::Params.Parameters)
   return B, P
 end
 
+"""Docstring for the function. M: number of basis elements to expand the general kernel in."""
+function basisConversionMatrix(P, M=5)
+  r = axes(P, 1)
+  return mapreduce(permutedims, hcat, [P[:, 1:M] \ r .^ k for k in 0:M-1]')
+end
+
+"""Docstring for the function. M: number of basis elements to expand the general kernel in."""
+function expandKernelInMonomials(potential, P, M=5)
+  r = axes(P, 1)
+  BasisConversionMat = basisConversionMatrix(P, M)
+  InteractionCoeffs = convert(Vector{Float64}, P[:, 1:M] \ Params.potentialFunction.(r; pot=potential))  # in Jacobi basis
+  MonomialInteractionCoeffs = BasisConversionMat \ InteractionCoeffs  # in monomial basis
+  return MonomialInteractionCoeffs
+end
+
 struct SolutionEnvironment
   p::Params.Parameters
   B::Jacobi  # Jacobi Basis
   P::ContinuumArrays.QuasiArrays.SubQuasiArray # with argument mapping
+  monomial::Vector{Float64}
 end
 
 """Creates a fresh environment based on the Params.Parameters."""
-function createEnvironment(p::Params.Parameters)::SolutionEnvironment
+function createEnvironment(p::Params.Parameters, M=5)::SolutionEnvironment
   B, P = createBasis(p)
-  return SolutionEnvironment(p, B, P)
+  monomial = []
+  if ~isa(p.potential, Params.AttractiveRepulsive)
+    monomial = expandKernelInMonomials(p.potential, P, M)
+  end
+  return SolutionEnvironment(p, B, P, monomial)
 end
 
 defaultEnv::SolutionEnvironment = createEnvironment(Params.defaultParams)
@@ -85,21 +105,6 @@ function theorem216(r::Real; n::Int64, beta::Float64, p::Params.Parameters)::Big
   return integral_value
 end
 
-"""Docstring for the function"""
-function recurrence(r; oldestValue, oldValue, n, beta, p::Params.Parameters)
-  # using Corollary 2.18
-  m = p.m
-  @assert isa(p.potential, Params.AttractiveRepulsive)
-  alpha = p.potential.alpha
-  c_a = -((-alpha + 2m + 4n) * (-alpha + 2m + 4n + 2) * (alpha + p.d - 2 * (p.m + n + 1))) /
-        (2 * (n + 1) * (-alpha + beta + 2m + 2n + 2) * (-alpha + beta + p.d + 2m + 2n))
-  c_b = -((-alpha + 2m + 4n) * (alpha + p.d - 2(p.m + n + 1)) * (p.d * (-alpha + 2 * beta + 2m + 2) - 2 * (2n - beta) * (-alpha + beta + 2m + 2n))) /
-        (2 * (n + 1) * (-alpha + 2m + 4n - 2) * (-alpha + beta + 2m + 2n + 2) * (-alpha + beta + p.d + 2m + 2n))
-  c_c = ((-beta + 2n - 2) * (beta + p.d - 2n) * (-alpha + 2m + 4n + 2) * (alpha + p.d - 2 * (p.m + n)) * (alpha + p.d - 2 * (p.m + n + 1))) /
-        (4n * (n + 1) * (-alpha + 2m + 4n - 2) * (-alpha + beta + 2m + 2n + 2) * (-alpha + beta + p.d + 2m + 2n))
-  return (c_a * r^2 + c_b) * oldValue + c_c * oldestValue
-end
-
 """In possession of a solution, evaluates the measure (function) at given values of x."""
 function rho(x_vec, solution::Vector{BigFloat}, env::SolutionEnvironment)
   return (1 .- x_vec .^ 2) .^ env.B.a .* vec(sum(solution .* env.P[abs.(x_vec), 1:length(solution)]', dims=1))
@@ -108,14 +113,24 @@ end
 """Docstring for the function"""
 function totalEnergy(solution::Vector{BigFloat}, R::Float64, r::Union{Float64,AbstractVector{Float64}}, env::SolutionEnvironment)
   # more details in section 3.2
-  @assert isa(env.p.potential, Params.AttractiveRepulsive)
-  alpha, beta = env.p.potential.alpha, env.p.potential.beta
-  attractive, repulsive = zero(r), zero(r)
-  for k in eachindex(solution)
-    attractive += solution[k] * Float64.(theorem216.(r; n=k - 1, beta=alpha, p=env.p))
-    repulsive += solution[k] * Float64.(theorem216.(r; n=k - 1, beta=beta, p=env.p))
+  if isa(env.p.potential, Params.AttractiveRepulsive)
+    alpha, beta = env.p.potential.alpha, env.p.potential.beta
+    attractive, repulsive = zero(r), zero(r)
+    for k in eachindex(solution)
+      attractive += solution[k] * Float64.(theorem216.(r; n=k - 1, beta=alpha, p=env.p))
+      repulsive += solution[k] * Float64.(theorem216.(r; n=k - 1, beta=beta, p=env.p))
+    end
+    E = (R^alpha / alpha) * attractive - (R^beta / beta) * repulsive
+  else
+    E = zero(r)
+    for k in eachindex(solution)
+      for index in eachindex(env.monomial)
+        # index starts from 1!
+        power, coefficient = index - 1, env.monomial[index]
+        E += coefficient * R^power * solution[k] * Float64.(theorem216.(r; n=k - 1, beta=float(power) + 0.0001, p=env.p))
+      end
+    end
   end
-  E = (R^alpha / alpha) * attractive - (R^beta / beta) * repulsive
   return E
 end
 

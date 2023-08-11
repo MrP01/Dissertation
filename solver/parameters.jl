@@ -27,11 +27,27 @@ function potentialFunction(r; pot)
   end
 end
 
+function potentialParamsToLatex(pot, rounded=false)
+  pot
+  if isa(pot, AttractiveRepulsive)
+    alpha, beta = pot.alpha, pot.beta
+    if rounded
+      alpha, beta = round(pot.alpha, digits=2), round(pot.beta, digits=2)
+    end
+    return "(\\alpha, \\beta) = ($(alpha), $(beta))"
+  elseif isa(pot, MorsePotential)
+    return "(C_a, l_a, C_r, l_r) = ($(pot.C_att), $(pot.l_att), $(pot.C_rep), $(pot.l_rep))"
+  else
+    error("What is this potential?")
+  end
+end
+
 """The solver takes a few parameters"""
 @kwdef struct Parameters
   d = 1  # dimension
   m = 1  # integer
   R0 = 0.8  # radius of the interval [-R, R]
+  # M = 5  # size of monomial basis
   potential = AttractiveRepulsive()  # potential parameters
   friction = QuadraticSelfPropulsion()  # friction
 end
