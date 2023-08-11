@@ -182,6 +182,20 @@ function plotOuterOptimisation(p=Params.knownAnalyticParams)
   return fig
 end
 
+function plotVaryingRSolutions(p=Params.morsePotiParams)
+  env = Utils.createEnvironment(p)
+  fig = Figure()
+  ax = Axis(fig[1, 1], xlabel=L"r", ylabel=L"\rho(r)",
+    title=L"\text{Energy with}~%$(Params.potentialParamsToLatex(p.potential)),~d=%$(p.d)")
+  for R in 0.2:0.4:1.4
+    lines!(ax, r_vec_noend, Utils.rho(r_vec_noend, Solver.solve(6, R, env), env), label="R = $R")
+  end
+  ylims!(ax, -0.5, 1)
+  axislegend(ax)
+  saveFig(fig, "varying-R-solutions")
+  return fig
+end
+
 function plotAnalyticSolution()
   fig = Figure()
   p = Params.knownAnalyticParams
@@ -299,7 +313,7 @@ function plotSimulationAndSolverComparison(p::Params.Parameters=Params.known2dPa
   fig = Figure()
   ax = Axis(fig[1, 1], xlabel=L"\text{Radial distance}~r", ylabel=LT"Density",
     title=L"\text{Particle Simulation Output Distribution}")
-  hist!(ax, radialDistance, bins=0:0.06:(maximum(radialDistance)*1.05), scale_to=maximum(solution),
+  hist!(ax, radialDistance, bins=0:0.06:(maximum(radialDistance)*1.05), scale_to=maximum(solution) * 1.1,
     label=LT"Particle Simulation")
   lines!(ax, r, solution, color=:red, linewidth=3.0, label=LT"Spectral Method")
   ylims!(ax, 0, maximum(solution) * 1.05)
