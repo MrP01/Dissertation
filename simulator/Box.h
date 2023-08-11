@@ -3,17 +3,20 @@
 #include <iostream>
 #include <stdlib.h>
 
+#ifndef PARTICLES
+#define PARTICLES 120 // number of particles
+#endif
+
+#ifndef DIMENSION
+#define DIMENSION 2 // dimension
+#endif
+
 // be careful to set numeric values as floats here
-#define PARTICLES 120              // number of particles
 #define PARTICLE_MASS 1.0          // mass of a particle
 #define LJ_CUTOFF_DISTANCE 0.00001 // LJ explodes for very close particles, stop earlier
 #define RADIAL_HISTOGRAM_BINS 20   // into how many radius boxes we aggregate particles
 #define VELOCITY_HISTOGRAM_BINS 12 // similarly, number of bins for the velocity histogram
 #define HISTOGRAM_AVERAGE_N 20     // histogram averaging
-
-#ifndef DIMENSION
-#define DIMENSION 2 // dimension
-#endif
 
 class InteractionPotential {
  public:
@@ -75,6 +78,7 @@ class ParticleBox {
   struct RadiusHistogram averagedRadiusHistogram;
   struct VelocityHistogram velocityHist;
   double totalMeanVelocity = 0;
+  size_t bounceCount = 0;
 
   double squaredDistanceBetween(size_t i, size_t j) {
     double sum = 0.0;

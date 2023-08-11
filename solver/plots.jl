@@ -23,7 +23,7 @@ x_vec_noends = x_vec[2:end-1]
 dissColours = Makie.wong_colors()
 pow10tickformat(values) = [L"10^{%$(Int64(round(value)))}" for value in values]
 
-function runSimulator(p::Params.Parameters, iterations=2000)
+function runSimulator(p::Params.Parameters, iterations=2000, big=true)
   if isa(p.potential, Params.AttractiveRepulsive)
     mode = "attrep"
     potentialParams = [p.potential.alpha, p.potential.beta]
@@ -33,7 +33,8 @@ function runSimulator(p::Params.Parameters, iterations=2000)
   else
     error("Unkown potential")
   end
-  cmd = Cmd(string.(["./build/simulator/experiments$(p.d)d", mode, p.d, iterations, potentialParams...]))
+  bigstring = big ? "big" : ""
+  cmd = Cmd(string.(["./build/simulator/experiments$(p.d)d$(bigstring)", mode, p.d, iterations, potentialParams...]))
   @show cmd
   println("----- Running simulation -----")
   run(cmd)
@@ -309,7 +310,7 @@ end
 
 function plotSimulationQuiver(p::Union{Params.Parameters,Symbol}=:nothing, iterations::Int64=2000)
   if p != :nothing
-    runSimulator(p, iterations)
+    runSimulator(p, iterations, false)
   end
   posidf, velodf, dimension = loadSimulatorData()
   @assert dimension >= 2

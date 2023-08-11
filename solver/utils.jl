@@ -41,7 +41,7 @@ function createBasis(p::Params.Parameters)
 end
 
 """Docstring for the function. M: number of basis elements to expand the general kernel in."""
-function basisConversionMatrix(P, M=5)
+function basisConversionMatrix(P, M=8)
   r = axes(P, 1)
   return mapreduce(permutedims, hcat, [P[:, 1:M] \ r .^ k for k in 0:M-1]')
 end

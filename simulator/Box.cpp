@@ -73,9 +73,11 @@ void ParticleBox::reflectParticles() {
       if (positions[i][d] < -1.0) {
         positions[i][d] = -1.0 - (1.0 + positions[i][d]); // assumes linear movement in this timestep
         velocities[i][d] = -velocities[i][d];
+        bounceCount++;
       } else if (positions[i][d] > 1.0) {
         positions[i][d] = 1.0 - (positions[i][d] - 1.0); // assumes linear movement
         velocities[i][d] = -velocities[i][d];
+        bounceCount++;
       }
     }
   }

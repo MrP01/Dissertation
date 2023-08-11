@@ -35,5 +35,7 @@ int main(int argc, char *argv[]) {
   //   box.computeRadiusHistogram();
   // }
   // box.exportToCSV();
+
+  std::cout << "Had " << box.bounceCount << " bounces." << std::endl;
   return 0;
 }
