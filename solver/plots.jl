@@ -46,9 +46,17 @@ function loadSimulatorData()
   dimension = length(axes(posidf, 2))
   return posidf, velodf, dimension
 end
-function saveFig(fig::Figure, name::String)
-  save(joinpath(RESULTS_FOLDER, "$name.pdf"), fig)
-  @info "Exported $name.pdf"
+function saveFig(fig::Figure, name::String, p::Union{Params.Parameters,Symbol}=:nothing)
+  if p == :nothing
+    save(joinpath(RESULTS_FOLDER, "$name.pdf"), fig)
+    @info "Exported $name.pdf"
+  else
+    if ~isdir(joinpath(RESULTS_FOLDER, p.name))
+      mkdir(joinpath(RESULTS_FOLDER, p.name))
+    end
+    save(joinpath(RESULTS_FOLDER, p.name, "$name.pdf"), fig)
+    @info "Exported $(p.name)/$name.pdf"
+  end
 end
 macro LT_str(s::String)
   return latexstring(raw"\text{" * s * "}")
@@ -66,7 +74,7 @@ function plotDifferentOrderSolutions(p=Params.defaultParams)
   lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(6, p.R0, env), env), label="N = 6")
   lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(7, p.R0, env), env), label="N = 7")
   axislegend(ax)
-  saveFig(fig, "solution-increasing-order")
+  saveFig(fig, "solution-increasing-order", p)
   return fig
 end
 
