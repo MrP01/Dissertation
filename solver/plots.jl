@@ -148,10 +148,10 @@ function plotStepByStepConvergence()
 end
 
 function plotMonomialBasisConvergence(p=Params.morsePotiParams)
-  Ms = 1:10
+  Ms = 2:11
   R = p.R0
   errors = zeros(length(Ms))
-  env = Utils.createEnvironment(p, 12)
+  env = Utils.createEnvironment(p, Ms[end] + 1)
   best = Utils.rho(r_vec_noend, Solver.solve(24, R, env), env)
   for k in eachindex(Ms)
     M = Ms[k]
@@ -184,10 +184,10 @@ end
 function plotAnalyticSolution()
   fig = Figure()
   p = Params.knownAnalyticParams
-  alpha, beta, d = round(p.potential.alpha, digits=2), round(p.potential.beta, digits=2), p.d
   env = Utils.createEnvironment(p)
   R, analytic = AnalyticSolutions.explicitSolution(x_vec_noends; p=p)
-  ax = Axis(fig[1, 1], title=L"\text{Analytic Solution with}~", xlabel=L"x", ylabel=L"\rho(x)")
+  ax = Axis(fig[1, 1], title=L"\text{Analytic Solution with}~%$(Params.potentialParamsToLatex(p.potential, true))",
+    xlabel=L"x", ylabel=L"\rho(x)")
   lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(4, R, env), env), label=L"N = 4")
   lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(8, R, env), env), label=L"N = 8")
   lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(20, R, env), env), label=L"N = 20")
