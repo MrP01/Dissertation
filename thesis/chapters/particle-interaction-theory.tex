@@ -3,6 +3,17 @@
 
 \input{chapters/out/Particle Interaction Theory.md.tex}
 
+Each particle $i=1, ..., N$ at position $\vec{x_i} \in \R^d$ and time $t \in \R^+$ follows
+$$\frac{\dd^2 \vec{x_i}}{\ddt^2} = f\left(\norm{\frac{\dd \vec{x_i}}{\ddt}}\right) \frac{\dd\vec{x_i}}{\ddt} - \frac{1}{N} \sum_{j=1, i\neq j}^{N} \nabla K\left(\norm{\vec{x_i} - \vec{x_j}}\right)\,,$$
+for reference see, for example, \parencite{2020-power-law-kernels, 2021-arbitrary-dimensions}.
+For now, we only consider the case without an external potential $V(\vec{x})$.
+
+\section{Continuous Limit}
+The total energy, in the continuous limit as $N_p \rightarrow \infty$, becomes
+$$E = \frac{1}{2} \iint K\left(\norm{\vec{x} - \vec{y}}\right) \,\dd\rho(\vec{x})\,\dd\rho(\vec{y})\,,$$
+where $\dd\rho = \rho(\vec{x})\dd\vec{x}$ is a measure (the equilibrium distribution) chosen such that
+$$M = \int \dd\rho = \int_{\supp(\rho)} \rho(\vec{x}) \,\dd\vec{x} = 1\,.$$
+
 \section{Self-Propulsion}
 Makes it active matter.
 

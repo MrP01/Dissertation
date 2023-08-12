@@ -13,7 +13,7 @@ There are some disadvantages as well, like the accelerated spread of diseases or
 
 From a more physical perspective, pair potentials $K: \R^+ \mapsto \R$ provide a simple and computationally efficient way to approximate the interaction between two particles based solely on their distance (cf. \Cref{fig:problem-setting} as a simple illustration).
 The total potential of a system of $N_p \ge 2$ particles $U \in \R$ can be calculated by summing up the pair potentials $U_{ij} \in \R$ between all pairs of particles
-$$U = \sum_{i=1}^{N_p}\sum_{j=1}^{N_p} U_{ij} = \sum_{i=1}^{N_p}\sum_{j=1}^{N_p} K\left(\norm{\vec{x_i} - \vec{x_j}}\right)\,,$$
+$$U = \sum_{i=1}^{N_p}\sum_{j=1, j \neq i}^{N_p} U_{ij} = \sum_{i=1}^{N_p}\sum_{j=1, j \neq i}^{N_p} K\left(\norm{\vec{x_i} - \vec{x_j}}\right)\,,$$
 where $\vec{x_i} \in \R^d$ represents the $d$-dimensional position of particle $i$, respectively.
 
 Pairwise potentials can be used to approximate a wide range of interactions, including interatomic potentials in physics and computational chemistry.
@@ -25,6 +25,7 @@ One can even consider the case where either $\alpha$ or $\beta$ is 0 in order to
   Consider the Laurent series expansion of $\frac{x^a}{a} = \frac{1}{a} + \log(x) + \frac{1}{2}a \log^2(x) + \mathcal{O}(a^2)$ in the limit as $a \rightarrow 0^+$.
   While this limit approaches $\infty$ coming from the right and $-\infty$ coming from the left due to the nature of the first term in the expansion, the only remaining term in it is $\log(x)$ which is thereby chosen as a convention.
 }.
+If the repulsive term is stronger (so $\beta > \alpha$), there is no equilibium distribution as particles simply continue repelling each other out to infinity.
 
 \begin{figure}[H]
   \centering
