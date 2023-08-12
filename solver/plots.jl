@@ -116,7 +116,7 @@ function plotFullOperator(N=30, p=Params.morsePotiParams)
   ax = Axis(fig[1, 1][1, 1], yreversed=true, title=L"\text{Operator}")
   s = spy!(ax, sparse(log10.(abs.(op1))), marker=:rect, markersize=32, framesize=0)
   Colorbar(fig[1, 1][1, 2], s, flipaxis=false, tickformat=pow10tickformat)
-  saveFig(fig, "morse-operator")
+  saveFig(fig, "full-operator", p)
   return fig
 end
 
@@ -324,9 +324,9 @@ function plotSimulationAndSolverComparison(p::Params.Parameters=Params.known2dPa
   hist!(ax, radialDistance, bins=0:0.06:(maximum(radialDistance)*1.05), scale_to=maximum(solution) * 1.1,
     label=LT"Particle Simulation")
   lines!(ax, r, solution, color=:red, linewidth=3.0, label=LT"Spectral Method")
-  ylims!(ax, 0, maximum(solution) * 1.05)
-  axislegend(ax, position=:lt)
-  saveFig(fig, "simulation-solver-comparison")
+  ylims!(ax, 0, maximum(solution) * 1.12)
+  axislegend(ax, position=:lb)
+  saveFig(fig, "simulation-solver-comparison", p)
   return fig
 end
 
