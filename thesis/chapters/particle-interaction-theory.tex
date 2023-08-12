@@ -1,9 +1,16 @@
 \chapter{Particle Interaction Theory}
 \label{chap:particle-interaction-theory}
 
-\input{chapters/out/Particle Interaction Theory.md.tex}
+As mentioned in the introduction.
 
-\paragraph{Definition: $N_p$-Body System (set of particles with position and velocity)}
+% Some input from the Wolfson Particle Physicist
+Lennard-Jones is an \textbf{intermolecular} potential.
+So length-scale is between-molecules.
+Therefore, the only relevant interaction is the electromagnetic one.
+The strong force keeps protons in the nucleus together (a force much stronger than the electromagnetic one).
+
+\paragraph{Definition: $N_p$-Body System}
+(a set of particles with position and velocity)
 Each particle $i=1, ..., N_p$ at position $\vec{x_i} \in \R^d$ and time $t \in \R^+$ follows
 % Write differential equation of movement:
 $$\frac{\dd^2 \vec{x_i}}{\ddt^2} = f\left(\norm{\frac{\dd \vec{x_i}}{\ddt}}\right) \frac{\dd\vec{x_i}}{\ddt} - \frac{1}{N} \sum_{j=1, i\neq j}^{N} \nabla K\left(\norm{\vec{x_i} - \vec{x_j}}\right)\,,$$
@@ -14,7 +21,7 @@ For now, we only consider the case without an external potential $V(\vec{x})$.
 Each particle has inertia and its kinetic energy (``second moment'' \footnote{
   In kinetic theory, the $0$th moment is the mass $m$ of a particle, the first moment is the momentum $\vec{p}$ and the second moment is its kinetic energy.
 }) is given by
-$$E_{\text{kin},i} = \frac{\vec{p_i}^2}{2m} = \frac{(m \vec{v_i})^2}{2m} = \frac{1}{2} m v^2\,.$$
+$$E_{\text{kin},i} = \frac{\vec{p_i}^2}{2m} = \frac{(m \vec{v_i})^2}{2m} = \frac{1}{2} m \norm{\vec{v_i}}^2\,.$$
 
 In the absence of an external potential, the total energy is given by $E = E_{\text{kin}} + U$.
 
@@ -43,6 +50,8 @@ Self-propulsion and friction could be modelled as a quadratic of the form
 $$f(v_i) = 1.6 - 0.5 v_i^2\,,$$
 where $v_i := \norm{\vec{v_i}} = \norm{\frac{\dd\vec{x_i}}{\ddt}}$.
 Show reproduced plots from \cite{2006-self-propelled}.
+
+\hierKoennteIhreWerbungStehen
 
 % Friction Term -\textgreater{} Energy Dissipation -\textgreater{} Different Plot
 

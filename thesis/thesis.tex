@@ -19,31 +19,30 @@
 
 \tikzexternalize[prefix=tikz/]
 
-\title{General Kernel Spectral Methods for Equilibrium Measures}
-\author{Peter Julius Waldert}
-% \institute{Mathematical Institute \\ University of Oxford}
+\thesistitle{General Kernel Spectral Methods for Equilibrium Measures}
+\thesisauthor{Peter Julius Waldert, BSc BSc}
+\thesisdate{August 2023}
+\academicdegree{Master of Science}
+\location{Oxford}
+\supervisor{
+  Dr. Timon Gutleb\textsuperscript{a} \\
+  Prof. José A. Carrillo MA, FEurASc, FSIAM, MAE, FIMA\textsuperscript{a} \\
+  \vspace{0.4cm}
+  \href{https://www.maths.ox.ac.uk/}{\textcolor{black}
+    {\textsuperscript{a}Mathematical Institute, University of Oxford}} \\
+}
+\curriculum{Mathematical Modelling and Scientific Computing (MMSC)}
 
-% \thesistitle{
-%   Secure Classification as a Service \\
-%   \small\normalfont Levelled Homomorphic, Post-Quantum Secure Machine Learning Inference \\
-%   based on the CKKS Encryption Scheme
-% }
-% \thesisauthor{Peter Julius Waldert}
-% \thesisdate{July 2022}
-% \supervisor{
-%   Dipl.-Ing. Roman Walch\textsuperscript{a} \\
-%   Univ.-Prof. Dipl.-Phys. Dr.rer.nat. Wolfgang von der Linden\textsuperscript{b} \\
-%   \vspace{0.4cm}
-%   \href{https://www.iaik.tugraz.at/}{\textcolor{black}
-%     {\textsuperscript{a}Institute of Applied Information Processing and Communications (IAIK)}} \\
-% }
-% \curriculum{\textit{Physics} and \textit{Information \& Computer Engineering}}
+\makeatletter
+\title{\@thesistitle}
+\makeatother
+\author{Peter Waldert}
 
 \input{macros.tex}
 \addbibresource{../literature/sources.bib}
 
 \begin{document}
-  % \printthesistitle
+  \printthesistitle
   \include{chapters/abstract}
   \tableofcontents
   \include{chapters/introduction}

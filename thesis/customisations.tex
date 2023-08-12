@@ -1,6 +1,7 @@
 \usepackage{tabularray}
 \usepackage{cancel}
 \usepackage{lipsum}
+\usepackage[msc,iaik]{thesistitlepage}
 
 \setlength{\headheight}{19.53pt}
 \setlength{\headsep}{1.8em}
@@ -26,103 +27,3 @@
 % \crefname{tcb@cnt@lemma}{lemma}{lemmata}
 % \crefname{tcb@cnt@corollary}{corollary}{corollaries}
 % \crefname{tcb@cnt@remark}{remark}{remarks}
-
-% Titlepage
-\newcommand{\printthesistitle}{%
-\cleardoublepage
-\iftugraz@informal\else
-  \newgeometry{bottom=2.7cm,left=2.5cm,right=2.5cm,top=1.5cm}
-\fi
-\thispagestyle{empty}
-{%
-\centering%
-\setlength{\parskip}{.75ex}%
-\linespread{1.2}%
-%
-\noindent
-\iftugraz@nawi
-  \nawilogoscaled[46mm]
-  \hfill
-\fi
-\iftugraz@iaik
-  %\smash{\raisebox{-24.75mm}{\iaiklogoscaled[11mm]}}
-  \smash{\raisebox{-17.875mm}{\iaiklogoscaled[8.25mm]}}
-  %\smash{\raisebox{-11mm}{\iaiklogoscaled[5.5mm]}}
-  \hfill
-\fi
-\iftugraz@claim
-  \hfill
-  \raisebox{2.75mm}{\sffamily\fontsize{8}{10}\selectfont\germanenglish{%
-      \sode{WISSEN} \minisq\sode{TECHNIK} \minisq\sode{LEIDENSCHAFT}}{%
-      \soen{SCIENCE} \minisq\soen{PASSION} \minisq\soen{TECHNOLOGY}}
-  }
-  \hskip6mm
-\fi
-\tuglogoscaled[29mm]
-\iftugraz@claim
-  \hskip-1cm\null
-\else
-\fi
-\vphantom{\nawilogoscaled[46mm]}
-\vskip3cm
-
-{\tugraz@titlefont\fontsize{14pt}{16pt}\selectfont \@thesisauthor \par}
-%\vskip1.5cm
-\vskip1.2cm
-
-{\bfseries\tugraz@titlefont\fontsize{16pt}{20pt}\selectfont \@thesistitle \par}
-\vfill
-\@thesistitleimage
-\vfill
-
-{\bfseries\tugraz@titlefont\fontsize{12pt}{14pt}\selectfont
-  \iftugraz@phd \germanenglish{DISSERTATION}{DOCTORAL THESIS} \fi
-  \iftugraz@msc \germanenglish{MASTERARBEIT}{MASTER'S THESIS} \fi
-  \iftugraz@bsc \germanenglish{BACHELORARBEIT}{BACHELOR'S THESIS} \fi
-  \iftugraz@project \germanenglish{PROJEKT}{PROJECT} \fi
-  %\iftugraz@bsc \mdseries\scshape\germanenglish{Bachelorarbeit}{Bachelor's Thesis} \fi
-  %\iftugraz@project \mdseries\scshape\germanenglish{Projekt}{Project} \fi
-  \iftugraz@diplom DIPLOMARBEIT \fi
-  \par
-}
-
-\iftugraz@informal\else
-  \germanenglish{zur Erlangung des akademischen Grades}{to achieve the university degree of}\par
-  \@academicdegree
-\fi
-\iftugraz@phd\else
-  \iftugraz@individual
-    \vskip.7cm
-
-    Individuelles Masterstudium\par
-    \@degreeprogramme
-  \else
-    \par
-    \iftugraz@msc\germanenglish{Masterstudium}{Master's degree programme:} \fi
-    \iftugraz@diplom\germanenglish{Lehramtsstudium}{Teacher training programme:} \fi
-    \iftugraz@bsc\germanenglish{Bachelorstudien}{Bachelor's degree programmes:} \fi
-    \iftugraz@project\germanenglish{Masterstudium}{Master's degree programme:} \fi
-    \\\@degreeprogramme
-  \fi
-\fi
-\iftugraz@informal\else
-  \par
-  \iftugraz@individual\vskip0.6cm\else\vskip1.0cm\fi
-
-  {\fontsize{10pt}{12pt}\selectfont \germanenglish{eingereicht an der}{submitted to}\par}
-  {\bfseries\tugraz@titlefont\fontsize{12pt}{14pt}\selectfont \germanenglish{Technischen Universit{\"{a}}t Graz}{Graz University of Technology}\par}
-\fi
-\iftugraz@individual\vskip0.8cm\else\vskip1.2cm\fi
-
-{\bfseries\tugraz@titlefont\fontsize{10pt}{12pt}\selectfont\@supervisortitle \par}
-
-{\fontsize{10pt}{12pt}\selectfont \@supervisor \par}
-\iftugraz@individual\vskip1.2cm\else\vskip1.4cm\fi
-
-{\fontsize{8pt}{11pt}\selectfont \@location, \@thesisdate \par}
-}
-\iftugraz@informal\else
-  \restoregeometry
-\fi
-% \cleardoublepage
-}
