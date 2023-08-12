@@ -11,21 +11,20 @@ For example, they share water resistance or it is easier to find a mate within t
 They also often mimic larger animals to fend off predators and swarming behaviour (``swarming intelligence'') plays an important role in this process.
 There are some disadvantages as well, like the accelerated spread of diseases or when resources are scarce, some swarm species even begin cannibalistic behaviour \parencite{2017-maria-orsogna-swarm-video}.
 
-From a more physical perspective, we have
+From a more physical perspective, pair potentials $K: \R^+ \mapsto \R$ provide a simple and computationally efficient way to approximate the interaction between two particles based solely on their distance (cf. \Cref{fig:problem-setting} as a simple illustration).
+The total potential of a system of $N_p \ge 2$ particles $U \in \R$ can be calculated by summing up the pair potentials $U_{ij} \in \R$ between all pairs of particles
+$$U = \sum_{i=1}^{N_p}\sum_{j=1}^{N_p} U_{ij} = \sum_{i=1}^{N_p}\sum_{j=1}^{N_p} K\left(\norm{\vec{x_i} - \vec{x_j}}\right)\,,$$
+where $\vec{x_i} \in \R^d$ represents the $d$-dimensional position of particle $i$, respectively.
 
-
-\section{Notational Conventions}
-Let $\N$ denote the natural numbers (positive integers) without $0$ and let $\N_0 := \N \cup \{0\}$.
-In the following, we will use \textbf{bold} notation for vectors, matrices will generally be denoted by a capital letter and scalars by a lowercase letter.
-We will frequently make use of the (Euclidean) 2-norm of a vector, as denoted by $\norm{\cdot}$.
-So for a $d$-dimensional vector $\vec{x} \in \R^d$ we have $\norm{\vec{x}} := \sqrt{\sum_{k=1}^d x_k^2}$.
-
-One should also clarify the nature of a few of the integrals appearing in this thesis which are often performed over the closed unit ball $B_1(\vec{x}) := \{\vec{y} \in \R^d \;|\, \norm{\vec{x} - \vec{y}} \le 1\}$ centered at the origin $\vec{x} = \vec{0}$.
-These volume integrals (often ended by $\dd^d y$ or $\dd V$) over the $d$-dimensional unit ball shall be written as
-$$\int_{B_1(\vec{0})} \dd\vec{y}\,,$$
-where $\vec{y} \in \R^d$ is the integration variable.
-Note that some definitions of $B_1(\vec{x})$ are open sets, leaving out the shell $\{\vec{y} \in \R^d \;|\, \norm{\vec{x} - \vec{y}} = 1\}$.
-The choice of definition does not matter for our purposes as the shell, a hyperplane of Lebesgue measure $0$, does not contribute to the integral.
+Pairwise potentials can be used to approximate a wide range of interactions, including interatomic potentials in physics and computational chemistry.
+Common examples of pair potentials include the Lennard-Jones potential and the Morse potential, which are widely used in molecular dynamics simulations to study the behavior of atoms and molecules.
+An example we will study is that of an attractive-repulsive interaction potential, where two power-law potentials compete with each other.
+For a given $\alpha, \beta \in \R \backslash \{0\}$, it is given by
+$$K_{\alpha, \beta}(r) = \frac{r^\alpha}{\alpha} - \frac{r^\beta}{\beta}\,.$$
+One can even consider the case where either $\alpha$ or $\beta$ is 0 in order to arrive at a log-term \parencite{2017-explicit-solutions}, using the convention that $\frac{x^0}{0} := \log(x)$\footnote{
+  Consider the Laurent series expansion of $\frac{x^a}{a} = \frac{1}{a} + \log(x) + \frac{1}{2}a \log^2(x) + \mathcal{O}(a^2)$ in the limit as $a \rightarrow 0^+$.
+  While this limit approaches $\infty$ coming from the right and $-\infty$ coming from the left due to the nature of the first term in the expansion, the only remaining term in it is $\log(x)$ which is thereby chosen as a convention.
+}.
 
 \begin{figure}[H]
   \centering
@@ -39,11 +38,24 @@ The choice of definition does not matter for our purposes as the shell, a hyperp
   \begin{subfigure}[t]{0.49\textwidth}
     \centering
     \scalebox{0.68}{\inputtikz{potential-function}}
-    \caption{Plot of attractive-repulsive potential functions $K(r) = \frac{r^\alpha}{\alpha} - \frac{r^\beta}{\beta}$ for different $\alpha, \beta$.}
+    \caption{Plot of attractive-repulsive potential functions $K_{\alpha, \beta}(r) = \frac{r^\alpha}{\alpha} - \frac{r^\beta}{\beta}$ for different $\alpha, \beta$.}
     \label{fig:potential-function}
   \end{subfigure}
 \end{figure}
 
-Cf. \Cref{fig:problem-setting} and \Cref{fig:potential-function}.
+From here on, we will refer to said swarm entities, be it fish, birds or atoms, as \textit{particles}.
+
+\section{Notational Conventions}
+Let $\N$ denote the natural numbers (positive integers) without $0$ and let $\N_0 := \N \cup \{0\}$.
+In the following, we will use \textbf{bold} notation for vectors, matrices will generally be denoted by a capital letter and scalars by a lowercase letter.
+We will frequently make use of the (Euclidean) 2-norm of a vector, as denoted by $\norm{\cdot}$.
+So for a $d$-dimensional vector $\vec{x} \in \R^d$ we have $\norm{\vec{x}} := \sqrt{\sum_{k=1}^d x_k^2}$.
+
+One should also clarify the nature of a few of the integrals appearing in this thesis which are often performed over the closed unit ball $B_1(\vec{x}) := \{\vec{y} \in \R^d \;|\, \norm{\vec{x} - \vec{y}} \le 1\}$ centered at the origin $\vec{x} = \vec{0}$.
+These volume integrals (often ended by $\dd^d y$ or $\dd V$) over the $d$-dimensional unit ball shall be written as
+$$\int_{B_1(\vec{0})} \dd\vec{y}\,,$$
+where $\vec{y} \in \R^d$ is the integration variable.
+Note that some definitions of $B_1(\vec{x})$ are open sets, leaving out the shell $\{\vec{y} \in \R^d \;|\, \norm{\vec{x} - \vec{y}} = 1\}$.
+The choice of definition does not matter for our purposes as the shell, a hyperplane of Lebesgue measure $0$, does not contribute to the integral.
 
 All numerical plots and figures in this thesis were generated using the Makie visualisation tool \parencite{2021-makie}, an open-source package available for the Julia computing language \parencite{2017-julia}.
