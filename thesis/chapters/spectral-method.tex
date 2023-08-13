@@ -39,14 +39,24 @@ to construct the Spectral Method Operator \(Q^\beta\) (cf. \Cref{def:operator}),
   \centering
   \label{fig:attractive-repulsive}
   \includegraphics[width=\linewidth]{results/attractive-repulsive-operators.pdf}
-  \caption{The attractive and repulsive operators (matrices), values are in log10-scale.}
+  \caption[Attractive and repulsive operators.]{The attractive and repulsive operators (matrices) as given in \Cref{def:operator}, the matrix values are shown in a $\log_{10}$ color scale. Due to the choice of basis, the attractive operator is exactly banded. The repulsive parameter is only approximately banded, which the spy plots effectively demonstrate.}
 \end{figure}
+
+The bandedness of the attractive operator is due to the three-term recurrence relationship of the Jacobi polynomial basis.
+% TODO.. explain
+
+For the attractive-repulsive interaction potential, the full operator is given by
+\begin{equation}
+  Q_{\alpha, \beta} := \frac{R^\alpha}{\alpha} Q^\alpha - \frac{R^\beta}{\beta} Q^\beta
+  \label{eq:full-attrep-operator}
+\end{equation}
+for some interval radius $R \in \R^+$, usually chosen as the smallest possible $R$ such that $\supp(\rho) \subseteq [-R, R]$.
 
 \begin{figure}[H]
   \centering
   \label{fig:attrep-operator}
   \includegraphics[width=0.5\linewidth]{results/attrep/full-operator.pdf}
-  \caption{Operator}
+  \caption[Combination of the attractive-repulsive operators]{Spy plot of $Q_{\alpha, \beta}$, the combination of the attractive-repulsive operators. Inverting this operator and applying it to $(1, 0, ..., 0)^T \in \R^N$ will yield the unnormalised coefficients $\rho_k$ of the solution expansion given in \Cref{def:ansatz}.}
 \end{figure}
 
 \section{Results}
@@ -54,24 +64,35 @@ to construct the Spectral Method Operator \(Q^\beta\) (cf. \Cref{def:operator}),
   \centering
   \label{fig:solution-increasing-order}
   \includegraphics[width=0.8\linewidth]{results/attrep/solution-increasing-order.pdf}
-  \caption{Solutions of increasing orders}
+  \caption[Solutions of increasing orders]{Particle density distribution function solutions $\rho$ of increasing order $N$ to the attractive-repulsive problem with interaction potential $K_{alpha, \beta}(r)$, $\alpha = 2.5$ and $\beta = 1.2$. Reflected along the y-axis for better illustration of the domain.}
 \end{figure}
 
 \section{Outer Optimisation Routine}
-\input{chapters/out/Outer Optimisation Routine.md.tex}
 \begin{figure}[H]
   \centering
   \label{fig:outer-optimisation}
-  \includegraphics[width=0.8\linewidth]{results/outer-optimisation.pdf}
-  \caption{Outer Optimisation}
+  \includegraphics[width=0.8\linewidth]{results/known-analytic/outer-optimisation.pdf}
+  \caption[Outer Optimisation Routine]{Total potential $U$ as a function of the interval radius $R$.}
 \end{figure}
 
-\section{Analytic Solutions}
+Note that using this setup, the operators themselves do not need to be recomputed (cf. \Cref{eq:full-attrep-operator}).
+The provided implementation uses \gls{lru} caching to automatically store operators for a given parameter set and order $N$.
+
+\section{Comparison with Analytic Solutions}
+As introduced in \Cref{sec:analytical-solutions}, there are some analytical solutions available which allow us to perform some further analysis of the numerical method in these special cases.
+
 \begin{figure}[H]
   \centering
   \label{fig:analytic-solution}
   \includegraphics[width=\linewidth]{results/analytic-solution.pdf}
-  \caption{Analytic solution and comparison to numerical solutions}
+  \caption[Comparison with analytical solutions and error]{The analytic solution $\rho(x)$ given in \Cref{eq:analytical-solution-alpha-equal-2} compared to the (spectral method) solutions of different order $N$.}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \label{fig:convergence-to-analytic}
+  \includegraphics[width=0.7\linewidth]{results/convergence-to-analytic.pdf}
+  \caption[]{Convergence to analytic solutions}
 \end{figure}
 
 \section{Discussion}
@@ -79,28 +100,21 @@ to construct the Spectral Method Operator \(Q^\beta\) (cf. \Cref{def:operator}),
 
 \begin{figure}[H]
   \centering
-  \label{fig:convergence-to-analytic}
-  \includegraphics[width=0.7\linewidth]{results/convergence-to-analytic.pdf}
-  \caption{Convergence to analytic solutions}
-\end{figure}
-
-\begin{figure}[H]
-  \centering
   \label{fig:convergence}
   \includegraphics[width=0.7\linewidth]{results/convergence.pdf}
-  \caption{Convergence}
+  \caption[]{Convergence}
 \end{figure}
 
 \begin{figure}[H]
   \centering
   \label{fig:spatial-energy-dependence}
   \includegraphics[width=0.6\linewidth]{results/energy-dependence-on-r.pdf}
-  \caption{Spatial energy dependence on $r$}
+  \caption[]{Spatial energy dependence on $r$}
 \end{figure}
 
 \begin{figure}[H]
   \centering
   \label{fig:varying-parameters}
   \includegraphics[width=0.9\linewidth]{results/varying-parameters.pdf}
-  \caption{Varying parameters in the solver}
+  \caption[]{Varying parameters in the solver}
 \end{figure}

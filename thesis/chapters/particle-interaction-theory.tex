@@ -85,6 +85,11 @@ which, without loss of generality, we can choose as $M = 1$ to make $\rho(\vec{x
 
 \input{chapters/bits/function-space.tex}
 
+\subsection{The Problem}
+\label{sec:the-problem}
+Finding the equilibrium measure $\rho$ that minimises the total potential $U$ given an interaction kernel $K$.
+\hierKoennteIhreWerbungStehen
+
 \section{Self-Propulsion}
 Makes it active matter.
 Self-propulsion and friction could be modelled as a quadratic of the form
@@ -121,7 +126,7 @@ Vlasov replaces the collision term with long-range interactions.
 For the study of active matter (a number of individual agents).
 \hierKoennteIhreWerbungStehen
 
-\section{Swarming in Biology}
+\section{Swarming in Biological Settings}
 A 2010 paper by \citeauthor{2010-starlings} showed the surprising result that correlation between movement of individual starlings in bird flocks over Rome is scale-free.
 In contrast to the assumption that birds only mirror their neighbours' behaviour and swarming behaviour emerges as a result of that, this observation suggests that bird flocks exert collective behaviour beyond local interactions.
 \begin{quote}
@@ -129,3 +134,20 @@ In contrast to the assumption that birds only mirror their neighbours' behaviour
   \parencite{2010-starlings}.
 \end{quote}
 This work was done by individually tracking each starling in the flock and using tracking algorithms to represent their 3 dimensional positions and velocities.
+
+\section{Analytical Solutions}
+\label{sec:analytical-solutions}
+\cite{2017-explicit-solutions} provides some analytic solutions to \hyperref[sec:the-problem]{the problem}.
+For example, when $\alpha = 2$ and $\beta \in [-1, 2]$, the equilibrium measure is given by
+\begin{equation}
+  \rho(\vec{x}) = C_\beta \cdot R^d \cdot \left(R^2 - \vec{x}^2\right)^{\frac{1-\beta}{2}}\,,
+  \label{eq:analytical-solution-alpha-equal-2}
+\end{equation}
+where
+$$C_\beta := \frac{1}{(\beta - 1) \pi} \cos\left(\frac{(2 - \beta) \pi}{2}\right)\,,$$
+$$R := \left(C_\beta \cdot B\left(\frac{1}{2}, \frac{3 - \beta}{2}\right)\right)^{\frac{1}{\beta - 2}}\,,$$
+with $B(\cdot, \cdot)$ the beta-function.
+
+% TODO: is this only 1-d or n-d?
+% TODO: the R^d is my own extension - can we prove?
+% TODO: definition of the beta function

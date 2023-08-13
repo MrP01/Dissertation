@@ -182,7 +182,7 @@ function plotOuterOptimisation(p=Params.knownAnalyticParams)
   env = Utils.createEnvironment(p)
   F(R) = Utils.totalEnergy(Solver.solve(8, R, env), R, 0.0, env)
   fig = Figure()
-  ax = Axis(fig[1, 1], xlabel=L"R", ylabel=L"E(R)",
+  ax = Axis(fig[1, 1], xlabel=L"R", ylabel=L"U(R)",
     title=L"\text{Energy Optimisation with}~%$(Params.potentialParamsToLatex(p.potential)),~d=%$(p.d)")
   lines!(ax, R_vec, F.(R_vec))
   saveFig(fig, "outer-optimisation", p)
@@ -369,15 +369,17 @@ function plotPhaseSpace(p=Params.defaultParams)
 end
 
 function plotJacobiConvergence()
+  B = Utils.defaultEnv.B
   P = Utils.defaultEnv.P
   f(x) = exp(x^2) # function we want to expand
   f_N = P[:, 1:10] \ f.(axes(P, 1))
   fig = Figure()
   ax = Axis(fig[1, 1], yscale=log10, xlabel=L"x", ylabel=LT"Absolute Error",
-    title=L"\text{Expansion of the function}~f(x) = \exp(x^2)")
+    title=L"\text{Expansion of the function}~f(x) = \exp(x^2)~\text{in the}~P_k^{(%$(B.a), %$(B.b))}~\text{basis}")
   for k in 2:10
     lines!(ax, r_vec, vec(abs.(sum(f_N[1:k] .* P[r_vec, 1:k]', dims=1) - f.(r_vec)')), label=L"N = %$k")
   end
+  axislegend(ax)
   saveFig(fig, "jacobi-expansions")
   return fig
 end
