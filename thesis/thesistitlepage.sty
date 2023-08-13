@@ -166,7 +166,8 @@
 }
 
 \iftugraz@informal\else
-  \germanenglish{zur Erlangung des akademischen Grades}{to achieve the university degree of}\par
+  % \germanenglish{zur Erlangung des akademischen Grades}{to achieve the university degree of}\par
+  {\fontsize{10pt}{12pt}\selectfont a thesis submitted for the degree of\par}
   \@academicdegree
 \fi
 \iftugraz@phd\else
@@ -177,12 +178,13 @@
     \@degreeprogramme
   \else
     \par
-    in the
-    \iftugraz@msc\germanenglish{Masterstudium}{Master's degree programme:} \fi
-    \iftugraz@diplom\germanenglish{Lehramtsstudium}{Teacher training programme:} \fi
-    \iftugraz@bsc\germanenglish{Bachelorstudien}{Bachelor's degree programmes:} \fi
-    \iftugraz@project\germanenglish{Masterstudium}{Master's degree programme:} \fi
-    \\\@degreeprogramme
+    {\fontsize{10pt}{12pt}\selectfont in}
+    \par
+    % \iftugraz@msc\germanenglish{Masterstudium}{Master's degree programme:} \fi
+    % \iftugraz@diplom\germanenglish{Lehramtsstudium}{Teacher training programme:} \fi
+    % \iftugraz@bsc\germanenglish{Bachelorstudien}{Bachelor's degree programmes:} \fi
+    % \iftugraz@project\germanenglish{Masterstudium}{Master's degree programme:} \fi
+    \@degreeprogramme
   \fi
 \fi
 \iftugraz@informal\else
