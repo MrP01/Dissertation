@@ -49,7 +49,7 @@ end
   R0 = 0.8  # radius of the interval [-R, R]
   potential = AttractiveRepulsive()  # potential parameters
   friction = QuadraticSelfPropulsion()  # friction
-  name::String = "default"
+  name::String = "attrep"
 end
 
 function checkParameters(p::Parameters)
@@ -64,8 +64,8 @@ end
 defaultParams = Parameters()
 known2dParams = Parameters(potential=AttractiveRepulsive(alpha=1.2, beta=0.1993), d=2, name="known-2d")
 knownAnalyticParams = Parameters(potential=AttractiveRepulsive(alpha=2.0001, beta=1.5), d=1, name="known-analytic")
-morsePotiParams = Parameters(potential=MorsePotential(), d=1, name="morse-poti")
-morsePotiParams2d = Parameters(potential=MorsePotential(), d=2, name="morse-poti-2d")
+morsePotiParams = Parameters(potential=MorsePotential(), d=1, name="morse")
+morsePotiParams2d = Parameters(potential=MorsePotential(), d=2, name="morse-2d")
 
 checkParameters(defaultParams)
 checkParameters(known2dParams)

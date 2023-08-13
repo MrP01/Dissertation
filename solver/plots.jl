@@ -88,7 +88,7 @@ function plotGeneralSolutionApproximation(p=Params.morsePotiParams)
     lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(8, p.R0, env), env), label="M = $M")
   end
   axislegend(ax)
-  saveFig(fig, "morse-solutions")
+  saveFig(fig, "monomial-solutions", p)
   return fig
 end
 
@@ -105,7 +105,7 @@ function plotAttRepOperators(N=30)
   ax = Axis(fig[1, 2][1, 1], yreversed=true, title=L"\text{Repulsive Operator}~(\beta = %$beta)")
   s = spy!(ax, sparse(log10.(abs.(op2))), marker=:rect, markersize=32, framesize=0)
   Colorbar(fig[1, 2][1, 2], s, flipaxis=false, tickformat=pow10tickformat)
-  saveFig(fig, "attractive-repulsive-operators")
+  saveFig(fig, "attractive-repulsive-operators", p)
   return fig
 end
 
@@ -174,7 +174,7 @@ function plotMonomialBasisConvergence(p=Params.morsePotiParams)
   ax = Axis(fig[1, 1], yscale=log10, xlabel=L"M", ylabel=LT"Squared Error", title=LT"Step by Step Convergence")
   lines!(ax, Ms, errors)
   scatter!(ax, Ms, errors, color=:red)
-  saveFig(fig, "monomial-basis-convergence")
+  saveFig(fig, "monomial-basis-convergence", p)
   return fig
 end
 
@@ -186,7 +186,7 @@ function plotOuterOptimisation(p=Params.knownAnalyticParams)
   ax = Axis(fig[1, 1], xlabel=L"R", ylabel=L"E(R)",
     title=L"\text{Energy Optimisation with}~%$(Params.potentialParamsToLatex(p.potential)),~d=%$(p.d)")
   lines!(ax, R_vec, F.(R_vec))
-  saveFig(fig, "outer-optimisation")
+  saveFig(fig, "outer-optimisation", p)
   return fig
 end
 
@@ -200,7 +200,7 @@ function plotVaryingRSolutions(p=Params.morsePotiParams)
   end
   ylims!(ax, -0.5, 1)
   axislegend(ax)
-  saveFig(fig, "varying-R-solutions")
+  saveFig(fig, "varying-R-solutions", p)
   return fig
 end
 
@@ -221,7 +221,7 @@ function plotAnalyticSolution()
   lines!(ax, x_vec_noends, abs.(Utils.rho(x_vec_noends, Solver.solve(8, R, env), env) .- analytic), label=L"N = 8")
   lines!(ax, x_vec_noends, abs.(Utils.rho(x_vec_noends, Solver.solve(20, R, env), env) .- analytic), label=L"N = 20")
   axislegend(ax)
-  saveFig(fig, "analytic-solution")
+  saveFig(fig, "analytic-solution", p)
   return fig
 end
 
@@ -243,7 +243,7 @@ function plotConvergenceToAnalytic()
     title=L"\text{Convergence to analytic solution with}~(\alpha, \beta, d) = (%$alpha, %$beta, %$d)")
   lines!(ax, Ns, errors)
   scatter!(ax, Ns, errors, color=:red)
-  saveFig(fig, "convergence-to-analytic")
+  saveFig(fig, "convergence-to-analytic", env.p)
   return fig
 end
 
@@ -276,11 +276,14 @@ function plotParameterVariations()
     lines!(ax, r_vec_noend, Utils.rho(r_vec_noend, Solver.solve(8, R, env), env), label=L"d = %$d")
   end
   axislegend(ax, position=:lt)
-  saveFig(fig, "varying-parameters")
+  saveFig(fig, "varying-parameters", p)
   return fig
 end
 
-function plotSimulationHistograms()
+function plotSimulationHistograms(p=Params.defaultParams)
+  env = Utils.createEnvironment(p)
+  runSimulator(env.p)
+
   fig = Figure()
   df = CSV.read("/tmp/positions.csv", DataFrames.DataFrame, header=false)
   dimension = length(axes(df, 2))
@@ -342,11 +345,14 @@ function plotSimulationQuiver(p::Union{Params.Parameters,Symbol}=:nothing, itera
   scatter!(ax, posidf[!, 1], posidf[!, 2], color=dissColours[1])
   quiver!(ax, posidf[!, 1], posidf[!, 2], velodf[!, 1] / 20, velodf[!, 2] / 20,
     color=dissColours[4], linewidth=2)
-  saveFig(fig, "simulation-quiver")
+  saveFig(fig, "simulation-quiver", p)
   return fig
 end
 
-function plotPhaseSpace()
+function plotPhaseSpace(p=Params.defaultParams)
+  env = Utils.createEnvironment(p)
+  runSimulator(env.p)
+
   fig = Figure()
   posidf, velodf, dimension = loadSimulatorData()
   ax = Axis(fig[1, 1], xlabel=L"\text{First coordinate}~x", ylabel=L"\text{First velocity component}~v_x",
@@ -357,7 +363,7 @@ function plotPhaseSpace()
   radialDistance = hypot.([posidf[!, k] for k in 1:dimension]...)
   velocity = hypot.([velodf[!, k] for k in 1:dimension]...)
   scatter!(ax, radialDistance, velocity)
-  saveFig(fig, "phase-space-plot")
+  saveFig(fig, "phase-space-plot", p)
   return fig
 end
 

@@ -9,7 +9,7 @@ This class of simulations, in the context of intermolecular interactions, is oft
 \begin{figure}[H]
   \centering
   \label{fig:simulation-quiver}
-  \includegraphics[width=0.8\linewidth]{results/simulation-quiver.pdf}
+  \includegraphics[width=0.8\linewidth]{results/known-2d/simulation-quiver.pdf}
   \caption{Position and velocity of particles in the simulation at a point in time. Every particle, each of equal mass $m$, interacts with every other particle through the interaction potential $U_{ij} = K\left(\norm{\vec{x_i} - \vec{x_j}}\right)$ leading to $\mathcal{O}(N_p^2)$ interactions.}
 \end{figure}
 
@@ -33,6 +33,7 @@ In addition to the \textit{headless} simulation software, exporting state and re
   \item Fast Multipole Method
   \item Multigrid Methods
 \end{itemize}
+\hierKoennteIhreWerbungStehen
 
 \subsection{Leapfrog Integration}
 \input{chapters/out/Leapfrog Integration.md.tex}
@@ -47,7 +48,7 @@ For $d > 1$ dimension, it is possible to either only visualise the first compone
 \begin{figure}[H]
   \centering
   \label{fig:phase-space-plot}
-  \includegraphics[width=0.8\linewidth]{results/phase-space-plot.pdf}
+  \includegraphics[width=0.8\linewidth]{results/morse/phase-space-plot.pdf}
   \caption{Position and velocity of particles in the simulation visualised as a phase space plot.}
 \end{figure}
 
