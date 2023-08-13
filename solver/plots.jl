@@ -148,6 +148,7 @@ function plotStepByStepConvergence()
   end
 
   fig = Figure()
+  # TODO: for all squared errors, give formula in the plot
   ax = Axis(fig[1, 1], yscale=log10, xlabel=L"N", ylabel=LT"Squared Error", title=LT"Step by Step Convergence")
   lines!(ax, Ns, errors)
   scatter!(ax, Ns, errors, color=:red)
@@ -378,6 +379,7 @@ function plotJacobiConvergence()
     title=L"\text{Expansion of the function}~f(x) = \exp(x^2)~\text{in the}~P_k^{(%$(B.a), %$(B.b))}~\text{basis}")
   for k in 2:10
     lines!(ax, r_vec, vec(abs.(sum(f_N[1:k] .* P[r_vec, 1:k]', dims=1) - f.(r_vec)')), label=L"N = %$k")
+    # lines!(ax, r_vec, vec(sum(f_N[1:k] .* P[r_vec, 1:k]', dims=1) - f.(r_vec)'), label=L"N = %$k")
   end
   axislegend(ax)
   saveFig(fig, "jacobi-expansions")

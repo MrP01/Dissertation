@@ -64,7 +64,7 @@ for some interval radius $R \in \R^+$, usually chosen as the smallest possible $
   \centering
   \label{fig:solution-increasing-order}
   \includegraphics[width=0.8\linewidth]{results/attrep/solution-increasing-order.pdf}
-  \caption[Solutions of increasing orders]{Particle density distribution function solutions $\rho$ of increasing order $N$ to the attractive-repulsive problem with interaction potential $K_{alpha, \beta}(r)$, $\alpha = 2.5$ and $\beta = 1.2$. Reflected along the y-axis for better illustration of the domain.}
+  \caption[Solutions of increasing orders]{Particle density distribution function solutions $\rho$ of increasing order $N$ to the attractive-repulsive problem with interaction potential $K_{alpha, \beta}(r)$, $\alpha = 2.5$ and $\beta = 1.2$. Reflected along the y-axis for better visibility of the domain.}
 \end{figure}
 
 \section{Outer Optimisation Routine}
@@ -72,7 +72,7 @@ for some interval radius $R \in \R^+$, usually chosen as the smallest possible $
   \centering
   \label{fig:outer-optimisation}
   \includegraphics[width=0.8\linewidth]{results/known-analytic/outer-optimisation.pdf}
-  \caption[Outer Optimisation Routine]{Total potential $U$ as a function of the interval radius $R$.}
+  \caption[Outer Optimisation Routine]{The total potential $U$ as a function of the support radius $R$. This is the goal function minimised by the outer optimisation routine.}
 \end{figure}
 
 Note that using this setup, the operators themselves do not need to be recomputed (cf. \Cref{eq:full-attrep-operator}).
@@ -85,36 +85,40 @@ As introduced in \Cref{sec:analytical-solutions}, there are some analytical solu
   \centering
   \label{fig:analytic-solution}
   \includegraphics[width=\linewidth]{results/analytic-solution.pdf}
-  \caption[Comparison with analytical solutions and error]{The analytic solution $\rho(x)$ given in \Cref{eq:analytical-solution-alpha-equal-2} compared to the (spectral method) solutions of different order $N$.}
+  \caption[Comparison with analytical solutions and error]{
+    The analytic solution $\rho(x)$ given in \Cref{eq:analytical-solution-alpha-equal-2} compared to the (spectral method) solutions of different order $N$.
+    The ``arches'' occur as a result of the roots of $\rho(x) - \rho_N(x)$, their number equals the order $N$ (a polynomial of order $N$ has $N$ roots).
+  }
 \end{figure}
 
 \begin{figure}[H]
   \centering
   \label{fig:convergence-to-analytic}
-  \includegraphics[width=0.7\linewidth]{results/convergence-to-analytic.pdf}
-  \caption[]{Convergence to analytic solutions}
+  \includegraphics[width=0.6\linewidth]{results/convergence-to-analytic.pdf}
+  \caption[Convergence to analytic solution]{Convergence of the numerical solution to the known analytic solution (cf. \Cref{eq:analytical-solution-alpha-equal-2}) in a special case where it is known, squared error plotted as a function of the highest order in the expansion $N$.}
 \end{figure}
 
 \section{Discussion}
-\input{chapters/out/Bound on the Error.md.tex}
-
 \begin{figure}[H]
   \centering
   \label{fig:convergence}
   \includegraphics[width=0.7\linewidth]{results/convergence.pdf}
-  \caption[]{Convergence}
+  \caption[Step-by-step convergence of solutions compared to order 24]{Step-by-step convergence of numerical solutions $\rho_N(x)$ as compared to $\rho_{24}(x)$, visualised using the squared error of the pointwise evaluation of both functions in $200$ points.}
 \end{figure}
 
 \begin{figure}[H]
   \centering
   \label{fig:spatial-energy-dependence}
   \includegraphics[width=0.6\linewidth]{results/energy-dependence-on-r.pdf}
-  \caption[]{Spatial energy dependence on $r$}
+  \caption[Spatial energy dependence on $r$]{Plot of the spatial energy dependence on $r$, for different values of the domain support radius $R$. As one can see, they are constant and this figure is only present as visual proof to increase our confidence in the construction of the spectral method.}
 \end{figure}
 
 \begin{figure}[H]
   \centering
   \label{fig:varying-parameters}
   \includegraphics[width=0.9\linewidth]{results/varying-parameters.pdf}
-  \caption[]{Varying parameters in the solver}
+  \caption[Varying parameters in the solver]{
+    Varying different parameters in the solver to demonstrate their effect.
+    See also, \Cref{fig:varying-R-solutions}.
+  }
 \end{figure}
