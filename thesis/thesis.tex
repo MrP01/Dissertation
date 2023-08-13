@@ -32,9 +32,24 @@
     {\textsuperscript{a}Mathematical Institute, University of Oxford}} \\
 }
 \curriculum{Mathematical Modelling and Scientific Computing (MMSC)}
+\newcommand{\thesiskeywords}{
+Pairwise Interaction Potentials,
+Many-Body Systems,
+Particle Simulations,
+Swarming Behaviours,
+Equilibrium Measures,
+Spectral Methods,
+Orthogonal Polynomials
+}
 
 \makeatletter
 \title{\@thesistitle}
+\hypersetup{
+  pdftitle=\@thesistitle,
+  pdfauthor=\@thesisauthor,
+  pdfsubject={Spectral Methods for Many-Body-Systems},
+  pdfkeywords={\thesiskeywords}
+}
 \makeatother
 \author{Peter Waldert}
 
@@ -67,5 +82,5 @@
   \addcontentsline{toc}{chapter}{List of Figures and Tables}
   \listoffigures
   \listoftables
-  \include{chapters/appendix}
+  % \include{chapters/appendix}
 \end{document}
