@@ -12,20 +12,8 @@ They also often mimic larger animals to fend off predators and swarming behaviou
 There are some disadvantages as well, like the accelerated spread of diseases or when resources are scarce, some swarm species even begin cannibalistic behaviour \parencite{2017-maria-orsogna-swarm-video}.
 
 From a more physical perspective, pair potentials $K: \R^+ \mapsto \R$ provide a simple and computationally efficient way to approximate the interaction between two particles based solely on their distance (cf. \Cref{fig:problem-setting} as a simple illustration).
-The total potential of a system of $N_p \ge 2$ particles $U \in \R$ can be calculated by summing up the pair potentials $U_{ij} \in \R$ between all pairs of particles
-$$U = \sum_{i=1}^{N_p}\sum_{j=1, j \neq i}^{N_p} U_{ij} = \sum_{i=1}^{N_p}\sum_{j=1, j \neq i}^{N_p} K\left(\norm{\vec{x_i} - \vec{x_j}}\right)\,,$$
-where $\vec{x_i} \in \R^d$ represents the $d$-dimensional position of particle $i$, respectively.
-
 Pairwise potentials can be used to approximate a wide range of interactions, including interatomic potentials in physics and computational chemistry.
 Common examples of pair potentials include the Lennard-Jones potential and the Morse potential, which are widely used in molecular dynamics simulations to study the behavior of atoms and molecules, as well as the Coulomb potential used to describe the interaction between two charges in electrodynamics.
-An example we will study is that of an attractive-repulsive interaction potential, where two power-law potentials compete with each other.
-For a given $\alpha, \beta \in \R \backslash \{0\}$, it is given by
-$$K_{\alpha, \beta}(r) = \frac{r^\alpha}{\alpha} - \frac{r^\beta}{\beta}\,.$$
-One can even consider the case where either $\alpha$ or $\beta$ is 0 in order to arrive at a log-term \parencite{2017-explicit-solutions}, using the convention that $\frac{x^0}{0} := \log(x)$\footnote{
-  Consider the Laurent series expansion of $\frac{x^a}{a} = \frac{1}{a} + \log(x) + \frac{1}{2}a \log^2(x) + \mathcal{O}(a^2)$ in the limit as $a \rightarrow 0^+$.
-  While this limit approaches $\infty$ coming from the right and $-\infty$ coming from the left due to the nature of the first term in the expansion, the only remaining term in it is $\log(x)$ which is thereby chosen as a convention.
-}.
-If the repulsive term is stronger (so $\beta > \alpha$), there is no equilibium distribution as particles simply continue repelling each other out to infinity.
 
 \begin{figure}[H]
   \centering
@@ -51,6 +39,7 @@ Let $\N$ denote the natural numbers (positive integers) without $0$ and let $\N_
 In the following, we will use \textbf{bold} notation for vectors, matrices will generally be denoted by a capital letter and scalars by a lowercase letter.
 We will frequently make use of the (Euclidean) 2-norm of a vector, as denoted by $\norm{\cdot}$.
 So for a $d$-dimensional vector $\vec{x} \in \R^d$ we have $\norm{\vec{x}} := \sqrt{\sum_{k=1}^d x_k^2}$.
+Also note that for readability, we will use the notation $\vec{x}^2 := \vec{x}^T \vec{x} = \norm{\vec{x}}^2 \in \R^+$.
 
 One should also clarify the nature of a few of the integrals appearing in this thesis which are often performed over the closed unit ball $B_1(\vec{x}) := \{\vec{y} \in \R^d \;|\, \norm{\vec{x} - \vec{y}} \le 1\}$ centered at the origin $\vec{x} = \vec{0}$.
 These volume integrals (often ended by $\dd^d y$ or $\dd V$) over the $d$-dimensional unit ball shall be written as
