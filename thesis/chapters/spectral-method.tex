@@ -4,33 +4,47 @@
 % \section{Content}
 % \input{chapters/out/Spectral Method.md.tex}
 
-\section{Definitions}
+In this chapter we will construct a spectral method in the basis of Jacobi polynomials to explore the solution of equilibrium distributions $\rho(\vec{x})$.
+Starting from a many-body system and considering the continuous limit as $N_p \goesto \infty$, in \Cref{chap:particle-interaction-theory} we have already established the governing equation of the particle density distribution $\rho(\vec{x})$ in such a system.
+
+Can we put together a numerical method to solve for the equilibrium distribution (cf. \Cref{def:equilibrium-measure})?
+Let us consider the problem from the bottom up and start from the solution:
+The basic idea behind spectral methods is to assume a solution $\rho(\vec{x})$ of the form
+$$\rho(\vec{x}) = \sum_{k=0}^{N-1} \rho_k \varphi_k(\vec{x})\,,\quad \rho_k \in \R, \varphi_k: \R^d \mapsto \R\,,\quad k = 0, ..., N-1\,,$$
+with $N$ coefficients $\vec{\rho} := \left(\rho_0, ..., \rho_{N-1}\right)^T$ multiplying $N$ basis functions $\varphi_k$.
+
+\section{Orthogonal Polynomials forming a Basis}
+The following section will introduce a few necessary objects and tools to understand the basis of functions we are working with to construct the spectral method, the basis of Jacobi polynomials.
+
+We start with the Pochhammer symbol, another name for the \textit{rising factorial}, an unusual notation for a function but standard in the context of the special functions that will be introduced on top of it.
 \input{chapters/bits/rising-factorial.tex}
+
+As a second prerequisite, we introduce closely intertwined beta- and gamma-functions.
+\input{chapters/bits/gamma-function.tex}
+\input{chapters/bits/beta-function.tex}
+
+In order to efficiently construct a spectral method, we need an orthogonal basis.
 \input{chapters/bits/orthogonal-polynomials.tex}
 \input{chapters/bits/three-term-recurrence-relationship.tex}
+
+Using the Pochhammer symbol introduced in \Cref{def:rising-factorial}, we can now define the generalised hypergeometric series ${}_pF_q$ (cf. \Cref{def:generalised-hypergeometric-series}) and a special case of it, the Gaussian hypergeometric function (cf. \Cref{def:gaussian-hypergeometric-function}).
 \input{chapters/bits/generalised-hypergeometric-series.tex}
 \input{chapters/bits/gaussian-hypergeometric-function.tex}
+
+The Jacobi polynomials are then defined from ${}_2F_1$ as follows:
 \input{chapters/bits/jacobi-polynomials.tex}
 \input{chapters/bits/gegenbauer-polynomials.tex}
 \input{chapters/bits/chebyshev-polynomials.tex}
+
+In order to obtain a recurrence relationship between the coefficients later, we make use of the Jacobi matrix (cf. \Cref{def:jacobi-matrix}).
 \input{chapters/bits/jacobi-matrix.tex}
+
+Finally, now that we have established the basis functions, we can write down an ansatz for the solution of \hyperref[sec:the-problem]{the problem}.
 \input{chapters/bits/ansatz.tex}
+
+The spectral method can then be written as a linear system involving a matrix (operator).
 \input{chapters/bits/operator.tex}
-\input{chapters/bits/spectral-convergence.tex}
-
-\begin{theorem}{Integration Theorem that needs a name}{theorem216}
-  On the $d$-dimensional unit ball $B_1$ the power law potential, with power $\alpha \in(-d,2+2m-d)$, $m\in\mathbb{N}_0$ and $\beta>-d$, of the $n$-th weighted radial Jacobi polynomial $$(1-|y|^2)^{m-\frac{\alpha+d}{2}}P_n^{(m-\frac{\alpha+d}{2},\frac{d-2}{2})}(2|y|^2-1)$$ reduces to a Gaussian hypergeometric function as follows:
-  \begin{align*}
-    \int_{B_1} & |x-y|^\beta (1-|y|^2)^{m-\frac{\alpha+d}{2}} P_n^{(m-\frac{\alpha+d}{2},\frac{d-2}{2})}(2|y|^2-1) \mathrm{d}y                                                                                                                                                                                                                                                                                               \\
-               & = \tfrac{\pi ^{d/2} \Gamma \left(1+\frac{\beta}{2}\right) \Gamma \left(\frac{\beta+d}{2}\right) \Gamma \left(m+n-\frac{\alpha+d}{2}+1\right)}{\Gamma \left(\frac{d}{2}\right) \Gamma (n+1) \Gamma \left(\frac{\beta}{2}-n+1\right) \Gamma \left(\frac{\beta-\alpha}{2}+m+n+1\right)}{}_2F_1\left(\begin{matrix}n-\frac{\beta}{2}, \quad -m-n+\frac{\alpha-\beta}{2} \\\frac{d}{2}\end{matrix};|x|^2\right).
-  \end{align*}
-\end{theorem}
-
-\Cref{thm:theorem216} gives an explicit expression for the main integral
-\(Q^{\beta}: L \mapsto L\), an operator from the Function Space \(L\) to the function space \(L\), we are interested in:
-$$\hat{Q}^{\beta}[\rho](x) = \int_{B_1} |x-y|^\beta (1-|y|^2)^{m-\frac{\alpha+d}{2}} P_n^{(m-
-  \frac{\alpha+d}{2},\frac{d-2}{2})}(2|y|^2-1) \mathrm{d}y$$ which is used
-to construct the Spectral Method Operator \(Q^\beta\) (cf. \Cref{def:operator}), acting on the coefficients \(\vec{\rho}\).
+\input{chapters/bits/theorem216.tex}
 
 \section{Derivation of Operator}
 \input{chapters/bits/derivation-of-operator-matrix.tex}
@@ -75,7 +89,7 @@ for some interval radius $R \in \R^+$, usually chosen as the smallest possible $
   \caption[Outer Optimisation Routine]{The total potential $U$ as a function of the support radius $R$. This is the goal function minimised by the outer optimisation routine.}
 \end{figure}
 
-Note that using this setup, the operators themselves do not need to be recomputed (cf. \Cref{eq:full-attrep-operator}).
+Note that using this setup, the operators themselves do not need to be recomputed upon a change in $R$ (cf. \Cref{eq:full-attrep-operator}).
 The provided implementation uses \gls{lru} caching to automatically store operators for a given parameter set and order $N$.
 
 \section{Comparison with Analytic Solutions}
@@ -90,6 +104,8 @@ As introduced in \Cref{sec:analytical-solutions}, there are some analytical solu
     The ``arches'' occur as a result of the roots of $\rho(x) - \rho_N(x)$, their number approximately equals the order $N$ (a polynomial of degree $N$ has $N$ roots).
   }
 \end{figure}
+
+\input{chapters/bits/spectral-convergence.tex}
 
 \begin{figure}[H]
   \centering
