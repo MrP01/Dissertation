@@ -1,5 +1,24 @@
 \begin{theorem}{Three-Term Recurrence Relationship}{three-term-recurrence-relationship}
-  All Orthogonal Polynomials (cf. \Cref{def:orthogonal-polynomials}) have (at least) a three-term recurrence relationship.
+  All orthogonal polynomials (cf. \Cref{def:orthogonal-polynomials}) have (at least) a three-term recurrence relationship.
 \end{theorem}
+\begin{proof}
+  % TODO: how could I prove this exists for all?
+  \hierKoennteIhreWerbungStehen
+\end{proof}
 
-% TODO: how could I prove this exists for all?
+For example, for the Chebyshev polynomials (cf. \Cref{def:chebyshev-polynomials}) we have
+$$T_{k+1}(x) = 2x T_k(x) - T_{k-1}(x) \,.$$
+
+% From HeatFun:
+% \begin{theorem}{Chebyshev recursion formula}{chebrecursion}
+%   The \chebyshev polyomials satisfy the three-term recurrence relation $$T_{k+1}(x) = 2x T_k(x) - T_{k-1}(x) \,.$$
+% \end{theorem}
+% \begin{proof}{\parencite{atap}.}
+%   For $k > 1$, we have
+%   \begin{align*}
+%     2x T_k(x) - T_{k-1}(x) & = 2x \cdot \frac{1}{2} (z^k + z^{-k}) - \frac{1}{2} (z^{k-1} + z^{-(k-1)})                     \\
+%                            & = 2 \frac{1}{2}(z + z^{-1}) \cdot \frac{1}{2}(z^k + z^{-k}) - \frac{1}{2} (z^{k-1} + z^{-k+1}) \\
+%                            & = \frac{1}{2} (z^{k+1} + z^{k-1} + z^{-k+1} + z^{-k-1}) - \frac{1}{2} (z^{k-1} + z^{-k+1})     \\
+%                            & = \frac{1}{2} (z^{k+1} + z^{-(k+1)}) = T_{k+1}(x)
+%   \end{align*}
+% \end{proof}
