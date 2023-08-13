@@ -72,7 +72,7 @@ where $\rho: \R \mapsto \R$ is the particle density function.
 The solution $\rho$ we are looking for within the scope of this dissertation is the \textit{equilibrium measure} (cf. \Cref{def:equilibrium-measure}) minimizing the total potential $U$.
 
 \begin{definition}{Equilibrium Measure}{equilibrium-measure}
-  For a given pairwise interaction potential $K: \R \mapsto \R$, the equilibrium measure $\rho: \mathbb{R} \mapsto \mathbb{R}$ is a measure chosen such that
+  For a given pairwise interaction potential $K: \R \mapsto \R$, the equilibrium measure $\rho: \R \mapsto \R$ is a measure chosen such that
   $$U = \frac{1}{2} \iint K\left(\norm{\vec{x} - \vec{y}}\right) \,\dd\rho(\vec{x})\,\dd\rho(\vec{y})\,,$$
   is minimised, where $\dd\rho = \rho(\vec{x})\dd\vec{x}$.
 \end{definition}
@@ -82,6 +82,7 @@ Also consider the total mass of the equilibrium distribution, given by
   \label{eq:measure-mass}
 \end{equation}
 which, without loss of generality, we can choose as $M = 1$ to make $\rho(\vec{x})$ a \textit{probability distribution}.
+Also note that, as the integrand of the above integrals, we sometimes refer to the interaction potential $K$ as an integral kernel or simply \textit{kernel}.
 
 \input{chapters/bits/function-space.tex}
 

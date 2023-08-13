@@ -84,7 +84,7 @@ function plotGeneralSolutionApproximation(p=Params.morsePotiParams)
   for M in 2:6
     env = Utils.createEnvironment(p, M)
     # env = Utils.createEnvironment(Params.Parameters(d=p.d, m=p.m, R0=p.R0, potential=p.potential, friction=p.friction, M=M))
-    lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(8, p.R0, env), env), label="M = $M")
+    lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(8, p.R0, env), env), label="G = $M")
   end
   axislegend(ax)
   saveFig(fig, "monomial-solutions", p)
@@ -163,7 +163,7 @@ function plotMonomialBasisConvergence(p=Params.morsePotiParams)
   env = Utils.createEnvironment(p, Ms[end] + 1)
   best = Utils.rho(r_vec_noend, Solver.solve(24, R, env), env)
   for k in eachindex(Ms)
-    M = Ms[k]
+    G = Ms[k]
     env = Utils.createEnvironment(p, M)
     solution = Solver.solve(24, R, env)
     this = Utils.rho(r_vec_noend, solution, env)

@@ -33,7 +33,7 @@ import .AttractiveRepulsiveSolver
     @test Utils.totalMass(Solver.solve(12, env.p.R0, env), env) ≈ 1.0 atol = 1e-16
   end
   @testset "jacobi to monomial basis conversion" begin
-    M = 5
+    G = 5
     env = Utils.defaultEnv
     monomialCoeffs = zeros(M)
     monomialCoeffs[1] = 0.3  # r^0 coefficient
