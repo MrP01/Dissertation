@@ -1,8 +1,17 @@
-\begin{definition}{Gegenbauer Polynomials}{gegenbauer-polynomials}
-  \hypertarget{alias-ultraspherical-polynomials}
-  {alias: Ultraspherical Polynomials}
-
-  Are a special case of the Jacobi Polynomials (cf. \Cref{def:jacobi-polynomials}) and form an
-  Orthonormal Basis (cf. \Cref{def:orthonormal-basis}) under the weight given by
-  \[w(x)=(1+x)^\alpha\]
+\begin{definition}{Gegenbauer (Ultraspherical) Polynomials}{gegenbauer-polynomials}
+  $$C_{n}^{{( \lambda )}}(z) := {\frac  {(2\lambda )_{n}}{n!}}\,_{2}F_{1}\left(-n,2\lambda +n;\lambda +{\frac  {1}{2}};{\frac  {1-z}{2}}\right) = {\frac  {(2\lambda )_{n}}{(\lambda +{\frac  {1}{2}})_{{n}}}}P_{n}^{{(\lambda -1/2,\lambda -1/2)}}(x)\,.$$
 \end{definition}
+
+They satisfy a three-term recurrence relation (as all orthogonal polynomials do!)
+$${ {\begin{aligned}C_{0}^{(\lambda )}(x)&=1\\C_{1}^{(\lambda )}(x)&=2\lambda x\\(n+1)C_{n+1}^{(\lambda )}(x)&=2(n+\lambda )xC_{n}^{(\lambda )}(x)-(n+2\lambda -1)C_{n-1}^{(\lambda )}(x).\end{aligned}}}\,.$$
+
+\cite[18.9.1]{2018-nist}:
+\begin{equation}\label{eq:ultraspherical-rec}
+  x C_n^{(\lambda)}(x) = \tfrac{(n+2\lambda-1)}{2(n+\lambda)}C_{n-1}^{(\lambda)}(x) + \tfrac{n+1}{2(n+\lambda)}C_{n+1}^{(\lambda)}(x).
+\end{equation}
+
+From Wikipedia: In spectral methods for solving differential equations, if a function is expanded in the basis of Chebyshev polynomials and its derivative is represented in a Gegenbauer/ultraspherical basis, then the derivative operator becomes a diagonal matrix, leading to fast banded matrix methods for large problems \parencite{2013-a-fast-and-well-conditioned-spectral-method}.
+
+Are a special case of the Jacobi Polynomials (cf. \Cref{def:jacobi-polynomials}) and form an
+Orthonormal Basis under the weight given by
+\[w(x)=(1+x)^\alpha\]

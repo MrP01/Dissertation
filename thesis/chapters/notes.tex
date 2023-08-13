@@ -2,33 +2,10 @@
 This chapter's purpose is the collection of notes, and it will not be included in the final dissertation.
 
 \section*{Special Functions we like}
-
 \paragraph{Pochhammer's falling symbol} $(x)_n := \prod_{k=0}^{n-1} (x-k)\,.$
-\paragraph{Pochhammer's rising symbol} $(x)^n := \prod_{k=0}^{n-1} (x+k)\,.$
+\paragraph{Pochhammer's rising symbol} $(x)_n := \prod_{k=0}^{n-1} (x+k)\,.$
 
-\paragraph{Generalised hypergeometric series}
-$${ \,{}_{p}F_{q}(a_{1},\ldots ,a_{p};b_{1},\ldots ,b_{q};z) := \sum _{n=0}^{\infty }{\frac {(a_{1})_{n}\cdots (a_{p})_{n}}{(b_{1})_{n}\cdots (b_{q})_{n}}}\,{\frac {z^{n}}{n!}}.}\,.$$
-
-\paragraph{(Gaussian) Hypergeometric function}
-$${}_2 F_1(a,-n;c;z) = \sum_{j=0}^n (-1)^j \begin{pmatrix}n \\j\end{pmatrix} \frac{(a)_j}{(c)_j}z^j\,.$$
-(A special case of the hypergeometric series with $p=2$, $q=1$).
-
-\paragraph{Jacobi (=hypergeometric) polynomials}
-$$P_{n}^{{(\alpha ,\beta )}}(z) := {\frac{(\alpha +1)_{n}}{n!}}\,{}_{2}F_{1}\left(-n,1+\alpha +\beta +n;\alpha +1;{\tfrac  {1}{2}}(1-z)\right)\,.$$
-
-\paragraph{Gegenbauer (=ultraspherical) polynomials}
-$$C_{n}^{{( \lambda )}}(z) := {\frac  {(2\lambda )_{n}}{n!}}\,_{2}F_{1}\left(-n,2\lambda +n;\lambda +{\frac  {1}{2}};{\frac  {1-z}{2}}\right) = {\frac  {(2\lambda )_{n}}{(\lambda +{\frac  {1}{2}})_{{n}}}}P_{n}^{{(\lambda -1/2,\lambda -1/2)}}(x)\,.$$
-They satisfy a three-term recurrence relation (as all orthogonal polynomials do!)
-$${ {\begin{aligned}C_{0}^{(\lambda )}(x)&=1\\C_{1}^{(\lambda )}(x)&=2\lambda x\\(n+1)C_{n+1}^{(\lambda )}(x)&=2(n+\lambda )xC_{n}^{(\lambda )}(x)-(n+2\lambda -1)C_{n-1}^{(\lambda )}(x).\end{aligned}}}\,.$$
-
-From Wikipedia: In spectral methods for solving differential equations, if a function is expanded in the basis of Chebyshev polynomials and its derivative is represented in a Gegenbauer/ultraspherical basis, then the derivative operator becomes a diagonal matrix, leading to fast banded matrix methods for large problems \parencite{2013-a-fast-and-well-conditioned-spectral-method}.
-
-\paragraph{Three-term recurrence relationship}
-\cite[18.9.1]{2018-nist}:
-\begin{equation}\label{eq:ultraspherical-rec}
-  x C_n^{(\lambda)}(x) = \tfrac{(n+2\lambda-1)}{2(n+\lambda)}C_{n-1}^{(\lambda)}(x) + \tfrac{n+1}{2(n+\lambda)}C_{n+1}^{(\lambda)}(x).
-\end{equation}
-
+% Brauche ich nicht: Ist in C Polynomen, nicht Jacobi
 \begin{theorem}{Two term recurrence of $Q^\alpha$}{two-term-rec-of-Q}
   The integral operator
   \begin{equation*}
