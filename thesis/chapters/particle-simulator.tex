@@ -10,7 +10,7 @@ This class of simulations, in the context of intermolecular interactions, is oft
   \centering
   \label{fig:simulation-quiver}
   \includegraphics[width=0.8\linewidth]{results/known-2d/simulation-quiver.pdf}
-  \caption{Position and velocity of particles in the simulation at a point in time. Every particle, each of equal mass $m$, interacts with every other particle through the interaction potential $U_{ij} = K\left(\norm{\vec{x_i} - \vec{x_j}}\right)$ leading to $\mathcal{O}(N_p^2)$ interactions.}
+  \caption[Quiver plot of 120 particles in 2D interacting through the attractive-repulsive potential]{Position and velocity of particles in the simulation at a point in time. Every particle, each of equal mass $m$, interacts with every other particle through the interaction potential $U_{ij} = K\left(\norm{\vec{x_i} - \vec{x_j}}\right)$ leading to $\mathcal{O}(N_p^2)$ interactions.}
 \end{figure}
 
 Because each particle interacts with every other particle, the number of interactions scales with $\mathcal{O}(N_p^2)$,
@@ -23,7 +23,7 @@ In addition to the \textit{headless} simulation software, exporting state and re
   \centering
   \label{fig:gui-screenshot}
   \includegraphics[width=\linewidth]{gui-screenshot.png}
-  \caption{Screenshot of the \gls{gui} provided for the particle simulator. The top row shows the position of particles in their $[-1, 1]^d$ domain at a point $t$ in time, the energy development over time and the current position/velocity phase space plot. Below, there are position and velocity histogram updated live along with the simulation.}
+  \caption[Graphical User Interface of the Simulator]{Screenshot of the \gls{gui} provided for the particle simulator. The top row shows the position of particles in their $[-1, 1]^d$ ($d = 1$ in this case) domain at a point $t$ in time, the energy development over time and the current position/velocity phase space plot. Below, there are position and velocity histogram updated live along with the simulation.}
 \end{figure}
 
 \section{Available Methods}
@@ -43,18 +43,25 @@ In addition to the \textit{headless} simulation software, exporting state and re
 \section{Phase Space}
 Each particle, at every point in time $t$, has a position and velocity value.
 In $d=1$ dimension, one can visualise both of these quantities simultaneously in a phase space plot (cf. \Cref{fig:phase-space-plot}).
-For $d > 1$ dimension, it is possible to either only visualise the first components $\{\vec{x_i}\}_1$ and $\{\vec{v_i}\}_1$ or to visualise the norm of the position (distance from the center of mass) $\norm{\vec{x_i} - \vec{x}_{\text{center}}}$ and velocity $\norm{\vec{v_i}}$, where $$\vec{x}_{\text{center}} := \frac{1}{N_p} \sum_{i=1}^{N_p} \vec{x_i}\,.$$
+For $d > 1$ dimension, it is possible to either only visualise the first components $\{\vec{x_i}\}_1$ and $\{\vec{v_i}\}_1$ or to visualise the norm of the position (distance from the center of mass) $r = \norm{\vec{x_i} - \vec{x}_{\text{center}}}$ and velocity $\norm{\vec{v_i}}$, where $$\vec{x}_{\text{center}} := \frac{1}{N_p} \sum_{i=1}^{N_p} \vec{x_i}\,.$$
 
 \begin{figure}[H]
   \centering
   \label{fig:phase-space-plot}
   \includegraphics[width=0.8\linewidth]{results/morse/phase-space-plot.pdf}
-  \caption{Position and velocity of particles in the simulation visualised as a phase space plot.}
+  \caption[Phase Space Plots]{Position and velocity of $N_p = 500$ particles in a $d=1$ simulation visualised as phase space plots using the two different visualisation mechanisms. In the top plot, one can observe natural rotation around the origin $(0, 0)$ as positive velocity corresponds to movement to the right and negative velocity to leftwards movement.}
 \end{figure}
+
+The behaviour of the phase space plot differs from potential to potential, most importantly one can observe multiple centers of rotation for the Morse potential in addition to the origin, whereas an attractive-repulsive potential builds up to an elliptical shape in the phase space plot.
+% TODO: why is this? Local interactions?
 
 \begin{figure}[H]
   \centering
   \label{fig:simulation-histogram}
-  \includegraphics[width=0.8\linewidth]{results/simulation-histogram.pdf}
-  \caption{Position Histogram}
+  \includegraphics[width=0.8\linewidth]{results/attrep/simulation-histogram.pdf}
+  \caption[Radial Distance and Velocity Histograms of attractive-repulsive Simulation Output in 1D]{Radial Distance ($r$) and Velocity ($v$) Histograms as obtained through a long-running simulation of $N_p = 500$ particles interacting through an attractive-repulsive potential $K_{\alpha, \beta}(r)$. The spectral method introduced in \Cref{chap:spectral-method} aims to solve for the particle density as a function of radial distance, hoping to predict the shape of the positional histogram.}
 \end{figure}
+
+In a physical setting with collision terms, the velocity distribution $f(v)$ would approach the shape of a Boltzmann distribution
+$$f(v)={\bigg(\frac{m}{2\pi k_B T}\bigg)}^{\frac {3}{2}}\,4\pi v^{2}\exp \left(-{\frac {mv^{2}}{2k_B T}}\right)\,,$$
+where $k_B$ is the Boltzmann constant and $T$ is temperature.

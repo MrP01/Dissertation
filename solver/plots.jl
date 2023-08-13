@@ -46,17 +46,16 @@ function loadSimulatorData()
   dimension = length(axes(posidf, 2))
   return posidf, velodf, dimension
 end
-function saveFig(fig::Figure, name::String, p::Union{Params.Parameters,Symbol}=:nothing)
-  if p == :nothing
-    save(joinpath(RESULTS_FOLDER, "$name.pdf"), fig)
-    @info "Exported $name.pdf"
-  else
-    if ~isdir(joinpath(RESULTS_FOLDER, p.name))
-      mkdir(joinpath(RESULTS_FOLDER, p.name))
-    end
-    save(joinpath(RESULTS_FOLDER, p.name, "$name.pdf"), fig)
-    @info "Exported $(p.name)/$name.pdf"
+function saveFig(fig::Figure, name::String)
+  save(joinpath(RESULTS_FOLDER, "$name.pdf"), fig)
+  @info "Exported $name.pdf"
+end
+function saveFig(fig::Figure, name::String, p::Params.Parameters)
+  if ~isdir(joinpath(RESULTS_FOLDER, p.name))
+    mkdir(joinpath(RESULTS_FOLDER, p.name))
   end
+  save(joinpath(RESULTS_FOLDER, p.name, "$name.pdf"), fig)
+  @info "Exported $(p.name)/$name.pdf"
 end
 macro LT_str(s::String)
   return latexstring(raw"\text{" * s * "}")
@@ -280,9 +279,10 @@ function plotParameterVariations()
   return fig
 end
 
-function plotSimulationHistograms(p=Params.defaultParams)
-  env = Utils.createEnvironment(p)
-  runSimulator(env.p)
+function plotSimulationHistograms(p=Params.defaultParams, runSim=true)
+  if runSim
+    runSimulator(p, 2000, true)
+  end
 
   fig = Figure()
   df = CSV.read("/tmp/positions.csv", DataFrames.DataFrame, header=false)
@@ -291,21 +291,22 @@ function plotSimulationHistograms(p=Params.defaultParams)
   @show center
   radialDistance = hypot.([df[!, k] .- center[k] for k in 1:dimension]...)
   ax = Axis(fig[1, 1], xlabel=L"\text{Radial distance}~r", ylabel=LT"Density",
-    title=L"\text{Particle Simulation Output Distribution}")
+    title=L"\text{Simulation Output Positional Distribution with}~%$(Params.potentialParamsToLatex(p.potential)),~d=%$(p.d)")
   hist!(ax, radialDistance, bins=0:0.02:(maximum(radialDistance)*1.05), color=dissColours[1])
 
-  df = CSV.read("/tmp/position-histogram.csv", DataFrames.DataFrame, header=["hist"])
-  ax = Axis(fig[2, 1], xlabel=L"\text{Radial distance}~r", ylabel=LT"Density",
-    title=L"\text{Averaged Simulation Output Distribution over 20 runs}")
-  barplot!(ax, df.hist, gap=0, color=dissColours[2])
+  # TODO:
+  # df = CSV.read("/tmp/position-histogram.csv", DataFrames.DataFrame, header=["hist"])
+  # ax = Axis(fig[2, 1], xlabel=L"\text{Radial distance}~r", ylabel=LT"Density",
+  #   title=L"\text{Averaged Simulation Output Distribution over 20 runs}")
+  # barplot!(ax, df.hist, gap=0, color=dissColours[2])
 
   df = CSV.read("/tmp/velocities.csv", DataFrames.DataFrame, header=false)
   velocity = hypot.([df[!, k] for k in 1:dimension]...)
-  ax = Axis(fig[3, 1], xlabel=L"\text{Velocity}~v", ylabel=LT"Density",
+  ax = Axis(fig[2, 1], xlabel=L"\text{Velocity}~v", ylabel=LT"Density",
     title=L"\text{Simulation Output Velocity Distribution}")
   hist!(ax, velocity, bins=20, color=dissColours[3])
 
-  saveFig(fig, "simulation-histogram")
+  saveFig(fig, "simulation-histogram", p)
   return fig
 end
 
@@ -341,7 +342,7 @@ function plotSimulationQuiver(p::Union{Params.Parameters,Symbol}=:nothing, itera
   @assert dimension >= 2
 
   fig = Figure()
-  ax = Axis(fig[1, 1], xlabel=L"x", ylabel=L"y", title=L"\text{Simulation Output}~(d = %$dimension)")
+  ax = Axis(fig[1, 1], xlabel=L"x", ylabel=L"y", title=L"\text{Simulation Output}~%$(Params.potentialParamsToLatex(p.potential)),~d = %$dimension")
   scatter!(ax, posidf[!, 1], posidf[!, 2], color=dissColours[1])
   quiver!(ax, posidf[!, 1], posidf[!, 2], velodf[!, 1] / 20, velodf[!, 2] / 20,
     color=dissColours[4], linewidth=2)
