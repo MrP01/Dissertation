@@ -66,6 +66,7 @@ known2dParams = Parameters(potential=AttractiveRepulsive(alpha=1.2, beta=0.1993)
 knownAnalyticParams = Parameters(potential=AttractiveRepulsive(alpha=2.0001, beta=1.5), d=1, name="known-analytic")
 morsePotiParams = Parameters(potential=MorsePotential(), d=1, name="morse")
 morsePotiParams2d = Parameters(potential=MorsePotential(), d=2, name="morse-2d")
+morsePotiParams4d = Parameters(potential=MorsePotential(), d=4, name="morse-4d")
 
 checkParameters(defaultParams)
 checkParameters(known2dParams)

@@ -52,7 +52,7 @@ The spectral method can then be written as a linear system involving a matrix (o
 \begin{figure}[H]
   \centering
   \label{fig:attractive-repulsive}
-  \includegraphics[width=\linewidth]{results/attractive-repulsive-operators.pdf}
+  \includegraphics[width=\linewidth]{results/attrep/attractive-repulsive-operators.pdf}
   \caption[Attractive and repulsive operators.]{The attractive and repulsive operators (matrices) as given in \Cref{def:operator}, the matrix values are shown in a $\log_{10}$ color scale. Due to the choice of basis, the attractive operator is exactly banded. The repulsive parameter is only approximately banded, which the spy plots effectively demonstrate.}
 \end{figure}
 
@@ -98,7 +98,7 @@ As introduced in \Cref{sec:analytical-solutions}, there are some analytical solu
 \begin{figure}[H]
   \centering
   \label{fig:analytic-solution}
-  \includegraphics[width=\linewidth]{results/analytic-solution.pdf}
+  \includegraphics[width=\linewidth]{results/known-analytic/analytic-solution.pdf}
   \caption[Comparison with analytical solutions and error]{
     The analytic solution $\rho(x)$ given in \Cref{eq:analytical-solution-alpha-equal-2} compared to the (spectral method) solutions of different order $N$.
     The ``arches'' occur as a result of the roots of $\rho(x) - \rho_N(x)$, their number approximately equals the order $N$ (a polynomial of degree $N$ has $N$ roots).
@@ -110,7 +110,7 @@ As introduced in \Cref{sec:analytical-solutions}, there are some analytical solu
 \begin{figure}[H]
   \centering
   \label{fig:convergence-to-analytic}
-  \includegraphics[width=0.6\linewidth]{results/convergence-to-analytic.pdf}
+  \includegraphics[width=0.6\linewidth]{results/known-analytic/convergence-to-analytic.pdf}
   \caption[Convergence to analytic solution]{Convergence of the numerical solution to the known analytic solution (cf. \Cref{eq:analytical-solution-alpha-equal-2}) in a special case where it is known, squared error plotted as a function of the highest order in the expansion $N$.}
 \end{figure}
 
@@ -118,21 +118,21 @@ As introduced in \Cref{sec:analytical-solutions}, there are some analytical solu
 \begin{figure}[H]
   \centering
   \label{fig:convergence}
-  \includegraphics[width=0.7\linewidth]{results/convergence.pdf}
+  \includegraphics[width=0.7\linewidth]{results/attrep/convergence.pdf}
   \caption[Step-by-step convergence of solutions compared to order 24]{Step-by-step convergence of numerical solutions $\rho_N(x)$ as compared to $\rho_{24}(x)$, visualised using the squared error of the pointwise evaluation of both functions in $200$ points.}
 \end{figure}
 
 \begin{figure}[H]
   \centering
   \label{fig:spatial-energy-dependence}
-  \includegraphics[width=0.6\linewidth]{results/energy-dependence-on-r.pdf}
+  \includegraphics[width=0.6\linewidth]{results/attrep/energy-dependence-on-r.pdf}
   \caption[Spatial energy dependence on $r$]{Plot of the spatial energy dependence on $r$, for different values of the domain support radius $R$. As one can see, they are constant and this figure is only present as visual proof to increase our confidence in the construction of the spectral method.}
 \end{figure}
 
 \begin{figure}[H]
   \centering
   \label{fig:varying-parameters}
-  \includegraphics[width=0.9\linewidth]{results/varying-parameters.pdf}
+  \includegraphics[width=0.9\linewidth]{results/attrep/varying-parameters.pdf}
   \caption[Varying parameters in the solver]{
     Varying different parameters in the solver to demonstrate their effect.
     See also, \Cref{fig:varying-R-solutions}.

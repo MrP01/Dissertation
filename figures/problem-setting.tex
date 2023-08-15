@@ -1,6 +1,6 @@
 \begin{tikzpicture}[
     inner sep=2mm,
-    particle/.style={circle, draw=blue!50, fill=blue!20, thick},
+    particle/.style={circle, draw=oxfordblue, fill=themecolor3, thick},
   ]
   \node [particle] (a) at (0, 0) {};
   \node [particle] (b) at (4, 0) {};
@@ -10,7 +10,7 @@
   \node [particle] at (3, 1) {};
   \node [particle] at (3.7, 2.8) {};
   \node [particle] at (0.4, 2.9) {};
-  \draw[<->] (a.east) -- (b.west) node [midway, above] {$K\left(\norm{\vec{x} - \vec{y}}_2\right)$};
+  \draw[<->] (a.east) -- (b.west) node [midway, above] {$K\left(\norm{\vec{x} - \vec{y}}\right)$};
 
   \useasboundingbox (-1,-1) rectangle (5, 3.5);
   % \draw [thick] (current bounding box.north east) -- (current bounding box.north west) -- (current bounding box.south west) -- (current bounding box.south east) -- cycle;
