@@ -7,6 +7,7 @@ import ..Params
 import ..Utils
 import ..AttractiveRepulsiveSolver
 import ..GeneralKernelSolver
+import LinearAlgebra
 
 function constructOperatorFromEnv(N::Int64, R::Float64, env::Utils.SolutionEnvironment)
   if isa(env.p.potential, Params.AttractiveRepulsive)
@@ -23,6 +24,18 @@ function solve(N::Int64, R::Float64, env::Utils.SolutionEnvironment)::Vector{Big
   BigMatrix = constructOperatorFromEnv(N, R, env)
   BigRHS = zeros(N)
   BigRHS[1] = 1.0
+
+  BigSolution = BigMatrix \ BigRHS
+  return BigSolution / Utils.totalMass(BigSolution, env)
+end
+
+"""Docstring for the function"""
+function solveWithRegularisation(N::Int64, R::Float64, s=1e-8, env::Utils.SolutionEnvironment)::Vector{BigFloat}
+  A = constructOperatorFromEnv(N, R, env)
+  BigMatrix = A' * A + s * LinearAlgebra.I
+  BigRHS = zeros(N)
+  BigRHS[1] = 1.0
+  BigRHS = A' * BigRHS
 
   BigSolution = BigMatrix \ BigRHS
   return BigSolution / Utils.totalMass(BigSolution, env)
