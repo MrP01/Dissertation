@@ -20,6 +20,8 @@ r_vec = 0:0.005:1
 r_vec_noend = r_vec[1:end-1]
 x_vec = -1:0.002:1
 x_vec_noends = x_vec[2:end-1]
+x_vec_noends2 = x_vec[3:end-2]
+x_vec_noends3 = x_vec[4:end-3]
 pow10tickformat(values) = [L"10^{%$(Int64(round(value)))}" for value in values]
 
 dissertationColours = Makie.wong_colors()
@@ -67,16 +69,16 @@ macro LT_str(s::String)
 end
 
 function plotDifferentOrderSolutions(p=Params.defaultParams)
-  fig = Figure()
+  fig = Figure(resolution=(800, 450))
   env = Utils.createEnvironment(p)
   ax = Axis(fig[1, 1], xlabel=L"\text{Radial Position}~x", ylabel=L"\text{Probability Density}~\rho(|x|)",
     title=L"\text{Solutions of different order}~N~\text{with}~%$(Params.potentialParamsToLatex(p.potential)),~d=%$(p.d)")
   # lines!(ax, x_vec_noends, obtainMeasure(x_vec_noends, 2), label="N = 2")
-  lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(3, p.R0, env), env), label="N = 3")
-  lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(4, p.R0, env), env), label="N = 4")
-  lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(5, p.R0, env), env), label="N = 5")
-  lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(6, p.R0, env), env), label="N = 6")
-  lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(7, p.R0, env), env), label="N = 7")
+  lines!(ax, x_vec_noends2, Utils.rho(x_vec_noends2, Solver.solve(3, p.R0, env), env), label="N = 3")
+  lines!(ax, x_vec_noends2, Utils.rho(x_vec_noends2, Solver.solve(4, p.R0, env), env), label="N = 4")
+  lines!(ax, x_vec_noends2, Utils.rho(x_vec_noends2, Solver.solve(5, p.R0, env), env), label="N = 5")
+  lines!(ax, x_vec_noends2, Utils.rho(x_vec_noends2, Solver.solve(6, p.R0, env), env), label="N = 6")
+  lines!(ax, x_vec_noends2, Utils.rho(x_vec_noends2, Solver.solve(7, p.R0, env), env), label="N = 7")
   axislegend(ax)
   saveFig(fig, "solution-increasing-order", p)
   return fig
@@ -125,7 +127,7 @@ function plotFullOperator(p=Params.morsePotiParams; N=30)
 end
 
 function plotSpatialEnergyDependence(p=Params.defaultParams)
-  fig = Figure()
+  fig = Figure(resolution=(800, 450))
   alpha, beta, d = p.potential.alpha, p.potential.beta, p.d
   ax = Axis(fig[1, 1], xlabel=L"\text{Radial Distance}~r", ylabel=L"\text{Energy}~E(r)",
     title=L"\text{Energy Dependence on}~r~\text{with}~(\alpha, \beta, d) = (%$alpha, %$beta, %$d)")
@@ -151,7 +153,7 @@ function plotStepByStepConvergence(p=Params.defaultParams)
     errors[k] = sum((this - best) .^ 2) / length(r_vec)
   end
 
-  fig = Figure()
+  fig = Figure(resolution=(800, 450))
   # TODO: for all squared errors, give formula in the plot
   ax = Axis(fig[1, 1], yscale=log10, xlabel=L"N", ylabel=LT"Squared Error", title=LT"Step by Step Convergence")
   lines!(ax, Ns, errors)
@@ -174,7 +176,7 @@ function plotMonomialBasisConvergence(p=Params.morsePotiParams)
     errors[k] = sum((this - best) .^ 2) / length(r_vec)
   end
 
-  fig = Figure()
+  fig = Figure(resolution=(800, 450))
   ax = Axis(fig[1, 1], yscale=log10, xlabel=L"G", ylabel=LT"Squared Error", title=LT"Step by Step Convergence")
   lines!(ax, Gs, errors)
   scatter!(ax, Gs, errors, color=:red)
@@ -186,7 +188,7 @@ function plotOuterOptimisation(p=Params.knownAnalyticParams)
   R_vec = 0.25:0.02:1.5
   env = Utils.createEnvironment(p)
   F(R) = Utils.totalEnergy(Solver.solve(8, R, env), R, 0.0, env)
-  fig = Figure()
+  fig = Figure(resolution=(800, 400))
   ax = Axis(fig[1, 1], xlabel=L"R", ylabel=L"U(R)",
     title=L"\text{Energy Optimisation with}~%$(Params.potentialParamsToLatex(p.potential)),~d=%$(p.d)")
   lines!(ax, R_vec, F.(R_vec))
@@ -240,7 +242,7 @@ function plotConvergenceToAnalytic(p=Params.knownAnalyticParams)
     errors[k] = sum((this - analytic) .^ 2) / length(r_vec)
   end
 
-  fig = Figure()
+  fig = Figure(resolution=(800, 450))
   alpha, beta, d = round(env.p.potential.alpha, digits=2), round(env.p.potential.beta, digits=2), env.p.d
   ax = Axis(fig[1, 1], yscale=log10, xlabel=L"N", ylabel=LT"Squared Error",
     title=L"\text{Convergence to analytic solution with}~(\alpha, \beta, d) = (%$alpha, %$beta, %$d)")
@@ -377,7 +379,7 @@ function plotJacobiConvergence()
   P = Utils.defaultEnv.P
   f(x) = exp(x^2) # function we want to expand
   f_N = P[:, 1:10] \ f.(axes(P, 1))
-  fig = Figure()
+  fig = Figure(resolution=(800, 550))
   ax = Axis(fig[1, 1], yscale=log10, xlabel=L"x", ylabel=LT"Absolute Error",
     title=L"\text{Expansion of the function}~f(x) = \exp(x^2)~\text{in the}~P_k^{(%$(B.a), %$(B.b))}~\text{basis}")
   for k in 2:10
