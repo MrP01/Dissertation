@@ -95,12 +95,13 @@ end
 
 function plotGeneralSolutionApproximation(p=Params.morsePotiParams)
   fig = Figure()
-  ax = Axis(fig[1, 1], xlabel=L"\text{Radial Position}~x", ylabel=L"\text{Probability Density}~\rho(|x|)",
-    title=L"\text{Monomial Terms}")
-  for M in 2:6
+  ax = Axis(fig[1, 1], xlabel=L"\text{Radial position}~x", ylabel=L"\text{Probability density}~\rho(|x|)",
+    title=L"\text{General Kernel Solution with Increasing Number of Monomial Terms}")
+  for M in 4:8
     env = Utils.createEnvironment(p, M)
     # env = Utils.createEnvironment(Params.Parameters(d=p.d, m=p.m, R0=p.R0, potential=p.potential, friction=p.friction, M=M))
-    lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(8, p.R0, env), env), label="G = $M")
+    solution = Solver.solveWithRegularisation(8, p.R0, env)
+    lines!(ax, x_vec_noends2, Utils.rho(x_vec_noends2, solution, env), label="G = $M")
   end
   axislegend(ax)
   saveFig(fig, "monomial-solutions", p)
@@ -213,7 +214,9 @@ function plotVaryingRSolutions(p=Params.morsePotiParams)
   for R in 0.2:0.4:1.4
     lines!(ax, r_vec_noend, Utils.rho(r_vec_noend, Solver.solve(6, R, env), env), label="R = $R")
   end
-  # ylims!(ax, -0.5, 1)
+  if p == Params.morsePotiParams
+    ylims!(ax, -0.5, 1)
+  end
   axislegend(ax)
   saveFig(fig, "varying-R-solutions", p)
   return fig
@@ -413,15 +416,21 @@ end
 function plotCoefficients(p=Params.defaultParams; N=60)
   env = Utils.createEnvironment(p)
   solution = Solver.solve(N, p.R0, env)
-  regSolution = Solver.solveWithRegularisation(N, p.R0, env)
   fig = Figure(resolution=(800, 500))
   ax = Axis(fig[1, 1], xlabel=L"\text{Index}~k", ylabel=L"\text{Abs. Coefficient}~|\rho_k|",
     yscale=log10, title=LT"Solution coefficients")
   scatter!(ax, 1:N, abs.(solution), label=LT"without regularisation")
-  scatter!(ax, 1:N, abs.(regSolution), label=LT"with regularisation")
+  for s in [1e-8, 1e-6, 1e-4, 1e-2]
+    regSolution = Solver.solveWithRegularisation(N, env.p.R0, env, s)
+    scatter!(ax, 1:N, abs.(regSolution), label=L"\text{with regularisation}~s=10^{%$(Int64(log10(s)))}")
+  end
   axislegend(ax)
   saveFig(fig, "coefficients", p)
   return fig
+end
+
+function plotAnalyticErrorVaryingRegularisation(p=Params.knownAnalyticParams)
+  # TODO
 end
 
 function plotJacobiConvergence()

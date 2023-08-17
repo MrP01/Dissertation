@@ -53,7 +53,7 @@ end
   d = 1  # dimension
   m = 1  # integer
   R0 = 0.8  # radius of the interval [-R, R]
-  s = 1e-7  # regularisation parameter
+  s0 = 1e-4  # regularisation parameter
   potential = AttractiveRepulsive()  # potential parameters
   friction = QuadraticSelfPropulsion()  # friction
   name::String = "attrep"
@@ -66,6 +66,13 @@ function checkParameters(p::Parameters)
     @assert p.potential.beta > -p.d
     @assert p.m >= 0 && isinteger(p.m)
   end
+end
+
+function parametersToDict(p::Parameters)
+  return Dict(s => getfield(p, s) for s in fieldnames(typeof(p)))
+end
+function dictToParameters(d::Dict)
+  return Parameters(; d...)
 end
 
 defaultParams = Parameters()

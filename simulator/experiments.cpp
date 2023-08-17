@@ -24,10 +24,9 @@ int main(int argc, char *argv[]) {
       box.computeRadiusHistogram();
       minimalPotential = potential;
       box.exportToCSV();
-      std::cout << "new min!" << std::endl;
+      std::cout << "new min!" << n << ": " << potential << std::endl;
       n = 200;
     }
-    std::cout << n << ": " << potential << std::endl;
   }
 
   // for (size_t i = 0; i < 10; i++) {
