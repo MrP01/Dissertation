@@ -15,7 +15,8 @@ function constructOperatorFromEnv(N::Int64, R::Float64, env::Utils.SolutionEnvir
   else
     BigMatrix = GeneralKernelSolver.constructGeneralOperator(N, R, env)
   end
-  preConditioner = 1 / (2^(N - 1) * factorial(N - 1)) * LinearAlgebra.diagm(0 => 1 ./ (N .+ (0:N-1)))
+  # preConditioner = 1 / (2^(N - 1) * factorial(N - 1)) * LinearAlgebra.diagm(0 => 1 ./ (N .+ (0:N-1)))
+  # preConditioner = LinearAlgebra.diagm(0 => 1 ./ (N .+ (0:N-1)))
   return BigMatrix
 end
 
@@ -30,9 +31,9 @@ function solve(N::Int64, R::Float64, env::Utils.SolutionEnvironment)::Vector{Big
 end
 
 """Docstring for the function"""
-function solveWithRegularisation(N::Int64, R::Float64, s, env::Utils.SolutionEnvironment)::Vector{BigFloat}
+function solveWithRegularisation(N::Int64, R::Float64, env::Utils.SolutionEnvironment)::Vector{BigFloat}
   A = constructOperatorFromEnv(N, R, env)
-  BigMatrix = A' * A + s * LinearAlgebra.I
+  BigMatrix = A' * A + env.p.s * LinearAlgebra.I
   BigRHS = zeros(N)
   BigRHS[1] = 1.0
   BigRHS = A' * BigRHS

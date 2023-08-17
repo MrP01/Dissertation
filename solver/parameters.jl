@@ -1,6 +1,6 @@
 module Params
 @kwdef struct AttractiveRepulsive
-  alpha = 3.5  # attractive parameter
+  alpha = 2.4  # attractive parameter
   beta = 1.6  # repulsive parameter
 end
 
@@ -53,6 +53,7 @@ end
   d = 1  # dimension
   m = 1  # integer
   R0 = 0.8  # radius of the interval [-R, R]
+  s = 1e-7  # regularisation parameter
   potential = AttractiveRepulsive()  # potential parameters
   friction = QuadraticSelfPropulsion()  # friction
   name::String = "attrep"

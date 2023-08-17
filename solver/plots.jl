@@ -377,13 +377,13 @@ function plotPhaseSpace(p=Params.defaultParams)
 end
 
 function plotConditionNumberGrowth(p=Params.defaultParams)
-  Ns = 1:20
+  Ns = 2 .^ (1:6)
   env = Utils.createEnvironment(p)
   OpCond(N) = Utils.opCond(Solver.constructOperatorFromEnv(N, p.R0, env))
   opconds = OpCond.(Ns)
-  fig = Figure()
+  fig = Figure(resolution=(800, 500))
   ax = Axis(fig[1, 1], xlabel=L"\text{Matrix size}~N", ylabel=L"\text{Condition number}~\kappa(Q)",
-    yscale=log10, title=LT"Growth of the condition number")
+    xscale=log10, yscale=log10, title=LT"Growth of the condition number")
   lines!(ax, Ns, opconds)
   scatter!(ax, Ns, opconds, label=LT"Full Operator")
   if isa(p.potential, Params.AttractiveRepulsive)
@@ -398,6 +398,20 @@ function plotConditionNumberGrowth(p=Params.defaultParams)
   end
   axislegend(ax)
   saveFig(fig, "condition-number-growth", p)
+  return fig
+end
+
+function plotCoefficients(p=Params.defaultParams; N=60)
+  env = Utils.createEnvironment(p)
+  solution = Solver.solve(N, p.R0, env)
+  regSolution = Solver.solveWithRegularisation(N, p.R0, env)
+  fig = Figure(resolution=(800, 500))
+  ax = Axis(fig[1, 1], xlabel=L"\text{Index}~k", ylabel=L"\text{Abs. Coefficient}~|\rho_k|",
+    yscale=log10, title=LT"Solution coefficients")
+  scatter!(ax, 1:N, abs.(solution), label=LT"without regularisation")
+  scatter!(ax, 1:N, abs.(regSolution), label=LT"with regularisation")
+  axislegend(ax)
+  saveFig(fig, "coefficients", p)
   return fig
 end
 
