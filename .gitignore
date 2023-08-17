@@ -4,6 +4,7 @@ build/
 stuff/
 thesis/chapters/out/
 *.protected.pdf
+*.extra.pdf
 *.todo
 
 thesis/tikz/**/*.dpth

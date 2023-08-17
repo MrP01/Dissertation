@@ -15,6 +15,7 @@ import .GeneralKernelSolver
 import .AnalyticSolutions
 
 const RESULTS_FOLDER = joinpath(@__DIR__, "..", "figures", "results")
+_extra_pdf = true
 
 r_vec = 0:0.005:1
 r_vec_noend = r_vec[1:end-1]
@@ -54,10 +55,16 @@ function loadSimulatorData()
   return posidf, velodf, dimension
 end
 function saveFig(fig::Figure, name::String)
+  if _extra_pdf
+    name = name * ".extra"
+  end
   save(joinpath(RESULTS_FOLDER, "$name.pdf"), fig)
   @info "Exported $name.pdf"
 end
 function saveFig(fig::Figure, name::String, p::Params.Parameters)
+  if _extra_pdf
+    name = name * ".extra"
+  end
   if ~isdir(joinpath(RESULTS_FOLDER, p.name))
     mkdir(joinpath(RESULTS_FOLDER, p.name))
   end
@@ -433,27 +440,33 @@ function plotJacobiConvergence()
 end
 
 function plotAll()
-  plotJacobiConvergence()
-  plotDifferentOrderSolutions(Params.defaultParams)
-  plotDifferentOrderSolutions(Params.morsePotiParams)
-  plotAttRepOperators(Params.defaultParams)  # or maybe 2d?
-  plotFullOperator(Params.defaultParams)
-  plotFullOperator(Params.morsePotiParams)
-  plotOuterOptimisation(Params.knownAnalyticParams)
-  plotAnalyticSolution(Params.knownAnalyticParams)
-  plotStepByStepConvergence(Params.defaultParams)
-  plotConvergenceToAnalytic(Params.knownAnalyticParams)
-  plotDefaultParameterVariations()  # uses defaultParams hence the name
-  plotPhaseSpace(Params.morsePotiParams)
-  plotSimulationHistograms(Params.defaultParams)
-  plotSimulationQuiver(Params.known2dParams)
-  plotSimulationQuiver(Params.morsePotiParams2d)
-  plotSpatialEnergyDependence(Params.defaultParams)
-  plotVaryingRSolutions(Params.morsePotiParams)
-  plotGeneralSolutionApproximation(Params.morsePotiParams)
-  plotMonomialBasisConvergence(Params.morsePotiParams)
-  plotSimulationAndSolverComparison(Params.known2dParams)
-  plotConditionNumberGrowth(Params.defaultParams)
+  global _extra_pdf
+  _extra_pdf = false
+  try
+    plotJacobiConvergence()
+    plotDifferentOrderSolutions(Params.defaultParams)
+    plotDifferentOrderSolutions(Params.morsePotiParams)
+    plotAttRepOperators(Params.defaultParams)  # or maybe 2d?
+    plotFullOperator(Params.defaultParams)
+    plotFullOperator(Params.morsePotiParams)
+    plotOuterOptimisation(Params.knownAnalyticParams)
+    plotAnalyticSolution(Params.knownAnalyticParams)
+    plotStepByStepConvergence(Params.defaultParams)
+    plotConvergenceToAnalytic(Params.knownAnalyticParams)
+    plotDefaultParameterVariations()  # uses defaultParams hence the name
+    plotPhaseSpace(Params.morsePotiParams)
+    plotSimulationHistograms(Params.defaultParams)
+    plotSimulationQuiver(Params.known2dParams)
+    plotSimulationQuiver(Params.morsePotiParams2d)
+    plotSpatialEnergyDependence(Params.defaultParams)
+    plotVaryingRSolutions(Params.morsePotiParams)
+    plotGeneralSolutionApproximation(Params.morsePotiParams)
+    plotMonomialBasisConvergence(Params.morsePotiParams)
+    plotSimulationAndSolverComparison(Params.known2dParams)
+    plotConditionNumberGrowth(Params.defaultParams)
+  finally
+    _extra_pdf = true
+  end
   return
 end
 

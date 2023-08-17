@@ -1,7 +1,7 @@
 module Params
 @kwdef struct AttractiveRepulsive
-  alpha = 2.4  # attractive parameter
-  beta = 1.6  # repulsive parameter
+  alpha = 2.0  # attractive parameter
+  beta = 1.5  # repulsive parameter
 end
 
 @kwdef struct MorsePotential
