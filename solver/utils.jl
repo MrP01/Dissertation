@@ -4,6 +4,7 @@ import ClassicalOrthogonalPolynomials: Jacobi
 import HypergeometricFunctions
 import ContinuumArrays: Map
 import SpecialFunctions: gamma
+import LinearAlgebra
 import ..Params
 
 PARAMETER_TO_FIND = 2.5  # probably, most dominant term in the monomial expansion, so maximum(abs(monomial))
@@ -144,5 +145,9 @@ end
 """Sets small values in a matrix to zero. Improves accuracy of the solutions by a tiny bit!"""
 function zeroOutTinyValues!(M::Matrix{BigFloat})
   M[abs.(M).<big"1e-12"] .= 0
+end
+
+function opCond(M::Matrix)
+  return LinearAlgebra.cond(convert(Matrix{Float64}, M))
 end
 end

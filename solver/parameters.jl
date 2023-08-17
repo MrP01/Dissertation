@@ -1,7 +1,7 @@
 module Params
 @kwdef struct AttractiveRepulsive
-  alpha = 2.5  # attractive parameter
-  beta = 1.2  # repulsive parameter
+  alpha = 3.5  # attractive parameter
+  beta = 1.6  # repulsive parameter
 end
 
 @kwdef struct MorsePotential
@@ -9,6 +9,12 @@ end
   l_att = 2.0
   C_rep = 1.0
   l_rep = 0.5
+end
+
+@kwdef struct CombinedPotential
+  morseC = 1.0
+  morsel = 2.0
+  attrepPower = 2.4
 end
 
 @kwdef struct QuadraticSelfPropulsion
@@ -67,6 +73,7 @@ knownAnalyticParams = Parameters(potential=AttractiveRepulsive(alpha=2.0001, bet
 morsePotiParams = Parameters(potential=MorsePotential(), d=1, name="morse")
 morsePotiParams2d = Parameters(potential=MorsePotential(), d=2, name="morse-2d")
 morsePotiParams4d = Parameters(potential=MorsePotential(), d=4, name="morse-4d")
+twoDVoidParams = Parameters(d=2, potential=AttractiveRepulsive(alpha=3.5, beta=1.6))
 
 checkParameters(defaultParams)
 checkParameters(known2dParams)

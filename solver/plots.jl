@@ -316,9 +316,11 @@ function plotSimulationHistograms(p=Params.defaultParams, runSim=true)
   return fig
 end
 
-function plotSimulationAndSolverComparison(p::Params.Parameters=Params.known2dParams)
+function plotSimulationAndSolverComparison(p::Params.Parameters=Params.known2dParams; runSim=true)
   env = Utils.createEnvironment(p)
-  runSimulator(env.p)
+  if runSim
+    runSimulator(env.p, 2000, false)
+  end
 
   df = CSV.read("/tmp/positions.csv", DataFrames.DataFrame, header=false)
   dimension = length(axes(df, 2))
@@ -331,7 +333,7 @@ function plotSimulationAndSolverComparison(p::Params.Parameters=Params.known2dPa
   fig = Figure()
   ax = Axis(fig[1, 1], xlabel=L"\text{Radial distance}~r", ylabel=LT"Density",
     title=L"\text{Particle Simulation Output Distribution}")
-  hist!(ax, radialDistance, bins=0:0.06:(maximum(radialDistance)*1.05), scale_to=maximum(solution) * 1.1,
+  hist!(ax, radialDistance, bins=0:0.01:(maximum(radialDistance)*1.05), scale_to=maximum(solution) * 1.1,
     label=LT"Particle Simulation")
   lines!(ax, r, solution, color=:red, linewidth=3.0, label=LT"Spectral Method")
   ylims!(ax, 0, maximum(solution) * 1.12)
@@ -374,6 +376,31 @@ function plotPhaseSpace(p=Params.defaultParams)
   return fig
 end
 
+function plotConditionNumberGrowth(p=Params.defaultParams)
+  Ns = 1:20
+  env = Utils.createEnvironment(p)
+  OpCond(N) = Utils.opCond(Solver.constructOperatorFromEnv(N, p.R0, env))
+  opconds = OpCond.(Ns)
+  fig = Figure()
+  ax = Axis(fig[1, 1], xlabel=L"\text{Matrix size}~N", ylabel=L"\text{Condition number}~\kappa(Q)",
+    yscale=log10, title=LT"Growth of the condition number")
+  lines!(ax, Ns, opconds)
+  scatter!(ax, Ns, opconds, label=LT"Full Operator")
+  if isa(p.potential, Params.AttractiveRepulsive)
+    AttOpCond(N) = Utils.opCond(AttractiveRepulsiveSolver.constructOperator(N, p.potential.alpha, env))
+    opconds = AttOpCond.(Ns)
+    lines!(ax, Ns, opconds)
+    scatter!(ax, Ns, opconds, label=LT"Attractive Operator")
+    RepOpCond(N) = Utils.opCond(AttractiveRepulsiveSolver.constructOperator(N, p.potential.beta, env))
+    opconds = RepOpCond.(Ns)
+    lines!(ax, Ns, opconds)
+    scatter!(ax, Ns, opconds, label=LT"Repulsive Operator")
+  end
+  axislegend(ax)
+  saveFig(fig, "condition-number-growth", p)
+  return fig
+end
+
 function plotJacobiConvergence()
   B = Utils.defaultEnv.B
   P = Utils.defaultEnv.P
@@ -411,7 +438,8 @@ function plotAll()
   plotVaryingRSolutions(Params.morsePotiParams)
   plotGeneralSolutionApproximation(Params.morsePotiParams)
   plotMonomialBasisConvergence(Params.morsePotiParams)
-  plotSimulationAndSolverComparison(Params.morsePotiParams)
+  plotSimulationAndSolverComparison(Params.known2dParams)
+  plotConditionNumberGrowth(Params.defaultParams)
   return
 end
 
