@@ -73,6 +73,9 @@ function saveFig(fig::Figure, name::String, p::Params.Parameters)
   save(joinpath(RESULTS_FOLDER, p.name, "$name.pdf"), fig)
   @info "Exported $(p.name)/$name.pdf"
 end
+function p2tex(p::Params.Parameters)
+  return Params.potentialParamsToLatex(p.potential, true) * ",~d=$(p.d)"
+end
 macro LT_str(s::String)
   return latexstring(raw"\text{" * s * "}")
 end
@@ -81,7 +84,7 @@ function plotDifferentOrderSolutions(p=Params.defaultParams)
   fig = Figure(resolution=(800, 450))
   env = Utils.createEnvironment(p)
   ax = Axis(fig[1, 1], xlabel=L"\text{Radial Position}~x", ylabel=L"\text{Probability Density}~\rho(|x|)",
-    title=L"\text{Solutions of different order}~N~\text{with}~%$(Params.potentialParamsToLatex(p.potential)),~d=%$(p.d)")
+    title=L"\text{Solutions of different order}~N~\text{with}~%$(p2tex(p))")
   # lines!(ax, x_vec_noends, obtainMeasure(x_vec_noends, 2), label="N = 2")
   lines!(ax, x_vec_noends2, Utils.rho(x_vec_noends2, Solver.solve(3, p.R0, env), env), label="N = 3")
   lines!(ax, x_vec_noends2, Utils.rho(x_vec_noends2, Solver.solve(4, p.R0, env), env), label="N = 4")
@@ -96,7 +99,7 @@ end
 function plotGeneralSolutionApproximation(p=Params.morsePotiParams)
   fig = Figure()
   ax = Axis(fig[1, 1], xlabel=L"\text{Radial position}~x", ylabel=L"\text{Probability density}~\rho(|x|)",
-    title=L"\text{General Kernel Solution with Increasing Number of Monomial Terms}")
+    title=L"\text{General Kernel Solution with Increasing Number of Monomial Terms}~%$(p2tex(p))")
   for M in 4:8
     env = Utils.createEnvironment(p, M)
     # env = Utils.createEnvironment(Params.Parameters(d=p.d, m=p.m, R0=p.R0, potential=p.potential, friction=p.friction, M=M))
@@ -129,7 +132,7 @@ function plotFullOperator(p=Params.morsePotiParams; N=30)
   fig = Figure(resolution=(600, 500))
   env = Utils.createEnvironment(p)
   op1 = Solver.constructOperatorFromEnv(N, p.R0, env)
-  ax = Axis(fig[1, 1][1, 1], yreversed=true, title=L"\text{Operator}")
+  ax = Axis(fig[1, 1][1, 1], yreversed=true, title=L"\text{Full Operator}~%$(p2tex(p))")
   s = spy!(ax, sparse(log10.(abs.(op1))), marker=:rect, markersize=32, framesize=0)
   Colorbar(fig[1, 1][1, 2], s, flipaxis=false, tickformat=pow10tickformat)
   saveFig(fig, "full-operator", p)
@@ -138,9 +141,8 @@ end
 
 function plotSpatialEnergyDependence(p=Params.defaultParams)
   fig = Figure(resolution=(800, 450))
-  alpha, beta, d = p.potential.alpha, p.potential.beta, p.d
   ax = Axis(fig[1, 1], xlabel=L"\text{Radial Distance}~r", ylabel=L"\text{Energy}~E(r)",
-    title=L"\text{Energy Dependence on}~r~\text{with}~(\alpha, \beta, d) = (%$alpha, %$beta, %$d)")
+    title=L"\text{Energy Dependence on}~r~\text{with}~%$(p2tex(p))")
   for R in 0.4:0.2:1.2
     solution = Solver.solve(12, R, Utils.defaultEnv)
     lines!(ax, r_vec_noend, Utils.totalEnergy(solution, R, r_vec_noend, Utils.defaultEnv), label=L"R = %$R")
@@ -165,7 +167,8 @@ function plotStepByStepConvergence(p=Params.defaultParams)
 
   fig = Figure(resolution=(800, 450))
   # TODO: for all squared errors, give formula in the plot
-  ax = Axis(fig[1, 1], yscale=log10, xlabel=L"N", ylabel=LT"Squared Error", title=LT"Step by Step Convergence")
+  ax = Axis(fig[1, 1], yscale=log10, xlabel=L"N", ylabel=LT"Squared Error",
+    title=L"\text{Step by Step Convergence with}~%$(p2tex(p))")
   lines!(ax, Ns, errors)
   scatter!(ax, Ns, errors, color=:red)
   saveFig(fig, "convergence", p)
@@ -200,7 +203,7 @@ function plotOuterOptimisation(p=Params.knownAnalyticParams)
   F(R) = Utils.totalEnergy(Solver.solve(8, R, env), R, 0.0, env)
   fig = Figure(resolution=(800, 400))
   ax = Axis(fig[1, 1], xlabel=L"R", ylabel=L"U(R)",
-    title=L"\text{Energy Optimisation with}~%$(Params.potentialParamsToLatex(p.potential)),~d=%$(p.d)")
+    title=L"\text{Energy Optimisation with}~%$(p2tex(p))")
   lines!(ax, R_vec, F.(R_vec))
   saveFig(fig, "outer-optimisation", p)
   return fig
@@ -210,7 +213,7 @@ function plotVaryingRSolutions(p=Params.morsePotiParams)
   env = Utils.createEnvironment(p)
   fig = Figure()
   ax = Axis(fig[1, 1], xlabel=L"r", ylabel=L"\rho(r)",
-    title=L"\text{Energy with}~%$(Params.potentialParamsToLatex(p.potential)),~d=%$(p.d)")
+    title=L"\text{Energy with}~%$(p2tex(p))")
   for R in 0.2:0.4:1.4
     lines!(ax, r_vec_noend, Utils.rho(r_vec_noend, Solver.solve(6, R, env), env), label="R = $R")
   end
@@ -226,7 +229,7 @@ function plotAnalyticSolution(p=Params.knownAnalyticParams)
   fig = Figure()
   env = Utils.createEnvironment(p)
   R, analytic = AnalyticSolutions.explicitSolution(x_vec_noends; p=p)
-  ax = Axis(fig[1, 1], title=L"\text{Analytic Solution with}~%$(Params.potentialParamsToLatex(p.potential, true))",
+  ax = Axis(fig[1, 1], title=L"\text{Analytic Solution with}~%$(p2tex(p))",
     xlabel=L"x", ylabel=L"\rho(x)")
   lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(4, R, env), env), label=L"N = 4")
   lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(8, R, env), env), label=L"N = 8")
@@ -255,9 +258,8 @@ function plotConvergenceToAnalytic(p=Params.knownAnalyticParams)
   end
 
   fig = Figure(resolution=(800, 450))
-  alpha, beta, d = round(env.p.potential.alpha, digits=2), round(env.p.potential.beta, digits=2), env.p.d
   ax = Axis(fig[1, 1], yscale=log10, xlabel=L"N", ylabel=LT"Squared Error",
-    title=L"\text{Convergence to analytic solution with}~(\alpha, \beta, d) = (%$alpha, %$beta, %$d)")
+    title=L"\text{Convergence to analytic solution with}~%$(p2tex(p))")
   lines!(ax, Ns, errors)
   scatter!(ax, Ns, errors, color=:red)
   saveFig(fig, "convergence-to-analytic", env.p)
@@ -269,7 +271,7 @@ function plotDefaultParameterVariations()
   R = 0.8
   p = Params.Parameters()
   alpha, beta, d = round(p.potential.alpha, digits=2), round(p.potential.beta, digits=2), p.d
-  ax = Axis(fig[1, 1], ylabel=L"\rho(r)", title=L"\text{Varying}~\alpha~\text{with}~(\beta, d) = (%$beta, %$d)")
+  ax = Axis(fig[1, 1], ylabel=L"\rho(r)", title=L"\text{Varying}~\alpha~\text{with}~%$(p2tex(p))")
   for alpha in 0.3:0.6:2.7
     env = Utils.createEnvironment(Params.Parameters(potential=Params.AttractiveRepulsive(alpha=alpha)))
     lines!(ax, r_vec_noend, Utils.rho(r_vec_noend, Solver.solve(8, R, env), env), label=L"\alpha = %$alpha")
@@ -309,7 +311,7 @@ function plotSimulationHistograms(p=Params.defaultParams, runSim=true)
   @show center
   radialDistance = hypot.([df[!, k] .- center[k] for k in 1:dimension]...)
   ax = Axis(fig[1, 1], xlabel=L"\text{Radial distance}~r", ylabel=LT"Density",
-    title=L"\text{Simulation Output Positional Distribution with}~%$(Params.potentialParamsToLatex(p.potential)),~d=%$(p.d)")
+    title=L"\text{Simulation Output Positional Distribution with}~%$(p2tex(p))")
   hist!(ax, radialDistance, bins=0:0.02:(maximum(radialDistance)*1.05), color=dissertationColours[1])
 
   # TODO:
@@ -344,7 +346,7 @@ function plotSimulationAndSolverComparison(p::Params.Parameters=Params.known2dPa
 
   fig = Figure()
   ax = Axis(fig[1, 1], xlabel=L"\text{Radial distance}~r", ylabel=LT"Density",
-    title=L"\text{Particle Simulation Output Distribution}")
+    title=L"\text{Particle Simulation Output Distribution with}~%$(p2tex(p))")
   hist!(ax, radialDistance, bins=0:(maxR/16):(maxR*1.05), scale_to=maximum(solution) * 1.1,
     label=LT"Particle Simulation")
   lines!(ax, r, solution, color=:red, linewidth=3.0, label=LT"Spectral Method")
@@ -362,7 +364,7 @@ function plotSimulationQuiver(p::Params.Parameters=Params.known2dParams; iterati
   @assert dimension >= 2
 
   fig = Figure()
-  ax = Axis(fig[1, 1], xlabel=L"x", ylabel=L"y", title=L"\text{Simulation Output}~%$(Params.potentialParamsToLatex(p.potential)),~d = %$dimension")
+  ax = Axis(fig[1, 1], xlabel=L"x", ylabel=L"y", title=L"\text{Simulation Output with}~%$(p2tex(p))")
   scatter!(ax, posidf[!, 1], posidf[!, 2], color=dissertationColours[1])
   quiver!(ax, posidf[!, 1], posidf[!, 2], velodf[!, 1] / 20, velodf[!, 2] / 20,
     color=dissertationColours[4], linewidth=2)
@@ -370,17 +372,19 @@ function plotSimulationQuiver(p::Params.Parameters=Params.known2dParams; iterati
   return fig
 end
 
-function plotPhaseSpace(p=Params.defaultParams)
+function plotPhaseSpace(p=Params.defaultParams; runSim=true)
   env = Utils.createEnvironment(p)
-  runSimulator(env.p)
+  if runSim
+    runSimulator(p)
+  end
 
   fig = Figure()
   posidf, velodf, dimension = loadSimulatorData()
   ax = Axis(fig[1, 1], xlabel=L"\text{First coordinate}~x", ylabel=L"\text{First velocity component}~v_x",
-    title=L"\text{Simulation Output Phase Space}~(d = %$dimension)")
+    title=L"\text{Simulation Output Phase Space with}~%$(p2tex(p))")
   scatter!(ax, posidf[!, 1], velodf[!, 1])
   ax = Axis(fig[2, 1], xlabel=L"\text{Radial distance}~r", ylabel=L"\text{Velocity}~v",
-    title=L"\text{Simulation Output Phase Space}~(d = %$dimension)")
+    title=L"\text{Simulation Output Phase Space with}~%$(p2tex(p))")
   radialDistance = hypot.([posidf[!, k] for k in 1:dimension]...)
   velocity = hypot.([velodf[!, k] for k in 1:dimension]...)
   scatter!(ax, radialDistance, velocity)
@@ -395,7 +399,7 @@ function plotConditionNumberGrowth(p=Params.defaultParams)
   opconds = OpCond.(Ns)
   fig = Figure(resolution=(800, 500))
   ax = Axis(fig[1, 1], xlabel=L"\text{Matrix size}~N", ylabel=L"\text{Condition number}~\kappa(Q)",
-    xscale=log10, yscale=log10, title=LT"Growth of the condition number")
+    xscale=log10, yscale=log10, title=L"\text{Growth of the condition number with}~%$(p2tex(p))")
   lines!(ax, Ns, opconds)
   scatter!(ax, Ns, opconds, label=LT"Full Operator")
   if isa(p.potential, Params.AttractiveRepulsive)
@@ -413,12 +417,12 @@ function plotConditionNumberGrowth(p=Params.defaultParams)
   return fig
 end
 
-function plotCoefficients(p=Params.defaultParams; N=60)
+function plotCoefficients(p=Params.morsePotiParams; N=60)
   env = Utils.createEnvironment(p)
   solution = Solver.solve(N, p.R0, env)
   fig = Figure(resolution=(800, 500))
   ax = Axis(fig[1, 1], xlabel=L"\text{Index}~k", ylabel=L"\text{Abs. Coefficient}~|\rho_k|",
-    yscale=log10, title=LT"Solution coefficients")
+    yscale=log10, title=L"\text{Solution coefficients with}~%$(p2tex(p))")
   scatter!(ax, 1:N, abs.(solution), label=LT"without regularisation")
   for s in [1e-8, 1e-6, 1e-4, 1e-2]
     regSolution = Solver.solveWithRegularisation(N, env.p.R0, env, s)
@@ -440,7 +444,7 @@ function plotJacobiConvergence()
   f_N = P[:, 1:10] \ f.(axes(P, 1))
   fig = Figure(resolution=(800, 550))
   ax = Axis(fig[1, 1], yscale=log10, xlabel=L"x", ylabel=LT"Absolute Error",
-    title=L"\text{Expansion of the function}~f(x) = \exp(x^2)~\text{in the}~P_k^{(%$(B.a), %$(B.b))}~\text{basis}")
+    title=L"\text{Expansion of the function}~f(x) = \exp(x^2)~\text{in the}~P_k^{(%$(round(B.a, digits=2)), %$(round(B.b, digits=2)))}~\text{basis}")
   for k in 2:10
     lines!(ax, r_vec, vec(abs.(sum(f_N[1:k] .* P[r_vec, 1:k]', dims=1) - f.(r_vec)')), label=L"N = %$k")
     # lines!(ax, r_vec, vec(sum(f_N[1:k] .* P[r_vec, 1:k]', dims=1) - f.(r_vec)'), label=L"N = %$k")
@@ -479,6 +483,28 @@ function plotAll()
     plotCoefficients(Params.morsePotiParams)
   finally
     _extra_pdf = true
+  end
+  return
+end
+
+function plotAllForP(p::Params.Parameters, quick=true)
+  plotFullOperator(p)
+  plotDifferentOrderSolutions(p)
+  plotOuterOptimisation(p)
+  plotStepByStepConvergence(p)
+  plotVaryingRSolutions(p)
+  plotSimulationAndSolverComparison(p)
+  if p.d >= 2
+    plotSimulationQuiver(p; runSim=false)
+  end
+  plotPhaseSpace(p; runSim=false)
+  if !quick
+    plotSimulationHistograms(p)
+    plotMonomialBasisConvergence(p)
+    plotGeneralSolutionApproximation(p)
+    plotSpatialEnergyDependence(p)
+    plotConditionNumberGrowth(p)
+    plotCoefficients(p)
   end
   return
 end
