@@ -196,37 +196,44 @@ void ParticleBox::exportToCSV() {
 
 int ParticleBox::setupFromArgv(int argc, char **argv) {
   if (argc < 2) {
-    std::cerr << "Usage: ./experiments (morse|attrep) dimension [iterations] [C_a, C_r, l_a, l_b | alpha, beta]"
+    std::cerr << "Usage: ./experiments (morse|attrep) dimension [iterations] [self-propulsion] [friction] "
+                 "[C_a, C_r, l_a, l_b | alpha, beta]"
               << std::endl;
     return 1;
   }
 
+  // argv[0] == "./experiments"
   char *potentialType = argv[1];
-
   size_t dimension = atol(argv[2]);
   if (dimension != DIMENSION) {
     std::cerr << "DIMENSION SHOULD BE " << DIMENSION << std::endl;
     std::cerr << "(Otherwise, have to recompile or use a different binary) " << DIMENSION << std::endl;
     return 1;
   }
+  // argv[3] == iterations
+  if (argc >= 6) {
+    p.selfPropulsion = atof(argv[4]);
+    p.friction = atof(argv[5]);
+  }
 
+  size_t firstPotIndex = 6;
   if (strcmp(potentialType, "attrep") == 0) {
     std::cout << "Using attractive-repulsive interaction potential" << std::endl;
     auto poti = new AttractiveRepulsive();
-    if (argc >= 6) {
-      poti->alpha = atof(argv[4]);
-      poti->beta = atof(argv[5]);
+    if (argc >= firstPotIndex + 2) {
+      poti->alpha = atof(argv[firstPotIndex + 0]);
+      poti->beta = atof(argv[firstPotIndex + 1]);
     }
     std::cout << poti->alpha << ", " << poti->beta << std::endl;
     interaction = poti;
   } else if (strcmp(potentialType, "morse") == 0) {
     std::cout << "Using Morse interaction potential" << std::endl;
     auto poti = new MorsePotential();
-    if (argc >= 8) {
-      poti->C_att = atof(argv[4]);
-      poti->l_att = atof(argv[5]);
-      poti->C_rep = atof(argv[6]);
-      poti->l_rep = atof(argv[7]);
+    if (argc >= firstPotIndex + 4) {
+      poti->C_att = atof(argv[firstPotIndex + 0]);
+      poti->l_att = atof(argv[firstPotIndex + 1]);
+      poti->C_rep = atof(argv[firstPotIndex + 2]);
+      poti->l_rep = atof(argv[firstPotIndex + 3]);
     }
     interaction = poti;
   } else {

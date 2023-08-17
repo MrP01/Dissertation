@@ -2,18 +2,19 @@
 
 void BoxSimulator::buildUI() {
   const QColor oxfordBlue = QColor(0, 33, 71);
+  const QColor oxfordGolden = QColor(175, 148, 72);
   const QColor themeColor = QColor(0, 62, 170);
   const QColor wongPurple = QColor(204, 121, 167);
-  const QColor wongOrange = QColor(230, 159, 0);
   const QColor wongGreen = QColor(101, 145, 87);
+  // const QColor wongOrange = QColor(230, 159, 0);
 
   particleSeries->setColor(themeColor);
-  kineticEnergySeries->setColor(wongOrange);
+  kineticEnergySeries->setColor(oxfordGolden);
   LJpotentialEnergySeries->setColor(wongPurple);
   totalEnergySeries->setColor(themeColor);
-  phaseSpaceSeries->setColor(wongGreen);
+  phaseSpaceSeries->setColor(oxfordGolden);
   radiusHistSet->setColor(wongPurple);
-  velocityHistSet->setColor(wongOrange);
+  velocityHistSet->setColor(wongGreen);
 
   QChartView *particleView = new QChartView(this);
   {

@@ -1,7 +1,7 @@
 module Params
 @kwdef struct AttractiveRepulsive
-  alpha = 2.0  # attractive parameter
-  beta = 1.5  # repulsive parameter
+  alpha = 1.8  # attractive parameter
+  beta = 1.2  # repulsive parameter
 end
 
 @kwdef struct MorsePotential
@@ -18,7 +18,7 @@ end
 end
 
 @kwdef struct QuadraticSelfPropulsion
-  selfPropulsion = 1.6
+  selfPropulsion = 0.0
   frictionCoeff = 0.5
 end
 
@@ -72,9 +72,10 @@ defaultParams = Parameters()
 known2dParams = Parameters(potential=AttractiveRepulsive(alpha=1.2, beta=0.1993), d=2, name="known-2d")
 knownAnalyticParams = Parameters(potential=AttractiveRepulsive(alpha=2.0001, beta=1.5), d=1, name="known-analytic")
 morsePotiParams = Parameters(potential=MorsePotential(), d=1, name="morse")
-morsePotiParams2d = Parameters(potential=MorsePotential(), d=2, name="morse-2d")
+morsePotiSwarming2d = Parameters(potential=MorsePotential(), friction=QuadraticSelfPropulsion(selfPropulsion=1.6), d=2, name="morse-2d")
 morsePotiParams4d = Parameters(potential=MorsePotential(), d=4, name="morse-4d")
-twoDVoidParams = Parameters(d=2, potential=AttractiveRepulsive(alpha=3.5, beta=1.6))
+voidParams2d = Parameters(d=2, potential=AttractiveRepulsive(alpha=3.5, beta=1.6), name="void-2d")  # found in meeting with Timon
+bumpParams = Parameters(d=1, potential=AttractiveRepulsive(alpha=0.912, beta=0.881), R0=1.4, name="bump")  # 2020-power-law, fig. 11
 
 checkParameters(defaultParams)
 checkParameters(known2dParams)

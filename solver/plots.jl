@@ -27,6 +27,7 @@ pow10tickformat(values) = [L"10^{%$(Int64(round(value)))}" for value in values]
 
 dissertationColours = Makie.wong_colors()
 dissertationColours[1] = RGBAf(0x00 / 255, 0x21 / 255, 0x47 / 255)  # Oxford Blue
+dissertationColours[2] = RGBAf(0xaf / 255, 0x94 / 255, 0x48 / 255)  # Oxford Golden
 dissertationColours[3] = RGBAf(0x65 / 255, 0x91 / 255, 0x57 / 255)  # Themecolor2 (olive green) from prettytex
 dissertationTheme = Theme(palette=(color=dissertationColours,),)
 set_theme!(dissertationTheme)
@@ -42,7 +43,8 @@ function runSimulator(p::Params.Parameters, iterations=2000, big=true)
     error("Unkown potential")
   end
   bigstring = big ? "big" : ""
-  cmd = Cmd(string.(["./build/simulator/experiments$(p.d)d$(bigstring)", mode, p.d, iterations, potentialParams...]))
+  cmd = Cmd(string.(["./build/simulator/experiments$(p.d)d$(bigstring)",
+    mode, p.d, iterations, p.friction.selfPropulsion, p.friction.frictionCoeff, potentialParams...]))
   @show cmd
   println("----- Running simulation -----")
   run(cmd)
@@ -211,7 +213,7 @@ function plotVaryingRSolutions(p=Params.morsePotiParams)
   for R in 0.2:0.4:1.4
     lines!(ax, r_vec_noend, Utils.rho(r_vec_noend, Solver.solve(6, R, env), env), label="R = $R")
   end
-  ylims!(ax, -0.5, 1)
+  # ylims!(ax, -0.5, 1)
   axislegend(ax)
   saveFig(fig, "varying-R-solutions", p)
   return fig
@@ -317,7 +319,7 @@ function plotSimulationHistograms(p=Params.defaultParams, runSim=true)
   velocity = hypot.([df[!, k] for k in 1:dimension]...)
   ax = Axis(fig[2, 1], xlabel=L"\text{Velocity}~v", ylabel=LT"Density",
     title=L"\text{Simulation Output Velocity Distribution}")
-  hist!(ax, velocity, bins=20, color=dissertationColours[3])
+  hist!(ax, velocity, bins=20, color=dissertationColours[2])
 
   saveFig(fig, "simulation-histogram", p)
   return fig
@@ -326,7 +328,7 @@ end
 function plotSimulationAndSolverComparison(p::Params.Parameters=Params.known2dParams; runSim=true)
   env = Utils.createEnvironment(p)
   if runSim
-    runSimulator(env.p, 2000, false)
+    runSimulator(env.p, 4000, false)
   end
 
   df = CSV.read("/tmp/positions.csv", DataFrames.DataFrame, header=false)
@@ -340,7 +342,7 @@ function plotSimulationAndSolverComparison(p::Params.Parameters=Params.known2dPa
   fig = Figure()
   ax = Axis(fig[1, 1], xlabel=L"\text{Radial distance}~r", ylabel=LT"Density",
     title=L"\text{Particle Simulation Output Distribution}")
-  hist!(ax, radialDistance, bins=0:0.01:(maximum(radialDistance)*1.05), scale_to=maximum(solution) * 1.1,
+  hist!(ax, radialDistance, bins=0:(maxR/16):(maxR*1.05), scale_to=maximum(solution) * 1.1,
     label=LT"Particle Simulation")
   lines!(ax, r, solution, color=:red, linewidth=3.0, label=LT"Spectral Method")
   ylims!(ax, 0, maximum(solution) * 1.12)
@@ -446,6 +448,7 @@ function plotAll()
     plotJacobiConvergence()
     plotDifferentOrderSolutions(Params.defaultParams)
     plotDifferentOrderSolutions(Params.morsePotiParams)
+    plotDifferentOrderSolutions(Params.bumpParams)
     plotAttRepOperators(Params.defaultParams)  # or maybe 2d?
     plotFullOperator(Params.defaultParams)
     plotFullOperator(Params.morsePotiParams)
@@ -457,13 +460,14 @@ function plotAll()
     plotPhaseSpace(Params.morsePotiParams)
     plotSimulationHistograms(Params.defaultParams)
     plotSimulationQuiver(Params.known2dParams)
-    plotSimulationQuiver(Params.morsePotiParams2d)
+    plotSimulationQuiver(Params.morsePotiSwarming2d)
     plotSpatialEnergyDependence(Params.defaultParams)
     plotVaryingRSolutions(Params.morsePotiParams)
     plotGeneralSolutionApproximation(Params.morsePotiParams)
     plotMonomialBasisConvergence(Params.morsePotiParams)
-    plotSimulationAndSolverComparison(Params.known2dParams)
+    plotSimulationAndSolverComparison(Params.morsePotiParams)
     plotConditionNumberGrowth(Params.defaultParams)
+    plotCoefficients(Params.morsePotiParams)
   finally
     _extra_pdf = true
   end
