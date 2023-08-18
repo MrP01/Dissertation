@@ -79,7 +79,7 @@ defaultParams = Parameters()
 known2dParams = Parameters(potential=AttractiveRepulsive(alpha=1.2, beta=0.1993), d=2, name="known-2d")
 knownAnalyticParams = Parameters(potential=AttractiveRepulsive(alpha=2.0001, beta=1.5), d=1, name="known-analytic")
 morsePotiParams = Parameters(potential=MorsePotential(), d=1, name="morse")
-morsePotiSwarming2d = Parameters(potential=MorsePotential(), friction=QuadraticSelfPropulsion(selfPropulsion=1.6), d=2, name="morse-2d")
+morsePotiSwarming2d = Parameters(potential=MorsePotential(), friction=QuadraticSelfPropulsion(selfPropulsion=1.6), d=2, m=2, name="morse-2d")
 morsePotiParams4d = Parameters(potential=MorsePotential(), d=4, name="morse-4d")
 voidParams2d = Parameters(d=2, potential=AttractiveRepulsive(alpha=3.5, beta=1.6), name="void-2d")  # found in meeting with Timon
 bumpParams = Parameters(d=1, potential=AttractiveRepulsive(alpha=0.912, beta=0.881), R0=1.4, name="bump")  # 2020-power-law, fig. 11

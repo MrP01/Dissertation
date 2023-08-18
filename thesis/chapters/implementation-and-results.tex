@@ -12,6 +12,14 @@
 \end{figure}
 
 \section{Further Discussion}
+\subsection{Well-Conditionedness}
+A common flaw of spectral collocation methods, one could think of them as the highest-order limit of finite difference schemes, is their bad conditioning behaviour.
+% TODO: reference
+
+Ideally, we would like the condition number $\kappa(Q)$ to be independent of the order $N$ to which we solve our problem. That means we want
+$$\kappa(Q) := \frac{\sigma_{\rm max}(Q)}{\sigma_{\rm min}(Q)} = \frac{\norm{Q}}{\norm{Q^{-1}}} = \mathcal{O}(1)$$
+and not $\mathcal{O}(N)$ or even higher orders.
+
 \begin{figure}[H]
   \centering
   \label{fig:condition-number-growth}
@@ -25,3 +33,7 @@
   \includegraphics[width=0.8\linewidth]{results/morse/coefficients.pdf}
   \caption[Absolute value of the coefficients with and without regularisation]{Absolute value of the solution coefficients $\rho_k$ with and without Tikhonov regularisation.}
 \end{figure}
+
+\section{Implementation Architecture}
+\section{Runtime Analysis}
+The above benchmarks were accumulated on an Intel\textregistered \, i7-5600U CPU running at \SI{2.6}{\giga\hertz} as the average over 3 individual runs with different test vectors, consistent across different parameter runs.

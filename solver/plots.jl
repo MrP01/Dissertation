@@ -42,9 +42,10 @@ function runSimulator(p::Params.Parameters, iterations=2000, big=true)
   else
     error("Unkown potential")
   end
+  boxScaling = 1.0
   bigstring = big ? "big" : ""
   cmd = Cmd(string.(["./build/simulator/experiments$(p.d)d$(bigstring)",
-    mode, p.d, iterations, p.friction.selfPropulsion, p.friction.frictionCoeff, potentialParams...]))
+    mode, p.d, iterations, boxScaling, p.friction.selfPropulsion, p.friction.frictionCoeff, potentialParams...]))
   @show cmd
   println("----- Running simulation -----")
   run(cmd)
@@ -435,6 +436,25 @@ end
 
 function plotAnalyticErrorVaryingRegularisation(p=Params.knownAnalyticParams)
   # TODO
+end
+
+function plotGeneralNGErrorMatrix(p=Params.morsePotiParams)
+  maxN = 15
+  maxG = 15
+  errorMatrix = zeros(maxN, maxG)
+  for N in 1:maxN
+    for G in 1:maxG
+      errorMatrix[N, G] = 1
+    end
+  end
+  # TODO: do the same for runtime
+
+  fig = Figure(resolution=(600, 500))
+  ax = Axis(fig[1, 1][1, 1], yreversed=true, title=L"\text{Full Operator}~%$(p2tex(p))")
+  s = spy!(ax, sparse(log10.(abs.(op1))), marker=:rect, markersize=32, framesize=0)
+  Colorbar(fig[1, 1][1, 2], s, flipaxis=false, tickformat=pow10tickformat)
+  saveFig(fig, "full-operator", p)
+  return fig
 end
 
 function plotJacobiConvergence()
