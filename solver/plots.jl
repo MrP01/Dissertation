@@ -129,13 +129,19 @@ function plotAttRepOperators(p=Params.defaultParams; N=30)
   return fig
 end
 
-function plotFullOperator(p=Params.morsePotiParams; N=30)
+function enhancedSpyPlot(matrix, title="")
+  @debug Utils.opCond(matrix)
   fig = Figure(resolution=(600, 500))
-  env = Utils.createEnvironment(p)
-  op1 = Solver.constructOperatorFromEnv(N, p.R0, env)
-  ax = Axis(fig[1, 1][1, 1], yreversed=true, title=L"\text{Full Operator}~%$(p2tex(p))")
+  ax = Axis(fig[1, 1][1, 1], yreversed=true, title=title)
   s = spy!(ax, sparse(log10.(abs.(op1))), marker=:rect, markersize=32, framesize=0)
   Colorbar(fig[1, 1][1, 2], s, flipaxis=false, tickformat=pow10tickformat)
+  return fig
+end
+
+function plotFullOperator(p=Params.morsePotiParams; N=30)
+  env = Utils.createEnvironment(p)
+  op1 = Solver.constructOperatorFromEnv(N, p.R0, env)
+  fig = enhancedSpyPlot(op1, L"\text{Full Operator}~%$(p2tex(p))")
   saveFig(fig, "full-operator", p)
   return fig
 end
@@ -449,11 +455,8 @@ function plotGeneralNGErrorMatrix(p=Params.morsePotiParams)
   end
   # TODO: do the same for runtime
 
-  fig = Figure(resolution=(600, 500))
-  ax = Axis(fig[1, 1][1, 1], yreversed=true, title=L"\text{Full Operator}~%$(p2tex(p))")
-  s = spy!(ax, sparse(log10.(abs.(op1))), marker=:rect, markersize=32, framesize=0)
-  Colorbar(fig[1, 1][1, 2], s, flipaxis=false, tickformat=pow10tickformat)
-  saveFig(fig, "full-operator", p)
+  fig = enhancedSpyPlot(errorMatrix, L"N G \text{Error Matrix}")
+  saveFig(fig, "N-G-error-matrix", p)
   return fig
 end
 
