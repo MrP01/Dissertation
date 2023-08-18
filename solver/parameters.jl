@@ -74,6 +74,10 @@ end
 function dictToParameters(d::Dict)
   return Parameters(; d...)
 end
+function copyWithChanges(p::Parameters; kwargs...)
+  d = parametersToDict(p)
+  return dictToParameters(merge(d, kwargs))
+end
 
 defaultParams = Parameters()
 known2dParams = Parameters(potential=AttractiveRepulsive(alpha=1.2, beta=0.1993), d=2, name="known-2d")

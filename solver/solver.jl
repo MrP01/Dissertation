@@ -26,7 +26,7 @@ function constructOperatorFromEnv(N::Int64, R::Float64, env::Utils.SolutionEnvir
 end
 
 """Docstring for the function"""
-function solve(N::Int64, R::Float64, env::Utils.SolutionEnvironment)::Vector{BigFloat}
+function solveWithoutRegularisation(N::Int64, R::Float64, env::Utils.SolutionEnvironment)::Vector{BigFloat}
   BigMatrix = constructOperatorFromEnv(N, R, env)
   BigRHS = zeros(N)
   BigRHS[1] = 1.0
@@ -36,12 +36,8 @@ function solve(N::Int64, R::Float64, env::Utils.SolutionEnvironment)::Vector{Big
 end
 
 """Docstring for the function"""
-function solveWithRegularisation(N::Int64, R::Float64, env::Utils.SolutionEnvironment, s=:s0)::Vector{BigFloat}
+function solveWithRegularisation(N::Int64, R::Float64, env::Utils.SolutionEnvironment, s::Float64)::Vector{BigFloat}
   A = constructOperatorFromEnv(N, R, env)
-  if s == :s0
-    s = env.p.s0
-  end
-  @show s
   BigMatrix = A' * A + s * LinearAlgebra.I
   BigRHS = zeros(N)
   BigRHS[1] = 1.0
@@ -49,6 +45,10 @@ function solveWithRegularisation(N::Int64, R::Float64, env::Utils.SolutionEnviro
 
   BigSolution = BigMatrix \ BigRHS
   return BigSolution / Utils.totalMass(BigSolution, env)
+end
+
+function solve(N::Int64, R::Float64, env::Utils.SolutionEnvironment)::Vector{BigFloat}
+  return solveWithRegularisation(N, R, env, env.p.s0)
 end
 
 """Docstring for the function"""
