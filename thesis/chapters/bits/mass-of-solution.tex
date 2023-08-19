@@ -1,0 +1,36 @@
+\begin{lemma}{Mass}{mass}
+  For a given solution $\rho: B_1(\vec{0}) \mapsto \R$, its \textit{mass} $M \in \R$ is given by \Cref{eq:measure-mass}.
+  Provided the appropriate ansatz given in \Cref{eq:ansatz}, an expansion of weighted radial Jacobi polynomials with coefficients $\rho_k$, has its \textit{mass} specifically given by
+  \begin{align*}
+    M := \int_{\supp(\rho)} \rho(y) \,\ddy = \frac{\pi^{\frac{d}{2}}\Gamma (a+1)}{\Gamma \left(a+\frac{d}{2}+1\right)} \rho_0\,,
+  \end{align*}
+  so solely depending on the first coefficient $\rho_0$.
+\end{lemma}
+\begin{proof}[Proof (from \cite{2021-arbitrary-dimensions})]
+  The domain and radial symmetry of this problem suggests the use of hyperspherical coordinates:
+  \begin{align*}
+    M_1 = \int_{B_1(\vec{0})} \rho(y) dy & = \sum_{n=0}^{N-1} \rho_{n} \int_{B_1(\vec{0})} (1-|y|^2)^a P_n^{(a,\frac{d-2}{2})}(2|y|^2-1) dy                                            \\
+                                         & =\sum_{n=0}^{N-1} \rho_{n} \int_{\partial B_1(\vec{0})} \int_{r=0}^1 (1-r^2)^a P_n^{(a,\frac{d-2}{2})}(2r^2-1) r^{d-1} dr d\sigma(\omega)   \\
+                                         & = \frac{2\pi^\frac{d}{2}}{\Gamma(\frac{d}{2})} \sum_{n=0}^{N-1} \rho_{n} \int_{r=0}^1 (1-r^2)^a P_n^{(a,\frac{d-2}{2})}(2r^2-1) r^{d-1} dr,
+  \end{align*}
+  where ${2\pi^\frac{d}{2}} / {\Gamma(\frac{d}{2})}$ is the surface area of the $d-1$ dimensional sphere (cf. \Cref{lemma:surface-area}).
+  % Note that working with a finite expansion ($N < \infty$), we automatically have
+  % $$\int_{B_1} \sum_{k=0}^{N-1} |\rho_k (1-|y|^2)^a P_k^{(a,\frac{d-2}{2})}(2|y|^2-1)| \,\ddy < \infty\,,$$
+  % so the exchange of integration and infinite sum in the first line is justified by the Fubini-Tonelli theorem.
+
+  The integral in the resulting expression can be evaluated easily by reversing the quadratic shift of the Jacobi polynomials via transformation $2r^2-1 = t$:
+  \begin{align*}
+    \sum_{n=0}^{N-1} \rho_{n} \int_0^1 (1-r^2)^a & P_n^{(a,\frac{d-2}{2})}(2r^2-1) r^{d-1} dr                                                                                \\&= \frac{1}{4} \sum_{n=0}^{N-1} \rho_{n} \int_{-1}^1 \frac{(1-t)^a}{2^a}\frac{(1+t)^{\frac{d-2}{2}}}{2^{\frac{d-2}{2}}} P_n^{(a,\frac{d-2}{2})}(t) dt\\
+                                                 & = 2^{\frac{-2-2a-d}{2}} \sum_{n=0}^{N-1} \rho_{n} \int_{-1}^1 (1-t)^a (1+t)^{\frac{d-2}{2}} P_n^{(a,\frac{d-2}{2})}(t) dt \\
+                                                 & = \frac{\Gamma (a+1) \Gamma \left(\frac{d}{2}\right)}{2 \Gamma \left(a+\frac{d}{2}+1\right)} \rho_0,
+  \end{align*}
+  where the last equality relies on the classical orthogonality condition of the Jacobi polynomials in \Cref{eq:jacobi-orthogonality-condition} where we remind ourselves that $P_0(t) = 1$. Combining this with the prior expression yields the stated result.
+\end{proof}
+
+\begin{lemma}{Surface area of the hypersphere}{surface-area}
+  The surface area of $\partial B_R(\vec{0})$ is given by
+  $$A_{d-1}(R) = \frac{\dd}{\dd R} V_d(R) = \frac{2\pi^\frac{d}{2}}{\Gamma(\frac{d}{2})} R^{d-1}\,.$$
+\end{lemma}
+\begin{proof}
+  \hierKoennteIhreWerbungStehen
+\end{proof}

@@ -39,12 +39,19 @@ The Jacobi polynomials are then defined from ${}_2F_1$ as follows:
 In order to obtain a recurrence relationship between the coefficients later, we make use of the Jacobi matrix (cf. \Cref{def:jacobi-matrix}).
 \input{chapters/bits/jacobi-matrix.tex}
 
-Finally, now that we have established the basis functions, we can write down an ansatz for the solution of \hyperref[sec:the-problem]{the problem}.
-\input{chapters/bits/ansatz.tex}
+Finally, now that we have established the basis functions, we can write down an ansatz $\rho: B_1(\vec{0}) \mapsto \R$ for the solution of \hyperref[sec:the-problem]{the problem}, of the form
+\begin{equation}
+  \rho(\vec{x}) := \left(1-\norm{\vec{x}}^{2}\right)^{m - \frac{\alpha + d}{2}} \sum_{k=0}^{N-1} \rho_k P_{k}^{\left(m - \frac{\alpha + d}{2},\frac{d-2}{2}\right)}(2 \norm{\vec{x}}^{2}-1)\,.
+  \label{eq:ansatz}
+\end{equation}
+with $P_k^{(a, b)}$ the Jacobi polynomials and $\{\rho_k\}_{k=0, ..., N-1}$ the coefficients.
+% TODO: is it alpha or beta in the exponent of (1-y\^{}2)?
 
 The spectral method can then be written as a linear system involving a matrix (operator).
 \input{chapters/bits/operator.tex}
 \input{chapters/bits/theorem216.tex}
+
+\input{chapters/bits/mass-of-solution.tex}
 
 \section{Derivation of Operator}
 \input{chapters/bits/derivation-of-operator-matrix.tex}
@@ -70,7 +77,7 @@ for some interval radius $R \in \R^+$, usually chosen as the smallest possible $
   \centering
   \label{fig:attrep-operator}
   \includegraphics[width=0.5\linewidth]{results/attrep/full-operator.pdf}
-  \caption[Combination of the attractive-repulsive operators]{Spy plot of $Q_{\alpha, \beta}$, the combination of the attractive-repulsive operators. Inverting this operator and applying it to $(1, 0, ..., 0)^T \in \R^N$ will yield the unnormalised coefficients $\rho_k$ of the solution expansion given in \Cref{def:ansatz}.}
+  \caption[Combination of the attractive-repulsive operators]{Spy plot of $Q_{\alpha, \beta}$, the combination of the attractive-repulsive operators. Inverting this operator and applying it to $(1, 0, ..., 0)^T \in \R^N$ will yield the unnormalised coefficients $\rho_k$ of the solution expansion given in \Cref{eq:ansatz}.}
 \end{figure}
 
 \section{Results}

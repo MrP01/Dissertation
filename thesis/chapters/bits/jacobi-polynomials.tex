@@ -34,9 +34,10 @@ Jacobi polynomials $P_n^{(a,b)}(x)$ are orthogonal on $[-1,1]$ w.r.t. the weight
   w^{(a,b)}(x)=(1-x)^a (1+x)^b\,,
 \end{equation*}
 so they satisfy
-\begin{align*}\label{eq:orthogonalityconditionJacobi}
+\begin{align}
   \int_{-1}^1(1-x)^a(1+x)^bP_n^{(a,b)}P_m^{(a,b)}\,\ddx = \frac{2^{a+b+1} \Gamma (a+n+1) \Gamma (b+n+1)}{n! (a+b+2 n+1) \Gamma (a+b+n+1)} \delta_{n,m}\,,
-\end{align*}
+  \label{eq:jacobi-orthogonality-condition}
+\end{align}
 with $a	,b>-1$, which uniquely determines $P_n^{(a,b)}(x)$. The special case of $a=b$ corresponds to the ultraspherical or Gegenbauer polynomials, while the case $a=b=0$ corresponds to the Legendre polynomials \cite{2018-nist}.
 
 \begin{itemize}
