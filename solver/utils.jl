@@ -135,6 +135,19 @@ function totalEnergy(solution::Vector{BigFloat}, R::Float64, r::Union{Float64,Ab
   return E
 end
 
+function getSupportRadius(solution::Vector{BigFloat}, env::SolutionEnvironment)
+  # This is wrong, a term in the derivative is missing
+  r = 0.0
+  alpha, beta = env.p.potential.alpha, env.p.potential.beta
+  attractive, repulsive = zero(r), zero(r)
+  for k in eachindex(solution)
+    attractive += solution[k] * Float64.(theorem216.(r; n=k - 1, beta=alpha, p=env.p))
+    repulsive += solution[k] * Float64.(theorem216.(r; n=k - 1, beta=beta, p=env.p))
+  end
+  R = (repulsive / attractive)^(1 / (alpha - beta))
+  return R
+end
+
 """Docstring for the function"""
 function totalMass(solution::Vector{BigFloat}, env::SolutionEnvironment)::BigFloat
   # using Lemma 2.20

@@ -337,10 +337,10 @@ function plotSimulationHistograms(p=Params.defaultParams, runSim=true)
   return fig
 end
 
-function plotSimulationAndSolverComparison(p::Params.Parameters=Params.known2dParams; runSim=true)
+function plotSimulationAndSolverComparison(p::Params.Parameters=Params.known2dParams; runSim=true, big=true)
   env = Utils.createEnvironment(p)
   if runSim
-    runSimulator(env.p, 4000, false)
+    runSimulator(env.p, 2000, big)
   end
 
   df = CSV.read("/tmp/positions.csv", DataFrames.DataFrame, header=false)
@@ -477,6 +477,11 @@ function plotJacobiConvergence()
   return fig
 end
 
+function plotRegularisationErrorAnalytic()
+  # Timon says it makes sense to include this in the dissertation
+  plotConvergenceToAnalytic(Params.copyWithChanges(Params.knownAnalyticParams, s0=1e-7))
+end
+
 function plotAll()
   global _extra_pdf
   _extra_pdf = false
@@ -516,7 +521,7 @@ function plotAllForP(p::Params.Parameters, quick=true)
   plotOuterOptimisation(p)
   plotStepByStepConvergence(p)
   plotVaryingRSolutions(p)
-  plotSimulationAndSolverComparison(p)
+  plotSimulationAndSolverComparison(p; big=false)
   if p.d >= 2
     plotSimulationQuiver(p; runSim=false)
   end

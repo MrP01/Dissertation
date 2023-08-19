@@ -5,6 +5,7 @@ include("./generalkernel.jl")
 module Solver
 import LinearAlgebra
 import LRUCache
+import Optim
 import ..Params
 import ..Utils
 import ..AttractiveRepulsiveSolver
