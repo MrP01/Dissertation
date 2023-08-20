@@ -1,21 +1,35 @@
 \begin{definition}{Jacobi Polynomials}{jacobi-polynomials}
-  Let $P^{(a, b)}: \C \mapsto \C$ with
-  $$P^{(a,b)}_n(x) = {\frac{(a +1)_{n}}{n!}}\,{}_{2}F_{1}\left(-n,1+a +b +n;a +1;{\tfrac  {1}{2}}(1-x)\right)$$
-  So are defined using the Gaussian Hypergeometric Function (cf. \Cref{def:gaussian-hypergeometric-function}) and the Pochhammer symbol.
-  Which is equivalent to
-  $$P_{n}^{{(a, b)}}(x)={\frac  {\Gamma (a +n+1)}{n!\,\Gamma (a +b +n+1)}}\sum _{{m=0}}^{n}\binom{n}{m}{\frac{\Gamma (a +b +n+m+1)}{\Gamma (a +m+1)}}\left({\frac{x-1}{2}}\right)^{m}\,.$$
-  where $\Gamma (x)=\int _{0}^{\infty }t^{x-1}e^{-t}\,\ddt$ (with $\Re(x)>0$) is the gamma function \footnote{Recall that for integer arguments $k \in \N$, it equals the factorial of $(k-1)$ so $\Gamma(k) = (k-1)!$.}.
+  Let $P^{(a, b)}: \C \mapsto \C$ with $a, b \in \R$ be given by
+  $$P^{(a,b)}_n(x) := {\frac{(a +1)_{n}}{n!}}\, {}_2F_1\left(\begin{matrix}1+a +b +n, -n \\a + 1\end{matrix}; \frac{1-x}{2}\right)\,,$$
+  using the Gaussian hypergeometric function (\Cref{lemma:gaussian-hypergeometric-function}) and the Pochhammer symbol (\Cref{def:rising-factorial}).
 \end{definition}
 
-Gegenbauer Polynomials (cf. \Cref{def:gegenbauer-polynomials}) are a special case. And
-Chebyshev Polynomials (cf. \Cref{def:chebyshev-polynomials}) are a special case of them.
+\begin{lemma}{Jacobi Polynomial Series}{jacobi-polynomial-series}
+  \Cref{def:jacobi-polynomials} of $P_n^{(a, b)}$ is equivalent to
+  $$P_{n}^{(a, b)}(x)={\frac  {\Gamma (a +n+1)}{n!\,\Gamma (a +b +n+1)}}\sum _{{k=0}}^{n}\binom{n}{k}{\frac{\Gamma (a +b +n+k+1)}{\Gamma (a +k+1)}}\left({\frac{x-1}{2}}\right)^{k}\,,$$
+  where $\Gamma(x)$ is the gamma function (cf. \Cref{def:gamma-function}).
+\end{lemma}
+\begin{proof}
+  Inserting into \Cref{lemma:gaussian-hypergeometric-function}, we have
+  \begin{align*}
+    P_{n}^{(a, b)}(x) & = \frac{(a+1)_n}{n!} \sum_{k=0}^n (-1)^k \binom{n}{k} \frac{(1+a+b+n)_k}{(a+1)_k} \left(\frac{1-x}{2}\right)^k                                                                        \\
+                      & = \frac{\Gamma(a+1+n)}{n! \cancel{\Gamma(a+1)}} \sum_{k=0}^n \binom{n}{k} \frac{\cancel{\Gamma(a+1)} \Gamma(1+a+b+n + k)}{\Gamma(a+1+k) \Gamma(1+a+b+n)} \left(\frac{x-1}{2}\right)^k \\
+                      & = \frac{\Gamma(a+1+n)}{n! \Gamma(1+a+b+n)} \sum_{k=0}^n \binom{n}{k} \frac{\Gamma(1+a+b+n + k)}{\Gamma(a+1+k) } \left(\frac{x-1}{2}\right)^k
+  \end{align*}
+  using \Cref{remark:pochhammer-gamma}.
+\end{proof}
+
+Gegenbauer Polynomials (cf. \Cref{def:gegenbauer-polynomials}) are a special case.
+And Chebyshev Polynomials (cf. \Cref{def:chebyshev-polynomials}) are a special case of them.
+In the special case when $a = b = 0$, they reduce to the Legendre polynomials $P_n(x) = P_n^{(0, 0)}(x)$.
 
 Following from this definition,
 \begin{align*}
   P_0^{(a, b)}(x)   & = 1                            \\
   P_{1}^{(a, b)}(x) & = (a+1)+(a+b+2){\frac{x-1}{2}}
 \end{align*}
-and so on. Note that obviously, $\deg\left(P_k^{(a, b)}\right) = k$.
+and so on.
+Also note that $\deg\left(P_k^{(a, b)}\right) = k$.
 
 Nice Spectral Properties:
 \begin{itemize}

@@ -1,3 +1,17 @@
 \begin{definition}{Rising Factorial (Pochhammer Symbol)}{rising-factorial}
-  $$(x)_n := \prod_{k=0}^{n-1} (x+k)\,.$$
+  The $n$th rising factorial of $x \in \R$ is given by
+  $$(x)_n := \prod_{k=0}^{n-1} (x+k) \,\in \R\,.$$
 \end{definition}
+
+For example, $(3.141)_5 = 3.141 \cdot 4.141 \cdot 5.141 \cdot 6.141 \cdot 7.141$.
+
+\begin{remark}{Rising Factorial and the Gamma function}{pochhammer-gamma}
+  When $x \in \R, n \in \N_0$ such that $x, x+n \notin \Z_-$ are not negative integers, there is an important relation to the gamma function (\Cref{def:gamma-function}),
+  $$(x)_n = \frac{\Gamma(x+n)}{\Gamma(x)}\,.$$
+\end{remark}
+
+\begin{remark}{Nonpositive integer rising factorial}{nonpositive-pochhammer}
+  When the argument is a nonpositive integer, the rising factorial
+  $(-m)_n = -m \cdot (-m+1) \cdot ... \cdot (-m+n-1)$
+  vanishes when $n \ge m+1$ for $n \in \N$ and $m \in \N_0$ as $0$ is among the factors.
+\end{remark}

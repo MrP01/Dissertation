@@ -51,7 +51,7 @@ end
 """The solver takes a few parameters"""
 @kwdef struct Parameters
   d = 1  # dimension
-  m = 1  # integer
+  m = 0  # integer
   R0 = 0.8  # radius of the interval [-R, R]
   s0 = 1e-4  # regularisation parameter
   potential = AttractiveRepulsive()  # potential parameters
