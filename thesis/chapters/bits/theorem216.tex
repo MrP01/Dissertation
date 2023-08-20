@@ -6,8 +6,13 @@
   \end{align*}
 \end{theorem}
 
-\Cref{thm:theorem216} gives an explicit expression for the main integral
-\(Q^{\beta}: L \mapsto L\), an operator from the Function Space \(L\) to the function space \(L\), we are interested in:
-$$\hat{Q}^{\beta}[\rho](x) = \int_{B_1} |x-y|^\beta (1-|y|^2)^{m-\frac{\alpha+d}{2}} P_n^{(m-
-  \frac{\alpha+d}{2},\frac{d-2}{2})}(2|y|^2-1) \mathrm{d}y$$ which is used
-to construct the Spectral Method Operator \(Q^\beta\) (cf. \Cref{def:operator}), acting on the coefficients \(\vec{\rho}\).
+\begin{proof}
+  Using
+  $$(-\Delta)^{-s} \left((R^2 - \norm{\vec{y}}^2)^q\right) = C_{q, s, d} R^{2q+2s} {}_2F_1\left(\begin{matrix}d/2 - s, -q-s \\ d/2 \end{matrix}; \frac{\norm{\vec{y}}^2}{R^2}\right)$$
+  for $\norm{\vec{y}} \le R$ with $R = 1$ where $(-\delta)^{-s}$ denotes the inverse fractional Laplacian $\Delta := \nabla^2$ with power $s \in (0, 1)$ and $q \in \R^+$
+  from \cite{2014-barenblatt} based on the \textit{Weber-Schafheitlin} integral of two Bessel functions given in \cite{1945-bessel-integral}.
+  $$C_{q,s,d} = \frac{2^{-2s} \Gamma(q+1) \Gamma(d/2-s)}{\Gamma(d/2) \Gamma(q+s+1)}$$
+  The Weber-Schafheitlin integrals are related to the fractional Laplacians of aforementioned functions because the Fourier transform of ${}_2F_1$ is a bessel function.
+
+  The fractional Laplacian $(-\delta)^{-s}$ is defined by \cite{2015-fractional-laplacian-definitions}.
+\end{proof}
