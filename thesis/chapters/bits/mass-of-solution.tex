@@ -1,36 +1,51 @@
 \begin{lemma}{Mass}{mass}
   For a given solution $\rho: B_1(\vec{0}) \mapsto \R$, its \textit{mass} $M \in \R$ is given by \Cref{eq:measure-mass}.
-  Provided the appropriate ansatz given in \Cref{eq:ansatz}, an expansion of weighted radial Jacobi polynomials with coefficients $\rho_k$, has its \textit{mass} specifically given by
+  Provided the appropriate ansatz given in \Cref{eq:ansatz}, an expansion of weighted radial Jacobi polynomials with coefficients $\rho_k$, its \textit{mass} is given by
   \begin{align*}
-    M := \int_{\supp(\rho)} \rho(y) \,\ddy = \frac{\pi^{\frac{d}{2}}\Gamma (a+1)}{\Gamma \left(a+\frac{d}{2}+1\right)} \rho_0\,,
+    M := \int_{\supp(\rho)} \rho(y) \,\ddy = \frac{\pi^{{d/2}}\Gamma (a+1)}{\Gamma \left(a+{d/2}+1\right)}\, \rho_0\,,
   \end{align*}
   so solely depending on the first coefficient $\rho_0$.
 \end{lemma}
 \begin{proof}[Proof (from \cite{2021-arbitrary-dimensions})]
-  The domain and radial symmetry of this problem suggests the use of hyperspherical coordinates:
+  To shorten notation, let $b := \frac{d-2}{2}$.
+  The domain and radial symmetry of our problem suggests the use of hyperspherical coordinates:
   \begin{align*}
-    M_1 = \int_{B_1(\vec{0})} \rho(y) dy & = \sum_{n=0}^{N-1} \rho_{n} \int_{B_1(\vec{0})} (1-|y|^2)^a P_n^{(a,\frac{d-2}{2})}(2|y|^2-1) dy                                            \\
-                                         & =\sum_{n=0}^{N-1} \rho_{n} \int_{\partial B_1(\vec{0})} \int_{r=0}^1 (1-r^2)^a P_n^{(a,\frac{d-2}{2})}(2r^2-1) r^{d-1} dr d\sigma(\omega)   \\
-                                         & = \frac{2\pi^\frac{d}{2}}{\Gamma(\frac{d}{2})} \sum_{n=0}^{N-1} \rho_{n} \int_{r=0}^1 (1-r^2)^a P_n^{(a,\frac{d-2}{2})}(2r^2-1) r^{d-1} dr,
+    M = \int_{B_1(\vec{0})} \rho(\vec{x}) \,\dd\vec{x} & = \sum_{k=0}^{N-1} \rho_k \int_{B_1(\vec{0})} \weight{x} P_k^{(a,b)}(\jacobiarg{x}) \,\dd\vec{x}                          \\
+                                                       & =\sum_{k=0}^{N-1} \rho_k \int_{\partial B_1(\vec{0})} \dd\Omega \int_{r=0}^1 (1-r^2)^a P_k^{(a,b)}(2r^2-1) r^{d-1} \,\ddr \\
+                                                       & = \Omega_d \sum_{k=0}^{N-1} \rho_k \int_{r=0}^1 (1-r^2)^a P_k^{(a,b)}(2r^2-1) r^{d-1} \,\ddr\,,
   \end{align*}
-  where ${2\pi^\frac{d}{2}} / {\Gamma(\frac{d}{2})}$ is the surface area of the $d-1$ dimensional sphere (cf. \Cref{lemma:surface-area}).
+  where $\Omega_d = {2\pi^{d/2}} / {\Gamma({d/2})}$ is the surface area of the $d$-dimensional hypersphere (cf. \Cref{lemma:surface-area}) with radius $R = 1$.
   % Note that working with a finite expansion ($N < \infty$), we automatically have
-  % $$\int_{B_1} \sum_{k=0}^{N-1} |\rho_k (1-|y|^2)^a P_k^{(a,\frac{d-2}{2})}(2|y|^2-1)| \,\ddy < \infty\,,$$
+  % $$\int_{B_1} \sum_{k=0}^{N-1} |\rho_k (1-|y|^2)^a P_k^{(a,b)}(2|y|^2-1)| \,\ddy < \infty\,,$$
   % so the exchange of integration and infinite sum in the first line is justified by the Fubini-Tonelli theorem.
-
-  The integral in the resulting expression can be evaluated easily by reversing the quadratic shift of the Jacobi polynomials via transformation $2r^2-1 = t$:
+  Substituting $u := 2r^2-1$, therefore $r^2 = \frac{1+u}{2}$ and $(1-r^2)^a = \left(\frac{1-u}{2}\right)^a = 2^{-a} (1-u)^a$ as well as $\ddr = \frac{\ddu}{4r}$,
   \begin{align*}
-    \sum_{n=0}^{N-1} \rho_{n} \int_0^1 (1-r^2)^a & P_n^{(a,\frac{d-2}{2})}(2r^2-1) r^{d-1} dr                                                                                \\&= \frac{1}{4} \sum_{n=0}^{N-1} \rho_{n} \int_{-1}^1 \frac{(1-t)^a}{2^a}\frac{(1+t)^{\frac{d-2}{2}}}{2^{\frac{d-2}{2}}} P_n^{(a,\frac{d-2}{2})}(t) dt\\
-                                                 & = 2^{\frac{-2-2a-d}{2}} \sum_{n=0}^{N-1} \rho_{n} \int_{-1}^1 (1-t)^a (1+t)^{\frac{d-2}{2}} P_n^{(a,\frac{d-2}{2})}(t) dt \\
-                                                 & = \frac{\Gamma (a+1) \Gamma \left(\frac{d}{2}\right)}{2 \Gamma \left(a+\frac{d}{2}+1\right)} \rho_0,
+    M & = 2^{-a} \Omega_d \sum_{k=0}^{N-1} \rho_k \int_{u=-1}^1 (1-u)^a P_k^{(a,b)}(u) r^{d-1} \,\frac{\ddu}{4r} \\
+      & = 2^{-2} 2^{-a} \Omega_d \sum_{k=0}^{N-1} \rho_k \int_{-1}^1 (1-u)^a P_k^{(a,b)}(u) r^{d-2}\,\ddu\,,
   \end{align*}
-  where the last equality relies on the classical orthogonality condition of the Jacobi polynomials in \Cref{eq:jacobi-orthogonality-condition} where we remind ourselves that $P_0(t) = 1$. Combining this with the prior expression yields the stated result.
+  we notice that $r^{d-2} = \left(\frac{1+u}{2}\right)^{\frac{d-2}{2}} = 2^{-b} (1+u)^b$ and so we have
+  \begin{align*}
+    M & = 2^{-2} 2^{-a} 2^{-b} \Omega_d \sum_{k=0}^{N-1} \rho_k \int_{-1}^1 (1-u)^a (1+u)^{b} P_k^{(a,b)}(u) \,\ddu                                                 \\
+      & = 2^{-(2+a+b)} \Omega_d \sum_{k=0}^{N-1} \rho_k \int_{-1}^1 (1-u)^a (1+u)^{b} P_k^{(a,b)}(u) P_0^{(a, b)}(u) \,\ddu                                         \\
+      & = 2^{1-(2+a+b)} \frac{\pi^{d/2}}{\Gamma(d/2)} \sum_{k=0}^{N-1} \rho_k \, \frac{2^{a+b+1} \Gamma (a+1) \Gamma (b+1)}{0! (a+b+1) \Gamma (a+b+1)} \delta_{0,k} \\
+      & = \frac{\pi^{{d/2}}\Gamma (a+1)}{\Gamma \left(a+{d/2}+1\right)} \,\rho_0\,,
+  \end{align*}
+  which relies on the classical orthogonality condition of the Jacobi polynomials given in \Cref{eq:jacobi-orthogonality-condition} with the $0$th polynomial $P_0(u) = 1$.
 \end{proof}
 
 \begin{lemma}{Surface area of the hypersphere}{surface-area}
-  The surface area of $\partial B_R(\vec{0})$ is given by
-  $$A_{d-1}(R) = \frac{\dd}{\dd R} V_d(R) = \frac{2\pi^\frac{d}{2}}{\Gamma(\frac{d}{2})} R^{d-1}\,.$$
+  The surface area of the d-dimensional hypersphere $\partial B_R(\vec{0})$ is given by
+  $$\Omega_{d}(R) = \frac{\dd}{\dd R} V_d(R) = \frac{\dd}{\dd R} \left(\frac{2 \pi^{d/2}}{d \Gamma(d/2)} R^d\right) = \frac{2\pi^{d/2}}{\Gamma({d/2})} R^{d-1}\,.$$
 \end{lemma}
 \begin{proof}
-  \hierKoennteIhreWerbungStehen
+  We find $\Omega_d$ by evaluation of the $d$-dimensional Gaussian integral
+  $$I_d := \int_{\R^d} \e^{-\norm{\vec{x}}^2}\,\dd\vec{x} = \int_{\R} \ddx_1 ... \int_{\R} \ddx_d\, \e^{-x_1^2-...-x_d^2} = \left(\int_{\R} \e^{-x_1^2} \,\ddx_1\right)^d = (I_1)^d\,,$$
+  using Fubini's theorem ($I_d < \infty$).
+  Considering the case $d = 2$, we have
+  $$I_2 = \int_{\R^2} \e^{-\norm{\vec{x}}^2} \,\dd\vec{x} = \int_0^{2\pi} \dd\theta \int_0^\infty r \e^{-r^2} \,\ddr = -2\pi \int_{0}^{-\infty} \e^u \,\frac{\ddu}{2} = \pi \int_{-\infty}^0 \e^u \,\ddu = \pi\,,$$
+  taking the classical approach of transitioning to polar coordinates $r, \theta$ (with Jacobi determinant $r^{d-1}$ in the $d$-dimensional case) immediately leading us to $I_1 = \sqrt{\pi}$. Generalising this to higher dimensions $d$ with hyperspherical coordinates,
+  $$I_d = \int_{\R^d} \e^{-\norm{\vec{x}}^2} \,\dd\vec{x} = \Omega_d \int_0^\infty r^{d-1} \e^{-r^2}\,\ddr = \Omega_d \int_0^\infty s^{{d/2}-1} \e^{-s} \frac{\dds}{2} = \frac{\Omega_d}{2} \Gamma(d/2)\,,$$
+  where once again $r := \norm{\vec{x}}$ and using a substitution $s := r^2$, we must find equality with the above result $I_d = \pi^{d/2}$,
+  $$I_d = \pi^{d/2} \overset{!}{=} \frac{1}{2}\Omega_d \Gamma(d/2) \qLRq \Omega_d = \frac{2\pi^{d/2}}{\Gamma(d/2)}\,.$$
+  Now integrating over the $R$-ball $B_R(\vec{0})$, we obtain $V_d(R) := |B_R(\vec{0})| = \Omega_d \int_0^R r^{d-1} \,\ddr = \frac{\R^d \Omega_d}{d}$ and therefore $\Omega_{d}(R) = \frac{\dd V_d(R)}{\dd R} = \frac{2 \pi^{d/2}}{\Gamma(d/2)}R^{d-1}$.
 \end{proof}
