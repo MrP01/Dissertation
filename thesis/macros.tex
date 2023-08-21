@@ -3,7 +3,9 @@
 \newacronym{gd}{GD}{Gradient Descent}
 \newacronym{gui}{GUI}{Graphical User Interface}
 \newacronym{lru}{LRU}{Least Recently Used}
+\newacronym{pde}{PDE}{Partial Differential Equation}
 
+\usepackage{xifthen}
 \newcommand{\name}[1]{\textsc{#1}}
 \newcommand{\inv}{^{-1}}
 \newcommand{\qRq}{\quad\Rightarrow\quad}
@@ -11,9 +13,9 @@
 \newcommand{\functionspace}{L^2}
 \renewcommand{\norm}[1]{\left\lVert#1\right\rVert_{\scriptscriptstyle 2}}
 \newcommand{\jacobiarg}[1]{2 \norm{\vec{#1}}^2 - 1}
-\newcommand{\jacobi}[1]{P_{k}^{(a, b)}\left(\jacobiarg{#1}\right)}
-\newcommand{\jacobivec}[1]{\vec{P}_{k}^{(a, b)}\left(\jacobiarg{#1}\right)}
-\newcommand{\weight}[1]{\left(1-\norm{\vec{#1}}^2\right)^{a}}
+\newcommand{\jacobi}[2][]{P_{\ifthenelse{\isempty{#1}}{k}{#1}}^{(a, b)}\left(\jacobiarg{#2}\right)}
+\newcommand{\jacobivec}[2][]{\vec{P}_{\ifthenelse{\isempty{#1}}{k}{#1}}^{(a, b)}\left(\jacobiarg{#2}\right)}
+\newcommand{\weight}[2][]{\left(1-\norm{\vec{#2}}^2\right)^{\ifthenelse{\isempty{#1}}{a}{#1}}}
 \newcommand{\goesto}{\rightarrow}
 
 \newcommand{\hierKoennteIhreWerbungStehen}{

@@ -51,11 +51,11 @@ The spectral method can then be written as a linear system involving a matrix (o
 \input{chapters/bits/operator.tex}
 \input{chapters/bits/theorem216.tex}
 
-\Cref{thm:theorem216} gives an explicit expression for the main integral
-\(Q^{\beta}: L \mapsto L\), an operator from the Function Space \(L\) to the function space \(L\), we are interested in:
-$$\hat{Q}^{\beta}[\rho](x) = \int_{B_1} |x-y|^\beta (1-|y|^2)^{m-\frac{\alpha+d}{2}} P_n^{(m-
-  \frac{\alpha+d}{2},\frac{d-2}{2})}(2|y|^2-1) \mathrm{d}y$$ which is used
-to construct the Spectral Method Operator \(Q^\beta\) (cf. \Cref{def:operator}), acting on the coefficients \(\vec{\rho}\).
+\Cref{thm:theorem216} gives an explicit expression for the main integral \(\hat{Q}^{\beta}: L \mapsto L\), an operator from the function space \(L\) to the function space \(L\), we are interested in:
+$$\hat{Q}^{\beta}[\rho](x) = \sum_{k=0}^{N-1} \rho_k \int_{B_1} |x-y|^\beta (1-|y|^2)^{m-\frac{\alpha+d}{2}} P_n^{(m-\frac{\alpha+d}{2},\frac{d-2}{2})}(2|y|^2-1) \mathrm{d}y$$
+which is used to construct the spectral method operator \(Q^\beta\) (cf. \Cref{def:operator}), acting on the coefficients \(\vec{\rho}\).
+
+The operator $\hat{Q}^\beta$ acting on an equilibrium measure $\rho(\vec{x})$ returns the energy $\tilde{E}(\vec{x}) = \hat{Q}^\beta[\rho](\vec{x})$ at a point $\vec{x} \in B_1(\vec{0})$ in our domain.
 
 \input{chapters/bits/mass-of-solution.tex}
 
@@ -118,6 +118,8 @@ As introduced in \Cref{sec:analytical-solutions}, there are some analytical solu
   }
 \end{figure}
 
+There are more analytic solutions available for other parameter ranges, we will not analyse them here.
+
 \input{chapters/bits/spectral-convergence.tex}
 
 \begin{figure}[H]
@@ -139,7 +141,7 @@ As introduced in \Cref{sec:analytical-solutions}, there are some analytical solu
   \centering
   \label{fig:spatial-energy-dependence}
   \includegraphics[width=0.7\linewidth]{results/attrep/energy-dependence-on-r.pdf}
-  \caption[Spatial energy dependence on $r$]{Plot of the spatial energy dependence on $r$, for different values of the domain support radius $R$. As one can see, they are constant and this figure is only present as visual proof to increase our confidence in the construction of the spectral method.}
+  \caption[Spatial energy dependence on $r$]{Plot of the spatial energy dependence on $r$, for different values of the domain support radius $R$. As one can see, $E(\vec{x}) = \jacobivec{x} Q_{\alpha,\beta} \vec{\rho}$ constant and this figure is only present as visual proof to increase our confidence in the construction of the spectral method.}
 \end{figure}
 
 \begin{figure}[H]

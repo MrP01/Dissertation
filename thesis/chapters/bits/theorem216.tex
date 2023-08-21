@@ -1,18 +1,52 @@
 \begin{theorem}{Integration Theorem that needs a name}{theorem216}
   On the $d$-dimensional unit ball $B_1$ the power law potential, with power $\alpha \in(-d,2+2m-d)$, $m\in\mathbb{N}_0$ and $\beta>-d$, of the $n$-th weighted radial Jacobi polynomial $$(1-|y|^2)^{m-\frac{\alpha+d}{2}}P_n^{\left(m-\frac{\alpha+d}{2},\frac{d-2}{2}\right)}(2|y|^2-1)$$ reduces to a Gaussian hypergeometric function as follows:
   \begin{align*}
-    \int_{B_1} & |x-y|^\beta (1-|y|^2)^{m-\frac{\alpha+d}{2}} P_n^{\left(m-\frac{\alpha+d}{2},\frac{d-2}{2}\right)}(2|y|^2-1) \mathrm{d}y                                                                                                                                                                                                                                                                              \\
-               & = \tfrac{\pi ^{d/2} \Gamma \left(1+\frac{\beta}{2}\right) \Gamma \left(\frac{\beta+d}{2}\right) \Gamma \left(m+n-\frac{\alpha+d}{2}+1\right)}{\Gamma \left(\frac{d}{2}\right) \Gamma (n+1) \Gamma \left(\frac{\beta}{2}-n+1\right) \Gamma \left(\frac{\beta-\alpha}{2}+m+n+1\right)}{}_2F_1\left(\begin{matrix}n-\frac{\beta}{2}, -m-n+\frac{\alpha-\beta}{2} \\\frac{d}{2}\end{matrix};|x|^2\right).
+    \int_{B_1(\vec{0})} & \norm{\vec{x}-\vec{y}}^\beta \left(1-\norm{\vec{y}}^2\right)^{m-\frac{\alpha+d}{2}} P_{n}^{\left(m-\frac{\alpha+d}{2},\frac{d-2}{2}\right)}\left(\jacobiarg{y}\right) \dd\vec{y}                                                                                                                                                                                                                           \\
+                        & = \tfrac{\pi ^{d/2} \Gamma \left(1+\frac{\beta}{2}\right) \Gamma \left(\frac{\beta+d}{2}\right) \Gamma \left(m+n-\frac{\alpha+d}{2}+1\right)}{\Gamma \left(\frac{d}{2}\right) \Gamma (n+1) \Gamma \left(\frac{\beta}{2}-n+1\right) \Gamma \left(\frac{\beta-\alpha}{2}+m+n+1\right)}{}_2F_1\left(\begin{matrix}n-\frac{\beta}{2}, -m-n+\frac{\alpha-\beta}{2} \\\frac{d}{2}\end{matrix};\norm{x}^2\right).
   \end{align*}
 \end{theorem}
 
-\begin{proof}
+\begin{proof}[Proof (adapted from \cite{2021-arbitrary-dimensions})]
   Using
   $$(-\Delta)^{-s} \left((R^2 - \norm{\vec{y}}^2)^q\right) = C_{q, s, d} R^{2q+2s} {}_2F_1\left(\begin{matrix}d/2 - s, -q-s \\ d/2 \end{matrix}; \frac{\norm{\vec{y}}^2}{R^2}\right)$$
-  for $\norm{\vec{y}} \le R$ with $R = 1$ where $(-\delta)^{-s}$ denotes the inverse fractional Laplacian $\Delta := \nabla^2$ with power $s \in (0, 1)$ and $q \in \R^+$
+  for $\norm{\vec{y}} \le R$ with $R = 1$ where $(-\Delta)^{-s}$ denotes the inverse fractional Laplacian $\Delta := \nabla^2$ with power $s \in (0, 1)$ and $q \in \R^+$
   from \cite{2014-barenblatt} based on the \textit{Weber-Schafheitlin} integral of two Bessel functions given in \cite{1945-bessel-integral}.
   $$C_{q,s,d} = \frac{2^{-2s} \Gamma(q+1) \Gamma(d/2-s)}{\Gamma(d/2) \Gamma(q+s+1)}$$
   The Weber-Schafheitlin integrals are related to the fractional Laplacians of aforementioned functions because the Fourier transform of ${}_2F_1$ is a bessel function.
 
-  The fractional Laplacian $(-\delta)^{-s}$ is defined by \cite{2015-fractional-laplacian-definitions}.
+  The fractional Laplacian $(-\Delta)^{-s}$ is given by the Riesz potential \cite{2015-fractional-laplacian-definitions}.
+
+  We begin by applying \Cref{lemma:jacobi-polynomial-series} to the inside of the integrand.
+  \begin{align*}
+    \int_{B_1(\vec{0})} & \norm{\vec{x}-\vec{y}}^\beta \weight{y} \jacobi[n]{y} \dd\vec{y}                                                                                             \\
+                        & = C_{a,b,n} \sum_{k=0}^n \binom{n}{k} C_{a,b,n,k} \int_{B_1(\vec{0})} \norm{\vec{x}-\vec{y}}^\beta \weight{y} \left(\norm{\vec{y}}^2 - 1\right)^k \dd\vec{y} \\
+                        & = C_{a,b,n} \sum_{k=0}^n \binom{n}{k} C_{a,b,n,k} (-1)^k \int_{B_1(\vec{0})} \norm{\vec{x}-\vec{y}}^\beta \weight[a+k]{y} \dd\vec{y}
+  \end{align*}
+  where $a := m-\frac{\alpha+d}{2}$ and $b := \frac{d-2}{2}$.
+  Note that from the first to the second line, we used $\frac{z-1}{2} = \frac{2\norm{\vec{y}}^2-1 - 1}{2} = \norm{\vec{y}}^2 - 1$.
+
+  The constants are
+  \begin{align*}
+    C_{a,b,n}   & := \frac{\Gamma(a+1+n)}{n! \Gamma(1+a+b+n)}     \\
+    C_{a,b,n,k} & := \frac{\Gamma(1+a+b+n + k)}{\Gamma(a+1+k)}\,.
+  \end{align*}
+
+  We identify the remaining integral as the Riesz potential $I_{\beta+d}[u](\vec{x})$ of the function $u(\vec{y}) := \left(1-\norm{\vec{y}}^2\right)^{a+k}$, which we can evaluate using Lemma 2.4 from \cite{2011-porous-medium-1}:
+  \begin{align*}
+    \int_{B_1(\vec{0})} & \norm{\vec{x}-\vec{y}}^\beta \weight[a+k]{y} \dd\vec{y} = c_{\beta+d} I_{\beta+d}\left[\vec{y} \mapsto \left(1-\norm{\vec{y}}^2\right)^{a+k}\right](\vec{x}) \\
+                        & = c_{\beta+d} C_{a+k, \beta, d} \cdot {}_2F_1\left(\begin{matrix}\frac{d-(\beta+d)}{2}, -a-k-\frac{\beta+d}{2} \\d/2\end{matrix}; \norm{\vec{y}}^2\right)    \\
+                        & = c_{\beta+d} C_{a+k, \beta, d} \cdot {}_2F_1\left(\begin{matrix}-\beta/2, -m-k+\frac{\alpha-\beta}{2} \\d/2\end{matrix}; \norm{\vec{y}}^2\right)
+  \end{align*}
+  because $-a-k-\frac{\beta+d}{2} = -m + \frac{\alpha+d}{2} -k - \frac{\beta+d}{2} = -m-k+\frac{\alpha-\beta}{2}$ with constants
+  \begin{align*}
+    c_{\beta+d}       & := \frac{2^{\beta+d} \pi^{d/2} \Gamma\left(\frac{\beta+d}{2}\right)}{\Gamma(-\beta/2)}                      \quad \text{\textcolor{gray}{from aforementioned definition of the Riesz potential}} \\
+    C_{a+k, \beta, d} & := \frac{\Gamma(a+k+1) \Gamma(-\beta/2)}{2^{\beta+d}\Gamma(d/2) \Gamma\left(a+k+\frac{\beta+d}{2}+1\right)} \quad \text{\textcolor{gray}{from Lemma 2.4}}\,,
+  \end{align*}
+  and therefore
+  $$c_{\beta+d} C_{a+k, \beta, d} = \frac{\cancel{2^{\beta+d}} \pi^{d/2} \Gamma\left(\frac{\beta+d}{2}\right) \Gamma(a+k+1) \cancel{\Gamma(-\beta/2)}}{\cancel{\Gamma(-\beta/2)} \cancel{2^{\beta+d}}\Gamma(d/2) \Gamma\left(a+k+\frac{\beta+d}{2}+1\right)} = \frac{\pi^{d/2}}{\Gamma(d/2)} B\left(\tfrac{\beta+d}{2}, a+1\right)\,.$$
+  So that finally,
+  \begin{align*}
+    \int_{B_1(\vec{0})} & \norm{\vec{x}-\vec{y}}^\beta \weight[a+k]{y} \dd\vec{y}                                                                                                                                                    \\
+                        & =\frac{\pi^{d/2}}{\Gamma(d/2)} B\left(\tfrac{\beta+d}{2}, m-\tfrac{\alpha+d}{2}+1\right) \cdot {}_2F_1\left(\begin{matrix}-\beta/2, -m-k+\frac{\alpha-\beta}{2} \\d/2\end{matrix}; \norm{\vec{y}}^2\right)\,.
+  \end{align*}
 \end{proof}
