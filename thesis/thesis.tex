@@ -1,8 +1,8 @@
 \documentclass[12pt, a4paper]{report}
 \PassOptionsToPackage{sharp}{prettytex/boxes}
-\usepackage{prettytex/base}
+\usepackage[en]{prettytex/base}
 \usepackage{prettytex/math}
-\usepackage[cleveref]{prettytex/math-theorems}
+\usepackage[cleveref, chapter]{prettytex/math-theorems}
 \usepackage{prettytex/gfx}
 \usepackage{prettytex/code}
 
@@ -59,12 +59,14 @@ Numerical Analysis
 \addbibresource{../literature/sources.bib}
 
 \begin{document}
+  \pagenumbering{roman}
   \printthesistitle
   \include{chapters/abstract}
   \include{chapters/acknowledgements} % maybe not yet?
   \tableofcontents
+  \pagebreak
+  \pagenumbering{arabic}
   \include{chapters/introduction}
-  % \include{chapters/notes}
   \include{chapters/particle-interaction-theory}
   \include{chapters/particle-simulator}
   \include{chapters/spectral-method}
