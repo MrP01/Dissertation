@@ -4,7 +4,7 @@
 \end{theorem}
 \begin{proof}
   Consider ``$x p_n$''$:= x \mapsto x p_n(x)$, a polynomial with $\deg(x p_n) \le n+1$.
-  Therefore, it must be possible to write
+  By the linear independence of all orthogonal polynomials $p_n$ with respect to the inner product $\langle \cdot, \cdot \rangle_w$, it must be possible to write
   $$x p_n(x) = \sum_{k=0}^{n+1} \hat{a}_k p_k(x)\,,\quad \text{for some}~\hat{a}_k \in \R, k=0, ..., n+1\,.$$
   Now, for all $n \ge 0$ and $m \le n+1$ we have
   $$\langle xp_n, p_m \rangle_w = \sum_{k=0}^{n+1} \hat{a}_k \langle p_k, p_m \rangle_w = \sum_{k=0}^{n+1} \hat{a}_k \delta_{i,k} = \hat{a}_m \langle p_m, p_m \rangle_w\,,$$
@@ -15,12 +15,12 @@
     \label{eq:three-term-step}
   \end{equation}
 
-  But when $m < n-1$, we have $\deg(xp_m) < n$ so $x p_m(x) = \sum_{k=0}^{n-1} \hat{b}_k p_k(x)$ for some (potentially 0) $\hat{b}_k$ and therefore $\langle p_n, xp_m \rangle_w = \sum_{k=0}^{n-1} \hat{b}_k \langle p_n, p_k \rangle_w = 0$,
+  But when \underline{$m < n-1$}, we have $\deg(xp_m) < n$ so $x p_m(x) = \sum_{k=0}^{n-1} \hat{b}_k p_k(x)$ for some (potentially 0) $\hat{b}_k \in \R$, and therefore $\langle p_n, xp_m \rangle_w = \sum_{k=0}^{n-1} \hat{b}_k \langle p_n, p_k \rangle_w = 0$,
   which, by the symmetry of the inner product (\Cref{remark:symmetry-of-inner-product}), also implies $\langle x p_n, p_m \rangle_w = 0$ which, by \Cref{eq:three-term-step}, allows us to conclude that the earlier coefficients $\hat{a}_m = 0$.
 
-  And obviously, even if we assumed higher-order coefficients in the expansion of $xp_n$, when $m > n+1 \Leftrightarrow n < m-1$, $\deg(xp_n) < m$ and so all later coefficients $\hat{a}_m = 0$.
+  % And obviously, even if we assumed higher-order coefficients in the expansion of $xp_n$, when $m > n+1 \Leftrightarrow n < m-1$, $\deg(xp_n) < m$ and so all later coefficients $\hat{a}_m = 0$.
 
-  Recall that by definition, $xp_n(x) = \sum_{k=0}^{n+1} \hat{a}_k p_k(x)$, which in combination with our insights above means that
+  We recall that $xp_n(x) = \sum_{k=0}^{n+1} \hat{a}_k p_k(x)$, which in combination with our insights on the $\hat{a}_m$ above means that
   $$xp_n(x) = \hat{a}_{n-1} p_{n-1}(x) + \hat{a}_{n} p_n(x) + \hat{a}_{n+1} p_{n+1}(x)\,,$$
   concluding the proof.
 \end{proof}
