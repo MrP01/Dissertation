@@ -2,8 +2,11 @@
   Are univariate polynomials
   $$p_n: \R \mapsto \R, \; p_n(x) = \sum_{k=0}^{n} c_k x^k\,.$$
   that form an orthogonal basis under some inner product $\langle p_n, p_m \rangle_w$ with weight function $w(x)$, given by
-  $$\langle f, g \rangle_w := \int_{-1}^{1} f(x) g(x) w(x) \,\ddx\,.$$
+  $$\langle f, g \rangle_w := \int_{D_p} f(x) g(x) w(x) \,\ddx\,,$$
+  the integral over some domain $D_p \subseteq \R$.
 \end{definition}
+
+The domain of the integral, for all intents and purposes within this dissertation, will be the Chebyshev interval $D_p = [-1, 1]$.
 
 \begin{remark}{}{symmetry-of-inner-product}
   The inner product satisfies $\langle x\mapsto xf(x), g \rangle_w = \langle f, x \mapsto xg(x)\rangle_w$.

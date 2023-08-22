@@ -1,5 +1,8 @@
-\begin{definition}{Operator}{operator}
-  Either the attractive or the repulsive operator can be sparse.
-
-  Obtained using \Cref{thm:theorem216}.
+\begin{definition}{Power-law Operator $Q^\beta$}{operator}
+  The power-law operator $\hat{Q}^\beta: \functionspace \mapsto \functionspace$ is given by
+  $$\hat{Q}^\beta[\rho](\vec{x}) := \frac{1}{\beta} \int_{\supp(\rho)} \norm{\vec{x}-\vec{y}}^\beta \rho(\vec{y}) \,\dd\vec{y}\,,$$
 \end{definition}
+% Either the attractive or the repulsive operator can be sparse.
+% Obtained using \Cref{thm:theorem216}.
+
+The operator $\hat{Q}^\beta$ acting on an equilibrium measure $\rho(\vec{x})$ returns the energy $E(\vec{x}) = \hat{Q}^\beta[\rho](\vec{x})$ at a point $\vec{x} \in B_1(\vec{0})$ in our normalised domain.

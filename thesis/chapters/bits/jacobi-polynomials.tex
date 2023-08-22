@@ -4,13 +4,14 @@
   using the Gaussian hypergeometric function (\Cref{lemma:gaussian-hypergeometric-function}) and the Pochhammer symbol (\Cref{def:rising-factorial}).
 \end{definition}
 
+\paragraph{Examples:}
 Following from this definition,
 \begin{align*}
   P_0^{(a, b)}(x)   & = 1                            \\
   P_{1}^{(a, b)}(x) & = (a+1)+(a+b+2){\frac{x-1}{2}}
 \end{align*}
 and so on.
-Also note that $\deg\left(P_k^{(a, b)}\right) = k$.
+Also note that, as with all other orthogonal polynomials, by convention indices start at $0$ and therefore $\deg\left(P_k^{(a, b)}\right) = k$.
 
 \begin{lemma}{Jacobi Polynomial Series}{jacobi-polynomial-series}
   \Cref{def:jacobi-polynomials} of $P_n^{(a, b)}$ is equivalent to
@@ -28,25 +29,27 @@ Also note that $\deg\left(P_k^{(a, b)}\right) = k$.
 \end{proof}
 
 \paragraph{Special Cases:}
-The Gegenbauer polynomials (cf. \Cref{def:gegenbauer-polynomials}) are a special case, namely when $a = b$.
-And Chebyshev Polynomials (cf. \Cref{def:chebyshev-polynomials}) are a special case of them.
-In the special case when $a = b = 0$, they reduce to the Legendre polynomials $P_n(x) = P_n^{(0, 0)}(x)$ \cite{2018-nist}.
+The Gegenbauer (or ultraspherical) polynomials $C_n^{(\lambda)}$ are a special case of the Jacobi polynomials, namely when $a = b$,
+of which the Chebyshev polynomials of the first kind $T_n$ are another special case of.
+Namely, when $a = b = -1/2$.
+The Chebyshev polynomials of the second kind $U_n$, once again regulated by a prefactor, are given by $a = b = +1/2$.
+In the special case when $a = b = 0$, the Jacobi polynomials reduce to the Legendre polynomials $P_n(x) = P_n^{(0, 0)}(x)$ \cite{2018-nist}.
 
 % Nice Spectral Properties:
 % \begin{itemize}
-%   \item Differentiation
+%   \item Differentiation <-- TODO
 %   \item Three-Term Recurrence
 %   \item why are they better than just Chebyshev?
 % \end{itemize}
 
-\paragraph{Dot-product notation.}
-Note that in this manuscript we will use the dot-product notation
+\paragraph{Dot-product notation:}
+Note that in this manuscript we will use the dot-product notation between the vector of Jacobi polynomials and the coefficient vector,
 $$f(x) = \sum_{k=0}^{N-1} f_k P_k^{(a, b)}(x) \qLRq f(x) = \vec{f} \cdot \vec{P}^{(a, b)}(x)\,,$$
 to express that a function $f$ is a linear combination of basis polynomials with coefficients $\vec{f} = (f_0, ..., f_{N-1})^T \in \R^N$.
 So $\vec{P}^{(a, b)}(x) \in \R^N$ is the vector of Jacobi polynomials $P^{(a, b)}_0(x)$, $P^{(a, b)}_1(x)$, ..., $P^{(a, b)}_{N-1}(x)$.
 
 \begin{theorem}{Jacobi Polynomial Orthogonality}{jacobi-orthogonality-condition}
-  Jacobi polynomials $P_n^{(a,b)}(x)$ are orthogonal on $[-1,1]$ with respect to the weight function
+  Jacobi polynomials $P_n^{(a,b)}(x)$ are orthogonal on $D_p = [-1,1]$ with respect to the weight function
   \begin{equation*}
     w^{(a,b)}(x)=(1-x)^a (1+x)^b\,,
   \end{equation*}
@@ -60,11 +63,8 @@ So $\vec{P}^{(a, b)}(x) \in \R^N$ is the vector of Jacobi polynomials $P^{(a, b)
   See, for example, \cite{1995-jacobi-orthogonality-proof}.
 \end{proof}
 
-% The special case of $a=b$ corresponds to the ultraspherical or Gegenbauer polynomials, while the case $a=b=0$ corresponds to the Legendre polynomials \cite{2018-nist}.
-
-\begin{itemize}
-  \item This basis yields a \textbf{sparse}, and in particular, \textbf{banded} operator.
-\end{itemize}
+As shown by, for example, ``the ultraspherical method'' \parencite{2013-a-fast-and-well-conditioned-spectral-method}, the basis of Jacobi polynomials can yield a \textbf{sparse}, and in particular, \textbf{banded} operator.
+This is due to the excellent property that derivatives of orthogonal polynomials and in particular, the Gegenbauer polynomials, can be expressed as tridiagonal matrices acting on coefficient space.
 
 \begin{figure}[H]
   \centering

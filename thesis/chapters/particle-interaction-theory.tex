@@ -7,29 +7,29 @@ As mentioned in the introduction.
 is a set of particles with position and velocity interacting with one another.
 % \paragraph{Inertia / kinetic energy}
 Each particle individually is subject to inertia and its kinetic energy (``second moment'' \footnote{
-  In kinetic theory, the $0$th moment is the mass $m_i$ of a particle, the first moment is the momentum $\vec{p_i}$ and the second moment is its kinetic energy $E_{kin,i}$.
+  In kinetic theory, the $0$th moment is the mass $m_i$ of a particle, the first moment is the momentum $\hat{\vec{p}}_i$ and the second moment is its kinetic energy $E_{kin,i}$.
 }) is given by
-$$E_{\text{kin},i} = \frac{\vec{p_i}^2}{2m} = \frac{(m \vec{v_i})^2}{2m} = \frac{1}{2} m \norm{\vec{v_i}}^2\,.$$
+$$E_{\text{kin},i} = \frac{\hat{\vec{p}}_i^2}{2m} = \frac{(m \hat{\vec{v}}_i)^2}{2m} = \frac{1}{2} m \norm{\hat{\vec{v}}_i}^2\,.$$
 The second important ingredient is an interaction potential motivating pairwise forces $\vec{F_{ij}} \in \R^d$ between particles
 $$\vec{F}_{ij} = -\nabla U_{ij} = -\left(\partial x_1, ..., \partial x_d\right)^T U_{ij}\,.$$
 
 The total potential of a system of $N_p \ge 2$ particles $U \in \R$ can be calculated by summing up the pair potentials $U_{ij} \in \R$ between all pairs of particles
-$$U = \sum_{i=1}^{N_p}\sum_{j=1, j \neq i}^{N_p} U_{ij} = \sum_{i=1}^{N_p}\sum_{j=1, j \neq i}^{N_p} K\left(\norm{\vec{x_i} - \vec{x_j}}\right)\,,$$
-where $\vec{x_i} \in \R^d$ represents the $d$-dimensional position of particle $i$, respectively.
+$$U = \sum_{i=1}^{N_p}\sum_{j=1, j \neq i}^{N_p} U_{ij} = \sum_{i=1}^{N_p}\sum_{j=1, j \neq i}^{N_p} K\left(\norm{\hat{\vec{x}}_i - \hat{\vec{x}}_j}\right)\,,$$
+where $\hat{\vec{x}}_i \in \R^d$ represents the $d$-dimensional position of particle $i$, respectively.
 
 In the absence of an external potential $V$, the total energy is given by $E = E_{\text{kin}} + U$, so
 \begin{equation}
-  E = \frac{1}{2} \sum_{i=1}^{N_p} m_i \vec{v_i}^2 + \sum_{i=1}^{N_p}\sum_{j=1, j \neq i}^{N_p} K\left(\norm{\vec{x_i} - \vec{x_j}}\right)\,.
+  E = \frac{1}{2} \sum_{i=1}^{N_p} m_i \hat{\vec{v}}_i^2 + \sum_{i=1}^{N_p}\sum_{j=1, j \neq i}^{N_p} K\left(\norm{\hat{\vec{x}}_i - \hat{\vec{x}}_j}\right)\,.
   \label{eq:total-energy}
 \end{equation}
 
-Each particle $i=1, ..., N_p$ at position $\vec{x_i} \in \R^d$ and time $t \in \R^+$ then follows
+Each particle $i=1, ..., N_p$ at position $\hat{\vec{x}}_i \in \R^d$ and time $t \in \R^+$ then follows
 \begin{equation}
-  \frac{\dd^2 \vec{x_i}}{\ddt^2} = f\left(\norm{\frac{\dd \vec{x_i}}{\ddt}}\right) \frac{\dd\vec{x_i}}{\ddt} - \frac{1}{N} \sum_{j=1, i\neq j}^{N} \nabla K\left(\norm{\vec{x_i} - \vec{x_j}}\right)\,,
+  \frac{\dd^2 \hat{\vec{x}}_i}{\ddt^2} = f\left(\norm{\frac{\dd \hat{\vec{x}}_i}{\ddt}}\right) \frac{\dd\hat{\vec{x}}_i}{\ddt} - \frac{1}{N} \sum_{j=1, i\neq j}^{N} \nabla K\left(\norm{\hat{\vec{x}}_i - \hat{\vec{x}}_j}\right)\,,
   \label{eq:evolution-equation}
 \end{equation}
 for reference see, for example, \parencite{2020-power-law-kernels, 2021-arbitrary-dimensions}.
-For now, we only consider the case without an external potential $V(\vec{x})$.
+For now, we only consider the case without an external potential $V(\hat{\vec{x}})$.
 
 \subsection{Attractive-Repulsive Potential}
 An example we will study is that of the attractive-repulsive interaction potential, where two power-law potentials compete with each other.
@@ -64,42 +64,48 @@ Possible parameter ranges are given by $C_a l_a^{d-2} > 1, l_a < 1$ \parencite{2
 \section{Continuous Limit}
 The evolution equation, in the continuous limit as $N_p \goesto \infty$, becomes
 \begin{equation}
-  \frac{\partial \rho}{\partial t} = \nabla \cdot \left(\rho \nabla K * \rho\right)\,.
+  \frac{\partial \hat{\rho}}{\partial t} = \nabla \cdot \left(\hat{\rho} \nabla K * \hat{\rho}\right)\,.
   \label{eq:continuous-evolution-equation}
 \end{equation}
-where $\rho: \R \mapsto \R$ is the particle density function.
+where $\hat{\rho}: \R \mapsto \R$ is the particle density function.
 \begin{proof}
   \hierKoennteIhreWerbungStehen
 \end{proof}
-The solution $\rho$ we are looking for within the scope of this dissertation is the \textit{equilibrium measure} (cf. \Cref{def:equilibrium-measure}) minimizing the total potential $U$.
+The solution $\hat{\rho}$ we are looking for within the scope of this dissertation is the \textit{equilibrium measure} (cf. \Cref{def:equilibrium-measure}) minimizing the total potential $U$.
 
 \begin{definition}{Equilibrium Measure}{equilibrium-measure}
-  For a given pairwise interaction potential $K: \R \mapsto \R$, the equilibrium measure $\rho: D \mapsto \R$ with $D \subseteq \R^d$ is a measure chosen such that
-  $$U_K[\rho] = \frac{1}{2} \iint K\left(\norm{\vec{x} - \vec{y}}\right) \,\dd\rho(\vec{x})\,\dd\rho(\vec{y})\,,$$
-  is minimised, where $\dd\rho = \rho(\vec{x})\dd\vec{x}$.
+  For a given pairwise interaction potential $K: \R \mapsto \R$, the equilibrium measure $\hat{\rho}: D \mapsto \R$ with $D \subseteq \R^d$ is a measure chosen such that
+  $$U_K[\hat{\rho}] := \frac{1}{2} \iint K\left(\norm{\hat{\vec{x}} - \hat{\vec{y}}}\right) \,\dd\hat{\rho}(\hat{\vec{x}})\,\dd\hat{\rho}(\hat{\vec{y}})\,,$$
+  is minimised, where $\dd\hat{\rho} = \hat{\rho}(\hat{\vec{x}})\dd\hat{\vec{x}}$.
 \end{definition}
 Also consider the total mass of the equilibrium distribution, given by
 \begin{equation}
-  M = \int \dd\rho = \int_{\supp(\rho)} \rho(\vec{x}) \,\dd\vec{x}\,,
+  M := \int \dd\hat{\rho} = \int_{\supp(\hat{\rho})} \hat{\rho}(\hat{\vec{x}}) \,\dd\hat{\vec{x}}\,,
   \label{eq:measure-mass}
 \end{equation}
-which, without loss of generality, we can choose as $M = 1$ to make $\rho(\vec{x})$ a \textit{probability distribution}.
+which, without loss of generality, we can choose as $M = 1$ to make $\hat{\rho}(\hat{\vec{x}})$ a \textit{probability distribution}.
 Also note that, as the integrand of the above integrals, we sometimes refer to the interaction potential $K$ as an integral kernel or simply \textit{kernel}.
 
-With these preliminaries in mind, we can define \href{def:the-problem}{the problem}.
+Due to the absence of an external potential, solutions usually have translational invariance, so one might as well choose them to be centered at the origin (i.e. on $D = B_R(\vec{0})$ instead of $B_R(\hat{\vec{x}}_{\text{center}})$).
 
-% \input{chapters/bits/function-space.tex}  % TODO!
+As throughout the rest of this document, we will restrict ourselves to radially symmetric solutions we will use $\hat{\vec{x}} := R\hat{\vec{x}} \in B_R(\vec{0})$ to denote position in the original $d$-dimensional ball domain of radius $R$, whereas $x \in B_1(\vec{0})$ denotes position in the normalised domain with radius $1$.
+Solutions on the original domain shall be denoted by $\hat{\rho} \in \functionspacehat$ whereas equilibrium measures $\rho \in \functionspace$ denote solutions on the normalised domain $B_1(\vec{0})$ with $\functionspace$ and $\functionspacehat$ given in \Cref{def:function-space}.
+Of course, $\hat{\rho}(\hat{\vec{x}}) = \hat{\rho}(R\vec{x}) = \rho(\vec{x})$.
+\input{chapters/bits/function-space.tex}
+
+With these preliminaries in mind, we can now define \href{def:the-problem}{the problem}.
 
 \begin{definition}[colframe=gray, colbacktitle=gray!30]{The Problem}{the-problem}
-  Finding an equilibrium measure $\rho: B_R(\vec{0}) \mapsto \R$ of mass $M = 1$ on a $d$-dimensional ball of radius $R \in \R^+$ that minimises the total potential $U_K[\rho]$ given an interaction kernel $K: \R^+ \mapsto \R$.
+  Finding an equilibrium measure $\hat{\rho}: B_R(\vec{0}) \mapsto \R$ of mass $M = 1$ on a $d$-dimensional ball of radius $R \in \R^+$ that minimises the total potential $U_K[\hat{\rho}]$ given an interaction kernel $K: \R^+ \mapsto \R$.
 \end{definition}
-% \hierKoennteIhreWerbungStehen
+
+The remaining chapter will briefly discuss (analytical) approaches taken in particle physics and computational biology to solve (a version of) the above problem.
 
 \section{Self-Propulsion}
 Makes it active matter.
 Self-propulsion and friction could be modelled as a quadratic of the form
-$$f(v_i) = 1.6 - 0.5 v_i^2\,,$$
-where $v_i := \norm{\vec{v_i}} = \norm{\frac{\dd\vec{x_i}}{\ddt}}$.
+$$f(\hat{v}_i) = 1.6 - 0.5 \hat{v}_i^2\,,$$
+where $\hat{v}_i := \norm{\hat{\vec{v}}_i} = \norm{\frac{\dd\hat{\vec{x}}_i}{\ddt}}$.
 
 \hierKoennteIhreWerbungStehen
 
@@ -121,10 +127,10 @@ Vlasov replaces the collision term with long-range interactions.
 
 \begin{theorem}{Liouville's}{liouville}
   Says that phase-space volume is conserved in situations of a pure particle-particle interaction.
-  $$\frac{d\rho}{dt}=
-    \frac{\partial\rho}{\partial t}
-    +\sum_{i=1}^n\left(\frac{\partial\rho}{\partial q_i}\dot{q}_i
-    +\frac{\partial\rho}{\partial p_i}\dot{p}_i\right)=0\,.$$
+  $$\frac{d\hat{\rho}}{dt}=
+    \frac{\partial\hat{\rho}}{\partial t}
+    +\sum_{i=1}^n\left(\frac{\partial\hat{\rho}}{\partial q_i}\dot{q}_i
+    +\frac{\partial\hat{\rho}}{\partial p_i}\dot{p}_i\right)=0\,.$$
 \end{theorem}
 
 \section{Vicsek Model}
@@ -145,7 +151,7 @@ This work was done by individually tracking each starling in the flock and using
 \cite{2017-explicit-solutions} provides some analytic solutions to \hyperref[def:the-problem]{the problem}.
 For example with an attractive-repulsive potential as given in \Cref{eq:attractive-repulsive-potential}, when $\alpha = 2$ and $\beta \in [-1, 2]$, the equilibrium measure is given by
 \begin{equation}
-  \rho(\vec{x}) = C_\beta \cdot R^d \cdot \left(R^2 - \vec{x}^2\right)^{\frac{1-\beta}{2}}\,,
+  \hat{\rho}(\hat{\vec{x}}) = C_\beta \cdot R^d \cdot \left(R^2 - \hat{\vec{x}}^2\right)^{\frac{1-\beta}{2}}\,,
   \label{eq:analytical-solution-alpha-equal-2}
 \end{equation}
 where
