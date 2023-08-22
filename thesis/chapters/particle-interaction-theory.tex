@@ -74,8 +74,8 @@ where $\rho: \R \mapsto \R$ is the particle density function.
 The solution $\rho$ we are looking for within the scope of this dissertation is the \textit{equilibrium measure} (cf. \Cref{def:equilibrium-measure}) minimizing the total potential $U$.
 
 \begin{definition}{Equilibrium Measure}{equilibrium-measure}
-  For a given pairwise interaction potential $K: \R \mapsto \R$, the equilibrium measure $\rho: \R \mapsto \R$ is a measure chosen such that
-  $$U = \frac{1}{2} \iint K\left(\norm{\vec{x} - \vec{y}}\right) \,\dd\rho(\vec{x})\,\dd\rho(\vec{y})\,,$$
+  For a given pairwise interaction potential $K: \R \mapsto \R$, the equilibrium measure $\rho: D \mapsto \R$ with $D \subseteq \R^d$ is a measure chosen such that
+  $$U_K[\rho] = \frac{1}{2} \iint K\left(\norm{\vec{x} - \vec{y}}\right) \,\dd\rho(\vec{x})\,\dd\rho(\vec{y})\,,$$
   is minimised, where $\dd\rho = \rho(\vec{x})\dd\vec{x}$.
 \end{definition}
 Also consider the total mass of the equilibrium distribution, given by
@@ -86,12 +86,14 @@ Also consider the total mass of the equilibrium distribution, given by
 which, without loss of generality, we can choose as $M = 1$ to make $\rho(\vec{x})$ a \textit{probability distribution}.
 Also note that, as the integrand of the above integrals, we sometimes refer to the interaction potential $K$ as an integral kernel or simply \textit{kernel}.
 
-\input{chapters/bits/function-space.tex}
+With these preliminaries in mind, we can define \href{def:the-problem}{the problem}.
 
-\subsection{The Problem}
-\label{sec:the-problem}
-Finding the equilibrium measure $\rho$ that minimises the total potential $U$ given an interaction kernel $K$.
-\hierKoennteIhreWerbungStehen
+% \input{chapters/bits/function-space.tex}  % TODO!
+
+\begin{definition}[colframe=gray, colbacktitle=gray!30]{The Problem}{the-problem}
+  Finding an equilibrium measure $\rho: B_R(\vec{0}) \mapsto \R$ of mass $M = 1$ on a $d$-dimensional ball of radius $R \in \R^+$ that minimises the total potential $U_K[\rho]$ given an interaction kernel $K: \R^+ \mapsto \R$.
+\end{definition}
+% \hierKoennteIhreWerbungStehen
 
 \section{Self-Propulsion}
 Makes it active matter.
@@ -140,8 +142,8 @@ This work was done by individually tracking each starling in the flock and using
 
 \section{Analytical Solutions}
 \label{sec:analytical-solutions}
-\cite{2017-explicit-solutions} provides some analytic solutions to \hyperref[sec:the-problem]{the problem}.
-For example, when $\alpha = 2$ and $\beta \in [-1, 2]$, the equilibrium measure is given by
+\cite{2017-explicit-solutions} provides some analytic solutions to \hyperref[def:the-problem]{the problem}.
+For example with an attractive-repulsive potential as given in \Cref{eq:attractive-repulsive-potential}, when $\alpha = 2$ and $\beta \in [-1, 2]$, the equilibrium measure is given by
 \begin{equation}
   \rho(\vec{x}) = C_\beta \cdot R^d \cdot \left(R^2 - \vec{x}^2\right)^{\frac{1-\beta}{2}}\,,
   \label{eq:analytical-solution-alpha-equal-2}

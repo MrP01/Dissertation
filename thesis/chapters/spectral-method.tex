@@ -39,7 +39,7 @@ The Jacobi polynomials are then defined from ${}_2F_1$ as follows:
 In order to obtain a recurrence relationship between the coefficients later, we make use of the Jacobi matrix (cf. \Cref{def:jacobi-matrix}).
 \input{chapters/bits/jacobi-matrix.tex}
 
-Finally, now that we have established the basis functions, we can write down an ansatz $\rho: B_1(\vec{0}) \mapsto \R$ for the solution of \hyperref[sec:the-problem]{the problem}, of the form
+Finally, now that we have established the basis functions, we can write down an ansatz $\rho: B_1(\vec{0}) \mapsto \R$ for the solution of \hyperref[def:the-problem]{the problem}, of the form
 \begin{equation}
   \rho(\vec{x}) := \left(1-\norm{\vec{x}}^{2}\right)^{m - \frac{\alpha + d}{2}} \sum_{k=0}^{N-1} \rho_k P_{k}^{\left(m - \frac{\alpha + d}{2},\frac{d-2}{2}\right)}(2 \norm{\vec{x}}^{2}-1)\,.
   \label{eq:ansatz}
@@ -146,13 +146,6 @@ There are more analytic solutions available for other parameter ranges, we will 
   \label{fig:convergence}
   \includegraphics[width=0.8\linewidth]{results/attrep/convergence.pdf}
   \caption[Step-by-step convergence of solutions compared to order 24]{Step-by-step convergence of numerical solutions $\rho_N(x)$ as compared to $\rho_{24}(x)$, visualised using the squared error of the pointwise evaluation of both functions in $200$ points.}
-\end{figure}
-
-\begin{figure}[H]
-  \centering
-  \label{fig:spatial-energy-dependence}
-  \includegraphics[width=0.7\linewidth]{results/attrep/energy-dependence-on-r.pdf}
-  \caption[Spatial energy dependence on $r$]{Plot of the spatial energy dependence on $r$, for different values of the domain support radius $R$. As one can see, $E(\vec{x}) = \jacobivec{x} Q_{\alpha,\beta} \vec{\rho}$ constant and this figure is only present as visual proof to increase our confidence in the construction of the spectral method.}
 \end{figure}
 
 \begin{figure}[H]
