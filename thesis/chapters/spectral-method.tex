@@ -19,7 +19,7 @@ The following section will introduce a few necessary objects and tools to unders
 We start with the Pochhammer symbol, another name for the \textit{rising factorial}, an unusual notation for a function but standard in the context of the special functions that will be introduced on top of it.
 \input{chapters/bits/rising-factorial.tex}
 
-As a second prerequisite, we introduce the closely intertwined beta- and gamma-functions.
+As a second prerequisite, we introduce the closely intertwined beta- and gamma-functions (\Cref{def:beta-function}, \Cref{def:gamma-function}).
 \input{chapters/bits/gamma-function.tex}
 \input{chapters/bits/beta-function.tex}
 
@@ -96,6 +96,28 @@ for some interval radius $R \in \R^+$, usually chosen as the smallest possible $
   \includegraphics[width=0.5\linewidth]{results/attrep/full-operator.pdf}
   \caption[Combination of the attractive-repulsive operators]{Spy plot of $Q_{\alpha, \beta}$, the combination of the attractive-repulsive operators. Inverting this operator and applying it to $(1, 0, ..., 0)^T \in \R^N$ will yield the unnormalised coefficients $\rho_k$ of the solution expansion given in \Cref{eq:ansatz}.}
 \end{figure}
+
+\section{Solving a Linear System}
+Once the operator is computed, we are now looking for a set of solution coefficients $\vec{\rho} \in \R^N$ such that the energy on the domain $D = B_R(\vec{0})$ is constant.
+That means, we are looking for $\vec{\rho} \in \R^N$ such that
+\begin{equation}
+  Q[\rho](\vec{x}) = E(\vec{x}) = E\,,
+\end{equation}
+where we can expand $E(\vec{x}) = \jacobivec{P} \cdot \vec{E}$ into Jacobi polynomials with coefficients $\vec{E} = (E, 0, ..., 0)^T$ such that the energy is constant along the entire domain, so $E(\vec{x}) = E \cdot P_0^{(a, b)}\left(\jacobiarg{x}\right) = E$.
+In matrix form, that is
+$$Q \vec{\rho} = \vec{E} \qLRq \begin{pmatrix}
+    q_{00}    & \dots  & q_{0,N-1}   \\
+    \vdots    & \ddots & \vdots      \\
+    q_{N-1,0} & \dots  & q_{N-1,N-1} \\
+  \end{pmatrix} \begin{pmatrix}
+    \rho_0 \\
+    \vdots \\
+    \rho_{N-1}
+  \end{pmatrix} = \begin{pmatrix}
+    E       \\
+    \vec{0} \\
+    0
+  \end{pmatrix}\,.$$
 
 \section{Results}
 \begin{figure}[H]

@@ -1,18 +1,18 @@
-Based on the Three-Term Recurrence Relationship (cf. \Cref{thm:three-term-recurrence-relationship}).
-
-One can even determine an explicit relationship between the coefficients
-in the Jacobi expansion by considering the Jacobi Matrix (cf. \Cref{def:jacobi-matrix}).
-
-Considering the operator $\hat{Q}^\beta[\rho]$ as in \Cref{thm:theorem216}, from the ansatz $\rho(\vec{x})$ (cf. \Cref{eq:ansatz}) we have
+Considering only a single power-law operator
+$$\hat{Q}^\beta[\rho](\vec{x}) := \frac{1}{\beta} \int_{B_1(\vec{0})} \norm{\vec{x}-\vec{y}}^\beta \,\dd\vec{y}\,,$$
+from the ansatz $\rho(\vec{x})$ (cf. \Cref{eq:ansatz}) we have
 \begin{equation}
   \hat{Q}^{\beta}(x) = \sum_{k=0}^{N-1} \rho_{k} \int_{B_1(\vec{0})} \norm{\vec{x}-\vec{y}}^{\beta} \weight{y}\jacobi{y} \,\dd\vec{y}\,.
   \label{eq:theorem216-in-derivation}
 \end{equation}
+as in \Cref{thm:theorem216}.
 
 We are now interested in a numerical representation of the operator $\hat{Q}^\beta$ acting on the function $\rho \in \functionspace$, so an equivalent (linear) operator $Q^\beta: \R^N \mapsto \R^N$ acting on the coefficients $\rho_k \in \R,\, k = 1, ..., N$.
 As every finite-dimensional linear operator must have a matrix representation, we are looking for a $Q^\beta \in \R^{N \times N}$ such that
 $$\hat{Q}^\beta[\rho](\vec{x}) = \jacobivec{x} \cdot Q^\beta \vec{\rho}\,,$$
 where $\jacobivec{x} \in \R^N$ is the vector of Jacobi polynomials $P^{(a, b)}_0(x)$, $P^{(a, b)}_1(x)$, ..., $P^{(a, b)}_{N-1}(x)$ evaluated at $2\norm{\vec{x}}^2 - 1$ as introduced in and after \Cref{def:jacobi-polynomials}.
+
+Based on the Three-Term Recurrence Relationship (cf. \Cref{thm:three-term-recurrence-relationship}), one can even determine an explicit relationship between the coefficients in the Jacobi expansion by considering the Jacobi Matrix (cf. \Cref{remark:jacobi-matrix}).
 
 % TODO: this section has weird indexing (start at 0 or 1?) and needs some work.
 Therefore, starting from \Cref{eq:theorem216-in-derivation}, we obtain
@@ -30,9 +30,9 @@ which we will rewrite in matrix-form,
   \end{pmatrix} = \vec{P}(\vec{x}) \cdot
   \underbrace{
     \begin{pmatrix}
-      q_{11} & \dots  & q_{1N} \\
-      \vdots & \ddots & \vdots \\
-      q_{N1} & \dots  & q_{NN} \\
+      q_{00}    & \dots  & q_{0,N-1}   \\
+      \vdots    & \ddots & \vdots      \\
+      q_{N-1,0} & \dots  & q_{N-1,N-1} \\
     \end{pmatrix}
   }_{=: Q^\beta}
   \begin{pmatrix}
