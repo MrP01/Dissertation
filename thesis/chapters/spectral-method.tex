@@ -4,11 +4,11 @@
 % \section{Content}
 % \input{chapters/out/Spectral Method.md.tex}
 
-In this chapter we will construct a spectral method in the basis of Jacobi polynomials to explore the solution of equilibrium distributions $\hat{\rho}(\hat{\vec{x}})$.
-Starting from a many-body system and considering the continuous limit as $N_p \goesto \infty$, in \Cref{chap:particle-interaction-theory} we have already established the governing equation of the particle density distribution $\hat{\rho}(\hat{\vec{x}})$ in such a system.
+In this chapter we will construct a spectral method in the basis of Jacobi polynomials to explore the solution of equilibrium distributions $\hat{\rho}(\hatvec{x})$.
+Starting from a many-body system and considering the continuous limit as $N_p \goesto \infty$, in \Cref{chap:particle-interaction-theory} we have already established the governing equation of the particle density distribution $\hat{\rho}(\hatvec{x})$ in such a system.
 
-As mentioned in \Cref{chap:particle-interaction-theory}, the numerical approaches will be carried out on the normalised domain $B_1(\vec{0})$ and we will be looking for $\rho \in \functionspace$ while in general we are interested in $\hat{\rho} \in \functionspacehat$ solving \href{def:the-problem}{our problem}.
-Both versions are related by $\hat{\rho}(\hat{\vec{x}}) = \rho(\vec{x})$ and $\hat{\vec{x}} := R \vec{x}$.
+As mentioned in \Cref{chap:particle-interaction-theory}, the numerical approaches will be carried out on the normalised domain $B_1(\vec{0})$ and we will be looking for $\rho \in \functionspace$, whilst in general we are interested in the $\hat{\rho} \in \functionspacehat$ solving \href{def:the-problem}{our problem}.
+Both versions are related by $\hat{\rho}(\hatvec{x}) = \rho(\vec{x})$ and $\hatvec{x} := R \vec{x}$.
 
 Can we put together a numerical method to solve for the equilibrium distribution (cf. \Cref{def:equilibrium-measure})?
 Let us consider the problem from the bottom up and start from the solution:
@@ -65,7 +65,7 @@ In order to establish said linear system, we first need to introduce the \textit
 \input{chapters/bits/mass-of-solution.tex}
 
 \pagebreak
-\section{Derivation of Operator}
+\section{Derivation of the Operator}
 \input{chapters/bits/operator.tex}
 \input{chapters/bits/derivation-of-operator-matrix.tex}
 
@@ -76,12 +76,21 @@ In order to establish said linear system, we first need to introduce the \textit
   \caption[Attractive and repulsive operators.]{The attractive and repulsive operators (matrices) as given in \Cref{def:operator}, the matrix values are shown in a $\log_{10}$ color scale. Due to the choice of basis, the attractive operator is exactly banded. The repulsive parameter is only approximately banded, which the spy plots effectively demonstrate.}
 \end{figure}
 
-The bandedness of the attractive operator is due to the three-term recurrence relationship of the Jacobi polynomial basis.
+The bandedness of the attractive operator in \Cref{fig:attractive-repulsive} is due to the three-term recurrence relationship of the Jacobi polynomial basis (cf. \Cref{thm:three-term-recurrence-relationship} and \Cref{def:jacobi-polynomials}).
 % TODO.. explain
 
-For the attractive-repulsive interaction potential, the full operator is given by
+For the attractive-repulsive interaction potential $K_{\alpha,\beta}(r)$, the full operator is given by
+\begin{align*}
+  \hat{Q}_{\alpha, \beta}[\hat{\rho}](\hatvec{x}) & := \int_{B_R(\vec{0})} K_{\alpha,\beta}\left(\norm{\hatvec{x} - \hatvec{y}}\right) \hat{\rho}(\hatvec{y}) \,\dd\hatvec{y}                                                               \\
+                                                  & = \int_{B_R(\vec{0})} \left(\frac{\norm{\hatvec{x} - \hatvec{y}}^\alpha}{\alpha} - \frac{\norm{\hatvec{x} - \hatvec{y}}^\beta}{\beta}\right) \hat{\rho}(\hatvec{y}) \,\dd\hatvec{y}     \\
+                                                  & = \int_{B_1(\vec{0})} \left(\frac{R^\alpha \norm{\vec{x} - \vec{y}}^\alpha}{\alpha} - \frac{R^\beta \norm{\vec{x} - \vec{y}}^\beta}{\beta}\right) \hat{\rho}(R\vec{y}) \, R^d\dd\vec{y} \\
+                                                  & = R^d\int_{B_1(\vec{0})} \left(\frac{R^\alpha}{\alpha}\norm{\vec{x} - \vec{y}}^\alpha - \frac{R^\beta}{\beta} \norm{\vec{x} - \vec{y}}^\beta\right) \rho(\vec{y}) \,\dd\vec{y}          \\
+                                                  & = \frac{R^{\alpha+d}}{\alpha} \hat{Q}^\alpha[\rho](\vec{x}) - \frac{R^{\beta+d}}{\beta} \hat{Q}^\beta[\rho](\vec{x})\,,
+\end{align*}
+where one needs to carefully handle the variable transform with $\dd\hatvec{y} = R^d \dd\vec{y}$ in $d$ dimensions whereas the vectors themselves obey $\hatvec{y} = R \vec{y}$ as established previously.
+In matrix form that is,
 \begin{equation}
-  Q_{\alpha, \beta} := \frac{R^\alpha}{\alpha} Q^\alpha - \frac{R^\beta}{\beta} Q^\beta
+  Q_{\alpha, \beta} := \frac{R^{\alpha+d}}{\alpha} Q^\alpha - \frac{R^{\beta+d}}{\beta} Q^\beta
   \label{eq:full-attrep-operator}
 \end{equation}
 for some interval radius $R \in \R^+$, usually chosen as the smallest possible $R$ such that $\supp(\rho) \subseteq [-R, R]$.
@@ -97,7 +106,7 @@ for some interval radius $R \in \R^+$, usually chosen as the smallest possible $
 Once the operator is computed, we are now looking for a set of solution coefficients $\vec{\rho} \in \R^N$ such that the energy on the domain $D = B_R(\vec{0})$ is constant.
 That means, we are looking for $\vec{\rho} \in \R^N$ such that
 \begin{equation}
-  Q[\rho](\vec{x}) = E(\vec{x}) = E\,,
+  \hat{Q}[\rho](\vec{x}) = E(\vec{x}) = E\,,
 \end{equation}
 where we can expand $E(\vec{x}) = \jacobivec{x} \cdot \vec{E}$ into Jacobi polynomials with coefficients $\vec{E} = (E, 0, ..., 0)^T$ such that the energy is constant along the entire domain, so $E(\vec{x}) = E \cdot P_0^{(a, b)}\left(\jacobiarg{x}\right) = E$.
 In matrix form, that is
