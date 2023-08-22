@@ -1,8 +1,8 @@
 \begin{theorem}{Integration Theorem that needs a name}{theorem216}
   On the $d$-dimensional unit ball $B_1$ the power law potential, with power $\alpha \in(-d,2+2m-d)$, $m\in\mathbb{N}_0$ and $\beta>-d$, of the $n$-th weighted radial Jacobi polynomial $$(1-|y|^2)^{m-\frac{\alpha+d}{2}}P_n^{\left(m-\frac{\alpha+d}{2},\frac{d-2}{2}\right)}(2|y|^2-1)$$ reduces to a Gaussian hypergeometric function as follows:
   \begin{align*}
-    \int_{B_1(\vec{0})} & \norm{\vec{x}-\vec{y}}^\beta \left(1-\norm{\vec{y}}^2\right)^{m-\frac{\alpha+d}{2}} P_{n}^{\left(m-\frac{\alpha+d}{2},\frac{d-2}{2}\right)}\left(\jacobiarg{y}\right) \dd\vec{y}                                                                                                                                                                                                                           \\
-                        & = \tfrac{\pi ^{d/2} \Gamma \left(1+\frac{\beta}{2}\right) \Gamma \left(\frac{\beta+d}{2}\right) \Gamma \left(m+n-\frac{\alpha+d}{2}+1\right)}{\Gamma \left(\frac{d}{2}\right) \Gamma (n+1) \Gamma \left(\frac{\beta}{2}-n+1\right) \Gamma \left(\frac{\beta-\alpha}{2}+m+n+1\right)}{}_2F_1\left(\begin{matrix}n-\frac{\beta}{2}, -m-n+\frac{\alpha-\beta}{2} \\\frac{d}{2}\end{matrix};\norm{x}^2\right).
+    \int_{B_1(\vec{0})} & \norm{\vec{x}-\vec{y}}^\beta \left(1-\norm{\vec{y}}^2\right)^{m-\frac{\alpha+d}{2}} P_{n}^{\left(m-\frac{\alpha+d}{2},\frac{d-2}{2}\right)}\left(\jacobiarg{y}\right) \dd\vec{y}                                                                                                                                                                                                                                   \\
+                        & = \tfrac{\pi ^{d/2} \Gamma \left(1+\frac{\beta}{2}\right) \Gamma \left(\frac{\beta+d}{2}\right) \Gamma \left(m+n-\frac{\alpha+d}{2}+1\right)}{\Gamma \left(\frac{d}{2}\right) \Gamma (n+1) \Gamma \left(\frac{\beta}{2}-n+1\right) \Gamma \left(\frac{\beta-\alpha}{2}+m+n+1\right)}{}_2F_1\left(\begin{matrix}n-\frac{\beta}{2}, -m-n+\frac{\alpha-\beta}{2} \\\frac{d}{2}\end{matrix};\norm{\vec{x}}^2\right)\,.
   \end{align*}
 \end{theorem}
 
@@ -18,9 +18,9 @@
 
   We begin by applying \Cref{lemma:jacobi-polynomial-series} to the inside of the integrand.
   \begin{align*}
-    \int_{B_1(\vec{0})} & \norm{\vec{x}-\vec{y}}^\beta \weight{y} \jacobi[n]{y} \dd\vec{y}                                                                                             \\
-                        & = C_{a,b,n} \sum_{k=0}^n \binom{n}{k} C_{a,b,n,k} \int_{B_1(\vec{0})} \norm{\vec{x}-\vec{y}}^\beta \weight{y} \left(\norm{\vec{y}}^2 - 1\right)^k \dd\vec{y} \\
-                        & = C_{a,b,n} \sum_{k=0}^n \binom{n}{k} C_{a,b,n,k} (-1)^k \int_{B_1(\vec{0})} \norm{\vec{x}-\vec{y}}^\beta \weight[a+k]{y} \dd\vec{y}
+    I := \int_{B_1(\vec{0})} & \norm{\vec{x}-\vec{y}}^\beta \weight{y} \jacobi[n]{y} \dd\vec{y}                                                                                             \\
+                             & = C_{a,b,n} \sum_{k=0}^n \binom{n}{k} C_{a,b,n,k} \int_{B_1(\vec{0})} \norm{\vec{x}-\vec{y}}^\beta \weight{y} \left(\norm{\vec{y}}^2 - 1\right)^k \dd\vec{y} \\
+                             & = C_{a,b,n} \sum_{k=0}^n \binom{n}{k} C_{a,b,n,k} (-1)^k \int_{B_1(\vec{0})} \norm{\vec{x}-\vec{y}}^\beta \weight[a+k]{y} \dd\vec{y}
   \end{align*}
   where $a := m-\frac{\alpha+d}{2}$ and $b := \frac{d-2}{2}$.
   Note that from the first to the second line, we used $\frac{z-1}{2} = \frac{2\norm{\vec{y}}^2-1 - 1}{2} = \norm{\vec{y}}^2 - 1$.
@@ -34,8 +34,8 @@
   We identify the remaining integral as the Riesz potential $I_{\beta+d}[u](\vec{x})$ of the function $u(\vec{y}) := \left(1-\norm{\vec{y}}^2\right)^{a+k}$, which we can evaluate using Lemma 2.4 from \cite{2011-porous-medium-1}:
   \begin{align*}
     \int_{B_1(\vec{0})} & \norm{\vec{x}-\vec{y}}^\beta \weight[a+k]{y} \dd\vec{y} = c_{\beta+d} I_{\beta+d}\left[\vec{y} \mapsto \left(1-\norm{\vec{y}}^2\right)^{a+k}\right](\vec{x}) \\
-                        & = c_{\beta+d} C_{a+k, \beta, d} \cdot {}_2F_1\left(\begin{matrix}\frac{d-(\beta+d)}{2}, -a-k-\frac{\beta+d}{2} \\d/2\end{matrix}; \norm{\vec{y}}^2\right)    \\
-                        & = c_{\beta+d} C_{a+k, \beta, d} \cdot {}_2F_1\left(\begin{matrix}-\beta/2, -m-k+\frac{\alpha-\beta}{2} \\d/2\end{matrix}; \norm{\vec{y}}^2\right)
+                        & = c_{\beta+d} C_{a+k, \beta, d} \cdot {}_2F_1\left(\begin{matrix}\frac{d-(\beta+d)}{2}, -a-k-\frac{\beta+d}{2} \\d/2\end{matrix}; \norm{\vec{x}}^2\right)    \\
+                        & = c_{\beta+d} C_{a+k, \beta, d} \cdot {}_2F_1\left(\begin{matrix}-\beta/2, -m-k+\frac{\alpha-\beta}{2} \\d/2\end{matrix}; \norm{\vec{x}}^2\right)
   \end{align*}
   because $-a-k-\frac{\beta+d}{2} = -m + \frac{\alpha+d}{2} -k - \frac{\beta+d}{2} = -m-k+\frac{\alpha-\beta}{2}$ with constants
   \begin{align*}
@@ -43,10 +43,27 @@
     C_{a+k, \beta, d} & := \frac{\Gamma(a+k+1) \Gamma(-\beta/2)}{2^{\beta+d}\Gamma(d/2) \Gamma\left(a+k+\frac{\beta+d}{2}+1\right)} \quad \text{\textcolor{gray}{from Lemma 2.4}}\,,
   \end{align*}
   and therefore
-  $$c_{\beta+d} C_{a+k, \beta, d} = \frac{\cancel{2^{\beta+d}} \pi^{d/2} \Gamma\left(\frac{\beta+d}{2}\right) \Gamma(a+k+1) \cancel{\Gamma(-\beta/2)}}{\cancel{\Gamma(-\beta/2)} \cancel{2^{\beta+d}}\Gamma(d/2) \Gamma\left(a+k+\frac{\beta+d}{2}+1\right)} = \frac{\pi^{d/2}}{\Gamma(d/2)} B\left(\tfrac{\beta+d}{2}, a+1\right)\,.$$
+  $$c_{\beta+d} C_{a+k, \beta, d} = \frac{\cancel{2^{\beta+d}} \pi^{d/2} \Gamma\left(\frac{\beta+d}{2}\right) \Gamma(a+k+1) \cancel{\Gamma(-\beta/2)}}{\cancel{\Gamma(-\beta/2)} \cancel{2^{\beta+d}}\Gamma(d/2) \Gamma\left(a+k+\frac{\beta+d}{2}+1\right)} = \frac{\pi^{d/2}B\left(\tfrac{\beta+d}{2}, a+k+1\right)}{\Gamma(d/2)}\,,$$
+  using \Cref{eq:beta-gamma}.
   So that finally,
   \begin{align*}
-    \int_{B_1(\vec{0})} & \norm{\vec{x}-\vec{y}}^\beta \weight[a+k]{y} \dd\vec{y}                                                                                                                                                    \\
-                        & =\frac{\pi^{d/2}}{\Gamma(d/2)} B\left(\tfrac{\beta+d}{2}, m-\tfrac{\alpha+d}{2}+1\right) \cdot {}_2F_1\left(\begin{matrix}-\beta/2, -m-k+\frac{\alpha-\beta}{2} \\d/2\end{matrix}; \norm{\vec{y}}^2\right)\,.
+    \int_{B_1(\vec{0})} & \norm{\vec{x}-\vec{y}}^\beta \weight[a+k]{y} \dd\vec{y}                                                                                                                                                         \\
+                        & =\frac{\pi^{d/2}}{\Gamma(d/2)} B\left(\tfrac{\beta+d}{2}, m-\tfrac{\alpha+d}{2}+k+1\right) \cdot {}_2F_1\left(\begin{matrix}-\beta/2, -m-k+\frac{\alpha-\beta}{2} \\d/2\end{matrix}; \norm{\vec{x}}^2\right)\,.
   \end{align*}
+
+  Plugging this back into the original form above, carrying along the same parameters,
+  \begin{align*}
+    I = C_{a,b,n} \sum_{k=0}^n \binom{n}{k} C_{a,b,n,k} (-1)^k \frac{\pi^{d/2}}{\Gamma(d/2)} B\left(\cdot, \cdot\right) {}_2F_1\left(\dots; \norm{\vec{x}}^2\right)\,
+  \end{align*}
+  we can apply Equation (2.1) in \cite{2021-arbitrary-dimensions} after some algebra, the special case of an identity given in \cite{1986-crazy-hypergeometric-properties} to obtain a ${}_3F_2$ (three terms in the numerator, two in the denominator) function
+  \begin{align*}
+    I \propto {}_3F_2\left(\begin{matrix}-\beta/2, n-\beta/2, -m-n+\frac{\alpha-\beta}{2} \\d/2, -\beta/2\end{matrix}; \norm{\vec{x}}^2\right)\,,
+  \end{align*}
+  which we expand into its definition \Cref{def:generalised-hypergeometric-series} to see that two terms cancel:
+  \begin{align*}
+    I \propto \sum_{k=0}^{\infty} \frac{\cancel{(-\beta/2)_k}, (n-\beta/2)_k, \left(-m-n+\frac{\alpha-\beta}{2}\right)_k}{(d/2)_k \cancel{(-\beta/2)_k}} \frac{\norm{\vec{x}}^{2k}}{k!}\,,
+  \end{align*}
+  which results back in a ${}_2F_1$ function (two terms in the numerator, one in the denominator), the so-called Gaussian hypergeometric function, cf. \Cref{lemma:gaussian-hypergeometric-function}, and after combining $C_{a,b,n}$, $C_{a,b,n,k}$, $\frac{\pi^{d/2}}{\Gamma(d/2)}$ with the gamma-function expansion of $B\left(\tfrac{\beta+d}{2}, m-\tfrac{\alpha+d}{2}+k+1\right)$ according to \Cref{eq:beta-gamma}, and cancelling terms, one finally obtains
+  $$I = \tfrac{\pi^{d/2} \Gamma \left(1+\frac{\beta}{2}\right) \Gamma \left(\frac{\beta+d}{2}\right) \Gamma \left(m+n-\frac{\alpha+d}{2}+1\right)}{\Gamma \left(\frac{d}{2}\right) \Gamma (n+1) \Gamma \left(\frac{\beta}{2}-n+1\right) \Gamma \left(\frac{\beta-\alpha}{2}+m+n+1\right)}{}_2F_1\left(\begin{matrix}n-\frac{\beta}{2}, -m-n+\frac{\alpha-\beta}{2} \\\frac{d}{2}\end{matrix};\norm{\vec{x}}^2\right)\,,$$
+  concluding the proof.
 \end{proof}
