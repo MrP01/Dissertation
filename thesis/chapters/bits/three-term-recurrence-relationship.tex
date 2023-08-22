@@ -1,9 +1,28 @@
 \begin{theorem}{Three-Term Recurrence Relationship}{three-term-recurrence-relationship}
-  All orthogonal polynomials (cf. \Cref{def:orthogonal-polynomials}) have (at least) a three-term recurrence relationship.
+  All orthogonal polynomials $\{p_0, p_1, p_2, ...\}$ (cf. \Cref{def:orthogonal-polynomials}) have (at least) a three-term recurrence relationship of the form
+  $$A_n p_{n+1}(x) = B_n p_n(x) + C_n p_{n-1}(x)\,.$$
 \end{theorem}
 \begin{proof}
-  % TODO: how could I prove this exists for all?
-  \hierKoennteIhreWerbungStehen
+  Consider ``$x p_n$''$:= x \mapsto x p_n(x)$, a polynomial with $\deg(x p_n) \le n+1$.
+  Therefore, it must be possible to write
+  $$x p_n(x) = \sum_{k=0}^{n+1} \hat{a}_k p_k(x)\,,\quad \text{for some}~\hat{a}_k \in \R, k=0, ..., n+1\,.$$
+  Now, for all $n \ge 0$ and $m \le n+1$ we have
+  $$\langle xp_n, p_m \rangle_w = \sum_{k=0}^{n+1} \hat{a}_k \langle p_k, p_m \rangle_w = \sum_{k=0}^{n+1} \hat{a}_k \delta_{i,k} = \hat{a}_m \langle p_m, p_m \rangle_w\,,$$
+  due to the orthogonality relationship (\Cref{thm:jacobi-orthogonality-condition}).
+  Therefore,
+  \begin{equation}
+    \hat{a}_m = \frac{\langle xp_n, p_m \rangle_w}{\langle p_m, p_m \rangle_w} \quad\text{for all}~m \le n+1\,.
+    \label{eq:three-term-step}
+  \end{equation}
+
+  But when $m < n-1$, we have $\deg(xp_m) < n$ so $x p_m(x) = \sum_{k=0}^{n-1} \hat{b}_k p_k(x)$ for some (potentially 0) $\hat{b}_k$ and therefore $\langle p_n, xp_m \rangle_w = \sum_{k=0}^{n-1} \hat{b}_k \langle p_n, p_k \rangle_w = 0$,
+  which, by the symmetry of the inner product (\Cref{remark:symmetry-of-inner-product}), also implies $\langle x p_n, p_m \rangle_w = 0$ which, by \Cref{eq:three-term-step}, allows us to conclude that the earlier coefficients $\hat{a}_m = 0$.
+
+  And obviously, even if we assumed higher-order coefficients in the expansion of $xp_n$, when $m > n+1 \Leftrightarrow n < m-1$, $\deg(xp_n) < m$ and so all later coefficients $\hat{a}_m = 0$.
+
+  Recall that by definition, $xp_n(x) = \sum_{k=0}^{n+1} \hat{a}_k p_k(x)$, which in combination with our insights above means that
+  $$xp_n(x) = \hat{a}_{n-1} p_{n-1}(x) + \hat{a}_{n} p_n(x) + \hat{a}_{n+1} p_{n+1}(x)\,,$$
+  concluding the proof.
 \end{proof}
 
 For example, for the Chebyshev polynomials (cf. \Cref{def:chebyshev-polynomials}) we have

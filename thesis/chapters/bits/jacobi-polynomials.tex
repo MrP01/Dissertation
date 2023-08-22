@@ -45,7 +45,7 @@ $$f(x) = \sum_{k=0}^{N-1} f_k P_k^{(a, b)}(x) \qLRq f(x) = \vec{f} \cdot \vec{P}
 to express that a function $f$ is a linear combination of basis polynomials with coefficients $\vec{f} = (f_0, ..., f_{N-1})^T \in \R^N$.
 So $\vec{P}^{(a, b)}(x) \in \R^N$ is the vector of Jacobi polynomials $P^{(a, b)}_0(x)$, $P^{(a, b)}_1(x)$, ..., $P^{(a, b)}_{N-1}(x)$.
 
-\begin{lemma}{Jacobi Polynomial Orthogonality}{jacobi-orthogonality-condition}
+\begin{theorem}{Jacobi Polynomial Orthogonality}{jacobi-orthogonality-condition}
   Jacobi polynomials $P_n^{(a,b)}(x)$ are orthogonal on $[-1,1]$ with respect to the weight function
   \begin{equation*}
     w^{(a,b)}(x)=(1-x)^a (1+x)^b\,,
@@ -55,7 +55,7 @@ So $\vec{P}^{(a, b)}(x) \in \R^N$ is the vector of Jacobi polynomials $P^{(a, b)
     \int_{-1}^1(1-x)^a(1+x)^bP_n^{(a,b)}P_m^{(a,b)}\,\ddx = \frac{2^{a+b+1} \Gamma (a+n+1) \Gamma (b+n+1)}{n! (a+b+2 n+1) \Gamma (a+b+n+1)} \delta_{n,m}\,,
   \end{align*}
   with $a	,b>-1$, which uniquely determines $P_n^{(a,b)}(x)$.
-\end{lemma}
+\end{theorem}
 \begin{proof}
   See, for example, \cite{1995-jacobi-orthogonality-proof}.
 \end{proof}
