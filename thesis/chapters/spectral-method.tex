@@ -49,6 +49,17 @@ with $P_k^{(a, b)}$ the Jacobi polynomials and $\{\rho_k\}_{k=0, ..., N-1}$ the 
 
 The spectral method can then be written as a linear system involving a matrix (operator).
 \input{chapters/bits/operator.tex}
+
+$(-\Delta)^{-s}$ denotes the inverse fractional Laplacian $\Delta := \nabla^2$ with power $s \in (0, 1)$.
+
+The fractional Laplacian $(-\Delta)^{-s}$ is given by the Riesz potential \cite{2015-fractional-laplacian-definitions}.
+
+% TODO: can we accept any gamma?
+\begin{definition}{Riesz Potential}{riesz-potential}
+  For a given function $u: \R^d \mapsto \R$ and $\gamma \in \R$, its \textit{Riesz potential} $I_{\gamma}[u]$ is given by
+  $$I_{\gamma}[u](\vec{x}) := \frac{2^{-\gamma} \Gamma(\tfrac{d-\gamma}{2})}{\pi^{d/2} \Gamma(\gamma/2)} \int_{\R^d} \frac{u(\vec{z})}{\norm{\vec{x}-\vec{z}}^{d-\gamma}} \dd\vec{z}\,.$$
+\end{definition}
+
 \input{chapters/bits/theorem216.tex}
 
 \Cref{thm:theorem216} gives an explicit expression for the main integral \(\hat{Q}^{\beta}: L \mapsto L\), an operator from the function space \(L\) to the function space \(L\), we are interested in:

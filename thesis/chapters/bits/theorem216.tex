@@ -1,4 +1,4 @@
-\begin{theorem}{Integration Theorem that needs a name}{theorem216}
+\begin{theorem}{Power-law Potential of the $n$th Jacobi Polynomial}{theorem216}
   On the $d$-dimensional unit ball $B_1$ the power law potential, with power $\alpha \in(-d,2+2m-d)$, $m\in\mathbb{N}_0$ and $\beta>-d$, of the $n$-th weighted radial Jacobi polynomial $$(1-|y|^2)^{m-\frac{\alpha+d}{2}}P_n^{\left(m-\frac{\alpha+d}{2},\frac{d-2}{2}\right)}(2|y|^2-1)$$ reduces to a Gaussian hypergeometric function as follows:
   \begin{align*}
     \int_{B_1(\vec{0})} & \norm{\vec{x}-\vec{y}}^\beta \left(1-\norm{\vec{y}}^2\right)^{m-\frac{\alpha+d}{2}} P_{n}^{\left(m-\frac{\alpha+d}{2},\frac{d-2}{2}\right)}\left(\jacobiarg{y}\right) \dd\vec{y}                                                                                                                                                                                                                                   \\
@@ -7,15 +7,6 @@
 \end{theorem}
 
 \begin{proof}[Proof (adapted from \cite{2021-arbitrary-dimensions})]
-  Using
-  $$(-\Delta)^{-s} \left((R^2 - \norm{\vec{y}}^2)^q\right) = C_{q, s, d} R^{2q+2s} {}_2F_1\left(\begin{matrix}d/2 - s, -q-s \\ d/2 \end{matrix}; \frac{\norm{\vec{y}}^2}{R^2}\right)$$
-  for $\norm{\vec{y}} \le R$ with $R = 1$ where $(-\Delta)^{-s}$ denotes the inverse fractional Laplacian $\Delta := \nabla^2$ with power $s \in (0, 1)$ and $q \in \R^+$
-  from \cite{2014-barenblatt} based on the \textit{Weber-Schafheitlin} integral of two Bessel functions given in \cite{1945-bessel-integral}.
-  $$C_{q,s,d} = \frac{2^{-2s} \Gamma(q+1) \Gamma(d/2-s)}{\Gamma(d/2) \Gamma(q+s+1)}$$
-  The Weber-Schafheitlin integrals are related to the fractional Laplacians of aforementioned functions because the Fourier transform of ${}_2F_1$ is a bessel function.
-
-  The fractional Laplacian $(-\Delta)^{-s}$ is given by the Riesz potential \cite{2015-fractional-laplacian-definitions}.
-
   We begin by applying \Cref{lemma:jacobi-polynomial-series} to the inside of the integrand.
   \begin{align*}
     I := \int_{B_1(\vec{0})} & \norm{\vec{x}-\vec{y}}^\beta \weight{y} \jacobi[n]{y} \dd\vec{y}                                                                                             \\
@@ -35,9 +26,9 @@
   \begin{align*}
     \int_{B_1(\vec{0})} & \norm{\vec{x}-\vec{y}}^\beta \weight[a+k]{y} \dd\vec{y} = c_{\beta+d} I_{\beta+d}\left[\vec{y} \mapsto \left(1-\norm{\vec{y}}^2\right)^{a+k}\right](\vec{x}) \\
                         & = c_{\beta+d} C_{a+k, \beta, d} \cdot {}_2F_1\left(\begin{matrix}\frac{d-(\beta+d)}{2}, -a-k-\frac{\beta+d}{2} \\d/2\end{matrix}; \norm{\vec{x}}^2\right)    \\
-                        & = c_{\beta+d} C_{a+k, \beta, d} \cdot {}_2F_1\left(\begin{matrix}-\beta/2, -m-k+\frac{\alpha-\beta}{2} \\d/2\end{matrix}; \norm{\vec{x}}^2\right)
+                        & = c_{\beta+d} C_{a+k, \beta, d} \cdot {}_2F_1\left(\begin{matrix}-\beta/2, -m-k+\frac{\alpha-\beta}{2} \\d/2\end{matrix}; \norm{\vec{x}}^2\right)\,,
   \end{align*}
-  because $-a-k-\frac{\beta+d}{2} = -m + \frac{\alpha+d}{2} -k - \frac{\beta+d}{2} = -m-k+\frac{\alpha-\beta}{2}$ with constants
+  as $-a-k-\frac{\beta+d}{2} = -m + \frac{\alpha+d}{2} -k - \frac{\beta+d}{2} = -m-k+\frac{\alpha-\beta}{2}$ with constants
   \begin{align*}
     c_{\beta+d}       & := \frac{2^{\beta+d} \pi^{d/2} \Gamma\left(\frac{\beta+d}{2}\right)}{\Gamma(-\beta/2)}                      \quad \text{\textcolor{gray}{from aforementioned definition of the Riesz potential}} \\
     C_{a+k, \beta, d} & := \frac{\Gamma(a+k+1) \Gamma(-\beta/2)}{2^{\beta+d}\Gamma(d/2) \Gamma\left(a+k+\frac{\beta+d}{2}+1\right)} \quad \text{\textcolor{gray}{from Lemma 2.4}}\,,
@@ -67,3 +58,7 @@
   $$I = \tfrac{\pi^{d/2} \Gamma \left(1+\frac{\beta}{2}\right) \Gamma \left(\frac{\beta+d}{2}\right) \Gamma \left(m+n-\frac{\alpha+d}{2}+1\right)}{\Gamma \left(\frac{d}{2}\right) \Gamma (n+1) \Gamma \left(\frac{\beta}{2}-n+1\right) \Gamma \left(\frac{\beta-\alpha}{2}+m+n+1\right)}{}_2F_1\left(\begin{matrix}n-\frac{\beta}{2}, -m-n+\frac{\alpha-\beta}{2} \\\frac{d}{2}\end{matrix};\norm{\vec{x}}^2\right)\,,$$
   concluding the proof.
 \end{proof}
+
+Lemma 2.4 from \cite{2011-porous-medium-1} is based on the \textit{Weber-Schafheitlin} integral of two Bessel functions given in \cite{1945-bessel-integral}.
+The Weber-Schafheitlin integrals are related to the fractional Laplacians of aforementioned functions because the Fourier transform of ${}_2F_1$ is a Bessel function.
+For a more generalised version of Lemma 2.4, see \cite{2014-barenblatt}.
