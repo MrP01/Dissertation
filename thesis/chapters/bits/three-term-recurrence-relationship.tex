@@ -1,6 +1,6 @@
 \begin{theorem}{Three-Term Recurrence Relationship}{three-term-recurrence-relationship}
   All orthogonal polynomials $\{p_0, p_1, p_2, ...\}$ (cf. \Cref{def:orthogonal-polynomials}) have (at least) a three-term recurrence relationship of the form
-  $$A_n p_{n+1}(x) = B_n p_n(x) + C_n p_{n-1}(x)\,.$$
+  $$A_n p_{n+1}(x) = (B_n - x) p_n(x) + C_n p_{n-1}(x)\,.$$
 \end{theorem}
 \begin{proof}
   Consider ``$x p_n$''$:= x \mapsto x p_n(x)$, a polynomial with $\deg(x p_n) \le n+1$.
@@ -25,7 +25,7 @@
   concluding the proof.
 \end{proof}
 
-For example, for the Chebyshev polynomials we have
+For example, for the Chebyshev polynomials $T_k: [-1, 1] \mapsto \R$ we have
 $$T_{k+1}(x) = 2x T_k(x) - T_{k-1}(x) \,.$$
 
 Note that the converse of \Cref{thm:three-term-recurrence-relationship} is also true, a set of polynomials of increasing degree $k$ that has a three-term recurrence relationship is a set of orthogonal polynomials (cf. \Cref{def:orthogonal-polynomials}).
