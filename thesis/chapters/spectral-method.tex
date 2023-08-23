@@ -71,9 +71,9 @@ In order to establish said linear system, we first need to introduce the \textit
 
 \begin{figure}[H]
   \centering
-  \label{fig:attractive-repulsive}
   \includegraphics[width=\linewidth]{results/attrep/attractive-repulsive-operators.pdf}
   \caption[Attractive and repulsive operators.]{The attractive and repulsive operators (matrices) as given in \Cref{def:operator}, the matrix values are shown in a $\log_{10}$ color scale. Due to the choice of basis, the attractive operator is exactly banded. The repulsive parameter is only approximately banded, which the spy plots effectively demonstrate.}
+  \label{fig:attractive-repulsive}
 \end{figure}
 
 The bandedness of the attractive operator in \Cref{fig:attractive-repulsive} is due to the three-term recurrence relationship of the Jacobi polynomial basis (cf. \Cref{thm:three-term-recurrence-relationship} and \Cref{def:jacobi-polynomials}).
@@ -97,18 +97,19 @@ for some interval radius $R \in \R^+$, usually chosen as the smallest possible $
 
 \begin{figure}[H]
   \centering
-  \label{fig:attrep-operator}
   \includegraphics[width=0.5\linewidth]{results/attrep/full-operator.pdf}
   \caption[Combination of the attractive-repulsive operators]{Spy plot of $Q_{\alpha, \beta}$, the combination of the attractive-repulsive operators. Inverting this operator and applying it to $(1, 0, ..., 0)^T \in \R^N$ will yield the unnormalised coefficients $\rho_k$ of the solution expansion given in \Cref{eq:ansatz}.}
+  \label{fig:attrep-operator}
 \end{figure}
 
+\pagebreak
 \section{Solving a Linear System}
 Once the operator is computed, we are now looking for a set of solution coefficients $\vec{\rho} \in \R^N$ such that the energy on the domain $D = B_R(\vec{0})$ is constant.
 That means, we are looking for $\vec{\rho} \in \R^N$ such that
 \begin{equation}
-  \hat{Q}[\rho](\vec{x}) = E(\vec{x}) = E\,,
+  \hat{Q}[\rho](\vec{x}) = \tilde{E}(\vec{x}) = E\,,
 \end{equation}
-where we can expand $E(\vec{x}) = \jacobivec{x} \cdot \vec{E}$ into Jacobi polynomials with coefficients $\vec{E} = (E, 0, ..., 0)^T$ such that the energy is constant along the entire domain, so $E(\vec{x}) = E \cdot P_0^{(a, b)}\left(\jacobiarg{x}\right) = E$.
+where we can expand $\tilde{E}(\vec{x}) = \jacobivec{x} \cdot \vec{E}$ into Jacobi polynomials with coefficients $\vec{E} = (E, 0, ..., 0)^T$ such that the energy is constant along the entire domain, so $\tilde{E}(\vec{x}) = E \cdot P_0^{(a, b)}\left(\jacobiarg{x}\right) = E$.
 In matrix form, that is
 $$Q \vec{\rho} = \vec{E} \qLRq \begin{pmatrix}
     q_{00}    & \dots  & q_{0,N-1}   \\
@@ -127,17 +128,17 @@ $$Q \vec{\rho} = \vec{E} \qLRq \begin{pmatrix}
 \section{Results}
 \begin{figure}[H]
   \centering
-  \label{fig:solution-increasing-order}
   \includegraphics[width=0.8\linewidth]{results/attrep/solution-increasing-order.pdf}
   \caption[Solutions of increasing orders]{Particle density distribution function solutions $\rho$ of increasing order $N$ to the attractive-repulsive problem with interaction potential $K_{alpha, \beta}(r)$, $\alpha = 2.5$ and $\beta = 1.2$. Reflected along the y-axis for better visibility of the domain.}
+  \label{fig:solution-increasing-order}
 \end{figure}
 
 \section{Outer Optimisation Routine}
 \begin{figure}[H]
   \centering
-  \label{fig:outer-optimisation}
   \includegraphics[width=0.8\linewidth]{results/known-analytic/outer-optimisation.pdf}
   \caption[Outer Optimisation Routine]{The total potential $U$ as a function of the support radius $R$. This is the goal function minimised by the outer optimisation routine.}
+  \label{fig:outer-optimisation}
 \end{figure}
 
 Note that using this setup, the operators themselves do not need to be recomputed upon a change in $R$ (cf. \Cref{eq:full-attrep-operator}).
@@ -148,12 +149,12 @@ As introduced in \Cref{sec:analytical-solutions}, there are some analytical solu
 
 \begin{figure}[H]
   \centering
-  \label{fig:analytic-solution}
   \includegraphics[width=\linewidth]{results/known-analytic/analytic-solution.pdf}
   \caption[Comparison with analytical solutions and error]{
     The analytic solution $\rho(x)$ given in \Cref{eq:analytical-solution-alpha-equal-2} compared to the (spectral method) solutions of different order $N$.
     The ``arches'' occur as a result of the roots of $\rho(x) - \rho_N(x)$, their number approximately equals the order $N$ (a polynomial of degree $N$ has $N$ roots).
   }
+  \label{fig:analytic-solution}
 \end{figure}
 
 There are more analytic solutions available for other parameter ranges, we will not analyse them here.
@@ -162,25 +163,25 @@ There are more analytic solutions available for other parameter ranges, we will 
 
 \begin{figure}[H]
   \centering
-  \label{fig:convergence-to-analytic}
   \includegraphics[width=0.8\linewidth]{results/known-analytic/convergence-to-analytic.pdf}
   \caption[Convergence to analytic solution]{Convergence of the numerical solution to the known analytic solution (cf. \Cref{eq:analytical-solution-alpha-equal-2}) in a special case where it is known, squared error plotted as a function of the highest order in the expansion $N$.}
+  \label{fig:convergence-to-analytic}
 \end{figure}
 
 \section{Discussion}
 \begin{figure}[H]
   \centering
-  \label{fig:convergence}
   \includegraphics[width=0.8\linewidth]{results/attrep/convergence.pdf}
   \caption[Step-by-step convergence of solutions compared to order 24]{Step-by-step convergence of numerical solutions $\rho_N(x)$ as compared to $\rho_{24}(x)$, visualised using the squared error of the pointwise evaluation of both functions in $200$ points.}
+  \label{fig:convergence}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \label{fig:varying-parameters}
   \includegraphics[width=0.9\linewidth]{results/attrep/varying-parameters.pdf}
   \caption[Varying parameters in the solver]{
     Varying different parameters in the solver to demonstrate their effect.
     See also, \Cref{fig:varying-R-solutions}.
   }
+  \label{fig:varying-parameters}
 \end{figure}
