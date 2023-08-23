@@ -32,7 +32,7 @@ Using the Pochhammer symbol introduced in \Cref{def:rising-factorial}, we can no
 \input{chapters/bits/gaussian-hypergeometric-function.tex}
 
 \pagebreak
-\section{Orthogonal Polynomials forming a Basis}
+\section{Orthogonal Polynomials Forming a Basis}
 In order to efficiently construct a spectral method, we need an orthogonal basis.
 \input{chapters/bits/orthogonal-polynomials.tex}
 \input{chapters/bits/three-term-recurrence-relationship.tex}
@@ -44,7 +44,7 @@ The Jacobi polynomials are then defined from ${}_2F_1$ as follows:
 \input{chapters/bits/jacobi-matrix.tex}
 
 % \pagebreak
-\section{Working towards a Solution}
+\section{Working Towards a Solution}
 Finally, now that we have established the basis functions, we can write down an ansatz $\rho: B_1(\vec{0}) \mapsto \R$ for the solution of \hyperref[def:the-problem]{the problem}, of the form
 \begin{equation}
   \rho(\vec{x}) := \left(1-\norm{\vec{x}}^{2}\right)^{m - \frac{\alpha + d}{2}} \sum_{k=0}^{N-1} \rho_k P_{k}^{\left(m - \frac{\alpha + d}{2},\frac{d-2}{2}\right)}(2 \norm{\vec{x}}^{2}-1)\,.
@@ -54,7 +54,7 @@ with $P_k^{(a, b)}$ the Jacobi polynomials and $\{\rho_k\}_{k=0, ..., N-1}$ the 
 % TODO: is it alpha or beta in the exponent of (1-y\^{}2)?
 
 The spectral method can then be written as a linear system of the coefficients $\vec{\rho}$ as we will see in the next section.
-In order to establish said linear system, we first need to introduce the \textit{inverse fractional Laplacian}, helping us with the evaluation of the power-law potential integral involving radial Jacobi polynomials given in \Cref{thm:theorem216}, the most important result of this chapter.
+In order to establish said linear system, we first need to introduce the \textit{inverse fractional Laplacian}, helping us with the evaluation of the power law potential integral involving radial Jacobi polynomials given in \Cref{thm:theorem216}, the most important result of this chapter.
 
 \input{chapters/bits/riesz-potential.tex}
 \input{chapters/bits/theorem216.tex}
@@ -129,6 +129,11 @@ $$Q \vec{\rho} = \vec{E} \qLRq \begin{pmatrix}
 
 The linear system is solved using a QR-decomposition.
 % TODO: what would Yuji say?
+
+% \subsection{Tikhonov Regularisation}
+% The normal system is: ...
+% Also referred to as Ridge regression
+% TODO
 
 \section{Results}
 \begin{figure}[H]
