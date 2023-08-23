@@ -127,6 +127,9 @@ $$Q \vec{\rho} = \vec{E} \qLRq \begin{pmatrix}
     0
   \end{pmatrix}\,.$$
 
+The linear system is solved using a QR-decomposition.
+% TODO: what would Yuji say?
+
 \section{Results}
 \begin{figure}[H]
   \centering
@@ -136,6 +139,8 @@ $$Q \vec{\rho} = \vec{E} \qLRq \begin{pmatrix}
 \end{figure}
 
 \section{Outer Optimisation Routine}
+The outer optimisation over the scalar value $R \in \R^+$, the radius of our domain $B_R(\vec{0})$ is carried out using \href{https://github.com/JuliaNLSolvers/Optim.jl}{Optim.jl}'s BFGS optimisation routine \parencite{2023-optim-jl} using an estimate for the gradient based on \gls{ad} techniques.
+
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.8\linewidth]{results/known-analytic/outer-optimisation.pdf}
@@ -146,6 +151,7 @@ $$Q \vec{\rho} = \vec{E} \qLRq \begin{pmatrix}
 Note that using this setup, the operators themselves do not need to be recomputed upon a change in $R$ (cf. \Cref{eq:full-attrep-operator}).
 The provided implementation uses \gls{lru} caching to automatically store operators for a given parameter set and order $N$.
 
+\pagebreak
 \section{Comparison with Analytic Solutions}
 As introduced in \Cref{sec:analytical-solutions}, there are some analytical solutions available which allow us to perform some further analysis of the numerical method in these special cases.
 

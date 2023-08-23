@@ -22,7 +22,7 @@
     C_{a,b,n,k} & := \frac{\Gamma(1+a+b+n + k)}{\Gamma(a+1+k)}\,.
   \end{align*}
 
-  We identify the remaining integral as the Riesz potential $I_{\beta+d}[u](\vec{x})$ of the function $u(\vec{y}) := \left(1-\norm{\vec{y}}^2\right)^{a+k}$, which we can evaluate using Lemma 2.4 from \cite{2011-porous-medium-1}:
+  We identify the remaining integral as the Riesz potential $I_{\beta+d}[u](\vec{x})$, cf. \Cref{def:riesz-potential}, of the function $u(\vec{y}) := \left(1-\norm{\vec{y}}^2\right)^{a+k}$, which we can evaluate using Lemma 2.4 from \cite{2011-porous-medium-1}:
   \begin{align*}
     \int_{B_1(\vec{0})} & \norm{\vec{x}-\vec{y}}^\beta \weight[a+k]{y} \dd\vec{y} = c_{\beta+d} I_{\beta+d}\left[\vec{y} \mapsto \left(1-\norm{\vec{y}}^2\right)^{a+k}\right](\vec{x}) \\
                         & = c_{\beta+d} C_{a+k, \beta, d} \cdot {}_2F_1\left(\begin{matrix}\frac{d-(\beta+d)}{2}, -a-k-\frac{\beta+d}{2} \\d/2\end{matrix}; \norm{\vec{x}}^2\right)    \\
