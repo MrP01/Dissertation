@@ -74,6 +74,6 @@ function constructFullOperator(N::Int64, R::Float64, env::SolutionEnvironment)::
   RepulsiveMatrix = constructOperator(N, p.potential.beta, env)
   # @show cond(convert(Matrix{Float64}, AttractiveMatrix))
   # @show cond(convert(Matrix{Float64}, RepulsiveMatrix))
-  return (R^p.potential.alpha / p.potential.alpha) * AttractiveMatrix - (R^p.potential.beta / p.potential.beta) * RepulsiveMatrix
+  return (R^(p.potential.alpha + p.d) / p.potential.alpha) * AttractiveMatrix - (R^(p.potential.beta + p.d) / p.potential.beta) * RepulsiveMatrix
 end
 end

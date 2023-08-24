@@ -133,7 +133,7 @@ function enhancedSpyPlot(matrix, title="")
   @debug Utils.opCond(matrix)
   fig = Figure(resolution=(600, 500))
   ax = Axis(fig[1, 1][1, 1], yreversed=true, title=title)
-  s = spy!(ax, sparse(log10.(abs.(op1))), marker=:rect, markersize=32, framesize=0)
+  s = spy!(ax, sparse(log10.(abs.(matrix))), marker=:rect, markersize=32, framesize=0)
   Colorbar(fig[1, 1][1, 2], s, flipaxis=false, tickformat=pow10tickformat)
   return fig
 end
@@ -236,21 +236,27 @@ function plotVaryingRSolutions(p=Params.morsePotiParams)
 end
 
 function plotAnalyticSolution(p=Params.knownAnalyticParams)
-  fig = Figure()
+  Ns = 2 .^ (1:6)
+  fig = Figure(resolution=(800, 800))
   env = Utils.createEnvironment(p)
   R, analytic = AnalyticSolutions.explicitSolution(x_vec_noends; p=p)
-  ax = Axis(fig[1, 1], title=L"\text{Analytic Solution with}~%$(p2tex(p))",
-    xlabel=L"x", ylabel=L"\rho(x)")
+  OptR(N) = abs(Solver.outerOptimisation(N, env, Optim.NewtonTrustRegion()).minimizer[1] - R)
+  ax = Axis(fig[1, 1], title=L"\text{Analytic Solution with}~%$(p2tex(p))", xlabel=L"x", ylabel=L"\rho(x)")
   lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(4, R, env), env), label=L"N = 4")
   lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(8, R, env), env), label=L"N = 8")
   lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(20, R, env), env), label=L"N = 20")
+  lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(60, R, env), env), label=L"N = 60")
   lines!(ax, x_vec_noends, analytic, linewidth=4.0, linestyle=:dash, label=LT"Analytic")
   axislegend(ax)
   ax = Axis(fig[2, 1], title=LT"Absolute Error", yscale=log10, xlabel=L"x", ylabel=L"|\rho_N(x) - \rho(x)|")
   lines!(ax, x_vec_noends, abs.(Utils.rho(x_vec_noends, Solver.solve(4, R, env), env) .- analytic), label=L"N = 4")
   lines!(ax, x_vec_noends, abs.(Utils.rho(x_vec_noends, Solver.solve(8, R, env), env) .- analytic), label=L"N = 8")
   lines!(ax, x_vec_noends, abs.(Utils.rho(x_vec_noends, Solver.solve(20, R, env), env) .- analytic), label=L"N = 20")
+  lines!(ax, x_vec_noends, abs.(Utils.rho(x_vec_noends, Solver.solve(60, R, env), env) .- analytic), label=L"N = 60")
   axislegend(ax)
+  ax = Axis(fig[3, 1], title=LT"Absolute Error", xscale=log10, yscale=log10, xlabel=L"N", ylabel=L"|R_N(x) - R(x)|",
+    xticks=Ns, height=120)
+  scatter!(ax, Ns, OptR.(Ns), color=dissertationColours[5])
   saveFig(fig, "analytic-solution", p)
   return fig
 end

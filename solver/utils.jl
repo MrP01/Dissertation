@@ -3,7 +3,7 @@ using ContinuumArrays
 import ClassicalOrthogonalPolynomials: Jacobi
 import HypergeometricFunctions
 import ContinuumArrays: Map
-import SpecialFunctions: gamma
+import SpecialFunctions
 import LinearAlgebra
 import ..Params
 
@@ -28,7 +28,6 @@ iqmap = InvQuadraticMap()
 
 """Represent the basis P_n^(a,b)(2r^2-1)"""
 function createBasis(p::Params.Parameters)
-  # TODO: which is it? alpha or beta?
   if isa(p.potential, Params.AttractiveRepulsive)
     alpha = p.potential.alpha
   elseif isa(p.potential, Params.MorsePotential)
@@ -75,6 +74,14 @@ end
 
 defaultEnv::SolutionEnvironment = createEnvironment(Params.defaultParams)
 
+"""The SpecialFunctions.gamma returns nan for negative integers, when one could actually return limiting behaviour."""
+function extendedGamma(x)
+  if isinteger(x) && x < 0
+    return isodd(x) ? Inf : -Inf
+  end
+  return SpecialFunctions.gamma(x)
+end
+
 """Docstring for the function"""
 function theorem216(r::Real; n::Int64, beta::Float64, p::Params.Parameters)::BigFloat
   # Explicit value of the integral from Theorem 2.16
@@ -87,14 +94,17 @@ function theorem216(r::Real; n::Int64, beta::Float64, p::Params.Parameters)::Big
   end
   prefactor =
     pi^(p.d / 2) *
-    gamma(1 + beta / 2) *
-    gamma((beta + p.d) / 2) *
-    gamma(p.m + n - (alpha + p.d) / 2 + 1) / (
-      gamma(p.d / 2) *
-      gamma(n + 1) *
-      gamma(beta / 2 - n + 1) *
-      gamma((beta - alpha) / 2 + p.m + n + 1)
+    extendedGamma(1 + beta / 2) *
+    extendedGamma((beta + p.d) / 2) *
+    extendedGamma(p.m + n - (alpha + p.d) / 2 + 1) / (
+      extendedGamma(p.d / 2) *
+      extendedGamma(n + 1) *
+      extendedGamma(beta / 2 - n + 1) *
+      extendedGamma((beta - alpha) / 2 + p.m + n + 1)
     )
+  if prefactor == 0.0
+    return big"0.0"
+  end
   integral_value =
     prefactor * HypergeometricFunctions._₂F₁.(
       big(n - beta / 2),
@@ -128,7 +138,7 @@ function totalEnergy(solution::Vector{BigFloat}, R::Float64, r::Union{Float64,Ab
       for index in eachindex(env.monomial)
         # index starts from 1!
         power, coefficient = index - 1, env.monomial[index]
-        E += coefficient * R^power * solution[k] * Float64.(theorem216.(r; n=k - 1, beta=float(power) + 0.0001, p=env.p))
+        E += coefficient * R^power * solution[k] * Float64.(theorem216.(r; n=k - 1, beta=float(power), p=env.p))
       end
     end
   end
@@ -152,7 +162,7 @@ end
 function totalMass(solution::Vector{BigFloat}, env::SolutionEnvironment)::BigFloat
   # using Lemma 2.20
   p::Params.Parameters = env.p
-  return pi^(p.d / 2) * gamma(env.B.a + 1) / gamma(env.B.a + p.d / 2 + 1) * solution[1]
+  return pi^(p.d / 2) * extendedGamma(env.B.a + 1) / extendedGamma(env.B.a + p.d / 2 + 1) * solution[1]
 end
 
 """Sets small values in a matrix to zero. Improves accuracy of the solutions by a tiny bit!"""
