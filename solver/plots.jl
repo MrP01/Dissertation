@@ -352,21 +352,23 @@ function plotSimulationAndSolverComparison(p::Params.Parameters=Params.known2dPa
     runSimulator(env.p, 2000, big)
   end
 
+  N = 100
   df = CSV.read("/tmp/positions.csv", DataFrames.DataFrame, header=false)
   dimension = length(axes(df, 2))
   @show center = [sum(df[!, k]) / length(df[!, k]) for k in 1:dimension]
   radialDistance = hypot.([df[!, k] .- center[k] for k in 1:dimension]...)
+  pseudoRadialDistance = radialDistance .* sign.(df[!, 1] .- center[1])  # signs according to sign(x)
   @show maxR = maximum(radialDistance)
-  @show R_opt = Solver.outerOptimisation(20, env).minimizer[1]
-  solution = Utils.rho(r_vec_noend, Solver.solve(20, R_opt, env), env)
-  r = r_vec_noend * maxR
+  @show R_opt = Solver.outerOptimisation(Int64(N / 2), env).minimizer[1]
+  solution = Utils.rho(x_vec_noends, Solver.solve(N, R_opt, env), env)
+  x = x_vec_noends * maxR
 
   fig = Figure()
-  ax = Axis(fig[1, 1], xlabel=L"\text{Radial distance}~r", ylabel=LT"Density",
+  ax = Axis(fig[1, 1], xlabel=L"\text{Pseudo radial distance}~r \cdot \mathrm{sign}(x_1)", ylabel=LT"Density",
     title=L"\text{Particle Simulation Output Distribution with}~%$(p2tex(p))")
-  hist!(ax, radialDistance, bins=0:(maxR/16):(maxR*1.05), scale_to=maximum(solution) * 1.1,
+  hist!(ax, pseudoRadialDistance, bins=LinRange([-1, 1] * maxR..., 20), scale_to=maximum(solution) * 1.1,
     label=LT"Particle Simulation")
-  lines!(ax, r, solution, color=:red, linewidth=3.0, label=LT"Spectral Method")
+  lines!(ax, x, solution, color=:red, linewidth=3.0, label=LT"Spectral Method")
   ylims!(ax, 0, maximum(solution) * 1.12)
   axislegend(ax, position=:lb)
   saveFig(fig, "simulation-solver-comparison", p)
