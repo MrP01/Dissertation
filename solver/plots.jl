@@ -207,11 +207,14 @@ end
 function plotOuterOptimisation(p=Params.knownAnalyticParams)
   R_vec = 0.25:0.02:1.5
   env = Utils.createEnvironment(p)
+  R_opt = Solver.outerOptimisation(8, env).minimizer[1]
   F(R) = Utils.totalEnergy(Solver.solve(8, R, env), R, 0.0, env)
   fig = Figure(resolution=(800, 400))
   ax = Axis(fig[1, 1], xlabel=L"R", ylabel=L"U(R)",
     title=L"\text{Energy Optimisation with}~%$(p2tex(p))")
-  lines!(ax, R_vec, F.(R_vec))
+  lines!(ax, R_vec, F.(R_vec), label=LT"Energy")
+  scatter!(ax, R_opt, F(R_opt), color=dissertationColours[3], label=LT"Optimum")
+  axislegend(ax)
   saveFig(fig, "outer-optimisation", p)
   return fig
 end

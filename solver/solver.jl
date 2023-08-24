@@ -53,10 +53,10 @@ function solve(N::Int64, R::Float64, env::Utils.SolutionEnvironment)::Vector{Big
 end
 
 """Docstring for the function"""
-function outerOptimisation(N::Int64, env::Utils.SolutionEnvironment)
+function outerOptimisation(N::Int64, env::Utils.SolutionEnvironment, method=Optim.LBFGS())
   F(R) = Utils.totalEnergy(solve(N, R, env), R, 0.0, env)
   f(x) = F(x[1])  # because optimize() only accepts vector inputs
-  solution = Optim.optimize(f, [R0])
+  solution = Optim.optimize(f, [env.p.R0], method=method)
   return solution
 end
 end

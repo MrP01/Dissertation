@@ -22,7 +22,7 @@ function plotMultivariateEnergy(d=1, m=1)
   #  SpecialFunctions.beta(0.5, (3 - alpha) / 2)^(1 / (alpha - 2)) * x[15]
   #  R^(4 - alpha) * SpecialFunctions.beta(0.5, (3 - alpha) / 2)^(1 / (alpha - 2)) * cos(alpha * pi / 2) * x[16]
   squareError(x) = sum((fitFunction.(alpha_vec, R_vec'; x=x) - E) .^ 2)
-  result = Optim.optimize(squareError, zeros(14), method=Optim.BFGS(), iterations=2000; autodiff=:forward)
+  result = Optim.optimize(squareError, zeros(14), method=Optim.LBFGS(), iterations=2000; autodiff=:forward)
   @show result
   @show result.minimizer, result.minimum
 

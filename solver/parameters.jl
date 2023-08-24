@@ -34,7 +34,6 @@ function potentialFunction(r; pot)
 end
 
 function potentialParamsToLatex(pot, rounded=false)
-  pot
   if isa(pot, AttractiveRepulsive)
     alpha, beta = pot.alpha, pot.beta
     if rounded
@@ -51,7 +50,7 @@ end
 """The solver takes a few parameters"""
 @kwdef struct Parameters
   d = 1  # dimension
-  m = 0  # integer
+  m = 1  # integer
   R0 = 0.8  # radius of the interval [-R, R]
   s0 = 1e-4  # regularisation parameter
   potential = AttractiveRepulsive()  # potential parameters
@@ -85,11 +84,15 @@ knownAnalyticParams = Parameters(potential=AttractiveRepulsive(alpha=2.0001, bet
 morsePotiParams = Parameters(potential=MorsePotential(), d=1, name="morse")
 morsePotiSwarming2d = Parameters(potential=MorsePotential(), friction=QuadraticSelfPropulsion(selfPropulsion=1.6), d=2, m=2, name="morse-2d")
 morsePotiParams4d = Parameters(potential=MorsePotential(), d=4, name="morse-4d")
-voidParams2d = Parameters(d=2, potential=AttractiveRepulsive(alpha=3.5, beta=1.6), name="void-2d")  # found in meeting with Timon
-bumpParams = Parameters(d=1, potential=AttractiveRepulsive(alpha=0.912, beta=0.881), R0=1.4, name="bump")  # 2020-power-law, fig. 11
+voidParams2d = Parameters(d=2, m=2, potential=AttractiveRepulsive(alpha=3.5, beta=1.6), name="void-2d")  # found in meeting with Timon
+bumpParams = Parameters(d=1, m=0, potential=AttractiveRepulsive(alpha=0.912, beta=0.881), R0=1.4, name="bump")  # 2020-power-law, fig. 11
 
 checkParameters(defaultParams)
 checkParameters(known2dParams)
 checkParameters(knownAnalyticParams)
 checkParameters(morsePotiParams)
+checkParameters(morsePotiSwarming2d)
+checkParameters(morsePotiParams4d)
+checkParameters(voidParams2d)
+checkParameters(bumpParams)
 end
