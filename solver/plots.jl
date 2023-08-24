@@ -104,7 +104,7 @@ function plotGeneralSolutionApproximation(p=Params.morsePotiParams)
   for M in 4:8
     env = Utils.createEnvironment(p, M)
     # env = Utils.createEnvironment(Params.Parameters(d=p.d, m=p.m, R0=p.R0, potential=p.potential, friction=p.friction, M=M))
-    solution = Solver.solveWithRegularisation(8, p.R0, env)
+    solution = Solver.solveWithRegularisation(8, p.R0, env, p.s0)
     lines!(ax, x_vec_noends2, Utils.rho(x_vec_noends2, solution, env), label="G = $M")
   end
   axislegend(ax)
@@ -138,7 +138,7 @@ function enhancedSpyPlot(matrix, title="")
   return fig
 end
 
-function plotFullOperator(p=Params.morsePotiParams; N=30)
+function plotFullOperator(p=Params.morsePotiParams; N=60)
   env = Utils.createEnvironment(p)
   op1 = Solver.constructOperatorFromEnv(N, p.R0, env)
   fig = enhancedSpyPlot(op1, L"\text{Full Operator}~%$(p2tex(p))")
@@ -204,11 +204,11 @@ function plotMonomialBasisConvergence(p=Params.morsePotiParams)
   return fig
 end
 
-function plotOuterOptimisation(p=Params.knownAnalyticParams)
+function plotOuterOptimisation(p=Params.knownAnalyticParams; N=8)
   R_vec = 0.25:0.02:1.5
   env = Utils.createEnvironment(p)
-  R_opt = Solver.outerOptimisation(8, env).minimizer[1]
-  F(R) = Utils.totalEnergy(Solver.solve(8, R, env), R, 0.0, env)
+  @show R_opt = Solver.outerOptimisation(N, env).minimizer[1]
+  F(R) = Utils.totalEnergy(Solver.solve(N, R, env), R, 0.0, env)
   fig = Figure(resolution=(800, 400))
   ax = Axis(fig[1, 1], xlabel=L"R", ylabel=L"U(R)",
     title=L"\text{Energy Optimisation with}~%$(p2tex(p))")
@@ -236,11 +236,11 @@ function plotVaryingRSolutions(p=Params.morsePotiParams)
 end
 
 function plotAnalyticSolution(p=Params.knownAnalyticParams)
-  Ns = 2 .^ (1:6)
+  Ns = 2 .^ (0:7)
   fig = Figure(resolution=(800, 800))
   env = Utils.createEnvironment(p)
   R, analytic = AnalyticSolutions.explicitSolution(x_vec_noends; p=p)
-  OptR(N) = abs(Solver.outerOptimisation(N, env, Optim.NewtonTrustRegion()).minimizer[1] - R)
+  OptR(N) = abs(Solver.outerOptimisation(N, env).minimizer[1] - R)
   ax = Axis(fig[1, 1], title=L"\text{Analytic Solution with}~%$(p2tex(p))", xlabel=L"x", ylabel=L"\rho(x)")
   lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(4, R, env), env), label=L"N = 4")
   lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(8, R, env), env), label=L"N = 8")
@@ -254,7 +254,7 @@ function plotAnalyticSolution(p=Params.knownAnalyticParams)
   lines!(ax, x_vec_noends, abs.(Utils.rho(x_vec_noends, Solver.solve(20, R, env), env) .- analytic), label=L"N = 20")
   lines!(ax, x_vec_noends, abs.(Utils.rho(x_vec_noends, Solver.solve(60, R, env), env) .- analytic), label=L"N = 60")
   axislegend(ax)
-  ax = Axis(fig[3, 1], title=LT"Absolute Error", xscale=log10, yscale=log10, xlabel=L"N", ylabel=L"|R_N(x) - R(x)|",
+  ax = Axis(fig[3, 1], title=LT"Absolute Error", xscale=log10, yscale=log10, xlabel=L"N", ylabel=L"|R_N - R|",
     xticks=Ns, height=120)
   scatter!(ax, Ns, OptR.(Ns), color=dissertationColours[5])
   saveFig(fig, "analytic-solution", p)
@@ -356,8 +356,9 @@ function plotSimulationAndSolverComparison(p::Params.Parameters=Params.known2dPa
   dimension = length(axes(df, 2))
   @show center = [sum(df[!, k]) / length(df[!, k]) for k in 1:dimension]
   radialDistance = hypot.([df[!, k] .- center[k] for k in 1:dimension]...)
-  maxR = maximum(radialDistance)
-  solution = Utils.rho(r_vec_noend, Solver.solve(12, maxR, env), env)
+  @show maxR = maximum(radialDistance)
+  @show R_opt = Solver.outerOptimisation(20, env).minimizer[1]
+  solution = Utils.rho(r_vec_noend, Solver.solve(20, R_opt, env), env)
   r = r_vec_noend * maxR
 
   fig = Figure()
@@ -409,13 +410,13 @@ function plotPhaseSpace(p=Params.defaultParams; runSim=true)
 end
 
 function plotConditionNumberGrowth(p=Params.defaultParams)
-  Ns = 2 .^ (1:6)
+  Ns = 2 .^ (1:8)
   env = Utils.createEnvironment(p)
   OpCond(N) = Utils.opCond(Solver.constructOperatorFromEnv(N, p.R0, env))
   opconds = OpCond.(Ns)
   fig = Figure(resolution=(800, 500))
   ax = Axis(fig[1, 1], xlabel=L"\text{Matrix size}~N", ylabel=L"\text{Condition number}~\kappa(Q)",
-    xscale=log10, yscale=log10, title=L"\text{Growth of the condition number with}~%$(p2tex(p))")
+    xscale=log10, yscale=log10, title=L"\text{Growth of the condition number with}~%$(p2tex(p))", xticks=Ns)
   lines!(ax, Ns, opconds)
   scatter!(ax, Ns, opconds, label=LT"Full Operator")
   if isa(p.potential, Params.AttractiveRepulsive)
@@ -433,7 +434,7 @@ function plotConditionNumberGrowth(p=Params.defaultParams)
   return fig
 end
 
-function plotCoefficients(p=Params.morsePotiParams; N=60)
+function plotCoefficients(p=Params.morsePotiParams; N=200)
   env = Utils.createEnvironment(p)
   solution = Solver.solve(N, p.R0, env)
   fig = Figure(resolution=(800, 500))

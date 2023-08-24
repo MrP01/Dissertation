@@ -125,13 +125,14 @@ end
 function totalEnergy(solution::Vector{BigFloat}, R::Float64, r::Union{Float64,AbstractVector{Float64}}, env::SolutionEnvironment)
   # more details in section 3.2
   if isa(env.p.potential, Params.AttractiveRepulsive)
-    alpha, beta = env.p.potential.alpha, env.p.potential.beta
+    alpha, beta, d = env.p.potential.alpha, env.p.potential.beta, env.p.d
     attractive, repulsive = zero(r), zero(r)
     for k in eachindex(solution)
       attractive += solution[k] * Float64.(theorem216.(r; n=k - 1, beta=alpha, p=env.p))
       repulsive += solution[k] * Float64.(theorem216.(r; n=k - 1, beta=beta, p=env.p))
     end
-    E = (R^alpha / alpha) * attractive - (R^beta / beta) * repulsive
+    d = 0
+    E = (R^(alpha + d) / alpha) * attractive - (R^(beta + d) / beta) * repulsive
   else
     E = zero(r)
     for k in eachindex(solution)
@@ -143,19 +144,6 @@ function totalEnergy(solution::Vector{BigFloat}, R::Float64, r::Union{Float64,Ab
     end
   end
   return E
-end
-
-function getSupportRadius(solution::Vector{BigFloat}, env::SolutionEnvironment)
-  # This is wrong, a term in the derivative is missing
-  r = 0.0
-  alpha, beta = env.p.potential.alpha, env.p.potential.beta
-  attractive, repulsive = zero(r), zero(r)
-  for k in eachindex(solution)
-    attractive += solution[k] * Float64.(theorem216.(r; n=k - 1, beta=alpha, p=env.p))
-    repulsive += solution[k] * Float64.(theorem216.(r; n=k - 1, beta=beta, p=env.p))
-  end
-  R = (repulsive / attractive)^(1 / (alpha - beta))
-  return R
 end
 
 """Docstring for the function"""

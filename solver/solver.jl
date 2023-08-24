@@ -49,10 +49,22 @@ function solveWithRegularisation(N::Int64, R::Float64, env::Utils.SolutionEnviro
 end
 
 """Docstring for the function"""
-function outerOptimisation(N::Int64, env::Utils.SolutionEnvironment, method=Optim.LBFGS())
+function outerOptimisation(N::Int64, env::Utils.SolutionEnvironment, method=Optim.NewtonTrustRegion(), R0=0)
+  if R0 == 0
+    R0 = env.p.R0
+  end
   F(R) = Utils.totalEnergy(solve(N, R, env), R, 0.0, env)
   f(x) = F(x[1])  # because optimize() only accepts vector inputs
-  solution = Optim.optimize(f, [env.p.R0], method=method)
+  solution = Optim.optimize(f, [R0], method=method)
   return solution
+end
+
+function getSupportRadius(env::Utils.SolutionEnvironment)
+  # This works for N=1.
+  alpha, beta = env.p.potential.alpha, env.p.potential.beta
+  f_a = Float64.(Utils.theorem216.(0.0; n=0, beta=alpha, p=env.p))
+  f_b = Float64.(Utils.theorem216.(0.0; n=0, beta=beta, p=env.p))
+  R = (f_b / f_a)^(1 / (alpha - beta))
+  return R
 end
 end

@@ -55,10 +55,16 @@ end
 
 RecOpMem = LRUCache.LRU{Tuple{Int64,Float64,SolutionEnvironment},Matrix{BigFloat}}(maxsize=20)
 function recursivelyConstructOperator(N::Int64, beta::Float64, env::SolutionEnvironment)::Matrix{BigFloat}
+  p = env.p
   get!(RecOpMem, (N, beta, env)) do
-    @assert isa(env.p.potential, Params.AttractiveRepulsive)
+    if isa(p.potential, Params.AttractiveRepulsive)
+      alpha = p.potential.alpha
+    elseif isa(p.potential, Params.MorsePotential)
+      alpha = Utils.PARAMETER_TO_FIND  # TODO: what should we put here?
+    else
+      error("Unkown potential")
+    end
     r_axis = axes(env.P, 1)
-    alpha = env.p.potential.alpha
     Mat = zeros(BigFloat, N, N)
     OldestCoeff = env.P[:, 1:N] \ Utils.theorem216.(r_axis; n=0, beta=beta, p=env.p)
     OldCoeff = env.P[:, 1:N] \ Utils.theorem216.(r_axis; n=1, beta=beta, p=env.p)
@@ -90,10 +96,12 @@ end
 function constructFullOperator(N::Int64, R::Float64, env::SolutionEnvironment)::Matrix{BigFloat}
   p::Params.Parameters = env.p
   @assert isa(p.potential, Params.AttractiveRepulsive)
-  AttractiveMatrix = recursivelyConstructOperator(N, p.potential.alpha, env)
-  RepulsiveMatrix = recursivelyConstructOperator(N, p.potential.beta, env)
+  alpha, beta, d = p.potential.alpha, p.potential.beta, p.d
+  AttractiveMatrix = recursivelyConstructOperator(N, alpha, env)
+  RepulsiveMatrix = recursivelyConstructOperator(N, beta, env)
   # @show cond(convert(Matrix{Float64}, AttractiveMatrix))
   # @show cond(convert(Matrix{Float64}, RepulsiveMatrix))
-  return (R^(p.potential.alpha + p.d) / p.potential.alpha) * AttractiveMatrix - (R^(p.potential.beta + p.d) / p.potential.beta) * RepulsiveMatrix
+  d = 0
+  return (R^(alpha + d) / alpha) * AttractiveMatrix - (R^(beta + d) / beta) * RepulsiveMatrix
 end
 end

@@ -2,6 +2,7 @@ using Test
 
 include("./parameters.jl")
 include("./solver.jl")
+include("./analyticsolutions.jl")
 
 import .Params
 import .Solver
@@ -49,6 +50,19 @@ import .AttractiveRepulsiveSolver
     r_vec = 0:0.002:1
     @test sum((Utils.basisConversionMatrix(env.P, G) \ jacobiCoeff) .* [r_vec .^ k for k in 0:G-1], dims=1)[1] ≈
           vec(sum(jacobiCoeff .* env.P[r_vec, 1:G]', dims=1))
+  end
+  @testset "N=1 approximation to R_opt works" begin
+    N = 1
+    env = Utils.defaultEnv
+    R_opt = Solver.outerOptimisation(N, env).minimizer[1]
+    @test R_opt ≈ Solver.getSupportRadius(env) atol = 1e-6
+  end
+  @testset "analytic solution is close" begin
+    p = Params.knownAnalyticParams
+    env = Utils.createEnvironment(p)
+    r_vec_noend = r_vec[1:end-1]
+    R, analytic = AnalyticSolutions.explicitSolution(r_vec_noend; p=p)
+    @test sum(abs.(Utils.rho(r_vec_noend, Solver.solve(30, R, env), env) .- analytic)) / length(r_vec_noend) < 1e-3
   end
 end
 
