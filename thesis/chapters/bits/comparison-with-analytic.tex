@@ -1,0 +1,25 @@
+\section{Comparison with Analytic Solutions}
+As introduced in \Cref{sec:analytical-solutions}, there are some analytical solutions available which allow us to perform some further analysis of the numerical method in these special cases.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{results/known-analytic/analytic-solution.pdf}
+  \caption[Comparison with analytical solutions and error]{
+    The analytic solution $\rho(x)$ given in \Cref{eq:analytical-solution-alpha-equal-2} compared to the (spectral method) solutions of different order $N$.
+    The ``arches'' occur as a result of the roots of $\rho(x) - \rho_N(x)$, their number approximately equals the order $N$ (a polynomial of degree $N$ has $N$ roots).
+  }
+  \label{fig:analytic-solution}
+\end{figure}
+
+The reason for this fast convergence is the choice of weighted basis in \Cref{eq:ansatz} compared to the form of the analytical solution in \Cref{eq:analytical-solution-alpha-equal-2}.
+% TODO: when added theorem216() with limit-behaviour
+There are more analytic solutions available for other parameter ranges, which we will not analyse within the scope of this dissertation.
+
+\input{chapters/bits/spectral-convergence.tex}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\linewidth]{results/known-analytic/convergence-to-analytic.pdf}
+  \caption[Convergence to analytic solution]{Convergence of the numerical solution to the known analytic solution (cf. \Cref{eq:analytical-solution-alpha-equal-2}) in a special case where it is known, squared error plotted as a function of the highest order in the expansion $N$.}
+  \label{fig:convergence-to-analytic}
+\end{figure}

@@ -143,51 +143,11 @@ The linear system is solved using a QR-decomposition.
   \label{fig:solution-increasing-order}
 \end{figure}
 
-\section{Outer Optimisation Routine}
-The unconstrained outer optimisation over the scalar value $R \in \R^+$, the radius of our domain $B_R(\vec{0})$, is carried out using \href{https://github.com/JuliaNLSolvers/Optim.jl}{Optim.jl}'s implementation \parencite{2023-optim-jl} of the \gls{lbfgs} optimisation method \parencite{1989-lbfgs} using an estimate for the gradient based on \gls{ad} techniques.
+% Full Section:
+\input{chapters/bits/outer-optimisation.tex}
 
-As part of a comparison between multiple optimisation approaches, \gls{lbfgs} outperformed the Nelder-Mead and Newton trust region methods for our case, converging extremely quickly within only 3 iterations, 10 function calls and 10 evaluations of the gradient.
-While the downhill simplex method by \citeauthor{1965-nelder-mead} did not converge to the desired local minimum (cf. \Cref{fig:outer-optimisation}), the trust region method combined with Newton's method \parencite{1982-trust-region} also converged in only 3 iterations with only 4 function, gradient and Hessian evaluations.
-Again, the values of the gradient and Hessian (in the case of a one-dimensional optimisation, simply the first and second derivatives), are obtained using \glstext{ad}.
-
-The \gls{lbfgs} method converged with $\norm{\nabla E(R)} \approx 10^{-11}$ while the Newton trust region method converged at $\norm{\nabla E(R)} \approx 10^{-9}$.
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.8\linewidth]{results/known-analytic/outer-optimisation.pdf}
-  \caption[Outer Optimisation Routine]{The total potential $U$ as a function of the support radius $R$. This is the goal function minimised by the outer optimisation routine.}
-  \label{fig:outer-optimisation}
-\end{figure}
-
-Note that using this setup, the operators themselves do not need to be recomputed upon a change in $R$ (cf. \Cref{eq:full-attrep-operator}).
-The provided implementation uses \gls{lru} caching to automatically store operators for a given parameter set and order $N$.
-
-\pagebreak
-\section{Comparison with Analytic Solutions}
-As introduced in \Cref{sec:analytical-solutions}, there are some analytical solutions available which allow us to perform some further analysis of the numerical method in these special cases.
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=\linewidth]{results/known-analytic/analytic-solution.pdf}
-  \caption[Comparison with analytical solutions and error]{
-    The analytic solution $\rho(x)$ given in \Cref{eq:analytical-solution-alpha-equal-2} compared to the (spectral method) solutions of different order $N$.
-    The ``arches'' occur as a result of the roots of $\rho(x) - \rho_N(x)$, their number approximately equals the order $N$ (a polynomial of degree $N$ has $N$ roots).
-  }
-  \label{fig:analytic-solution}
-\end{figure}
-
-The reason for this fast convergence is the choice of weighted basis in \Cref{eq:ansatz} compared to the form of the analytical solution in \Cref{eq:analytical-solution-alpha-equal-2}.
-% TODO: when added theorem216() with limit-behaviour
-There are more analytic solutions available for other parameter ranges, which we will not analyse within the scope of this dissertation.
-
-\input{chapters/bits/spectral-convergence.tex}
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.8\linewidth]{results/known-analytic/convergence-to-analytic.pdf}
-  \caption[Convergence to analytic solution]{Convergence of the numerical solution to the known analytic solution (cf. \Cref{eq:analytical-solution-alpha-equal-2}) in a special case where it is known, squared error plotted as a function of the highest order in the expansion $N$.}
-  \label{fig:convergence-to-analytic}
-\end{figure}
+% Full Section:
+\input{chapters/bits/comparison-with-analytic.tex}
 
 \section{Discussion}
 \begin{figure}[H]
