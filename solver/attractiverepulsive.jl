@@ -1,6 +1,7 @@
 module AttractiveRepulsiveSolver
 import ContinuumArrays: MappedWeightedBasisLayout, WeightedBasisLayout
-import LinearAlgebra: cond
+import ClassicalOrthogonalPolynomials: jacobimatrix
+import LinearAlgebra: cond, I
 import SpecialFunctions: gamma
 import LRUCache
 import Optim
@@ -58,13 +59,57 @@ function recursivelyConstructOperatorWithReprojection(N::Int64, beta::Float64, e
   end
 
   for remainingColumn in 3:N
-    Function = Utils.recurrence.(r_axis; oldestValue=OldestFunction, oldValue=OldFunction, n=remainingColumn - 2, beta=beta, p=env.p)
+    Function = recurrence.(r_axis; oldestValue=OldestFunction, oldValue=OldFunction, n=remainingColumn - 2, beta=beta, p=env.p)
     Mat[:, remainingColumn] = env.P[:, 1:N] \ Function
     OldestFunction = OldFunction
     OldFunction = Function
   end
   Utils.zeroOutTinyValues!(Mat)
   return Mat
+end
+
+function frakca(α, β, d, m, n, z)
+  return -(((2m + 4n - α) * (d - 2 * (1 + m + n) + α) *
+            (-8 * n^2 * I - 4 * z + 4m^2 * z + 16 * n^2 * z + 4n * α * I - 8 * n * z * α + z * α^2 - 2 * α * β * I + 2 * β^2 * I +
+             4m * (-2n * I + 4n * z - z * α + β * I) + d * I * (2 + 2m - α + 2 * β))) /
+           (2 * (1 + n) * (-2 + 2m + 4n - α) * (2 + 2m + 2n - α + β) * (d + 2m + 2n - α + β)))
+end
+function frakcc(α, β, d, m, n)
+  return (((2 + 2m + 4n - α) * (d - 2 * (m + n) + α) * (d - 2 * (1 + m + n) + α) * (-2 + 2n - β) * (d - 2n + β)) /
+          (4n * (1 + n) * (-2 + 2m + 4n - α) * (2 + 2m + 2n - α + β) * (d + 2m + 2n - α + β)))
+end
+
+RecOpMem = LRUCache.LRU{Tuple{Int64,Float64,SolutionEnvironment},Matrix{BigFloat}}(maxsize=20)
+function recursivelyConstructOperator(N::Int64, beta::Float64, env::SolutionEnvironment)::Matrix{BigFloat}
+  get!(RecOpMem, (N, beta, env)) do
+    @assert isa(env.p.potential, Params.AttractiveRepulsive)
+    r_axis = axes(env.P, 1)
+    alpha = env.p.potential.alpha
+    Mat = zeros(BigFloat, N, N)
+    OldestCoeff = env.P[:, 1:N] \ Utils.theorem216.(r_axis; n=0, beta=beta, p=env.p)
+    OldCoeff = env.P[:, 1:N] \ Utils.theorem216.(r_axis; n=1, beta=beta, p=env.p)
+
+    Mat[:, 1] = OldestCoeff
+    if N < 2
+      return Mat
+    end
+
+    Mat[:, 2] = OldCoeff
+    if N < 3
+      return Mat
+    end
+
+    Z = ((jacobimatrix(env.B)+I))[1:N, 1:N] ./ 2  # == (X+1)/2, the argument!
+    for remainingColumn in 3:N
+      n = remainingColumn - 2
+      Coeff = frakca(alpha, beta, env.p.d, env.p.m, n, Z) * OldCoeff + frakcc(alpha, beta, env.p.d, env.p.m, n) * OldestCoeff
+      Mat[:, remainingColumn] = Coeff
+      OldestCoeff = OldCoeff
+      OldCoeff = Coeff
+    end
+    Utils.zeroOutTinyValues!(Mat)
+    Mat
+  end
 end
 
 function constructFullOperator(N::Int64, R::Float64, env::SolutionEnvironment)::Matrix{BigFloat}

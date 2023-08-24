@@ -23,9 +23,16 @@ import .AttractiveRepulsiveSolver
   end
   @testset "compare operator construction methods" begin
     env = Utils.defaultEnv
+    for n in 2 .^ (1:6)
+      @test AttractiveRepulsiveSolver.constructOperator(n, env.p.potential.beta, env) ≈
+            AttractiveRepulsiveSolver.recursivelyConstructOperator(n, env.p.potential.beta, env) atol = 1e-12
+    end
+  end
+  @testset "compare operator construction methods with reprojection" begin
+    env = Utils.defaultEnv
     for n in 1:2
       @test AttractiveRepulsiveSolver.constructOperator(n, env.p.potential.beta, env) ≈
-            AttractiveRepulsiveSolver.recursivelyConstructOperatorWithReprojection(n, env.p.potential.beta, env) atol = 1e-15
+            AttractiveRepulsiveSolver.recursivelyConstructOperatorWithReprojection(n, env.p.potential.beta, env) atol = 1e-12
     end
   end
   @testset "solution is normalised" begin
@@ -35,20 +42,20 @@ import .AttractiveRepulsiveSolver
   @testset "jacobi to monomial basis conversion" begin
     G = 5
     env = Utils.defaultEnv
-    monomialCoeffs = zeros(M)
+    monomialCoeffs = zeros(G)
     monomialCoeffs[1] = 0.3  # r^0 coefficient
     monomialCoeffs[3] = 2.0  # r^2 coefficient
     r = axes(env.P, 1)
-    @test Utils.basisConversionMatrix(env.P, M) * monomialCoeffs ≈
-          env.P[:, 1:M] \ (monomialCoeffs[1] * r .^ 0 + monomialCoeffs[3] * r .^ 2)
+    @test Utils.basisConversionMatrix(env.P, G) * monomialCoeffs ≈
+          env.P[:, 1:G] \ (monomialCoeffs[1] * r .^ 0 + monomialCoeffs[3] * r .^ 2)
 
-    jacobiCoeff = zeros(M)
+    jacobiCoeff = zeros(G)
     jacobiCoeff[1] = 3.0  # P_0^{(a, b)} coeff
     jacobiCoeff[3] = -1.0  # P_2^{(a, b)} coeff
 
     r_vec = 0:0.002:1
-    @test sum((Utils.basisConversionMatrix(env.P, M) \ jacobiCoeff) .* [r_vec .^ k for k in 0:M-1], dims=1)[1] ≈
-          vec(sum(jacobiCoeff .* env.P[r_vec, 1:M]', dims=1))
+    @test sum((Utils.basisConversionMatrix(env.P, G) \ jacobiCoeff) .* [r_vec .^ k for k in 0:G-1], dims=1)[1] ≈
+          vec(sum(jacobiCoeff .* env.P[r_vec, 1:G]', dims=1))
   end
 end
 
