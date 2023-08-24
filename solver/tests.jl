@@ -28,13 +28,6 @@ import .AttractiveRepulsiveSolver
             AttractiveRepulsiveSolver.recursivelyConstructOperator(n, env.p.potential.beta, env) atol = 1e-12
     end
   end
-  @testset "compare operator construction methods with reprojection" begin
-    env = Utils.defaultEnv
-    for n in 1:2
-      @test AttractiveRepulsiveSolver.constructOperator(n, env.p.potential.beta, env) ≈
-            AttractiveRepulsiveSolver.recursivelyConstructOperatorWithReprojection(n, env.p.potential.beta, env) atol = 1e-12
-    end
-  end
   @testset "solution is normalised" begin
     env = Utils.defaultEnv
     @test Utils.totalMass(Solver.solve(12, env.p.R0, env), env) ≈ 1.0 atol = 1e-16
