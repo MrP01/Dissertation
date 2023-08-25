@@ -59,12 +59,27 @@ function outerOptimisation(N::Int64, env::Utils.SolutionEnvironment, method=Opti
   return solution
 end
 
-function getSupportRadius(env::Utils.SolutionEnvironment)
-  # This works for N=1.
-  alpha, beta = env.p.potential.alpha, env.p.potential.beta
-  f_a = Float64.(Utils.theorem216.(0.0; n=0, beta=alpha, p=env.p))
-  f_b = Float64.(Utils.theorem216.(0.0; n=0, beta=beta, p=env.p))
+function guessSupportRadius(N; p::Params.Parameters)
+  # This works for N=1. For N >= 2, not so much.
+  alpha, beta = p.potential.alpha, p.potential.beta
+  f_a, f_b = 0.0, 0.0
+  for n in 0:N-1
+    f_a += Float64.(Utils.theorem216.(0.0; n=n, beta=alpha, p=p))
+    f_b += Float64.(Utils.theorem216.(0.0; n=n, beta=beta, p=p))
+  end
   R = (f_b / f_a)^(1 / (alpha - beta))
+  return R
+end
+
+function guessSupportRadiusEvenHarder(solution::Vector{BigFloat}; p::Params.Parameters)
+  # no, does not work
+  alpha, beta = p.potential.alpha, p.potential.beta
+  U_a, U_b = 0.0, 0.0
+  for k in eachindex(solution)
+    U_a += solution[k] * Float64.(Utils.theorem216.(0.0; n=k - 1, beta=alpha, p=p))
+    U_b += solution[k] * Float64.(Utils.theorem216.(0.0; n=k - 1, beta=beta, p=p))
+  end
+  R = (U_b / U_a)^(1 / (alpha - beta))
   return R
 end
 end
