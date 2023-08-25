@@ -3,7 +3,6 @@ import ..Params
 import ..Utils
 import ..AttractiveRepulsiveSolver
 
-"""Docstring for the function"""
 function constructGeneralOperator(N::Int64, R::Float64, env::Utils.SolutionEnvironment)
   operator = zeros(N, N)
   for index in eachindex(env.monomial)

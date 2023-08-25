@@ -26,7 +26,6 @@ function constructOperatorFromEnv(N::Int64, R::Float64, env::Utils.SolutionEnvir
   end
 end
 
-"""Docstring for the function"""
 function solve(N::Int64, R::Float64, env::Utils.SolutionEnvironment)::Vector{BigFloat}
   BigMatrix = constructOperatorFromEnv(N, R, env)
   BigRHS = zeros(N)
@@ -36,7 +35,6 @@ function solve(N::Int64, R::Float64, env::Utils.SolutionEnvironment)::Vector{Big
   return BigSolution / Utils.totalMass(BigSolution, env)
 end
 
-"""Docstring for the function"""
 function solveWithRegularisation(N::Int64, R::Float64, env::Utils.SolutionEnvironment, s::Float64)::Vector{BigFloat}
   A = constructOperatorFromEnv(N, R, env)
   BigMatrix = A' * A + s * LinearAlgebra.I
@@ -48,7 +46,6 @@ function solveWithRegularisation(N::Int64, R::Float64, env::Utils.SolutionEnviro
   return BigSolution / Utils.totalMass(BigSolution, env)
 end
 
-"""Docstring for the function"""
 function outerOptimisation(N::Int64, env::Utils.SolutionEnvironment, method=Optim.NewtonTrustRegion(), R0=0)
   if R0 == 0
     R0 = env.p.R0

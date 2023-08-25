@@ -371,7 +371,7 @@ function plotSimulationAndSolverComparison(p::Params.Parameters=Params.known2dPa
   ax = Axis(fig[1, 1], xlabel=L"\text{Pseudo radial distance}~r \cdot \mathrm{sign}(x_1)", ylabel=LT"Density",
     title=L"\text{Particle Simulation Output Distribution with}~%$(p2tex(p))")
   hist!(ax, pseudoRadialDistance, bins=LinRange([-1, 1] * maxR..., 20), scale_to=maximum(solution) * 1.1,
-    label=LT"Particle Simulation")
+    label=LT"Particle Simulation", color=dissertationColours[1])
   lines!(ax, x, solution, color=dissertationColours[4], linewidth=3.0, label=LT"Spectral Method")
   ylims!(ax, 0, maximum(solution) * 1.12)
   axislegend(ax, position=:lb)

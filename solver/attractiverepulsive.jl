@@ -26,7 +26,6 @@ function constructOperator(N::Int64, beta::Float64, env::SolutionEnvironment)::M
   end
 end
 
-"""Docstring for the function"""
 function recurrence(r; oldestValue, oldValue, n, beta, p::Params.Parameters)
   # using Corollary 2.18
   m = p.m
