@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 #ifndef PARTICLES
-#define PARTICLES 120 // number of particles
+#define PARTICLES 80 // number of particles
 #endif
 
 #ifndef DIMENSION
@@ -17,6 +17,9 @@
 #define RADIAL_HISTOGRAM_BINS 20   // into how many radius boxes we aggregate particles
 #define VELOCITY_HISTOGRAM_BINS 12 // similarly, number of bins for the velocity histogram
 #define HISTOGRAM_AVERAGE_N 20     // histogram averaging
+
+#define square(x) ((x) * (x))
+#define sign(x) (((x) >= 0) ? 1.0 : -1.0)
 
 class InteractionPotential {
  public:
@@ -51,6 +54,11 @@ class MixedPotential : public InteractionPotential {
   double force(double r) { return -C / l * exp(-r / l) + pow(r, a - 1); };
 };
 
+class AbsoluteValuePotential : public InteractionPotential {
+  double potential(double r) { return -abs(1.0 - r); }
+  double force(double r) { return -sign(1.0 - r); }
+};
+
 struct Parameters {
   double tau = 35.0e-4;          // time step
   double boxScaling = 1.0;       // size of the box: [-1, 1] * boxScaling
@@ -58,9 +66,6 @@ struct Parameters {
   double selfPropulsion = 1.6;   // "alpha" parameter in 2006-self-propelled
   double friction = 0.5;         // "beta" parameter in 2006-self-propelled
 };
-
-#define square(x) ((x) * (x))
-#define sign(x) (((x) >= 0) ? 1.0 : -1.0)
 
 using ParticleVectors = double (&)[PARTICLES][DIMENSION];
 
