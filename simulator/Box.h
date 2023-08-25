@@ -42,6 +42,15 @@ class MorsePotential : public InteractionPotential {
   double force(double r) { return C_att / l_att * exp(-r / l_att) - C_rep / l_rep * exp(-r / l_rep); };
 };
 
+class MixedPotential : public InteractionPotential {
+ public:
+  double C = 1.0;
+  double l = 0.5;
+  double a = 1.8;
+  double potential(double r) { return C * exp(-r / l) + pow(r, a) / a; };
+  double force(double r) { return -C / l * exp(-r / l) + pow(r, a - 1); };
+};
+
 struct Parameters {
   double tau = 35.0e-4;          // time step
   double boxScaling = 1.0;       // size of the box: [-1, 1] * boxScaling

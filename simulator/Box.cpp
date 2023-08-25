@@ -239,6 +239,9 @@ int ParticleBox::setupFromArgv(int argc, char **argv) {
       poti->l_rep = atof(argv[firstPotIndex + 3]);
     }
     interaction = poti;
+  } else if (strcmp(potentialType, "mixed") == 0) {
+    auto poti = new MixedPotential();
+    interaction = poti;
   } else {
     std::cerr << "Unknown potential. Choices: attrep, morse." << std::endl;
     return 1;
