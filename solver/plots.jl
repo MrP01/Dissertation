@@ -31,6 +31,7 @@ dissertationColours[2] = RGBAf(175, 148, 72, 255) / 255  # oxfordGolden
 dissertationColours[3] = RGBAf(101, 145, 87, 255) / 255  # wongGreen
 dissertationColours[4] = RGBAf(204, 121, 167, 255) / 255  # wongPurple
 dissertationColours[5] = RGBAf(158, 179, 194, 255) / 255  # coolGray
+dissertationColourmap = :viridis
 dissertationTheme = Theme(palette=(color=dissertationColours,),)
 set_theme!(dissertationTheme)
 
@@ -66,14 +67,20 @@ function saveFig(fig::Figure, name::String)
   save(joinpath(RESULTS_FOLDER, "$name.pdf"), fig)
   @info "Exported $name.pdf"
 end
-function saveFig(fig::Figure, name::String, p::Params.Parameters)
+function saveFig(fig::Figure, name::String, p::Params.Parameters; throughEps=false)
   if _extra_pdf
     name = name * ".extra"
   end
   if ~isdir(joinpath(RESULTS_FOLDER, p.name))
     mkdir(joinpath(RESULTS_FOLDER, p.name))
   end
-  save(joinpath(RESULTS_FOLDER, p.name, "$name.pdf"), fig)
+  path = joinpath(RESULTS_FOLDER, p.name, "$name")
+  if throughEps
+    save("$path.eps", fig)
+    run(`epstopdf $path.eps -o $path.pdf`)
+  else
+    save("$path.pdf", fig)
+  end
   @info "Exported $(p.name)/$name.pdf"
 end
 function p2tex(p::Params.Parameters)
@@ -398,7 +405,7 @@ end
 
 function plot3dSimulationQuiver(p::Params.Parameters=Params.morsePotiSwarming3d; iterations::Int64=4000, runSim=true)
   if runSim
-    runSimulator(p, iterations, true)
+    runSimulator(p, iterations, false)
   end
   posidf, velodf, dimension = loadSimulatorData()
   @assert dimension >= 3
@@ -408,8 +415,8 @@ function plot3dSimulationQuiver(p::Params.Parameters=Params.morsePotiSwarming3d;
   ax = Axis3(fig[1, 1], xlabel=L"x", ylabel=L"y", zlabel=L"z", title=L"\text{Simulation Output with}~%$(p2tex(p))")
   scatter!(ax, posidf[!, 1], posidf[!, 2], posidf[!, 3], color=dissertationColours[1])
   quiver!(ax, posidf[!, 1], posidf[!, 2], posidf[!, 3], velodf[!, 1] / f, velodf[!, 2] / f, velodf[!, 3] / f,
-    color=velodf[!, 1], linewidth=0.01, arrowsize=Vec3f(0.3, 0.3, 0.4) * 0.1)
-  saveFig(fig, "simulation-quiver-3d", p)
+    color=velodf[!, 1], linewidth=0.007, arrowsize=Vec3f(0.3, 0.3, 0.4) * 0.07, fxaa=true)
+  saveFig(fig, "simulation-quiver-3d", p; throughEps=true)
   return fig
 end
 
