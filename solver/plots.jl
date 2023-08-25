@@ -31,6 +31,7 @@ dissertationColours[2] = RGBAf(175, 148, 72, 255) / 255  # oxfordGolden
 dissertationColours[3] = RGBAf(101, 145, 87, 255) / 255  # wongGreen
 dissertationColours[4] = RGBAf(204, 121, 167, 255) / 255  # wongPurple
 dissertationColours[5] = RGBAf(158, 179, 194, 255) / 255  # coolGray
+# dissertationColourmap = [dissertationColours[1], dissertationColours[2]]
 dissertationColourmap = :viridis
 dissertationTheme = Theme(palette=(color=dissertationColours,),)
 set_theme!(dissertationTheme)
@@ -121,7 +122,7 @@ function plotGeneralSolutionApproximation(p=Params.morsePotiParams)
   return fig
 end
 
-function plotAttRepOperators(p=Params.defaultParams; N=30)
+function plotAttRepOperators(p=Params.defaultParams; N=60)
   @assert isa(p.potential, Params.AttractiveRepulsive)
   env = Utils.createEnvironment(p)
   alpha, beta = p.potential.alpha, p.potential.beta
@@ -129,10 +130,10 @@ function plotAttRepOperators(p=Params.defaultParams; N=30)
   op2 = AttractiveRepulsiveSolver.recursivelyConstructOperator(N, beta, env)
   fig = Figure(resolution=(920, 400))
   ax = Axis(fig[1, 1][1, 1], yreversed=true, title=L"\text{Attractive Operator}~(\alpha = %$alpha)")
-  s = spy!(ax, sparse(log10.(abs.(op1))), marker=:rect, markersize=32, framesize=0)
+  s = spy!(ax, sparse(log10.(abs.(op1))), marker=:rect, markersize=12, framesize=0, colormap=dissertationColourmap)
   Colorbar(fig[1, 1][1, 2], s, flipaxis=false, tickformat=pow10tickformat)
   ax = Axis(fig[1, 2][1, 1], yreversed=true, title=L"\text{Repulsive Operator}~(\beta = %$beta)")
-  s = spy!(ax, sparse(log10.(abs.(op2))), marker=:rect, markersize=32, framesize=0)
+  s = spy!(ax, sparse(log10.(abs.(op2))), marker=:rect, markersize=12, framesize=0, colormap=dissertationColourmap)
   Colorbar(fig[1, 2][1, 2], s, flipaxis=false, tickformat=pow10tickformat)
   saveFig(fig, "attractive-repulsive-operators", p)
   return fig
@@ -142,7 +143,7 @@ function enhancedSpyPlot(matrix, title="")
   @debug Utils.opCond(matrix)
   fig = Figure(resolution=(600, 500))
   ax = Axis(fig[1, 1][1, 1], yreversed=true, title=title)
-  s = spy!(ax, sparse(log10.(abs.(matrix))), marker=:rect, markersize=32, framesize=0)
+  s = spy!(ax, sparse(log10.(abs.(matrix))), marker=:rect, markersize=12, framesize=0, colormap=dissertationColourmap)
   Colorbar(fig[1, 1][1, 2], s, flipaxis=false, tickformat=pow10tickformat)
   return fig
 end
@@ -403,7 +404,7 @@ function plotSimulationQuiver(p::Params.Parameters=Params.known2dParams; iterati
   return fig
 end
 
-function plot3dSimulationQuiver(p::Params.Parameters=Params.morsePotiSwarming3d; iterations::Int64=4000, runSim=true)
+function plot3dSimulationQuiver(p::Params.Parameters=Params.morsePotiSwarming3d; iterations::Int64=12000, runSim=true)
   if runSim
     runSimulator(p, iterations, false)
   end
@@ -546,6 +547,7 @@ function plotAll()
     plotSpatialEnergyDependence(Params.defaultParams)
     plotVaryingRSolutions(Params.morsePotiParams)
     plotGeneralSolutionApproximation(Params.morsePotiParams)
+    plot3dSimulationQuiver(Params.morsePotiSwarming3d)
     plotMonomialBasisConvergence(Params.morsePotiParams)
     plotSimulationAndSolverComparison(Params.morsePotiParams)
     plotConditionNumberGrowth(Params.defaultParams)
