@@ -62,3 +62,8 @@
 Lemma 2.4 from \cite{2011-porous-medium-1,1967-formulas-and-theorems} is based on the \textit{Weber-Schafheitlin} integral of two Bessel functions given in \cite{1945-bessel-integral}.
 The Weber-Schafheitlin integrals are related to the fractional Laplacians of aforementioned functions because the Fourier transform of ${}_2F_1$ is a Bessel function.
 For a more generalised version of Lemma 2.4, see \cite{2014-barenblatt}.
+
+Also note that for even integer $\beta$, the prefactor in \Cref{thm:theorem216} sometimes contains an expression of the form $\Gamma(-n),\, n \in \N$ which in principle leads to undefined behaviour (cf. \Cref{def:gamma-function} together with the property that $x \Gamma(x) = \Gamma(x+1)$).
+However, one can consider the limit as $x \in \R^+$ approaches an integer $n$ to say that
+$$\lim_{x \goesto n} \Gamma(-x) = (-1)^{n-1} \infty\,, \quad\text{or equivalently}\quad \lim_{x \goesto n} \frac{1}{\Gamma(-x)} = 0\,,$$
+in which case we are lucky because $\Gamma(\beta/2-n+1)$ appears in the denominator of the prefactor and without any singularities in the numerator we can safely evaluate the entire expression to $0$.
