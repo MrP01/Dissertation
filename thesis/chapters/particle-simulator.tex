@@ -78,3 +78,18 @@ where $k_B$ is the Boltzmann constant and $T$ is temperature.
 
 \section{Runtime Analysis}
 \hierKoennteIhreWerbungStehen
+
+\section{Further Experiments}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\linewidth]{results/gyroscope-3d/simulation-quiver-3d.pdf}
+  \caption{When running with $K(r) = |1-r|$ as an interaction potential and hence, $F(r) = -\nabla K(r) = -\sign(1-r)$, in $d=3$ dimensions a gyroscopical shape will form.}
+  \label{fig:gyroscope-quiver-3d}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\linewidth]{results/fcc-3d/simulation-quiver-3d.pdf}
+  \caption{When running an $N_p = 250$ particle simulation with $K(r) = |1-r|$ as an interaction potential in $d=3$ dimensions the particles will align into an ``optimal packing''. In this case, almost equaling a \gls{fcc} array of spheres.}
+  \label{fig:fcc-quiver-3d}
+\end{figure}

@@ -4,6 +4,7 @@ build/
 stuff/
 thesis/chapters/out/
 *.protected.pdf
+figures/results/**/*.eps
 *.extra.eps
 *.extra.pdf
 *.todo

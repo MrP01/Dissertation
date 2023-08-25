@@ -13,4 +13,10 @@ function constructGeneralOperator(N::Int64, R::Float64, env::Utils.SolutionEnvir
   end
   return operator
 end
+
+function constructMixedOperator(N::Int64, R::Float64, env::Utils.SolutionEnvironment)
+  a = env.p.potential.attrepPower
+  operator = R^a * AttractiveRepulsiveSolver.recursivelyConstructOperator(N, a, env)
+  return operator
+end
 end

@@ -196,10 +196,10 @@ void ParticleBox::exportToCSV() {
 
 int ParticleBox::setupFromArgv(int argc, char **argv) {
   if (argc < 2) {
-    std::cerr
-        << "Usage: ./experiments (morse|attrep) dimension [iterations] [box-scaling] [self-propulsion] [friction] "
-           "[C_a, C_r, l_a, l_b | alpha, beta]"
-        << std::endl;
+    std::cerr << "Usage: ./experiments (morse|attrep|mixed|absvalue) dimension [iterations] [box-scaling] "
+                 "[self-propulsion] [friction] "
+                 "[C_a, C_r, l_a, l_b | alpha, beta]"
+              << std::endl;
     return 1;
   }
 
@@ -246,7 +246,7 @@ int ParticleBox::setupFromArgv(int argc, char **argv) {
     auto poti = new AbsoluteValuePotential();
     interaction = poti;
   } else {
-    std::cerr << "Unknown potential. Choices: attrep, morse." << std::endl;
+    std::cerr << "Unknown potential. Choices: attrep, morse, mixed, absvalue." << std::endl;
     return 1;
   }
   return 0;

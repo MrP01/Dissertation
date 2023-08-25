@@ -32,6 +32,8 @@ function createBasis(p::Params.Parameters)
     alpha = p.potential.alpha
   elseif isa(p.potential, Params.MorsePotential)
     alpha = PARAMETER_TO_FIND  # TODO: what should we put here?
+  elseif isa(p.potential, Params.MixedPotential)
+    alpha = p.potential.attrepPower
   else
     error("Unkown potential")
   end

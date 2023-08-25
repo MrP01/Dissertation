@@ -43,6 +43,12 @@ function runSimulator(p::Params.Parameters, iterations=2000, big=true)
   elseif isa(p.potential, Params.MorsePotential)
     mode = "morse"
     potentialParams = [p.potential.C_att, p.potential.l_att, p.potential.C_rep, p.potential.l_rep]
+  elseif isa(p.potential, Params.MixedPotential)
+    mode = "mixed"
+    potentialParams = [p.potential.morseC, p.potential.morsel, p.potential.attrepPower]
+  elseif isa(p.potential, Params.AbsoluteValuePotential)
+    mode = "absvalue"
+    potentialParams = []
   else
     error("Unkown potential")
   end
@@ -61,21 +67,33 @@ function loadSimulatorData()
   dimension = length(axes(posidf, 2))
   return posidf, velodf, dimension
 end
-function saveFig(fig::Figure, name::String)
+function _saveFigCommon(name::String)
   if _extra_pdf
     name = name * ".extra"
   end
-  save(joinpath(RESULTS_FOLDER, "$name.pdf"), fig)
+  if Makie.current_backend() != CairoMakie
+    return
+  end
+  return name
+end
+function saveFig(fig::Figure, name::String)
+  name = _saveFigCommon(name)
+  if isnothing(name)
+    return
+  end
+  path = joinpath(RESULTS_FOLDER, name)
+  save("$path.pdf", fig)
   @info "Exported $name.pdf"
 end
 function saveFig(fig::Figure, name::String, p::Params.Parameters; throughEps=false)
-  if _extra_pdf
-    name = name * ".extra"
+  name = _saveFigCommon(name)
+  if isnothing(name)
+    return
   end
+  path = joinpath(RESULTS_FOLDER, p.name, name)
   if ~isdir(joinpath(RESULTS_FOLDER, p.name))
     mkdir(joinpath(RESULTS_FOLDER, p.name))
   end
-  path = joinpath(RESULTS_FOLDER, p.name, "$name")
   if throughEps
     save("$path.eps", fig)
     run(`epstopdf $path.eps -o $path.pdf`)
@@ -404,7 +422,7 @@ function plotSimulationQuiver(p::Params.Parameters=Params.known2dParams; iterati
   return fig
 end
 
-function plot3dSimulationQuiver(p::Params.Parameters=Params.morsePotiSwarming3d; iterations::Int64=12000, runSim=true)
+function plot3dSimulationQuiver(p::Params.Parameters=Params.morsePotiSwarming3d; iterations::Int64=12000, runSim=true, fcc=false)
   if runSim
     runSimulator(p, iterations, false)
   end
@@ -414,9 +432,12 @@ function plot3dSimulationQuiver(p::Params.Parameters=Params.morsePotiSwarming3d;
   f = 35
   fig = Figure()
   ax = Axis3(fig[1, 1], xlabel=L"x", ylabel=L"y", zlabel=L"z", title=L"\text{Simulation Output with}~%$(p2tex(p))")
-  scatter!(ax, posidf[!, 1], posidf[!, 2], posidf[!, 3], color=dissertationColours[1])
+  scatter!(ax, posidf[!, 1], posidf[!, 2], posidf[!, 3], color=dissertationColours[1], markersize=fcc ? 50 : 10)
   quiver!(ax, posidf[!, 1], posidf[!, 2], posidf[!, 3], velodf[!, 1] / f, velodf[!, 2] / f, velodf[!, 3] / f,
     color=velodf[!, 1], linewidth=0.007, arrowsize=Vec3f(0.3, 0.3, 0.4) * 0.07, fxaa=true)
+  if fcc
+    lines!(ax, posidf[!, 1], posidf[!, 2], posidf[!, 3], color=:black)
+  end
   saveFig(fig, "simulation-quiver-3d", p; throughEps=true)
   return fig
 end
@@ -548,6 +569,7 @@ function plotAll()
     plotVaryingRSolutions(Params.morsePotiParams)
     plotGeneralSolutionApproximation(Params.morsePotiParams)
     plot3dSimulationQuiver(Params.morsePotiSwarming3d)
+    plot3dSimulationQuiver(Params.gyroscope3dParams; iterations=4000)
     plotMonomialBasisConvergence(Params.morsePotiParams)
     plotSimulationAndSolverComparison(Params.morsePotiParams)
     plotConditionNumberGrowth(Params.defaultParams)

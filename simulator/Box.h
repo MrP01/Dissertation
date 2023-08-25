@@ -4,11 +4,11 @@
 #include <stdlib.h>
 
 #ifndef PARTICLES
-#define PARTICLES 80 // number of particles
+#define PARTICLES 220 // number of particles
 #endif
 
 #ifndef DIMENSION
-#define DIMENSION 2 // dimension
+#define DIMENSION 3 // dimension
 #endif
 
 // be careful to set numeric values as floats here
@@ -56,14 +56,15 @@ class MixedPotential : public InteractionPotential {
 
 class AbsoluteValuePotential : public InteractionPotential {
   double potential(double r) { return -abs(1.0 - r); }
+  // double force(double r) { return -sign(1.0 - 2 * r) + 0.5 * sign(2.0 - 2 * r) - sign(3.0 - 2 * r); }
   double force(double r) { return -sign(1.0 - r); }
 };
 
 struct Parameters {
-  double tau = 35.0e-4;          // time step
+  double tau = 40.0e-4;          // time step
   double boxScaling = 1.0;       // size of the box: [-1, 1] * boxScaling
   double initWindowLength = 1.0; // 0.0 < window length <= 2.0
-  double selfPropulsion = 1.6;   // "alpha" parameter in 2006-self-propelled
+  double selfPropulsion = 0.5;   // "alpha" parameter in 2006-self-propelled
   double friction = 0.5;         // "beta" parameter in 2006-self-propelled
 };
 
