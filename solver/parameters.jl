@@ -79,10 +79,11 @@ function copyWithChanges(p::Parameters; kwargs...)
 end
 
 defaultParams = Parameters()
-known2dParams = Parameters(potential=AttractiveRepulsive(alpha=1.2, beta=0.1993), d=2, name="known-2d")
+known2dParams = Parameters(potential=AttractiveRepulsive(alpha=1.2, beta=0.1993), d=2, R0=1.5, name="known-2d")
 knownAnalyticParams = Parameters(potential=AttractiveRepulsive(alpha=2.0, beta=1.5), d=1, name="known-analytic")
 morsePotiParams = Parameters(potential=MorsePotential(), d=1, s0=1e-5, name="morse")
 morsePotiSwarming2d = Parameters(potential=MorsePotential(), friction=QuadraticSelfPropulsion(selfPropulsion=1.6), d=2, m=2, s0=1e-5, name="morse-2d")
+morsePotiSwarming3d = Parameters(potential=MorsePotential(), friction=QuadraticSelfPropulsion(selfPropulsion=1.6), d=3, m=2, s0=1e-5, name="morse-3d")
 voidParams2d = Parameters(d=2, m=2, potential=AttractiveRepulsive(alpha=3.5, beta=1.6), name="void-2d")  # found in meeting with Timon
 bumpParams = Parameters(d=1, m=0, potential=AttractiveRepulsive(alpha=0.912, beta=0.881), R0=1.4, name="bump")  # 2020-power-law, fig. 11
 

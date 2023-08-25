@@ -197,7 +197,7 @@ void ParticleBox::exportToCSV() {
 int ParticleBox::setupFromArgv(int argc, char **argv) {
   if (argc < 2) {
     std::cerr
-        << "Usage: ./experiments (morse|attrep) dimension [iterations] [bos-scaling] [self-propulsion] [friction] "
+        << "Usage: ./experiments (morse|attrep) dimension [iterations] [box-scaling] [self-propulsion] [friction] "
            "[C_a, C_r, l_a, l_b | alpha, beta]"
         << std::endl;
     return 1;

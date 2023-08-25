@@ -26,9 +26,11 @@ x_vec_noends3 = x_vec[4:end-3]
 pow10tickformat(values) = [L"10^{%$(Int64(round(value)))}" for value in values]
 
 dissertationColours = Makie.wong_colors()
-dissertationColours[1] = RGBAf(0x00 / 255, 0x21 / 255, 0x47 / 255)  # Oxford Blue
-dissertationColours[2] = RGBAf(0xaf / 255, 0x94 / 255, 0x48 / 255)  # Oxford Golden
-dissertationColours[3] = RGBAf(0x65 / 255, 0x91 / 255, 0x57 / 255)  # Themecolor2 (olive green) from prettytex
+dissertationColours[1] = RGBAf(39, 63, 111, 255) / 255  # lighterOxfordBlue
+dissertationColours[2] = RGBAf(175, 148, 72, 255) / 255  # oxfordGolden
+dissertationColours[3] = RGBAf(101, 145, 87, 255) / 255  # wongGreen
+dissertationColours[4] = RGBAf(204, 121, 167, 255) / 255  # wongPurple
+dissertationColours[5] = RGBAf(158, 179, 194, 255) / 255  # coolGray
 dissertationTheme = Theme(palette=(color=dissertationColours,),)
 set_theme!(dissertationTheme)
 
@@ -42,12 +44,12 @@ function runSimulator(p::Params.Parameters, iterations=2000, big=true)
   else
     error("Unkown potential")
   end
-  boxScaling = 1.0
+  boxScaling = ceil(p.R0)
   bigstring = big ? "big" : ""
   cmd = Cmd(string.(["./build/simulator/experiments$(p.d)d$(bigstring)",
     mode, p.d, iterations, boxScaling, p.friction.selfPropulsion, p.friction.frictionCoeff, potentialParams...]))
   @show cmd
-  println("----- Running simulation -----")
+  println("----- Running simulation with $(p.name) -----")
   run(cmd)
   println("----- Simulation done -----")
 end
@@ -177,7 +179,7 @@ function plotStepByStepConvergence(p=Params.defaultParams)
   ax = Axis(fig[1, 1], yscale=log10, xlabel=L"N", ylabel=LT"Squared Error",
     title=L"\text{Step by Step Convergence with}~%$(p2tex(p))")
   lines!(ax, Ns, errors)
-  scatter!(ax, Ns, errors, color=:red)
+  scatter!(ax, Ns, errors, color=dissertationColours[4])
   saveFig(fig, "convergence", p)
   return fig
 end
@@ -199,7 +201,7 @@ function plotMonomialBasisConvergence(p=Params.morsePotiParams)
   fig = Figure(resolution=(800, 450))
   ax = Axis(fig[1, 1], yscale=log10, xlabel=L"G", ylabel=LT"Squared Error", title=LT"Step by Step Convergence")
   lines!(ax, Gs, errors)
-  scatter!(ax, Gs, errors, color=:red)
+  scatter!(ax, Gs, errors, color=dissertationColours[4])
   saveFig(fig, "monomial-basis-convergence", p)
   return fig
 end
@@ -241,6 +243,7 @@ function plotAnalyticSolution(p=Params.knownAnalyticParams)
   env = Utils.createEnvironment(p)
   R, analytic = AnalyticSolutions.explicitSolution(x_vec_noends; p=p)
   OptR(N) = abs(Solver.outerOptimisation(N, env).minimizer[1] - R)
+  OptRs = OptR.(Ns)
   ax = Axis(fig[1, 1], title=L"\text{Analytic Solution with}~%$(p2tex(p))", xlabel=L"x", ylabel=L"\rho(x)")
   lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(4, R, env), env), label=L"N = 4")
   lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(8, R, env), env), label=L"N = 8")
@@ -256,7 +259,8 @@ function plotAnalyticSolution(p=Params.knownAnalyticParams)
   axislegend(ax)
   ax = Axis(fig[3, 1], title=LT"Absolute Error", xscale=log10, yscale=log10, xlabel=L"N", ylabel=L"|R_N - R|",
     xticks=Ns, height=120)
-  scatter!(ax, Ns, OptR.(Ns), color=dissertationColours[5])
+  lines!(ax, Ns, OptRs)
+  scatter!(ax, Ns, OptRs, color=dissertationColours[4])
   saveFig(fig, "analytic-solution", p)
   return fig
 end
@@ -277,7 +281,7 @@ function plotConvergenceToAnalytic(p=Params.knownAnalyticParams)
   ax = Axis(fig[1, 1], yscale=log10, xlabel=L"N", ylabel=LT"Squared Error",
     title=L"\text{Convergence to analytic solution with}~%$(p2tex(p))")
   lines!(ax, Ns, errors)
-  scatter!(ax, Ns, errors, color=:red)
+  scatter!(ax, Ns, errors, color=dissertationColours[4])
   saveFig(fig, "convergence-to-analytic", env.p)
   return fig
 end
@@ -368,26 +372,44 @@ function plotSimulationAndSolverComparison(p::Params.Parameters=Params.known2dPa
     title=L"\text{Particle Simulation Output Distribution with}~%$(p2tex(p))")
   hist!(ax, pseudoRadialDistance, bins=LinRange([-1, 1] * maxR..., 20), scale_to=maximum(solution) * 1.1,
     label=LT"Particle Simulation")
-  lines!(ax, x, solution, color=:red, linewidth=3.0, label=LT"Spectral Method")
+  lines!(ax, x, solution, color=dissertationColours[4], linewidth=3.0, label=LT"Spectral Method")
   ylims!(ax, 0, maximum(solution) * 1.12)
   axislegend(ax, position=:lb)
   saveFig(fig, "simulation-solver-comparison", p)
   return fig
 end
 
-function plotSimulationQuiver(p::Params.Parameters=Params.known2dParams; iterations::Int64=2000, runSim=true)
+function plotSimulationQuiver(p::Params.Parameters=Params.known2dParams; iterations::Int64=4000, runSim=true)
   if runSim
     runSimulator(p, iterations, false)
   end
   posidf, velodf, dimension = loadSimulatorData()
   @assert dimension >= 2
 
+  f = (p.friction.selfPropulsion > 0) ? 20 : 2
   fig = Figure()
   ax = Axis(fig[1, 1], xlabel=L"x", ylabel=L"y", title=L"\text{Simulation Output with}~%$(p2tex(p))")
   scatter!(ax, posidf[!, 1], posidf[!, 2], color=dissertationColours[1])
-  quiver!(ax, posidf[!, 1], posidf[!, 2], velodf[!, 1] / 20, velodf[!, 2] / 20,
-    color=dissertationColours[4], linewidth=2)
+  quiver!(ax, posidf[!, 1], posidf[!, 2], velodf[!, 1] / f, velodf[!, 2] / f,
+    color=velodf[!, 1], linewidth=2)
   saveFig(fig, "simulation-quiver", p)
+  return fig
+end
+
+function plot3dSimulationQuiver(p::Params.Parameters=Params.morsePotiSwarming3d; iterations::Int64=4000, runSim=true)
+  if runSim
+    runSimulator(p, iterations, true)
+  end
+  posidf, velodf, dimension = loadSimulatorData()
+  @assert dimension >= 3
+
+  f = 35
+  fig = Figure()
+  ax = Axis3(fig[1, 1], xlabel=L"x", ylabel=L"y", zlabel=L"z", title=L"\text{Simulation Output with}~%$(p2tex(p))")
+  scatter!(ax, posidf[!, 1], posidf[!, 2], posidf[!, 3], color=dissertationColours[1])
+  quiver!(ax, posidf[!, 1], posidf[!, 2], posidf[!, 3], velodf[!, 1] / f, velodf[!, 2] / f, velodf[!, 3] / f,
+    color=velodf[!, 1], linewidth=0.01, arrowsize=Vec3f(0.3, 0.3, 0.4) * 0.1)
+  saveFig(fig, "simulation-quiver-3d", p)
   return fig
 end
 
@@ -513,7 +535,7 @@ function plotAll()
     plotPhaseSpace(Params.morsePotiParams)
     plotSimulationHistograms(Params.defaultParams)
     plotSimulationQuiver(Params.known2dParams)
-    plotSimulationQuiver(Params.morsePotiSwarming2d)
+    plotSimulationQuiver(Params.morsePotiSwarming2d; iterations=8000)
     plotSpatialEnergyDependence(Params.defaultParams)
     plotVaryingRSolutions(Params.morsePotiParams)
     plotGeneralSolutionApproximation(Params.morsePotiParams)

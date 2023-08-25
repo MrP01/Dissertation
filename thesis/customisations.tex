@@ -6,13 +6,18 @@
 \setlength{\headheight}{19.53pt}
 \setlength{\headsep}{1.8em}
 \setlength{\belowcaptionskip}{-12pt}
-\definecolor{oxfordblue}{HTML}{002147} % color in the official logo
-\definecolor{oxfordblue2}{HTML}{273f6f} % color in the official logo
-\definecolor{oxfordgolden}{HTML}{af9448} % color in the official logo
-\definecolor{themecolor}{HTML}{003eaa} % taken from ox.ac.uk homepage
-\definecolor{themecolor3}{HTML}{002147} % taken from ox.ac.uk homepage
-\definecolor{wongpurple}{RGB}{204, 121, 167}  % Makie.wong_colors()[4]
-\renewcommand{\operatorcolor}{wongpurple!70!black}
+
+% Colors:
+\definecolor{lighterOxfordBlue}{RGB}{39, 63, 111}
+\definecolor{oxfordGolden}{RGB}{175, 148, 72}
+\definecolor{wongGreen}{RGB}{101, 145, 87}
+\definecolor{wongPurple}{RGB}{204, 121, 167}
+\definecolor{powderBlue}{RGB}{158, 179, 194}
+
+\colorlet{themecolor}{lighterOxfordBlue}
+\colorlet{themecolor2}{wongGreen}
+\colorlet{themecolor3}{wongPurple!80!black}
+\renewcommand{\operatorcolor}{themecolor3}
 
 \renewcommand{\figureloc}{../figures}  % for tikzfigures
 \graphicspath{{../figures}}  % for all other figures
