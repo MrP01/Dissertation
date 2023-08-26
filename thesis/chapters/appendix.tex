@@ -20,3 +20,28 @@
 \end{figure}
 
 % \chapter{Supplemental Proofs}
+
+\chapter{Code Snippets}
+\label{appendix:code-snippets}
+\begin{minted}{cpp}
+void ParticleBox::simulate(size_t timesteps) {
+  double afterAccelerations[PARTICLES][DIMENSION];
+  f(afterAccelerations);
+  for (size_t t = 0; t < timesteps; t++) {
+    ParticleVectors beforeAccelerations = afterAccelerations;
+    memcpy(beforeAccelerations, afterAccelerations, PARTICLES * DIMENSION * sizeof(double));
+    for (size_t i = 0; i < PARTICLES; i++) {
+      for (size_t d = 0; d < DIMENSION; d++)
+        positions[i][d] += p.tau * velocities[i][d] + square(p.tau) / 2 * beforeAccelerations[i][d];
+    }
+
+    f(afterAccelerations);
+    for (size_t i = 0; i < PARTICLES; i++) {
+      for (size_t d = 0; d < DIMENSION; d++) {
+        velocities[i][d] += (p.tau / 2 * (beforeAccelerations[i][d] + afterAccelerations[i][d])) / p.boxScaling;
+      }
+    }
+    reflectParticles();
+  }
+}
+\end{minted}
