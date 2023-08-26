@@ -1,0 +1,18 @@
+\begin{tikzpicture}
+  \begin{axis}[
+      xlabel=$r$, ylabel=$K(r)$,
+      legend style={at={(0, 1)}, anchor=north west},
+      legend cell align={left},
+      scale only axis, width=11cm, height=7cm,
+      domain=0:2.5, samples=250
+    ]
+    \addplot[color=lighterOxfordBlue, ultra thick]{x^3.5/3.5 - x^1.6/1.6};
+    \addlegendentry{$K_{(\alpha, \beta)}(r) = \frac{r^\alpha}{\alpha} - \frac{r^\beta}{\beta}$};
+    \addplot[color=oxfordGolden, ultra thick]{1.0 * exp(-x / 0.5) - 1.5 * exp(-x / 2.0)};
+    \addlegendentry{$K_{(C_a, l_a, C_r, l_r)}(r) = C_a \e^{-r / l_a} - C_r \e^{-r / l_r}$};
+    \addplot[color=wongGreen, ultra thick]{1.0 * exp(-x / 0.5) + x^1.8/1.8};
+    \addlegendentry{$K_{(C, l, \bar{a})}(r) = C e^{-r/l} + \frac{r^{\bar{a}}}{\bar{a}}$};
+    \addplot[color=wongPurple, ultra thick]{abs(1-x)};
+    \addlegendentry{$K_{||}(r) = |1-r|$};
+  \end{axis}
+\end{tikzpicture}
