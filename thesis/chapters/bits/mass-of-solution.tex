@@ -2,7 +2,7 @@
   For a given solution $\rho: B_1(\vec{0}) \mapsto \R$, its \textit{mass} $M \in \R$ is given by \Cref{eq:measure-mass}.
   Provided the appropriate ansatz given in \Cref{eq:ansatz}, an expansion of weighted radial Jacobi polynomials with coefficients $\rho_k$, its \textit{mass} is given by
   \begin{align*}
-    M := \int_{\supp(\rho)} \rho(y) \,\ddy = \frac{\pi^{{d/2}}\Gamma (a+1)}{\Gamma \left(a+{d/2}+1\right)}\, \rho_0\,,
+    M[\rho[\vec{\rho}]] = \int_{\supp(\rho)} \rho(y) \,\ddy = \frac{\pi^{{d/2}}\Gamma (a+1)}{\Gamma \left(a+{d/2}+1\right)}\, \rho_0\,,
   \end{align*}
   so solely depending on the first coefficient $\rho_0$.
 \end{lemma}
@@ -32,6 +32,8 @@
   \end{align*}
   which relies on the classical orthogonality condition of the Jacobi polynomials given in \Cref{thm:jacobi-orthogonality-condition} with the $0$th polynomial $P_0(u) = 1$.
 \end{proof}
+
+Note that $M = 1$ together with $a > -1$ implies $\rho_0 > 0$ because the factor between both is positive.
 
 \begin{lemma}{Surface Area of the Hypersphere}{surface-area}
   The surface area of the d-dimensional hypersphere $\partial B_R(\vec{0})$ is given by

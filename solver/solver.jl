@@ -56,13 +56,15 @@ function outerOptimisation(N::Int64, env::Utils.SolutionEnvironment, method=Opti
   return solution
 end
 
-function guessSupportRadius(N; p::Params.Parameters)
+function guessSupportRadius(N; env::Utils.SolutionEnvironment)
   # This works for N=1. For N >= 2, not so much.
+  p = env.p
+  r = axes(env.P, 1)
   alpha, beta = p.potential.alpha, p.potential.beta
   f_a, f_b = 0.0, 0.0
   for n in 0:N-1
-    f_a += Float64.(Utils.theorem216.(0.0; n=n, beta=alpha, p=p))
-    f_b += Float64.(Utils.theorem216.(0.0; n=n, beta=beta, p=p))
+    f_a += (env.P[:, 1:1]\Utils.theorem216.(r; n=n, beta=alpha, p=env.p))[1]
+    f_b += (env.P[:, 1:1]\Utils.theorem216.(r; n=n, beta=beta, p=env.p))[1]
   end
   R = (f_b / f_a)^(1 / (alpha - beta))
   return R

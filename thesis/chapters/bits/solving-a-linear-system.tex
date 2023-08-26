@@ -4,7 +4,7 @@ That means, we are looking for $\vec{\rho} \in \R^N$ such that
 \begin{equation}
   \mathcal{Q}[\rho](\vec{x}) = \tilde{E}(\vec{x}) = E\,,
 \end{equation}
-where we can expand $\tilde{E}(\vec{x}) = \jacobivec{x} \cdot \vec{E}$ into Jacobi polynomials with coefficients $\vec{E} = (E, 0, ..., 0)^T$ such that the energy is constant along the entire domain, so $\tilde{E}(\vec{x}) = E \cdot P_0^{(a, b)}\left(\jacobiarg{x}\right) = E$.
+where we can expand $\tilde{E}(\vec{x}) = \jacobivec{x} \cdot \vec{E}$ into Jacobi polynomials with coefficients $\vec{E} = E \vec{e}_1 = (E, 0, ..., 0)^T$ such that the energy is constant along the entire domain, so $\tilde{E}(\vec{x}) = E \cdot P_0^{(a, b)}\left(\jacobiarg{x}\right) = E$.
 In matrix form, that is
 $$Q \vec{\rho} = \vec{E} \qLRq \begin{pmatrix}
     q_{00}    & \dots  & q_{0,N-1}   \\
@@ -20,15 +20,21 @@ $$Q \vec{\rho} = \vec{E} \qLRq \begin{pmatrix}
     0
   \end{pmatrix}\,.$$
 
-The linear system is solved using a QR-decomposition.
+This equation $Q \vec{\rho} = \vec{E}$ contains two unknowns, so we need a second equation to find the full solution $\rho \in \functionspace$ and, thereby, $\hat{\rho} \in \functionspacehat$.
+The second piece of information we are looking for is the mass given in \Cref{eq:measure-mass}, which is set to $M = 1$. We start by dividing $Q \vec{\rho} = E \vec{e}_1$ by the unknown energy $E$,
+$$Q \frac{\vec{\rho}}{E} = Q \vec{\tilde{\rho}} = \vec{e}_1\,,$$
+which we can efficiently solve using readily available linear system solvers.
+After solving, we ensure $M\left[\rho[\vec{\tilde{\rho}}]\right] = 1$, using \Cref{lemma:mass}, leading us to our final equilibrium distribution $\rho \in \functionspace$.
+
+% The linear system is solved using a QR-decomposition.
 % TODO: what would Yuji say?
 
 Hence the total potential (energy) of a given solution $\vec{\rho}$ is obtained by
 \begin{equation}
-  E(R) = \{Q_{\alpha,\beta} \vec{\rho}\}_1 = \sum_{k=0}^{N-1} \rho_k \left(\frac{R^\alpha}{\alpha} \bar{I}_{m,k}^{\alpha,\alpha} - \frac{R^\beta}{\beta} \bar{I}_{m,k}^{\alpha,\beta}\right)\,,
+  E(R) = \{Q_{\alpha,\beta} \vec{\rho}\}_1 = \sum_{k=0}^{N-1} \rho_k \left(\frac{R^{\alpha+d}}{\alpha} \bar{I}_{m,k}^{\alpha,\alpha} - \frac{R^{\beta+d}}{\beta} \bar{I}_{m,k}^{\alpha,\beta}\right)\,,
   \label{eq:total-energy-for-ansatz}
 \end{equation}
-with $\bar{I}_{m,n}^{\alpha,\alpha}$ the 0th coefficient of a Jacobi polynomial expansion of $I_{m,n}^{\alpha,\alpha}$ (cf. \Cref{thm:theorem216}) as given in \Cref{eq:0th-coeff-of-I}.
+with $\bar{I}_{m,n}^{\alpha,\alpha}$ the 0th coefficient of a Jacobi polynomial expansion of $I_{m,n}^{\alpha,\alpha}(\vec{x})$ (cf. \Cref{thm:theorem216}) as given in \Cref{eq:0th-coeff-of-I}.
 
 \subsection{Tikhonov Regularisation}
 The normal system is: ... \\

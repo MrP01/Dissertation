@@ -55,7 +55,7 @@ import .AttractiveRepulsiveSolver
     N = 1
     env = Utils.defaultEnv
     R_opt = Solver.outerOptimisation(N, env).minimizer[1]
-    @test R_opt ≈ Solver.guessSupportRadius(N; p=env.p) atol = 1e-6
+    @test R_opt ≈ Solver.guessSupportRadius(N; env) atol = 1e-6
   end
   @testset "analytic solution is close" begin
     p = Params.knownAnalyticParams
