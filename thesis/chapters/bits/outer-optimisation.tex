@@ -17,3 +17,12 @@ The entire optimisation routine with \gls{lbfgs}, including function and gradien
 
 Note that using this setup, the operators themselves do not need to be recomputed upon a change in $R$, cf. \Cref{eq:full-attrep-operator}.
 The provided implementation uses \gls{lru} caching to automatically store operators for a given parameter set and order $N$.
+
+\begin{lemma}{Unique Energy Minimum}{attrep-energy-min}
+  Assuming an $N=1$ expansion of the density distribution $\rho$ according to \Cref{eq:ansatz} with $m \in \N_0$, for an attractive-repulsive interaction potential $K_{\alpha, \beta}(r) = \frac{r^\alpha}{\alpha} - \frac{r^\beta}{\beta}$, the energy minimum $E_{\rm min}$ is unique and given by
+  $$E_{\rm min} = \left(\sfrac{I_{m,0}^{\alpha,\beta}}{I_{m,0}^{\alpha,\alpha}}\right)^\frac{1}{\alpha-\beta}\,,$$
+  with $I_{m,n}^{\alpha,\alpha}$ as given in \Cref{thm:theorem216}.
+\end{lemma}
+\begin{proof}
+  $$\frac{\partial E}{\partial R}$$
+\end{proof}

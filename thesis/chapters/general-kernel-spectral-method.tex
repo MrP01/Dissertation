@@ -6,34 +6,49 @@ The approach in this chapter will be to expand a general kernel $K$ in a power l
 
 More specifically, one choice of basis that could be made is the basis of monomials (so integer powers of the power law kernel basis).
 Using standard methods from function approximation theory, we expand the general kernel $K: \R^+ \mapsto \R$ in the basis of $G$ Jacobi polynomials (cf. \Cref{def:jacobi-polynomials})
-$$K(r) \approx \sum_{k=0}^{G-1} \tilde{g_k} P_k^{(a, b)}\left(2 r^2 - 1\right)\,, \quad \tilde{g_k} \in \R, \;k = 0, ..., G-1\,,$$
+$$K(r) \approx \sum_{l=0}^{G-1} \tilde{g_k} P_k^{(a, b)}\left(2 r^2 - 1\right)\,, \quad \tilde{g_k} \in \R, \;l = 0, ..., G-1\,,$$
 which we then reproject into the monomial basis to obtain the monomial coefficients $g_k \in \R$ such that
 \begin{equation}
-  K_G(r) = \sum_{k=0}^{G-1} g_k r^k \approx K(r)\,,\quad g_k \in \R, \;k=0, ..., G-1\,.
+  K_G(r) = \sum_{l=0}^{G-1} g_k r^l \approx K(r)\,,\quad g_k \in \R, \;l=0, ..., G-1\,.
   \label{eq:monomial-expansion}
 \end{equation}
 
-Does reprojection from Jacobi to monomials make sense / is it better for stability etc.?
-If so, explain reprojection using basis transformation matrix.
+\section{Reprojection from radial Jacobi polynomials}
+For versatility in the choice of basis, we obtain the monomial coefficients of a given kernel $K(r)$ by
+$$\vec{g} = B \tilde{\vec{g}}\,,$$
+where $B \in \R^{G \times G}$.
+
+% Does reprojection from Jacobi to monomials make sense / is it better for stability etc.?
+% If so, explain reprojection using basis transformation matrix. --> yes.
+
+\section{Description of the Method}
+Given the Ansatz, the total energy of the equilibrium measure (cf. \Cref{def:equilibrium-measure}) is given by
+\begin{align*}
+  U_{K_G}[\hat{\rho}] & = \iint K_G\left(\norm{\hatvec{x}-\hatvec{y}}\right) \,\dd\hat{\rho}(\hatvec{x})\dd\hat{\rho}(\hatvec{y})
+  = \sum_{l=0}^{G-1} g_l \iint \norm{\hatvec{x}-\hatvec{y}}^l \,\dd\hat{\rho}(\hatvec{x})\dd\hat{\rho}(\hatvec{y})                \\
+                      & = R^{2d} \sum_{l=0}^{G-1} g_l R^l \iint \norm{\vec{x}-\vec{y}}^l \,\dd\rho(\vec{x})\dd\rho(\vec{y})
+  = R^{2d} \sum_{l=0}^{G-1} g_l R^l U^{(l)}[\rho]\,,
+\end{align*}
+using \Cref{def:power-law-potential}.
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.5\linewidth]{results/morse/full-operator.pdf}
-  \caption[Full Morse operator]{The full operator constructed from the $G=8$th order monomial expansion $K_G$ of the morse potential function $K_{C_a, l_a, C_r, l_r}(r)$ with parameters as given above.}
+  \caption[Full Morse operator]{The full operator constructed from the $G=8$th order monomial expansion $K_G$ of the Morse potential function $K_{C_a, l_a, C_r, l_r}(r)$ with parameters as given above.}
   \label{fig:morse-operator}
 \end{figure}
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.8\linewidth]{results/morse/solution-increasing-order.pdf}
-  \caption[General kernel solutions of increasing order]{Solutions $\rho_N(x)$ of increasing order $N$ in the general kernel setting with a monomial expansion of highest order $G = 8$ of the morse potential $K_{C_a, l_a, C_r, l_r}(r)$.}
+  \caption[General kernel solutions of increasing order]{Solutions $\rho_N(x)$ of increasing order $N$ in the general kernel setting with a monomial expansion of highest order $G = 8$ of the Morse potential $K_{C_a, l_a, C_r, l_r}(r)$.}
   \label{fig:morse-solution-increasing-order}
 \end{figure}
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.7\linewidth]{results/morse/monomial-solutions.pdf}
-  \caption[]{Solutions $\rho_8(x)$ for an increasing number of terms $G$ in the monomial expansion of a general kernel $K$, in this case given by the morse potential $K_{C_a, l_a, C_r, l_r}(r)$. So each solution $\rho_8(x)$ is a linear combination of $8$ Jacobi polynomials together with a weight, cf. \Cref{eq:ansatz}.}
+  \caption[]{Solutions $\rho_8(x)$ for an increasing number of terms $G$ in the monomial expansion of a general kernel $K$, in this case given by the Morse potential $K_{C_a, l_a, C_r, l_r}(r)$. So each solution $\rho_8(x)$ is a linear combination of $8$ Jacobi polynomials together with a weight, cf. \Cref{eq:ansatz}.}
   \label{fig:monomial-solutions}
 \end{figure}
 

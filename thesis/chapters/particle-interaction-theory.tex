@@ -31,6 +31,59 @@ Each particle $i=1, ..., N_p$ at position $\hatvec{x}_i \in \R^d$ and time $t \i
 for reference see, for example, \parencite{2020-power-law-kernels, 2021-arbitrary-dimensions}.
 For now, we only consider the case without an external potential $V(\hatvec{x})$.
 
+
+\section{Continuous Limit}
+The evolution equation, in the continuous limit as $N_p \goesto \infty$, becomes
+\begin{equation}
+  \frac{\partial \hat{\rho}}{\partial t} = \nabla \cdot \left(\hat{\rho} \nabla K * \hat{\rho}\right)\,.
+  \label{eq:continuous-evolution-equation}
+\end{equation}
+where $\hat{\rho}: \R \mapsto \R$ is the particle density function.
+\begin{proof}
+  \hierKoennteIhreWerbungStehen
+\end{proof}
+The solution $\hat{\rho}$ we are looking for within the scope of this dissertation is the \textit{equilibrium measure} (cf. \Cref{def:equilibrium-measure}) minimising the total potential $U$.
+
+\begin{definition}{Equilibrium Measure}{equilibrium-measure}
+  For a given pairwise interaction potential $K: \R \mapsto \R$, the equilibrium measure $\hat{\rho}: D \mapsto \R$ with $D \subseteq \R^d$ is a measure chosen such that
+  $$U_K[\hat{\rho}] := \frac{1}{2} \iint K\left(\norm{\hatvec{x} - \hatvec{y}}\right) \,\dd\hat{\rho}(\hatvec{x})\,\dd\hat{\rho}(\hatvec{y})\,,$$
+  is minimised, where $\dd\hat{\rho} = \hat{\rho}(\hatvec{x})\dd\hatvec{x}$.
+\end{definition}
+Also consider the total mass of the equilibrium distribution, given by
+\begin{equation}
+  M[\hat{\rho}] := \int \dd\hat{\rho} = \int_{\supp(\hat{\rho})} \hat{\rho}(\hatvec{x}) \,\dd\hatvec{x}\,,
+  \label{eq:measure-mass}
+\end{equation}
+which, without loss of generality, we can choose as $M = 1$ to make $\hat{\rho}(\hatvec{x})$ a \textit{probability distribution}.
+Also note that, as the integrand of the above integrals, we sometimes refer to the interaction potential $K$ as an integral kernel or simply \textit{kernel}.
+
+Due to the absence of an external potential, solutions usually have translational invariance, so one might as well choose them to be centered at the origin (i.e. on $D = B_R(\vec{0})$ instead of $B_R(\hatvec{x}_{\text{centre}})$).
+
+As throughout the rest of this document, we will restrict ourselves to radially symmetric solutions we will use $\hatvec{x} := R\hatvec{x} \in B_R(\vec{0})$ to denote position in the original $d$-dimensional ball domain of radius $R$, whereas $x \in B_1(\vec{0})$ denotes position in the normalised domain with radius $1$.
+Solutions on the original domain shall be denoted by $\hat{\rho} \in \functionspacehat$ whereas equilibrium measures $\rho \in \functionspace$ denote solutions on the normalised domain $B_1(\vec{0})$ with $\functionspace$ and $\functionspacehat$ given in \Cref{def:function-space}.
+Therefore, $\supp(\hat{\rho}) = B_1(\vec{0})$ and $\supp(\rho) = B_R(\vec{0})$.
+Of course, $\hat{\rho}(\hatvec{x}) = \hat{\rho}(R\vec{x}) = \rho(\vec{x})$.
+\input{chapters/bits/function-space.tex}
+
+\begin{definition}{Power-Law Potential}{power-law-potential}
+  For a given equilibrium measure $\rho \in \functionspace$ and $\beta \in \R$, let
+  $$U^{(\beta)}[\rho] := \iint \norm{\vec{x}-\vec{y}}^\beta \,\dd\rho(\vec{x})\dd\rho(\vec{y})\,.$$
+\end{definition}
+
+Note that because
+$$\iint \norm{\vec{x}-\vec{y}}^\beta \,\dd\rho(\vec{x})\dd\rho(\vec{y}) = \iint_{\supp(\rho)^2} \norm{\vec{x}-\vec{y}}^\beta \rho(\vec{x}) \rho(\vec{y}) \,\dd\vec{x}\dd\vec{y}\,,$$
+this definition also generalises to $\hat{\rho} \in \functionspacehat$ and after a change of variables from $\vec{x}$ to $\hatvec{x}$ and $\vec{y}$ to $\hatvec{y}$, we obtain the relationship
+$$U^{(\beta)}[\hat{\rho}] = R^{2d + \beta} U^{(\beta)}[\rho]\,.$$
+
+With these preliminaries in mind, we can now define \href{def:the-problem}{the problem}.
+
+\begin{definition}[colframe=gray, colbacktitle=gray!30]{The Problem}{the-problem}
+  Finding an equilibrium measure $\hat{\rho}: B_R(\vec{0}) \mapsto \R$ of mass $M = 1$ on a $d$-dimensional ball of radius $R \in \R^+$ that minimises the total potential $U_K[\hat{\rho}]$ given an interaction kernel $K: \R^+ \mapsto \R$.
+\end{definition}
+
+The remaining chapter will briefly discuss (analytical) approaches taken in particle physics and computational biology to solve (a version of) the above problem.
+
+\section{Interaction Potentials}
 \subsection{Attractive-Repulsive Potential}
 An example we will study is that of the attractive-repulsive interaction potential, where two power law potentials compete with each other.
 For a given $\alpha, \beta \in \R \backslash \{0\}$, it is given by
@@ -61,47 +114,17 @@ with attractive parameters $C_a \in \R^+$ and $l_a \in \R^+$ (a `natural length 
 Possible parameter ranges are given by $C_a l_a^{d-2} > 1, l_a < 1$ \parencite{2006-self-propelled,2014-explicit-flock-solutions-for-quasi-morse-potentials}.
 \hierKoennteIhreWerbungStehen
 
-\section{Continuous Limit}
-The evolution equation, in the continuous limit as $N_p \goesto \infty$, becomes
-\begin{equation}
-  \frac{\partial \hat{\rho}}{\partial t} = \nabla \cdot \left(\hat{\rho} \nabla K * \hat{\rho}\right)\,.
-  \label{eq:continuous-evolution-equation}
-\end{equation}
-where $\hat{\rho}: \R \mapsto \R$ is the particle density function.
-\begin{proof}
-  \hierKoennteIhreWerbungStehen
-\end{proof}
-The solution $\hat{\rho}$ we are looking for within the scope of this dissertation is the \textit{equilibrium measure} (cf. \Cref{def:equilibrium-measure}) minimising the total potential $U$.
+\subsection{Mixed Potential}
+\subsection{Absolute Value Potential}
 
-\begin{definition}{Equilibrium Measure}{equilibrium-measure}
-  For a given pairwise interaction potential $K: \R \mapsto \R$, the equilibrium measure $\hat{\rho}: D \mapsto \R$ with $D \subseteq \R^d$ is a measure chosen such that
-  $$U_K[\hat{\rho}] := \frac{1}{2} \iint K\left(\norm{\hatvec{x} - \hatvec{y}}\right) \,\dd\hat{\rho}(\hatvec{x})\,\dd\hat{\rho}(\hatvec{y})\,,$$
-  is minimised, where $\dd\hat{\rho} = \hat{\rho}(\hatvec{x})\dd\hatvec{x}$.
-\end{definition}
-Also consider the total mass of the equilibrium distribution, given by
-\begin{equation}
-  M := \int \dd\hat{\rho} = \int_{\supp(\hat{\rho})} \hat{\rho}(\hatvec{x}) \,\dd\hatvec{x}\,,
-  \label{eq:measure-mass}
-\end{equation}
-which, without loss of generality, we can choose as $M = 1$ to make $\hat{\rho}(\hatvec{x})$ a \textit{probability distribution}.
-Also note that, as the integrand of the above integrals, we sometimes refer to the interaction potential $K$ as an integral kernel or simply \textit{kernel}.
+\begin{figure}[H]
+  \centering
+  \inputtikz{comparing-potentials}
+  \caption[Comparing potentials]{Comparing Potentials: The attractive-repulsive potential $K_{(\alpha,\beta)}(r)$ with $(\alpha,\beta) = (3.5, 1.6)$, the Morse potential $K_{(C_a, l_a, C_r, l_r)}(r)$ with $(C_a, l_a, C_r, l_r) = (1.5, 2.0, 1.0, 0.5)$, the mixed potential $K_{C, l, \bar{a}}$ with $(C, l, \bar{a}) = (1.0, 0.5, 1.8)$ and the absolute value potential $K_{||}(r)$.}
+  \label{fig:comparing-potentials}
+\end{figure}
 
-Due to the absence of an external potential, solutions usually have translational invariance, so one might as well choose them to be centered at the origin (i.e. on $D = B_R(\vec{0})$ instead of $B_R(\hatvec{x}_{\text{centre}})$).
-
-As throughout the rest of this document, we will restrict ourselves to radially symmetric solutions we will use $\hatvec{x} := R\hatvec{x} \in B_R(\vec{0})$ to denote position in the original $d$-dimensional ball domain of radius $R$, whereas $x \in B_1(\vec{0})$ denotes position in the normalised domain with radius $1$.
-Solutions on the original domain shall be denoted by $\hat{\rho} \in \functionspacehat$ whereas equilibrium measures $\rho \in \functionspace$ denote solutions on the normalised domain $B_1(\vec{0})$ with $\functionspace$ and $\functionspacehat$ given in \Cref{def:function-space}.
-Of course, $\hat{\rho}(\hatvec{x}) = \hat{\rho}(R\vec{x}) = \rho(\vec{x})$.
-\input{chapters/bits/function-space.tex}
-
-With these preliminaries in mind, we can now define \href{def:the-problem}{the problem}.
-
-\begin{definition}[colframe=gray, colbacktitle=gray!30]{The Problem}{the-problem}
-  Finding an equilibrium measure $\hat{\rho}: B_R(\vec{0}) \mapsto \R$ of mass $M = 1$ on a $d$-dimensional ball of radius $R \in \R^+$ that minimises the total potential $U_K[\hat{\rho}]$ given an interaction kernel $K: \R^+ \mapsto \R$.
-\end{definition}
-
-The remaining chapter will briefly discuss (analytical) approaches taken in particle physics and computational biology to solve (a version of) the above problem.
-
-\section{Self-Propulsion}
+\section{Self-Propulsion and Friction}
 Makes it active matter.
 Self-propulsion and friction could be modelled as a quadratic of the form
 $$f(\hat{v}_i) = 1.6 - 0.5 \hat{v}_i^2\,,$$

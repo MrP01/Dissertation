@@ -1,9 +1,11 @@
+Similar to \Cref{def:power-law-potential}, we can define the (single) power law operator $\mathcal{Q}^\beta$:
+
 % TODO: explain why we are not solving \int\int but only the following
-\begin{definition}{Power Law Operator $Q^\beta$}{operator}
-  The power law operator $\hat{Q}^\beta: \functionspace \mapsto \functionspace$ is given by
-  $$\hat{Q}^\beta[\rho](\vec{x}) := \int_{\supp(\rho)} \norm{\vec{x}-\vec{y}}^\beta \rho(\vec{y}) \,\dd\vec{y}\,,$$
+\begin{definition}{Power Law Operator $\mathcal{Q}^\beta$}{power-law-operator}
+  The power law operator $\mathcal{Q}^\beta: \functionspace \mapsto \functionspace$ is given by
+  $$\mathcal{Q}^\beta[\rho](\vec{x}) := \int \norm{\vec{x}-\vec{y}}^\beta \,\dd\rho(\vec{y}) = \int_{\supp(\rho)} \norm{\vec{x}-\vec{y}}^\beta \rho(\vec{y}) \,\dd\vec{y}\,,$$
 \end{definition}
 % Either the attractive or the repulsive operator can be sparse.
 % Obtained using \Cref{thm:theorem216}.
 
-The operator $\hat{Q}^\beta$ acting on an equilibrium measure $\rho(\vec{x})$ returns the energy $\tilde{E}(\vec{x}) = \hat{Q}^\beta[\rho](\vec{x})$ at a point $\vec{x} \in B_1(\vec{0})$ in our normalised domain.
+The operator $\mathcal{Q}^\beta$ acting on an equilibrium measure $\rho(\vec{x})$ returns the energy $\tilde{E}(\vec{x}) = \mathcal{Q}^\beta[\rho](\vec{x})$ at a point $\vec{x} \in B_1(\vec{0})$ in our normalised domain.

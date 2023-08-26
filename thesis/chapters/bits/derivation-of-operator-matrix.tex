@@ -1,14 +1,14 @@
 We will start by only considering a single power law operator (out of two in the case of an attractive-repulsive interaction potential $K_{\alpha, \beta}$).
-Substituting our ansatz given in \Cref{eq:ansatz} into $\hat{Q}^\beta[\rho]$, we obtain
+Substituting our ansatz given in \Cref{eq:ansatz} into $\mathcal{Q}^\beta[\rho]$, we obtain
 \begin{equation}
-  \hat{Q}^{\beta}(x) = \sum_{k=0}^{N-1} \rho_{k} \int_{B_1(\vec{0})} \norm{\vec{x}-\vec{y}}^{\beta} \weight{y}\jacobi{y} \,\dd\vec{y}\,,
+  \mathcal{Q}^{\beta}[\rho](x) = \sum_{k=0}^{N-1} \rho_{k} \int_{B_1(\vec{0})} \norm{\vec{x}-\vec{y}}^{\beta} \weight{y}\jacobi{y} \,\dd\vec{y}\,,
   \label{eq:theorem216-in-derivation}
 \end{equation}
 luckily containing the integral evaluated in \Cref{thm:theorem216}.
 
-We are now interested in a numerical representation of the operator $\hat{Q}^\beta$ acting on the function $\rho \in \functionspace$, so an equivalent (linear) operator $Q^\beta: \R^N \mapsto \R^N$ acting on the coefficients $\rho_k \in \R,\, k = 0, ..., N-1$.
+We are now interested in a numerical representation of the operator $\mathcal{Q}^\beta$ acting on the function $\rho \in \functionspace$, so an equivalent (linear) operator $Q^\beta: \R^N \mapsto \R^N$ acting on the coefficients $\rho_k \in \R,\, k = 0, ..., N-1$.
 As every finite-dimensional linear operator must have a matrix representation, we are looking for a $Q^\beta \in \R^{N \times N}$ such that
-$$\hat{Q}^\beta[\rho](\vec{x}) = \jacobivec{x} \cdot Q^\beta \vec{\rho}\,,$$
+$$\mathcal{Q}^\beta[\rho](\vec{x}) = \jacobivec{x} \cdot Q^\beta \vec{\rho}\,,$$
 where $\jacobivec{x} \in \R^N$ is the vector of radial Jacobi polynomials $P^{(a, b)}_0(x)$, $P^{(a, b)}_1(x)$, ..., $P^{(a, b)}_{N-1}(x)$ evaluated at $2\norm{\vec{x}}^2 - 1$ as introduced in and after \Cref{def:jacobi-polynomials}.
 Note that in the context of linear combinations of Jacobi polynomials, we will use zero-based indexing for vectors and matrices due to the convention that the first orthogonal polynomial is usually denoted by $p_0(x) = 1$, in line with $\deg(p_k) = k$.
 
@@ -17,12 +17,12 @@ Based on the Three-Term Recurrence Relationship (cf. \Cref{thm:three-term-recurr
 % TODO: this section has weird indexing (start at 0 or 1?) and needs some work.
 Therefore, starting from \Cref{eq:theorem216-in-derivation}, we obtain
 \begin{align*}
-  \hat{Q}^\beta[\rho](\vec{x}) & = \sum_{k=0}^{N-1} \rho_k \hat{Q}^\beta[wP_k](\vec{x}) = \sum_{k=0}^{N-1} \rho_k \sum_{j=0}^{N-1} q_{kj} \jacobi{x} \\
-                               & = \sum_{j=0}^{N-1} \sum_{k=0}^{N-1} \rho_k q_{kj} \jacobi{x}\,,
+  \mathcal{Q}^\beta[\rho](\vec{x}) & = \sum_{k=0}^{N-1} \rho_k \mathcal{Q}^\beta[wP_k](\vec{x}) = \sum_{k=0}^{N-1} \rho_k \sum_{j=0}^{N-1} q_{kj} \jacobi{x} \\
+                                   & = \sum_{j=0}^{N-1} \sum_{k=0}^{N-1} \rho_k q_{kj} \jacobi{x}\,,
 \end{align*}
 which we will rewrite in matrix-form,
 \begin{align*}
-  \hat{Q}^\beta[\rho](\vec{x}) & = \vec{P}(\vec{x}) \cdot
+  \mathcal{Q}^\beta[\rho](\vec{x}) & = \vec{P}(\vec{x}) \cdot
   \begin{pmatrix}
     \sum_{k=0}^{N-1} \rho_k q_{k,1} \\
     \vdots                          \\
@@ -39,8 +39,8 @@ which we will rewrite in matrix-form,
     \rho_0 \\
     \vdots \\
     \rho_{N-1}
-  \end{pmatrix}                                                          \\
-                               & = \jacobivec{x} \cdot Q^\beta \vec{\rho}
+  \end{pmatrix}                                                              \\
+                                   & = \jacobivec{x} \cdot Q^\beta \vec{\rho}
 \end{align*}
 where we used $\vec{P}(\vec{x}) = \jacobivec{x}$ as a shorthand giving us the form of the operator matrix.
 Its first row, the set of coefficients for the constant Jacobi polynomial $P_0^{(a,b)}$ of each expansion of the $Q$ operator, weighted by the solution coefficients, adds up to the total energy $E$ (coefficient of the constant polynomial).
