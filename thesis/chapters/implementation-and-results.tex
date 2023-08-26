@@ -35,6 +35,20 @@ and not $\mathcal{O}(N)$ or even higher orders.
 \end{figure}
 
 \section{Implementation Architecture}
+The spectral method solver is written in Julia \parencite{2017-julia} whereas the simulator is written in C++.
+
+To compile the simulator, please run \\
+\bashblock{conan install . ----output-folder=build ----build=missing} \\
+\bashblock{cd build; cmake .. -DCMAKE\_BUILD\_TYPE=Release} \\
+\bashblock{make -j4}
+in a bash terminal.
+
+In order to run tests of the numerical solver implementation, run \\
+\bashblock{julia solver/tests.jl} \\
+in a bash terminal. In order to regenerate all plots at once, including simulation output from the C++ implementation, run \\
+\bashblock{julia solver/plotall.jl}
+in a terminal.
+
 \hierKoennteIhreWerbungStehen
 
 \section{Runtime Analysis}

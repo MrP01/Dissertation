@@ -50,7 +50,7 @@ function outerOptimisation(N::Int64, env::Utils.SolutionEnvironment, method=Opti
   if R0 == 0
     R0 = env.p.R0
   end
-  F(R) = Utils.totalEnergy(solve(N, R, env), R, 0.0, env)
+  F(R) = Utils.totalEnergy(solve(N, R, env), R, env)
   f(x) = F(x[1])  # because optimize() only accepts vector inputs
   solution = Optim.optimize(f, [R0], method=method)
   return solution

@@ -17,11 +17,11 @@ InvQuadraticMap() = InvQuadraticMap{Float64}()
 Base.getindex(::QuadraticMap, r::Number) = 2r^2 - 1
 Base.axes(::QuadraticMap{T}) where {T} = (Inclusion(0 .. 1),)
 Base.axes(::InvQuadraticMap{T}) where {T} = (Inclusion(-1 .. 1),)
-Base.getindex(map::InvQuadraticMap, x::Number) = sqrt((x + 1) / 2)
+Base.getindex(::InvQuadraticMap, x::Number) = sqrt((x + 1) / 2)
 ContinuumArrays.invmap(::QuadraticMap{T}) where {T} = InvQuadraticMap{T}()
 ContinuumArrays.invmap(::InvQuadraticMap{T}) where {T} = QuadraticMap{T}()
-Base.getindex(map::QuadraticMap, x::Inclusion) = map
-Base.getindex(map::InvQuadraticMap, x::Inclusion) = map
+Base.getindex(map::QuadraticMap, ::Inclusion) = map
+Base.getindex(map::InvQuadraticMap, ::Inclusion) = map
 
 qmap = QuadraticMap()
 iqmap = InvQuadraticMap()
@@ -122,7 +122,32 @@ function rho(x_vec, solution::Vector{BigFloat}, env::SolutionEnvironment)
   return (1 .- x_vec .^ 2) .^ env.B.a .* vec(sum(solution .* env.P[abs.(x_vec), 1:length(solution)]', dims=1))
 end
 
-function totalEnergy(solution::Vector{BigFloat}, R::Float64, r::Union{Float64,AbstractVector{Float64}}, env::SolutionEnvironment)
+function totalEnergy(solution::Vector{BigFloat}, R::Float64, env::SolutionEnvironment)
+  # more details in section 3.2
+  r = axes(env.P, 1)
+  if isa(env.p.potential, Params.AttractiveRepulsive)
+    alpha, beta, d = env.p.potential.alpha, env.p.potential.beta, env.p.d
+    attractive, repulsive = big"0.0", big"0.0"
+    for k in eachindex(solution)
+      attractive += solution[k] * (env.P[:, 1:1]\theorem216.(r; n=k - 1, beta=alpha, p=env.p))[1]
+      repulsive += solution[k] * (env.P[:, 1:1]\theorem216.(r; n=k - 1, beta=beta, p=env.p))[1]
+    end
+    d = 0
+    E = (R^(alpha + d) / alpha) * attractive - (R^(beta + d) / beta) * repulsive
+  else
+    E = zero(r)
+    for k in eachindex(solution)
+      for index in eachindex(env.monomial)
+        # index starts from 1!
+        power, coefficient = index - 1, env.monomial[index]
+        E += coefficient * R^power * solution[k] * Float64.(theorem216.(r; n=k - 1, beta=float(power), p=env.p))
+      end
+    end
+  end
+  return E
+end
+
+function notTotalEnergy(solution::Vector{BigFloat}, R::Float64, r::Union{Float64,AbstractVector{Float64}}, env::SolutionEnvironment)
   # more details in section 3.2
   if isa(env.p.potential, Params.AttractiveRepulsive)
     alpha, beta, d = env.p.potential.alpha, env.p.potential.beta, env.p.d

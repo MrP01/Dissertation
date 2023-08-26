@@ -63,7 +63,15 @@ Lemma 2.4 from \cite{2011-porous-medium-1,1967-formulas-and-theorems} is based o
 The Weber-Schafheitlin integrals are related to the fractional Laplacians of aforementioned functions because the Fourier transform of ${}_2F_1$ is a Bessel function.
 For a more generalised version of Lemma 2.4, see \cite{2014-barenblatt}.
 
-Also note that for even integer $\beta$, the prefactor in \Cref{thm:theorem216} sometimes contains an expression of the form $\Gamma(-n),\, n \in \N$ which in principle leads to undefined behaviour (cf. \Cref{def:gamma-function} together with the property that $x \Gamma(x) = \Gamma(x+1)$).
+Also note that for even integer $\beta$, the prefactor in \Cref{thm:theorem216} sometimes contains an expression of the form $\Gamma(-n),\, n \in \N$ which in principle leads to undefined behaviour (cf. \Cref{def:gamma-function} together with the property that $k \Gamma(k) = \Gamma(k+1)$).
 However, one can consider the limit as $x \in \R^+$ approaches an integer $n$ to say that
 $$\lim_{x \goesto n} \Gamma(-x) = (-1)^{n-1} \infty\,, \quad\text{or equivalently}\quad \lim_{x \goesto n} \frac{1}{\Gamma(-x)} = 0\,,$$
 in which case we are lucky because $\Gamma(\beta/2-n+1)$ appears in the denominator of the prefactor and without any singularities in the numerator we can safely evaluate the entire expression to $0$.
+
+Because $I_{m,n}^{\alpha,\beta}(\vec{x})$ only depends on the squared radius $r^2 = \norm{\vec{x}}^2$, let it also be denoted by $I_{m,n}^{\alpha,\beta}(r^2) = I_{m,n}^{\alpha,\beta}(\vec{x})$.
+Further, let
+\begin{equation}
+  \bar{I}_{m,n}^{\alpha,\beta} := \frac{\left\langle x \mapsto I\left(\frac{x+1}{2}\right), P_0^{(a, b)} \right\rangle}{\left\langle P_0^{(a, b)}, P_0^{(a, b)} \right\rangle} = \frac{1}{h_0^{(a, b)}} \int_{-1}^{1} I_{m,n}^{\alpha,\beta}\left(\frac{x+1}{2}\right) w(x) \,\ddx\,,
+  \label{eq:0th-coeff-of-I}
+\end{equation}
+denote the 0th coefficient in a Jacobi expansion of $I_{m,n}^{\alpha,\beta}(\vec{x})$ (recall that $r^2 = \frac{x+1}{2}$ and $P_0^{(a, b)}(x) = 1$) with $h_k := \left\langle P_k^{(a, b)}, P_k^{(a, b)} \right\rangle$ the normalisation coefficients of the basis.

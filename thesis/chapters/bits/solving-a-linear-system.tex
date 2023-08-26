@@ -1,0 +1,36 @@
+\section{Solving a Linear System}
+Once the operator is computed, we are now looking for a set of solution coefficients $\vec{\rho} \in \R^N$ such that the total energy $E = E_{\rm kin} + U = U = U_K[\hat{\rho}]$ (in the presence of friction, the kinetic energy will eventually dissipate, cf. \Cref{chap:particle-interaction-theory}) on the domain $D = B_R(\vec{0})$ is constant.
+That means, we are looking for $\vec{\rho} \in \R^N$ such that
+\begin{equation}
+  \mathcal{Q}[\rho](\vec{x}) = \tilde{E}(\vec{x}) = E\,,
+\end{equation}
+where we can expand $\tilde{E}(\vec{x}) = \jacobivec{x} \cdot \vec{E}$ into Jacobi polynomials with coefficients $\vec{E} = (E, 0, ..., 0)^T$ such that the energy is constant along the entire domain, so $\tilde{E}(\vec{x}) = E \cdot P_0^{(a, b)}\left(\jacobiarg{x}\right) = E$.
+In matrix form, that is
+$$Q \vec{\rho} = \vec{E} \qLRq \begin{pmatrix}
+    q_{00}    & \dots  & q_{0,N-1}   \\
+    \vdots    & \ddots & \vdots      \\
+    q_{N-1,0} & \dots  & q_{N-1,N-1} \\
+  \end{pmatrix} \begin{pmatrix}
+    \rho_0 \\
+    \vdots \\
+    \rho_{N-1}
+  \end{pmatrix} = \begin{pmatrix}
+    E       \\
+    \vec{0} \\
+    0
+  \end{pmatrix}\,.$$
+
+The linear system is solved using a QR-decomposition.
+% TODO: what would Yuji say?
+
+Hence the total potential (energy) of a given solution $\vec{\rho}$ is obtained by
+\begin{equation}
+  E(R) = \{Q_{\alpha,\beta} \vec{\rho}\}_1 = \sum_{k=0}^{N-1} \rho_k \left(\frac{R^\alpha}{\alpha} \bar{I}_{m,k}^{\alpha,\alpha} - \frac{R^\beta}{\beta} \bar{I}_{m,k}^{\alpha,\beta}\right)\,,
+  \label{eq:total-energy-for-ansatz}
+\end{equation}
+with $\bar{I}_{m,n}^{\alpha,\alpha}$ the 0th coefficient of a Jacobi polynomial expansion of $I_{m,n}^{\alpha,\alpha}$ (cf. \Cref{thm:theorem216}) as given in \Cref{eq:0th-coeff-of-I}.
+
+\subsection{Tikhonov Regularisation}
+The normal system is: ... \\
+Also referred to as Ridge regression
+% TODO

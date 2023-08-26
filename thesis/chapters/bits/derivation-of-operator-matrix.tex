@@ -45,3 +45,15 @@ which we will rewrite in matrix-form,
 where we used $\vec{P}(\vec{x}) = \jacobivec{x}$ as a shorthand giving us the form of the operator matrix.
 Its first row, the set of coefficients for the constant Jacobi polynomial $P_0^{(a,b)}$ of each expansion of the $Q$ operator, weighted by the solution coefficients, adds up to the total energy $E$ (coefficient of the constant polynomial).
 All remaining rows of $Q$ contain coefficients for polynomials of degree at least 1, so their weighted contributions must add up to 0 in order for the total energy $\tilde{E}(\vec{x})$ to remain constant.
+
+For the attractive-repulsive interaction potential $K_{\alpha,\beta}$, because each column consists of an expansion of the Jacobi polynomials, we have $q_{0k} = I_{m,k}^{\alpha,\beta}$.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{results/attrep/attractive-repulsive-operators.pdf}
+  \caption[Attractive and repulsive operators.]{The attractive and repulsive operators (matrices) as given in \Cref{def:power-law-operator}, the matrix values are shown in a $\log_{10}$ colour scale. Due to the choice of basis, the attractive operator is exactly banded. The repulsive parameter is only approximately banded, which the spy plots effectively demonstrate.}
+  \label{fig:attractive-repulsive}
+\end{figure}
+
+The bandedness of the attractive operator in \Cref{fig:attractive-repulsive} is due to the three-term recurrence relationship of the Jacobi polynomial basis (cf. \Cref{thm:three-term-recurrence-relationship} and \Cref{def:jacobi-polynomials}).
+% TODO.. explain

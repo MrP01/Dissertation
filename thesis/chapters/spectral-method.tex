@@ -1,9 +1,5 @@
 \chapter{Spectral Method}
 \label{chap:spectral-method}
-
-% \section{Content}
-% \input{chapters/out/Spectral Method.md.tex}
-
 In this chapter we will construct a spectral method in the basis of Jacobi polynomials to explore the solution of equilibrium distributions $\hat{\rho}(\hatvec{x})$.
 Starting from a many-body system and considering the continuous limit as $N_p \goesto \infty$, in \Cref{chap:particle-interaction-theory} we have already established the governing equation of the particle density distribution $\hat{\rho}(\hatvec{x})$ in such a system.
 
@@ -70,74 +66,11 @@ The normalisation constant is given in \Cref{lemma:mass}, based only on a single
 \section{Derivation of the Operator}
 \input{chapters/bits/operator.tex}
 \input{chapters/bits/derivation-of-operator-matrix.tex}
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=\linewidth]{results/attrep/attractive-repulsive-operators.pdf}
-  \caption[Attractive and repulsive operators.]{The attractive and repulsive operators (matrices) as given in \Cref{def:power-law-operator}, the matrix values are shown in a $\log_{10}$ colour scale. Due to the choice of basis, the attractive operator is exactly banded. The repulsive parameter is only approximately banded, which the spy plots effectively demonstrate.}
-  \label{fig:attractive-repulsive}
-\end{figure}
-
-The bandedness of the attractive operator in \Cref{fig:attractive-repulsive} is due to the three-term recurrence relationship of the Jacobi polynomial basis (cf. \Cref{thm:three-term-recurrence-relationship} and \Cref{def:jacobi-polynomials}).
-% TODO.. explain
-
-For the attractive-repulsive interaction potential $K_{\alpha,\beta}(r)$, the full operator is given by
-\begin{align*}
-  \mathcal{Q}_{\alpha, \beta}[\hat{\rho}](\hatvec{x}) & := \int_{B_R(\vec{0})} K_{\alpha,\beta}\left(\norm{\hatvec{x} - \hatvec{y}}\right) \hat{\rho}(\hatvec{y}) \,\dd\hatvec{y}                                                               \\
-                                                      & = \int_{B_R(\vec{0})} \left(\frac{\norm{\hatvec{x} - \hatvec{y}}^\alpha}{\alpha} - \frac{\norm{\hatvec{x} - \hatvec{y}}^\beta}{\beta}\right) \hat{\rho}(\hatvec{y}) \,\dd\hatvec{y}     \\
-                                                      & = \int_{B_1(\vec{0})} \left(\frac{R^\alpha \norm{\vec{x} - \vec{y}}^\alpha}{\alpha} - \frac{R^\beta \norm{\vec{x} - \vec{y}}^\beta}{\beta}\right) \hat{\rho}(R\vec{y}) \, R^d\dd\vec{y} \\
-                                                      & = R^d\int_{B_1(\vec{0})} \left(\frac{R^\alpha}{\alpha}\norm{\vec{x} - \vec{y}}^\alpha - \frac{R^\beta}{\beta} \norm{\vec{x} - \vec{y}}^\beta\right) \rho(\vec{y}) \,\dd\vec{y}          \\
-                                                      & = \frac{R^{\alpha+d}}{\alpha} \mathcal{Q}^\alpha[\rho](\vec{x}) - \frac{R^{\beta+d}}{\beta} \mathcal{Q}^\beta[\rho](\vec{x})\,,
-\end{align*}
-where one needs to carefully handle the variable transform with $\dd\hatvec{y} = R^d \dd\vec{y}$ in $d$ dimensions whereas the vectors themselves obey $\hatvec{y} = R \vec{y}$ as established previously.
-In matrix form that is,
-\begin{equation}
-  Q_{\alpha, \beta} := \frac{R^{\alpha+d}}{\alpha} Q^\alpha - \frac{R^{\beta+d}}{\beta} Q^\beta
-  \label{eq:full-attrep-operator}
-\end{equation}
-for some interval radius $R \in \R^+$, usually chosen as the smallest possible $R$ such that $\supp(\rho) \subseteq [-R, R]$.
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.5\linewidth]{results/attrep/full-operator.pdf}
-  \caption[Combination of the attractive-repulsive operators]{Spy plot of $Q_{\alpha, \beta}$, the combination of the attractive-repulsive operators. Inverting this operator and applying it to $(1, 0, ..., 0)^T \in \R^N$ will yield the unnormalised coefficients $\rho_k$ of the solution expansion given in \Cref{eq:ansatz}.}
-  \label{fig:attrep-operator}
-\end{figure}
+\input{chapters/bits/full-attrep-operator.tex}
 
 \pagebreak
-\section{Solving a Linear System}
-Once the operator is computed, we are now looking for a set of solution coefficients $\vec{\rho} \in \R^N$ such that the total energy $E = E_{\rm kin} + U = U = U_K[\hat{\rho}]$ (in the presence of friction, the kinetic energy will eventually dissipate, cf. \Cref{chap:particle-interaction-theory}) on the domain $D = B_R(\vec{0})$ is constant.
-That means, we are looking for $\vec{\rho} \in \R^N$ such that
-\begin{equation}
-  \mathcal{Q}[\rho](\vec{x}) = \tilde{E}(\vec{x}) = E\,,
-\end{equation}
-where we can expand $\tilde{E}(\vec{x}) = \jacobivec{x} \cdot \vec{E}$ into Jacobi polynomials with coefficients $\vec{E} = (E, 0, ..., 0)^T$ such that the energy is constant along the entire domain, so $\tilde{E}(\vec{x}) = E \cdot P_0^{(a, b)}\left(\jacobiarg{x}\right) = E$.
-In matrix form, that is
-$$Q \vec{\rho} = \vec{E} \qLRq \begin{pmatrix}
-    q_{00}    & \dots  & q_{0,N-1}   \\
-    \vdots    & \ddots & \vdots      \\
-    q_{N-1,0} & \dots  & q_{N-1,N-1} \\
-  \end{pmatrix} \begin{pmatrix}
-    \rho_0 \\
-    \vdots \\
-    \rho_{N-1}
-  \end{pmatrix} = \begin{pmatrix}
-    E       \\
-    \vec{0} \\
-    0
-  \end{pmatrix}\,.$$
-
-The linear system is solved using a QR-decomposition.
-% TODO: what would Yuji say?
-
-Hence the total potential of a given solution $\vec{\rho}$ is obtained by $E = \{Q \vec{\rho}\}_1$.
-Considering the outside perspective,
-$$\hat{E}(R)$$
-
-\subsection{Tikhonov Regularisation}
-The normal system is: ... \\
-Also referred to as Ridge regression
-% TODO
+% Full Section:
+\input{chapters/bits/solving-a-linear-system.tex}
 
 \section{Results}
 \begin{figure}[H]

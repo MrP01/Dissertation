@@ -60,9 +60,17 @@ import .AttractiveRepulsiveSolver
   @testset "analytic solution is close" begin
     p = Params.knownAnalyticParams
     env = Utils.createEnvironment(p)
+    r_vec = 0:0.002:1
     r_vec_noend = r_vec[1:end-1]
     R, analytic = AnalyticSolutions.explicitSolution(r_vec_noend; p=p)
     @test sum(abs.(Utils.rho(r_vec_noend, Solver.solve(30, R, env), env) .- analytic)) / length(r_vec_noend) < 1e-3
+  end
+  @testset "total energy is (operator * solution)[1]" begin
+    env = Utils.defaultEnv
+    op = Solver.constructOperatorFromEnv(30, env.p.R0, env)
+    solution = Solver.solve(30, env.p.R0, env)
+    @test Utils.totalEnergy(solution, env.p.R0, env) ≈ (op*solution)[1] atol = 1e-5
+    @test Utils.notTotalEnergy(solution, env.p.R0, 0.0, env) ≈ (op*solution)[1] atol = 1e-4  # only approximately
   end
 end
 

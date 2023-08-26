@@ -174,13 +174,13 @@ function plotFullOperator(p=Params.morsePotiParams; N=60)
   return fig
 end
 
-function plotSpatialEnergyDependence(p=Params.defaultParams)
+function plotSpatialEnergyDependence(p=Params.defaultParams; N=12)
   fig = Figure(resolution=(800, 450))
   ax = Axis(fig[1, 1], xlabel=L"\text{Radial Distance}~r", ylabel=L"\text{Energy}~E(r)",
     title=L"\text{Energy Dependence on}~r~\text{with}~%$(p2tex(p))")
   for R in 0.4:0.2:1.2
-    solution = Solver.solve(12, R, Utils.defaultEnv)
-    lines!(ax, r_vec_noend, Utils.totalEnergy(solution, R, r_vec_noend, Utils.defaultEnv), label=L"R = %$R")
+    solution = Solver.solve(N, R, Utils.defaultEnv)
+    lines!(ax, r_vec_noend, Utils.notTotalEnergy(solution, R, r_vec_noend, Utils.defaultEnv), label=L"R = %$R")
   end
   axislegend(ax)
   saveFig(fig, "energy-dependence-on-r", p)
@@ -236,7 +236,7 @@ function plotOuterOptimisation(p=Params.knownAnalyticParams; N=8)
   R_vec = 0.25:0.02:1.5
   env = Utils.createEnvironment(p)
   @show R_opt = Solver.outerOptimisation(N, env).minimizer[1]
-  F(R) = Utils.totalEnergy(Solver.solve(N, R, env), R, 0.0, env)
+  F(R) = Utils.totalEnergy(Solver.solve(N, R, env), R, env)
   fig = Figure(resolution=(800, 400))
   ax = Axis(fig[1, 1], xlabel=L"R", ylabel=L"U(R)",
     title=L"\text{Energy Optimisation with}~%$(p2tex(p))")

@@ -10,7 +10,7 @@ function plotMultivariateEnergy(d=1, m=1)
     p = Params.Parameters(d=d, m=m, potential=Params.AttractiveRepulsive(alpha=alpha_vec[k], beta=beta))
     Params.checkParameters(p)
     env = Utils.createEnvironment(p)
-    F(R) = Utils.totalEnergy(Solver.solve(8, R, env), R, 0.0, env)
+    F(R) = Utils.totalEnergy(Solver.solve(8, R, env), R, env)
     E[k, :] = F.(R_vec)
   end
   println("Constructed E. Fitting.")
