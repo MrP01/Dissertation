@@ -422,7 +422,7 @@ function plotSimulationQuiver(p::Params.Parameters=Params.known2dParams; iterati
   return fig
 end
 
-function plot3dSimulationQuiver(p::Params.Parameters=Params.morsePotiSwarming3d; iterations::Int64=12000, runSim=true, fcc=false)
+function plot3dSimulationQuiver(p::Params.Parameters=Params.morsePotiSwarming3d; iterations::Int64=12000, runSim=true, fcc=false, withQuiver=true)
   if runSim
     runSimulator(p, iterations, false)
   end
@@ -432,11 +432,12 @@ function plot3dSimulationQuiver(p::Params.Parameters=Params.morsePotiSwarming3d;
   f = 35
   fig = Figure()
   ax = Axis3(fig[1, 1], xlabel=L"x", ylabel=L"y", zlabel=L"z", title=L"\text{Simulation Output with}~%$(p2tex(p))")
-  scatter!(ax, posidf[!, 1], posidf[!, 2], posidf[!, 3], color=dissertationColours[1], markersize=fcc ? 50 : 10)
-  quiver!(ax, posidf[!, 1], posidf[!, 2], posidf[!, 3], velodf[!, 1] / f, velodf[!, 2] / f, velodf[!, 3] / f,
-    color=velodf[!, 1], linewidth=0.007, arrowsize=Vec3f(0.3, 0.3, 0.4) * 0.07, fxaa=true)
+  scatter!(ax, posidf[!, 1], posidf[!, 2], posidf[!, 3], color=dissertationColours[1], markersize=fcc ? 50 : (withQuiver ? 10 : 20))
   if fcc
     lines!(ax, posidf[!, 1], posidf[!, 2], posidf[!, 3], color=:black)
+  elseif withQuiver
+    quiver!(ax, posidf[!, 1], posidf[!, 2], posidf[!, 3], velodf[!, 1] / f, velodf[!, 2] / f, velodf[!, 3] / f,
+      color=velodf[!, 1], linewidth=0.007, arrowsize=Vec3f(0.3, 0.3, 0.4) * 0.07, fxaa=true)
   end
   saveFig(fig, "simulation-quiver-3d", p; throughEps=true)
   return fig
