@@ -1,11 +1,10 @@
 \chapter{Particle Interaction Theory}
 \label{chap:particle-interaction-theory}
 
-As mentioned in the introduction.
+This chapter will give a brief introduction to systems of pairwise-interacting particles to pave the way for coming chapters.
 
 \section{A Many-Body System}
-is a set of particles with position and velocity interacting with one another.
-% \paragraph{Inertia / kinetic energy}
+An $N_p$-body system is a `discrete' set of particles with position $\vec{x}_i \in \R^d$ and velocity $\vec{v}_i \in \R^d$ interacting with one another.
 Each particle individually is subject to inertia and its kinetic energy (``second moment'' \footnote{
   In kinetic theory, the $0$th moment is the mass $m_i$ of a particle, the first moment is the momentum $\hatvec{p}_i$ and the second moment is its kinetic energy $E_{kin,i}$.
 }) is given by
@@ -28,7 +27,7 @@ Each particle $i=1, ..., N_p$ at position $\hatvec{x}_i \in \R^d$ and time $t \i
   \frac{\dd^2 \hatvec{x}_i}{\ddt^2} = f\left(\norm{\frac{\dd \hatvec{x}_i}{\ddt}}\right) \frac{\dd\hatvec{x}_i}{\ddt} - \frac{1}{N} \sum_{j=1, i\neq j}^{N} \nabla K\left(\norm{\hatvec{x}_i - \hatvec{x}_j}\right)\,,
   \label{eq:evolution-equation}
 \end{equation}
-for reference see, for example, \parencite{2020-power-law-kernels, 2021-arbitrary-dimensions}.
+for reference see, for example, \cite{2020-power-law-kernels, 2021-arbitrary-dimensions, 2017-explicit-solutions}.
 For now, we only consider the case without an external potential $V(\hatvec{x})$.
 
 \section{Continuous Limit}
@@ -37,10 +36,7 @@ The evolution equation, in the continuous limit as $N_p \goesto \infty$, becomes
   \frac{\partial \hat{\rho}}{\partial t} = \nabla \cdot \left(\hat{\rho} \nabla K * \hat{\rho}\right)\,.
   \label{eq:continuous-evolution-equation}
 \end{equation}
-where $\hat{\rho}: \R \mapsto \R$ is the particle density function.
-\begin{proof}
-  \hierKoennteIhreWerbungStehen
-\end{proof}
+where $\hat{\rho}: \R \mapsto \R$ is the particle density function \parencite{2021-carillo-radial}.
 The solution $\hat{\rho}$ we are looking for within the scope of this dissertation is the \textit{equilibrium measure} (cf. \Cref{def:equilibrium-measure}) minimising the total potential $U$.
 
 \begin{definition}{Equilibrium Measure}{equilibrium-measure}
@@ -54,7 +50,7 @@ Also consider the total mass of the equilibrium distribution, given by
   \label{eq:measure-mass}
 \end{equation}
 which, without loss of generality, we can choose as $M = 1$ to make $\hat{\rho}(\hatvec{x})$ a \textit{probability distribution}.
-Also note that, as the integrand of the above integrals, we sometimes refer to the interaction potential $K$ as an integral kernel or simply \textit{kernel}.
+Also note that, as the integrand of the above integrals, we sometimes refer to the interaction potential $K(r)$ as an integral kernel or simply \textit{kernel}.
 
 Due to the absence of an external potential, solutions usually have translational invariance, so one might as well choose them to be centered at the origin (i.e. on $D = B_R(\vec{0})$ instead of $B_R(\hatvec{x}_{\text{centre}})$).
 

@@ -126,7 +126,7 @@ function plotDifferentOrderSolutions(p=Params.defaultParams)
 end
 
 function plotGeneralSolutionApproximation(p=Params.morsePotiParams)
-  fig = Figure()
+  fig = Figure(resolution=(800, 450))
   ax = Axis(fig[1, 1], xlabel=L"\text{Radial position}~x", ylabel=L"\text{Probability density}~\rho(|x|)",
     title=L"\text{General Kernel Solution with Increasing Number of Monomial Terms}~%$(p2tex(p))")
   for M in 4:8
