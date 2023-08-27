@@ -1,7 +1,9 @@
 \chapter{Implementation and Results}
 \label{chap:implementation-and-results}
 
-% \input{chapters/out/Implementation and Results.md.tex}
+Simulating and solving for the same parameters, we can compare the radial distribution histogram of the simulation output with the obtained, radially-symmetric, equilibrium distribution $\rho \in \functionspace$, cf. \Cref{fig:simulation-solver-comparison}.
+
+% TODO: describe how we find the minimum potential and export in C++
 
 \begin{figure}[H]
   \centering
@@ -23,14 +25,14 @@ and not $\mathcal{O}(N)$ or even higher orders.
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.8\linewidth]{results/attrep/condition-number-growth.pdf}
-  \caption[Growth of the condition number]{Growth of the 2-norm condition number $\kappa(Q)$ of the attractive-repulsive operator $Q$.}
+  \caption[Growth of the condition number]{Growth of the 2-norm condition number $\kappa(Q)$ of the attractive-repulsive operators $Q^{(\alpha)}$, $Q^{(\beta)}$ and $Q_{\alpha,\beta}$ for growing system size $N$.}
   \label{fig:condition-number-growth}
 \end{figure}
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.8\linewidth]{results/morse/coefficients.pdf}
-  \caption[Absolute value of the coefficients with and without regularisation]{Absolute value of the solution coefficients $\rho_k$ with and without Tikhonov regularisation.}
+  \caption[Absolute value of the coefficients with and without regularisation]{Absolute value of the solution coefficients $\rho_k$ with and without Tikhonov regularisation after the solution of a $200 \times 200$ linear system.}
   \label{fig:coefficients}
 \end{figure}
 
@@ -46,12 +48,11 @@ in a bash terminal.
 In order to run tests of the numerical solver implementation, run \\
 \bashblock{julia solver/tests.jl} \\
 in a bash terminal. In order to regenerate all plots at once, including simulation output from the C++ implementation, run \\
-\bashblock{julia solver/plotall.jl}
+\bashblock{julia solver/plotall.jl} \\
 in a terminal.
-
-\hierKoennteIhreWerbungStehen
+% \hierKoennteIhreWerbungStehen
 
 \section{Runtime Analysis}
 \label{sec:runtime-analysis}
 The following benchmarks were accumulated on an Intel\textregistered \, i7-5600U CPU running at \SI{2.6}{\giga\hertz} as the average over 3 individual runs with different test vectors, consistent across different parameter runs.
-\hierKoennteIhreWerbungStehen
+% \hierKoennteIhreWerbungStehen

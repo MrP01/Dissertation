@@ -4,6 +4,7 @@
 Now that we know how to treat power law potentials in the construction of a spectral method for the solution of equilibrium measures, can we consider more general kernels as well?
 The approach in this chapter will be to expand a general kernel $K$ in a power law basis and utilise the methodology introduced in the previous chapter to construct a general kernel spectral method.
 
+\section{Expansion of the General Kernel}
 More specifically, one choice of basis that could be made is the basis of monomials (so integer powers of the power law kernel basis).
 Using standard methods from function approximation theory, we expand the general kernel $K: \R^+ \mapsto \R$ in the basis of $G$ Jacobi polynomials (cf. \Cref{def:jacobi-polynomials})
 $$K(r) \approx \sum_{l=0}^{G-1} \tilde{g_k} P_k^{(a, b)}\left(2 r^2 - 1\right)\,, \quad \tilde{g_k} \in \R, \;l = 0, ..., G-1\,,$$
@@ -13,7 +14,7 @@ which we then reproject into the monomial basis to obtain the monomial coefficie
   \label{eq:monomial-expansion}
 \end{equation}
 
-\section{Reprojection from radial Jacobi polynomials}
+\subsection{Reprojection from Radial Jacobi Polynomials}
 For versatility in the choice of basis, we obtain the monomial coefficients of a given kernel $K(r)$ by
 $$\vec{g} = B \tilde{\vec{g}}\,,$$
 where $B \in \R^{G \times G}$.
@@ -31,6 +32,9 @@ Given the Ansatz, the total energy of the equilibrium measure (cf. \Cref{def:equ
 \end{align*}
 using \Cref{def:power-law-potential}.
 
+The solution process then follows analogously from \Cref{chap:spectral-method}.
+A spy plot of the full operator may be found in \Cref{fig:morse-operator}, resulting solutions in \Cref{fig:morse-solution-increasing-order}.
+
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.5\linewidth]{results/morse/full-operator.pdf}
@@ -44,6 +48,8 @@ using \Cref{def:power-law-potential}.
   \caption[General kernel solutions of increasing order]{Solutions $\rho_N(x)$ of increasing order $N$ in the general kernel setting with a monomial expansion of highest order $G = 8$ of the Morse potential $K_{C_a, l_a, C_r, l_r}(r)$.}
   \label{fig:morse-solution-increasing-order}
 \end{figure}
+
+Instead of increasing the order of the expansion in the solution ansatz (cf. \Cref{eq:ansatz}), one can increase the expansion order of the general kernel, $G$ to ensure a good match between the general kernel expansion and $K_G(r)$.
 
 \begin{figure}[H]
   \centering
@@ -64,6 +70,8 @@ To make a better statement about this numerical behaviour, consider \Cref{fig:mo
   }
   \label{fig:monomial-basis-convergence}
 \end{figure}
+
+Solutions for varying support radius $R$ can be found in \Cref{fig:varying-R-solutions}.
 
 \begin{figure}[H]
   \centering
