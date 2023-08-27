@@ -1,6 +1,12 @@
 \section{Comparison with Analytic Solutions}
 As introduced in \Cref{sec:analytical-solutions}, there are some analytical solutions available which allow us to perform further analysis of the numerical method in these special cases.
 
+The major advantage of a spectral method is its so-called \textit{spectral convergence}, sometimes also referred to as exponential convergence, cf. \Cref{def:spectral-convergence}.
+\input{chapters/bits/spectral-convergence.tex}
+
+For a given set of parameters with a known analytic solution (cf. \Cref{sec:analytical-solutions}), we compare growing orders of the spectral method's solution with the analytic expression in a set of 200 points and plot the pointwise error, cf. \Cref{fig:analytic-solution}.
+The figure also shows how the outer optimisation routine will approach the optimal $R_{\rm opt}$ closer and closer for growing orders $N$.
+
 \begin{figure}[H]
   \centering
   \includegraphics[width=\linewidth]{results/known-analytic/analytic-solution.pdf}
@@ -14,8 +20,6 @@ As introduced in \Cref{sec:analytical-solutions}, there are some analytical solu
 The reason for this fast convergence is the choice of weighted basis in \Cref{eq:ansatz} compared to the form of the analytical solution in \Cref{eq:analytical-solution-alpha-equal-2}.
 % TODO: when added theorem216() with limit-behaviour
 There are more analytic solutions available for other parameter ranges, which we will not analyse within the scope of this dissertation.
-
-\input{chapters/bits/spectral-convergence.tex}
 
 \begin{figure}[H]
   \centering

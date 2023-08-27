@@ -73,12 +73,16 @@ The normalisation constant is given in \Cref{lemma:mass}, based only on a single
 \input{chapters/bits/solving-a-linear-system.tex}
 
 \section{Results}
+After construction of the operator, solution through a linear system, renormalisation using the mass condition and outer optimisation of the support radius $R$, we finally obtain a set of solutions for arbitrary orders $N$, as depicted in \Cref{fig:solution-increasing-order}.
+
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.8\linewidth]{results/attrep/solution-increasing-order.pdf}
-  \caption[Solutions of increasing orders]{Particle density distribution function solutions $\rho$ of increasing order $N$ to the attractive-repulsive problem with interaction potential $K_{alpha, \beta}(r)$, $\alpha = 2.5$ and $\beta = 1.2$. Reflected along the y-axis for better visibility of the domain.}
+  \caption[Solutions of increasing orders]{Particle density distribution function solutions $\rho$ of increasing order $N$ to the attractive-repulsive problem with interaction potential $K_{\alpha, \beta}(r)$, $\alpha = 2.5$ and $\beta = 1.2$. Reflected along the y-axis for better visibility of the domain.}
   \label{fig:solution-increasing-order}
 \end{figure}
+
+An overview of solutions for varying parameters in an attractive-repulsive setting can be found in \Cref{fig:varying-parameters}.
 
 % Full Section:
 \input{chapters/bits/outer-optimisation.tex}
@@ -88,19 +92,12 @@ The normalisation constant is given in \Cref{lemma:mass}, based only on a single
 \input{chapters/bits/comparison-with-analytic.tex}
 
 \section{Discussion}
+For unknown analytic solutions, one can still perform a ``step-by-step'' convergence analysis, comparing the difference between two solutions of adjacent order for growing order $N$.
+This does not always lead to clean improvements for every $N$, as can be seen in \Cref{fig:convergence}.
+
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.8\linewidth]{results/attrep/convergence.pdf}
   \caption[Step-by-step convergence of solutions compared to order 24]{Step-by-step convergence of numerical solutions $\rho_N(x)$ as compared to $\rho_{24}(x)$, visualised using the squared error of the pointwise evaluation of both functions in $200$ points.}
   \label{fig:convergence}
-\end{figure}
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.9\linewidth]{results/attrep/varying-parameters.pdf}
-  \caption[Varying parameters in the solver]{
-    Varying different parameters in the solver to demonstrate their effect.
-    See also, \Cref{fig:varying-R-solutions}.
-  }
-  \label{fig:varying-parameters}
 \end{figure}

@@ -51,6 +51,6 @@ The simplest possible Tikhonov regularisation, also referred to as Ridge regress
 The modified system therefore becomes
 $$(Q^* Q + sI) \vec{\tilde{\rho}} = Q^* \vec{e}_1\,,$$
 with $I \in \R^{N \times N}$ the identity matrix.
-Solving it instead of the original system given in \Cref{eq:the-linear-system} results in a slight error in the solution, depending on the value of $s$ (TODO: add analytic-solution figure here), but the Tikhonov regularisation greatly improves the coefficient decay when adding more terms to the expansion. % TODO: resolve todo.
+Solving it instead of the original system given in \Cref{eq:the-linear-system} results in a slight error in the solution, depending on the value of $s$, but the Tikhonov regularisation greatly improves the coefficient decay when adding more terms to the expansion. % TODO: add analytic-solution figure here, showing accuracy stops improving after some N
 This coefficient decay is expected, after some $N$ the added Jacobi polynomials should not make as big of a difference any more, hence their coefficients should shrink for large $N$.
 The behaviour of our solver with and without regularisation is shown in \Cref{fig:coefficients}.

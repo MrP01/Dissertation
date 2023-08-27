@@ -12,7 +12,8 @@ $$\mathcal{Q}^\beta[\rho](\vec{x}) = \jacobivec{x} \cdot Q^\beta \vec{\rho}\,,$$
 where $\jacobivec{x} \in \R^N$ is the vector of radial Jacobi polynomials $P^{(a, b)}_0(x)$, $P^{(a, b)}_1(x)$, ..., $P^{(a, b)}_{N-1}(x)$ evaluated at $2\norm{\vec{x}}^2 - 1$ as introduced in and after \Cref{def:jacobi-polynomials}.
 Note that in the context of linear combinations of Jacobi polynomials, we will use zero-based indexing for vectors and matrices due to the convention that the first orthogonal polynomial is usually denoted by $p_0(x) = 1$, in line with $\deg(p_k) = k$.
 
-Based on the Three-Term Recurrence Relationship (cf. \Cref{thm:three-term-recurrence-relationship}), one can even determine an explicit relationship between the coefficients in the Jacobi expansion by considering the Jacobi Matrix (cf. \Cref{remark:jacobi-matrix}).
+Based on the three-term recurrence relationship (cf. \Cref{thm:three-term-recurrence-relationship}), one can even determine an explicit relationship between the coefficients in the Jacobi expansion by considering the Jacobi matrix (cf. \Cref{remark:jacobi-matrix}).
+We use this recurrence relationship in our implementation to significantly speed up the construction of the operator (cf. \Cref{sec:runtime-analysis}).
 
 % TODO: this section has weird indexing (start at 0 or 1?) and needs some work.
 Therefore, starting from \Cref{eq:theorem216-in-derivation}, we obtain

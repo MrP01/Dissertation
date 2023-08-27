@@ -19,8 +19,8 @@ Note that using this setup, the operators themselves do not need to be recompute
 The provided implementation uses \gls{lru} caching to automatically store operators for a given parameter set and order $N$.
 
 \begin{lemma}{Unique Energy Minimum}{attrep-energy-min}
-  Assuming an $N=1$ expansion of the density distribution $\rho$ according to \Cref{eq:ansatz} with $m \in \N_0$, for a feasible attractive-repulsive interaction potential $K_{\alpha, \beta}(r) = \frac{r^\alpha}{\alpha} - \frac{r^\beta}{\beta}$ with $\alpha > \beta$ and $\alpha > 0$, the energy minimum $E_{\rm min} = E(R_{\rm min})$ is unique and given by
-  $$R_{\rm min} = \left(\frac{\alpha(\beta+d) \bar{I}_{m,0}^{\alpha,\beta}}{\beta(\alpha+d) \bar{I}_{m,0}^{\alpha,\alpha}}\right)^\frac{1}{\alpha-\beta}\,,$$
+  Assuming an $N=1$ expansion of the density distribution $\rho$ according to \Cref{eq:ansatz} with $m \in \N_0$, for a feasible attractive-repulsive interaction potential $K_{\alpha, \beta}(r) = \frac{r^\alpha}{\alpha} - \frac{r^\beta}{\beta}$ with $\alpha > \beta$ and $\alpha > 0$, the energy minimum $E_{\rm min} = E(R_{\rm opt})$ is unique and given by
+  $$R_{\rm opt} = \left(\frac{\alpha(\beta+d) \bar{I}_{m,0}^{\alpha,\beta}}{\beta(\alpha+d) \bar{I}_{m,0}^{\alpha,\alpha}}\right)^\frac{1}{\alpha-\beta}\,,$$
   with $\bar{I}_{m,n}^{\alpha,\alpha}$ as given in \Cref{eq:0th-coeff-of-I}.
 \end{lemma}
 \begin{proof}
@@ -29,15 +29,15 @@ The provided implementation uses \gls{lru} caching to automatically store operat
   as $\frac{\partial \rho_0}{\partial R} = 0$ for $N = 1$.
   Setting the derivative to $0$ to find the extremata,
   $$\frac{\partial E}{\partial R} = 0 \qLRq \frac{\alpha+d}{\alpha} R^{\alpha} \bar{I}_{m,k}^{\alpha,\alpha} = \frac{\beta+d}{\beta} R^{\beta} \bar{I}_{m,k}^{\alpha,\beta} \qLRq R^{\alpha-\beta} = \frac{\alpha (\beta+d)}{\beta(\alpha+d)} \frac{\bar{I}_{m,k}^{\alpha,\beta}}{\bar{I}_{m,k}^{\alpha,\alpha}}\,,$$
-  we obtain a unique extremum $R_{\rm min} := \left(\frac{\alpha(\beta+d) \bar{I}_{m,0}^{\alpha,\beta}}{\beta(\alpha+d) \bar{I}_{m,0}^{\alpha,\alpha}}\right)^\frac{1}{\alpha-\beta}$.
+  we obtain a unique extremum $R_{\rm opt} := \left(\frac{\alpha(\beta+d) \bar{I}_{m,0}^{\alpha,\beta}}{\beta(\alpha+d) \bar{I}_{m,0}^{\alpha,\alpha}}\right)^\frac{1}{\alpha-\beta}$.
   Because we must have $\alpha > \beta$ for any stable solution, $\lim_{r \goesto \infty} K_{\alpha,\beta}(r) = \infty$ and more importantly,
   $$\lim_{R \goesto \infty} E(R) = \lim_{R \goesto \infty} \rho_0 R^d \left(\frac{R^{\alpha}}{\alpha} \bar{I}_{m,k}^{\alpha,\alpha} - \frac{R^{\beta}}{\beta} \bar{I}_{m,k}^{\alpha,\beta}\right) = \infty\,,$$
-  since both $\bar{I}_{m,k}^{\alpha,\alpha}, \bar{I}_{m,k}^{\alpha,\beta} < \infty$, $\alpha > 0$ and $M > 0 \Rightarrow \rho_0 > 0$, telling us that any $R_{\rm min} > 0$ must be a minimum between the endpoints $R = 0$ and $R = \infty$.
+  since both $\bar{I}_{m,k}^{\alpha,\alpha}, \bar{I}_{m,k}^{\alpha,\beta} < \infty$, $\alpha > 0$ and $M > 0 \Rightarrow \rho_0 > 0$, telling us that any $R_{\rm opt} > 0$ must be a minimum between the endpoints $R = 0$ and $R = \infty$.
 \end{proof}
 
 There is strong numerical evidence that the energy minimum is also unique for $N > 1$.
 Despite significant effort, this remains difficult to prove \footnote{Naming ``numerical evidence'' is a current topic of discussion in the numerical analysis community}.
 Even for $N = 2$, attempting a direct substitution of $\vec{\rho}$ through the explicit inversion of a $2 \times 2$ matrix, leads to finding the roots of a quintic polynomial for which it is well-known that no explicit formula exists.
 
-While the exact value of $R_{\rm min}$ in \Cref{lemma:attrep-energy-min} is not particularly useful in most scenarios as it only holds for $N = 1$, it provides a solid initial guess for the optimisation routine.
-Further, $R_{\rm min} > 0$ is an approximate (necessary) condition for the existence of an energy minimum of a given combination of $\alpha$ and $\beta$.
+While the exact value of $R_{\rm opt}$ in \Cref{lemma:attrep-energy-min} is not particularly useful in most scenarios as it only holds for $N = 1$, it provides a solid initial guess for the optimisation routine.
+Further, $R_{\rm opt} > 0$ is an approximate (necessary) condition for the existence of an energy minimum of a given combination of $\alpha$ and $\beta$.
