@@ -16,13 +16,13 @@ The total potential of a system of $N_p \ge 2$ particles $U \in \R$ can be calcu
 $$U = \sum_{i=1}^{N_p}\sum_{j=1, j \neq i}^{N_p} U_{ij} = \sum_{i=1}^{N_p}\sum_{j=1, j \neq i}^{N_p} K\left(\norm{\hatvec{x}_i - \hatvec{x}_j}\right)\,,$$
 where $\hatvec{x}_i \in \R^d$ represents the $d$-dimensional position of particle $i$, respectively.
 
-In the absence of an external potential $V$, the total energy is given by $E = E_{\text{kin}} + U$, so
+In the absence of an external potential $V$, the total energy is given by $E = E_{\text{kin}} + U$,
 \begin{equation}
   E = \frac{1}{2} \sum_{i=1}^{N_p} m_i \hatvec{v}_i^2 + \sum_{i=1}^{N_p}\sum_{j=1, j \neq i}^{N_p} K\left(\norm{\hatvec{x}_i - \hatvec{x}_j}\right)\,.
   \label{eq:total-energy}
 \end{equation}
 
-Each particle $i=1, ..., N_p$ at position $\hatvec{x}_i \in \R^d$ and time $t \in \R^+$ then follows
+Following from Newton's equations of motion together with a model for friction and self-propulsion (cf. \Cref{sec:self-propulsion-friction}), each particle $i=1, ..., N_p$ at position $\hatvec{x}_i \in \R^d$ and time $t \in \R^+$ then follows
 \begin{equation}
   \frac{\dd^2 \hatvec{x}_i}{\ddt^2} = f\left(\norm{\frac{\dd \hatvec{x}_i}{\ddt}}\right) \frac{\dd\hatvec{x}_i}{\ddt} - \frac{1}{N} \sum_{j=1, i\neq j}^{N} \nabla K\left(\norm{\hatvec{x}_i - \hatvec{x}_j}\right)\,,
   \label{eq:evolution-equation}
@@ -93,6 +93,7 @@ One can even consider the case when either $\alpha$ or $\beta$ is 0 in order to 
 If the repulsive term is stronger (so $\beta > \alpha$), there is no equilibrium distribution as particles simply continue repelling each other out to infinity.
 Attractive-repulsive potentials in general describe pairwise interactions with separate attractive and repulsive terms.
 In our case however, we will only refer to attractive-repulsive \textit{powerlaw} potentials, specifically of the form in \Cref{eq:attractive-repulsive-potential}.
+Its equilibrium distance is at $r = 1$.
 
 % Some input from the Wolfson Particle Physicist
 The Lennard-Jones potential ($\alpha=-12, \beta=-6$), for example, is an \textbf{intermolecular} potential, so the relevant length-scale is between molecules.
@@ -107,10 +108,21 @@ Another frequently used pairwise interaction is the \textit{Morse potential} $K_
 \end{equation}
 with attractive parameters $C_a \in \R^+$ and $l_a \in \R^+$ (a `natural length scale') and repulsive parameters $C_r, l_b \in \R^+$.
 Possible parameter ranges are given by $C_a l_a^{d-2} > 1, l_a < 1$ \parencite{2006-self-propelled,2014-explicit-flock-solutions-for-quasi-morse-potentials}.
-\hierKoennteIhreWerbungStehen
+% TODO: Its equilibrium distance is at $r = ...$.
+% \hierKoennteIhreWerbungStehen
 
 \subsection{Mixed Potential}
+Combining the above approaches of power-law and exponential decay interaction potentials, we can define
+$$K_{(C, l, \bar{a})}(r) := \frac{r^{\bar{a}}}{\bar{a}} + C e^{-r/l}\,,$$
+the combination of both.
+Its solution via spectral methods, as introduced later in \Cref{chap:spectral-method,chap:general-kernel-spectral-method}, can be constructed in an efficient manner exploiting the structure of the potential together with the general kernel ansatz.
+
 \subsection{Absolute Value Potential}
+As part of an exploration of the various types of kernels, one can consider
+$$K_{||}(r) := |1-r|\,,$$
+as depicted in \Cref{fig:comparing-potentials}.
+Its equilibrium distance is at $r = 1$.
+Because the function is not continuously differentiable, this potential is entirely unphysical but yields interesting results nonetheless (cf. \Cref{fig:gyroscope-quiver-3d}).
 
 \begin{figure}[H]
   \centering
@@ -120,12 +132,14 @@ Possible parameter ranges are given by $C_a l_a^{d-2} > 1, l_a < 1$ \parencite{2
 \end{figure}
 
 \section{Self-Propulsion and Friction}
-Makes it active matter.
+\label{sec:self-propulsion-friction}
+When a particle is able to self-propell (a force accelerating the particle in the direction it is already going), that makes it active matter - a number of individual agents.
+Friction is the opposite of that - a force acting against movement, cf. \Cref{eq:evolution-equation}.
 Self-propulsion and friction could be modelled as a quadratic of the form
 $$f(\hat{v}_i) = 1.6 - 0.5 \hat{v}_i^2\,,$$
-where $\hat{v}_i := \norm{\hatvec{v}_i} = \norm{\frac{\dd\hatvec{x}_i}{\ddt}}$.
+where $\hat{v}_i := \norm{\hatvec{v}_i} = \norm{\frac{\dd\hatvec{x}_i}{\ddt}}$ \parencite{2006-self-propelled}.
 
-\hierKoennteIhreWerbungStehen
+% \hierKoennteIhreWerbungStehen
 
 \begin{figure}[H]
   \centering
@@ -137,32 +151,39 @@ where $\hat{v}_i := \norm{\hatvec{v}_i} = \norm{\frac{\dd\hatvec{x}_i}{\ddt}}$.
 % TODO: Friction Term -> Energy Dissipation -> Different Plot
 
 \section{Kinetic Theory: The Vlasov Equation}
-A very common tool in Plasma physics.
-$$\frac{\partial f}{\partial t}+{\frac {\mathrm {d} \mathbf {r} }{\mathrm {d} t}}\cdot {\frac {\partial f}{\partial \mathbf {r} }}+{\frac {\mathrm {d} \mathbf {p} }{\mathrm {d} t}}\cdot {\frac {\partial f}{\partial \mathbf {p} }}=0,$$
+A common tool in plasma physics is the Vlasov equation,
+$$\frac{\partial f}{\partial t}+{\frac {\dd \vec{r} }{\dd t}}\cdot {\frac {\partial f}{\partial \vec{r} }}+{\frac {\dd \vec{p} }{\dd t}}\cdot {\frac {\partial f}{\partial \vec{p} }}=0\,,$$
+describing the change of the phase-space distribution function $f(\vec{r}, \vec{p}, t)$ over time.
+The Vlasov equation is the collisionless Boltzmann equation, Vlasov replaces the collision term with long-range interactions.
 
-This is the collisionless Boltzmann equation.
-Vlasov replaces the collision term with long-range interactions.
+An important result in kinetic theory is Liouville's theorem, stating that the total volume occupied in phase-space $\R^{2dN_p}$ of $d$ coordinates for position and velocity for $N_p$ particles is constant.
 
 \begin{theorem}{Liouville's}{liouville}
-  Says that phase-space volume is conserved in situations of a pure particle-particle interaction.
-  $$\frac{d\hat{\rho}}{dt}=
-    \frac{\partial\hat{\rho}}{\partial t}
-    +\sum_{i=1}^n\left(\frac{\partial\hat{\rho}}{\partial q_i}\dot{q}_i
-    +\frac{\partial\hat{\rho}}{\partial p_i}\dot{p}_i\right)=0\,.$$
+  Phase-space volume is conserved in situations of pure particle-particle interactions
+  $$\frac{\dd f}{\ddt}=
+    \frac{\partial f}{\partial t}
+    +\sum_{i=1}^n\left(\frac{\partial f}{\partial q_i}\dot{q}_i
+    +\frac{\partial f}{\partial p_i}\dot{p}_i\right)=0\,.$$
 \end{theorem}
 
-\section{Vicsek Model}
-For the study of active matter (a number of individual agents).
-\hierKoennteIhreWerbungStehen
+This observation can be used to verify, for instance, the correctness of large molecular dynamics simulations.
 
 \section{Swarming in Biological Settings}
 A 2010 paper by \citeauthor{2010-starlings} showed the surprising result that correlation between movement of individual starlings in bird flocks over Rome is scale-free.
 In contrast to the assumption that birds only mirror their neighbours' behaviour and swarming behaviour emerges as a result of that, this observation suggests that bird flocks exert collective behaviour beyond local interactions.
-\begin{quote}
-  The change in the behavioural state of one animal affects and is affected by that of all other animals in the group, no matter how large the group is
-  \parencite{2010-starlings}.
+\begin{quote}\itshape
+  The change in the behavioural state of one animal affects and is affected by that of all other animals in the group, no matter how large the group is \parencite{2010-starlings}.
 \end{quote}
 This work was done by individually tracking each starling in the flock and using tracking algorithms to represent their 3 dimensional positions and velocities.
+
+\subsection{Vicsek Model}
+The Vicsek model \parencite{1995-vicsek-model} is intended for the study of active matter, in particular it is suitable to describe the swarming behaviour of large groups of animals.
+The fundamental idea behind the model is to assume local alignment of velocities $\vec{v}_i$ within a swarm of animals, suggesting that birds or fish immitate the direction of their neighbours.
+It describes how large-scale, collective motion emerges from small-scale, local interactions.
+% \hierKoennteIhreWerbungStehen
+
+\subsection{Long-Range Interaction Potentials}
+The approach we will take within the scope of this dissertation is to model animal swarms as a continuum and introduce long-range interactions where each particle not only interacts with its closest neighbours but also far-away particles, as suggested empirically in \cite{2010-starlings}.
 
 \section{Analytical Solutions}
 \label{sec:analytical-solutions}
