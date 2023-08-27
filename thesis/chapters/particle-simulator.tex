@@ -3,7 +3,7 @@
 
 The aforementioned many-body systems generally exert very complex behaviour when viewed as a whole.
 This behaviour can be captured in mathematical terms but also from a simulation perspective.
-Particle simulations have been a subject of much attention in physics and scientific computing more generally.
+Particle simulations such as the ones depicted in \Cref{fig:simulation-quiver,fig:morse-3d-quiver} have been a subject of much attention in physics and scientific computing more generally.
 This class of simulations, in the context of intermolecular interactions, is often referred to as molecular dynamics.
 
 \begin{figure}[H]
@@ -17,7 +17,7 @@ Because each particle interacts with every other particle, the number of interac
 which can play a prohibitive role in terms of the computation time when increasing the number of particles $N_p \gg 1$.
 
 Within the scope of this thesis, in order to understand the elaborate behaviour of such particle systems and also to verify results from theory and the spectral method, we provide an implementation of a simulator starting from a numerical time integrator in $\R^d$.
-In addition to the \textit{headless} simulation software, exporting state and results for treatment by the analysis component, a \gls{gui} is provided to enable live insight into and interaction with the model.
+In addition to the \textit{headless} simulation software, exporting state and results for treatment by the analysis component, a \gls{gui} is provided to enable live insight into and interaction with the model, cf. \Cref{fig:gui-screenshot}.
 
 \begin{figure}[H]
   \centering
@@ -29,7 +29,7 @@ In addition to the \textit{headless} simulation software, exporting state and re
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.8\linewidth]{results/morse-3d/simulation-quiver-3d.pdf}
-  \caption[3D]{Self-propelled particles interacting via the Morse potential $K_{C_a, l_a, C_r, l_r}(r)$ in $d=3$ dimensions.}
+  \caption[Self-propelled particles in 3D interacting through $K_{C_a, l_a, C_r, l_r}(r)$.]{Self-propelled particles in a reflective box $[-1, 1]^3$ interacting via the Morse potential $K_{C_a, l_a, C_r, l_r}(r)$ in $d=3$ dimensions.}
   \label{fig:morse-3d-quiver}
 \end{figure}
 
@@ -87,14 +87,16 @@ The behaviour of the phase space plot differs from potential to potential, most 
   \label{fig:simulation-histogram}
 \end{figure}
 
-In a physical setting with collision terms, the velocity distribution $f(v)$ would approach the shape of a Boltzmann distribution
-$$f(v)={\bigg(\frac{m}{2\pi k_B T}\bigg)}^{\frac {3}{2}}\,4\pi v^{2}\exp \left(-{\frac {mv^{2}}{2k_B T}}\right)\,,$$
-where $k_B$ is the Boltzmann constant and $T$ is temperature.
+In a physical setting with collision terms, the velocity distribution $f(\hat{v})$ would approach the shape of a Boltzmann distribution
+$$f(\hat{v})={\bigg(\frac{m}{2\pi k_B T}\bigg)}^{\frac {3}{2}}\,4\pi \hat{v}^{2}\exp \left(-{\frac {m \hat{v}^{2}}{2k_B T}}\right)\,,$$
+with $m$ the identical mass of each particle and velocity $\hat{v}$, $k_B$ the Boltzmann constant and $T \in \R^+$ is temperature, measured in Kelvin.
+An exemplary velocity distribution is given in \Cref{fig:simulation-histogram}.
 
 \section{Runtime Analysis}
 \hierKoennteIhreWerbungStehen
 
 \section{Further Experiments}
+One can obtain interesting patterns using the absolute-value potential $K_{||}(r)$ as given in \Cref{eq:absvalue-potential} in $d=3$ dimensions, cf. \Cref{fig:gyroscope-quiver-3d,fig:fcc-quiver-3d}.
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.7\linewidth]{results/gyroscope-3d/simulation-quiver-3d.pdf}
@@ -108,3 +110,5 @@ where $k_B$ is the Boltzmann constant and $T$ is temperature.
   \caption{When running an $N_p = 250$ particle simulation with $K(r) = |1-r|$ as an interaction potential in $d=3$ dimensions the particles will align into an ``optimal packing''. In this case, almost equaling a \gls{fcc} array of spheres.}
   \label{fig:fcc-quiver-3d}
 \end{figure}
+
+% TODO: add more details on the optimal packing? Maybe that this could be developed into an actual algorithm, etc.?

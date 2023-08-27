@@ -23,7 +23,7 @@ P = Jacobi(a, b)[QuadraticMap(), :]
 r = axes(P, 1)
 
 # the following are examples on how to compute the expansion coefficients of a function in this basis
-# note: the first element is the 0-th degree coefficient, the second element is the 1st degree coefficient etc.
+# note: the first element is the 0th degree coefficient, the second element is the 1st degree coefficient etc.
 f(x) = exp(x^2) # function we want to expand
 f_n = P \ f.(r) # infinite vector which is adaptively computed (the more elements you ask for, the more it computes)
 

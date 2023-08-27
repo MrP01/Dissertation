@@ -119,7 +119,10 @@ Its solution via spectral methods, as introduced later in \Cref{chap:spectral-me
 
 \subsection{Absolute Value Potential}
 As part of an exploration of the various types of kernels, one can consider
-$$K_{||}(r) := |1-r|\,,$$
+\begin{equation}
+  K_{||}(r) := |1-r|\,,
+  \label{eq:absvalue-potential}
+\end{equation}
 as depicted in \Cref{fig:comparing-potentials}.
 Its equilibrium distance is at $r = 1$.
 Because the function is not continuously differentiable, this potential is entirely unphysical but yields interesting results nonetheless (cf. \Cref{fig:gyroscope-quiver-3d}).
@@ -137,7 +140,8 @@ When a particle is able to self-propell (a force accelerating the particle in th
 Friction is the opposite of that - a force acting against movement, cf. \Cref{eq:evolution-equation}.
 Self-propulsion and friction could be modelled as a quadratic of the form
 $$f(\hat{v}_i) = 1.6 - 0.5 \hat{v}_i^2\,,$$
-where $\hat{v}_i := \norm{\hatvec{v}_i} = \norm{\frac{\dd\hatvec{x}_i}{\ddt}}$ \parencite{2006-self-propelled}.
+with $\hat{v}_i := \norm{\hatvec{v}_i} = \norm{\frac{\dd\hatvec{x}_i}{\ddt}}$ the absolute value of the velocity of particle $i$ \parencite{2006-self-propelled}.
+Running a simulation using the Morse potential given in \Cref{eq:morse-potential} with this friction model results in a good archetype for animal swarming behaviour, as seen in \Cref{fig:simulation-quiver-illustration}.
 
 % \hierKoennteIhreWerbungStehen
 
