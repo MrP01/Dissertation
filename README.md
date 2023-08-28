@@ -1,4 +1,7 @@
 # Spectral Methods for Equilibrium Measures
+
+[![DOI](https://zenodo.org/badge/615078885.svg)](https://zenodo.org/badge/latestdoi/615078885)
+
 My MMSC dissertation on general kernel spectral methods for equilibrium measures.
 
 👉 The document itself can be found [here](https://raw.githubusercontent.com/MrP01/Dissertation/master/thesis/thesis.pdf)!
