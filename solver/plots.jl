@@ -33,7 +33,7 @@ dissertationColours[4] = RGBAf(204, 121, 167, 255) / 255  # wongPurple
 dissertationColours[5] = RGBAf(158, 179, 194, 255) / 255  # coolGray
 # dissertationColourmap = [dissertationColours[1], dissertationColours[2]]
 dissertationColourmap = :viridis
-dissertationTheme = Theme(palette=(color=dissertationColours,),)
+dissertationTheme = Theme(palette=(color=dissertationColours,), fontsize=20)
 set_theme!(dissertationTheme)
 
 function runSimulator(p::Params.Parameters, iterations=2000, big=true)
@@ -105,6 +105,9 @@ end
 function p2tex(p::Params.Parameters)
   return Params.potentialParamsToLatex(p.potential, true) * ",~d=$(p.d)"
 end
+function p2tex(p::Params.Parameters, R::Float64)
+  return Params.potentialParamsToLatex(p.potential, true) * ",~d=$(p.d),~R_{\\text{opt}}\\approx$(round(R_opt, digits=2))"
+end
 macro LT_str(s::String)
   return latexstring(raw"\text{" * s * "}")
 end
@@ -112,14 +115,14 @@ end
 function plotDifferentOrderSolutions(p=Params.defaultParams)
   fig = Figure(resolution=(800, 450))
   env = Utils.createEnvironment(p)
+  @show R_opt = Solver.outerOptimisation(42, env).minimizer[1]
   ax = Axis(fig[1, 1], xlabel=L"\text{Radial Position}~x", ylabel=L"\text{Probability Density}~\rho(|x|)",
-    title=L"\text{Solutions of different order}~N~\text{with}~%$(p2tex(p))")
+    title=L"\text{Solutions of different order}~N~\text{with}~%$(p2tex(p, R_opt))")
   # lines!(ax, x_vec_noends, obtainMeasure(x_vec_noends, 2), label="N = 2")
-  lines!(ax, x_vec_noends2, Utils.rho(x_vec_noends2, Solver.solve(3, p.R0, env), env), label="N = 3")
-  lines!(ax, x_vec_noends2, Utils.rho(x_vec_noends2, Solver.solve(4, p.R0, env), env), label="N = 4")
-  lines!(ax, x_vec_noends2, Utils.rho(x_vec_noends2, Solver.solve(5, p.R0, env), env), label="N = 5")
-  lines!(ax, x_vec_noends2, Utils.rho(x_vec_noends2, Solver.solve(6, p.R0, env), env), label="N = 6")
-  lines!(ax, x_vec_noends2, Utils.rho(x_vec_noends2, Solver.solve(7, p.R0, env), env), label="N = 7")
+  lines!(ax, x_vec_noends2, Utils.rho(x_vec_noends2, Solver.solve(4, R_opt, env), env), label="N = 4")
+  lines!(ax, x_vec_noends2, Utils.rho(x_vec_noends2, Solver.solve(6, R_opt, env), env), label="N = 6")
+  lines!(ax, x_vec_noends2, Utils.rho(x_vec_noends2, Solver.solve(12, R_opt, env), env), label="N = 12")
+  lines!(ax, x_vec_noends2, Utils.rho(x_vec_noends2, Solver.solve(42, R_opt, env), env), label="N = 42", linewidth=2)
   axislegend(ax)
   saveFig(fig, "solution-increasing-order", p)
   return fig
@@ -147,10 +150,10 @@ function plotAttRepOperators(p=Params.defaultParams; N=60)
   op1 = AttractiveRepulsiveSolver.recursivelyConstructOperator(N, alpha, env)
   op2 = AttractiveRepulsiveSolver.recursivelyConstructOperator(N, beta, env)
   fig = Figure(resolution=(920, 400))
-  ax = Axis(fig[1, 1][1, 1], yreversed=true, title=L"\text{Attractive Operator}~(\alpha = %$alpha)", xlabel=LT"Column Index", ylabel="Row Index")
+  ax = Axis(fig[1, 1][1, 1], yreversed=true, title=L"\text{Attractive Operator}~(\alpha = %$alpha)", xlabel=LT"Column Index", ylabel=LT"Row Index")
   s = spy!(ax, sparse(log10.(abs.(op1))), marker=:rect, markersize=12, framesize=0, colormap=dissertationColourmap)
   Colorbar(fig[1, 1][1, 2], s, flipaxis=false, tickformat=pow10tickformat)
-  ax = Axis(fig[1, 2][1, 1], yreversed=true, title=L"\text{Repulsive Operator}~(\beta = %$beta)", xlabel=LT"Column Index", ylabel="Row Index")
+  ax = Axis(fig[1, 2][1, 1], yreversed=true, title=L"\text{Repulsive Operator}~(\beta = %$beta)", xlabel=LT"Column Index", ylabel=LT"Row Index")
   s = spy!(ax, sparse(log10.(abs.(op2))), marker=:rect, markersize=12, framesize=0, colormap=dissertationColourmap)
   Colorbar(fig[1, 2][1, 2], s, flipaxis=false, tickformat=pow10tickformat)
   saveFig(fig, "attractive-repulsive-operators", p)
@@ -160,7 +163,7 @@ end
 function enhancedSpyPlot(matrix, title="")
   @debug Utils.opCond(matrix)
   fig = Figure(resolution=(600, 500))
-  ax = Axis(fig[1, 1][1, 1], yreversed=true, title=title, xlabel=LT"Column Index", ylabel="Row Index")
+  ax = Axis(fig[1, 1][1, 1], yreversed=true, title=title, xlabel=LT"Column Index", ylabel=LT"Row Index")
   s = spy!(ax, sparse(log10.(abs.(matrix))), marker=:rect, markersize=12, framesize=0, colormap=dissertationColourmap)
   Colorbar(fig[1, 1][1, 2], s, flipaxis=false, tickformat=pow10tickformat)
   return fig
@@ -188,14 +191,14 @@ function plotSpatialEnergyDependence(p=Params.defaultParams; N=12)
 end
 
 function plotStepByStepConvergence(p=Params.defaultParams)
-  Ns = 1:1:22
+  Ns = 1:1:18
   env = Utils.createEnvironment(p)
   errors = zeros(length(Ns))
-  R = env.p.R0
-  best = Utils.rho(r_vec_noend, Solver.solve(24, R, env), env)
+  @show R_opt = Solver.outerOptimisation(19, env).minimizer[1]
+  best = Utils.rho(r_vec_noend, Solver.solve(50, R_opt, env), env)
   for k in eachindex(Ns)
     N = Ns[k]
-    solution = Solver.solve(N, R, env)
+    solution = Solver.solve(N, R_opt, env)
     this = Utils.rho(r_vec_noend, solution, env)
     errors[k] = sum((this - best) .^ 2) / length(r_vec)
   end
@@ -238,7 +241,7 @@ function plotOuterOptimisation(p=Params.knownAnalyticParams; N=8)
   @show R_opt = Solver.outerOptimisation(N, env).minimizer[1]
   F(R) = Utils.totalEnergy(Solver.solve(N, R, env), R, env)
   fig = Figure(resolution=(800, 400))
-  ax = Axis(fig[1, 1], xlabel=L"R", ylabel=L"U(R)",
+  ax = Axis(fig[1, 1], xlabel=L"R", ylabel=L"E(R)",
     title=L"\text{Energy Optimisation with}~%$(p2tex(p))")
   lines!(ax, R_vec, F.(R_vec), label=LT"Energy")
   scatter!(ax, R_opt, F(R_opt), color=dissertationColours[3], label=LT"Optimum")
@@ -396,7 +399,7 @@ function plotSimulationAndSolverComparison(p::Params.Parameters=Params.known2dPa
   fig = Figure()
   ax = Axis(fig[1, 1], xlabel=L"\text{Pseudo radial distance}~r \cdot \mathrm{sign}(x_1)", ylabel=LT"Density",
     title=L"\text{Particle Simulation Output Distribution with}~%$(p2tex(p))")
-  hist!(ax, pseudoRadialDistance, bins=LinRange([-1, 1] * maxR..., 20), scale_to=maximum(solution) * 1.1,
+  hist!(ax, pseudoRadialDistance, bins=LinRange([-1, 1] * maxR..., 20), scale_to=maximum(solution),
     label=LT"Particle Simulation", color=dissertationColours[1])
   lines!(ax, x, solution, color=dissertationColours[4], linewidth=3.0, label=LT"Spectral Method")
   ylims!(ax, 0, maximum(solution) * 1.12)
@@ -570,7 +573,7 @@ function plotAll()
     plotVaryingRSolutions(Params.morsePotiParams)
     plotGeneralSolutionApproximation(Params.morsePotiParams)
     plot3dSimulationQuiver(Params.morsePotiSwarming3d)
-    plot3dSimulationQuiver(Params.gyroscope3dParams; iterations=4000)
+    plot3dSimulationQuiver(Params.gyroscope3dParams; withQuiver=false)
     plotMonomialBasisConvergence(Params.morsePotiParams)
     plotSimulationAndSolverComparison(Params.morsePotiParams)
     plotConditionNumberGrowth(Params.defaultParams)

@@ -65,7 +65,7 @@ struct SolutionEnvironment
 end
 
 """Creates a fresh environment based on the Params.Parameters."""
-function createEnvironment(p::Params.Parameters, G=5)::SolutionEnvironment
+function createEnvironment(p::Params.Parameters, G=8)::SolutionEnvironment
   B, P = createBasis(p)
   monomial = []
   if ~isa(p.potential, Params.AttractiveRepulsive)
@@ -135,12 +135,12 @@ function totalEnergy(solution::Vector{BigFloat}, R::Float64, env::SolutionEnviro
     d = 0
     E = (R^(alpha + d) / alpha) * attractive - (R^(beta + d) / beta) * repulsive
   else
-    E = zero(r)
+    E = 0.0
     for k in eachindex(solution)
       for index in eachindex(env.monomial)
         # index starts from 1!
         power, coefficient = index - 1, env.monomial[index]
-        E += coefficient * R^power * solution[k] * Float64.(theorem216.(r; n=k - 1, beta=float(power), p=env.p))
+        E += coefficient * R^power * solution[k] * (env.P[:, 1:1]\theorem216.(r; n=k - 1, beta=float(power), p=env.p))[1]
       end
     end
   end

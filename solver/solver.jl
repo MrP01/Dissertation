@@ -49,10 +49,13 @@ end
 function outerOptimisation(N::Int64, env::Utils.SolutionEnvironment, method=Optim.NewtonTrustRegion(), R0=0)
   if R0 == 0
     R0 = env.p.R0
+    if isa(env.p.potential, Params.AttractiveRepulsive)
+      R0 = Float64(guessSupportRadius(1; env))
+    end
   end
   F(R) = Utils.totalEnergy(solve(N, R, env), R, env)
   f(x) = F(x[1])  # because optimize() only accepts vector inputs
-  solution = Optim.optimize(f, [R0], method=method)
+  solution = Optim.optimize(f, [R0], method=method, iterations=50)
   return solution
 end
 

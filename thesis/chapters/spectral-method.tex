@@ -46,7 +46,7 @@ Finally, now that we have established the basis functions, we can write down an 
   \rho[\vec{\rho}](\vec{x}) = \rho(\vec{x}) := \left(1-\norm{\vec{x}}^{2}\right)^{m - \frac{\alpha + d}{2}} \sum_{k=0}^{N-1} \rho_k P_{k}^{\left(m - \frac{\alpha + d}{2},\frac{d-2}{2}\right)}(2 \norm{\vec{x}}^{2}-1)\,,
   \label{eq:ansatz}
 \end{equation}
-with $P_k^{(a, b)}$ the Jacobi polynomials and $\{\rho_k\}_{k=0, ..., N-1}$ the coefficients.
+with $P_k^{(a, b)}$ the Jacobi polynomials and $\{\rho_k\}_{k=0, ..., N-1}$ the coefficients and $m \in \N_0$ the smallest nonnegative integer such that $-d < \alpha < 2 +  2m - d$ in order to ensure that $a = m - \frac{\alpha+d}{2} > -1$.
 % TODO: is it alpha or beta in the exponent of (1-y\^{}2)?
 
 The spectral method can then be written as a linear system of the coefficients $\vec{\rho}$ as we will see in the next section.

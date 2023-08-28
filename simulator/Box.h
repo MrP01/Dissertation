@@ -8,7 +8,7 @@
 #endif
 
 #ifndef DIMENSION
-#define DIMENSION 3 // dimension
+#define DIMENSION 1 // dimension
 #endif
 
 // be careful to set numeric values as floats here
