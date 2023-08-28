@@ -18,22 +18,22 @@ We use this recurrence relationship in our implementation to significantly speed
 % TODO: this section has weird indexing (start at 0 or 1?) and needs some work.
 Therefore, starting from \Cref{eq:theorem216-in-derivation}, we obtain
 \begin{align*}
-  \mathcal{Q}^\beta[\rho](\vec{x}) & = \sum_{k=0}^{N-1} \rho_k \mathcal{Q}^\beta[wP_k](\vec{x}) = \sum_{k=0}^{N-1} \rho_k \sum_{j=0}^{N-1} q_{kj} \jacobi{x} \\
-                                   & = \sum_{j=0}^{N-1} \sum_{k=0}^{N-1} \rho_k q_{kj} \jacobi{x}\,,
+  \mathcal{Q}^\beta[\rho](\vec{x}) & = \sum_{k=0}^{N-1} \rho_k \mathcal{Q}^\beta[wP_k](\vec{x}) = \sum_{k=0}^{N-1} \rho_k \sum_{j=0}^{N-1} q^{\beta}_{kj} \jacobi{x} \\
+                                   & = \sum_{j=0}^{N-1} \sum_{k=0}^{N-1} \rho_k q^{\beta}_{kj} \jacobi{x}\,,
 \end{align*}
 which we will rewrite in matrix-form,
 \begin{align*}
   \mathcal{Q}^\beta[\rho](\vec{x}) & = \vec{P}(\vec{x}) \cdot
   \begin{pmatrix}
-    \sum_{k=0}^{N-1} \rho_k q_{k,1} \\
-    \vdots                          \\
-    \sum_{k=0}^{N-1} \rho_k q_{k,N}
+    \sum_{k=0}^{N-1} \rho_k q^{\beta}_{k,1} \\
+    \vdots                                  \\
+    \sum_{k=0}^{N-1} \rho_k q^{\beta}_{k,N}
   \end{pmatrix} = \vec{P}(\vec{x}) \cdot
   \underbrace{
     \begin{pmatrix}
-      q_{00}    & \dots  & q_{0,N-1}   \\
-      \vdots    & \ddots & \vdots      \\
-      q_{N-1,0} & \dots  & q_{N-1,N-1} \\
+      q^{\beta}_{00}    & \dots  & q^{\beta}_{0,N-1}   \\
+      \vdots            & \ddots & \vdots              \\
+      q^{\beta}_{N-1,0} & \dots  & q^{\beta}_{N-1,N-1} \\
     \end{pmatrix}
   }_{=: Q^\beta}
   \begin{pmatrix}
@@ -44,10 +44,10 @@ which we will rewrite in matrix-form,
                                    & = \jacobivec{x} \cdot Q^\beta \vec{\rho}
 \end{align*}
 where we used $\vec{P}(\vec{x}) = \jacobivec{x}$ as a shorthand giving us the form of the operator matrix.
-Its first row, the set of coefficients for the constant Jacobi polynomial $P_0^{(a,b)}$ of each expansion of the $Q$ operator, weighted by the solution coefficients, adds up to the total energy $E$ (coefficient of the constant polynomial).
-All remaining rows of $Q$ contain coefficients for polynomials of degree at least 1, so their weighted contributions must add up to 0 in order for the total energy $\tilde{E}(\vec{x})$ to remain constant.
+Its first row, the set of coefficients for the constant Jacobi polynomial $P_0^{(a,b)}$ of each expansion of $Q^\beta$, weighted by the solution coefficients, adds up to the total energy $E$ (coefficient of the constant polynomial).
+All remaining rows of $Q^\beta$ contain coefficients for polynomials of degree at least 1, so their weighted contributions must add up to 0 in order for the total energy $\tilde{E}(\vec{x})$ to remain constant.
 
-For the attractive-repulsive interaction potential $K_{\alpha,\beta}$, because each column consists of an expansion of the Jacobi polynomials, we have $q_{0k} = I_{m,k}^{\alpha,\beta}$.
+For the attractive-repulsive interaction potential $K_{\alpha,\beta}$, because each column consists of an expansion of the Jacobi polynomials, we have $q^{\beta}_{0k} = I_{m,k}^{\alpha,\beta}$.
 
 \begin{figure}[H]
   \centering

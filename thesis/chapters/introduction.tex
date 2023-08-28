@@ -1,51 +1,50 @@
 \chapter{Introduction}
 \label{chap:introduction}
 
-This chapter will give a brief overview of the setting of the problem considered in this dissertation, motivate a few biological and physical examples, and set up some notational conventions.
-
-\section{Problem Setting}
-The present thesis is concerned with many-body systems, treating particles in an abstract sense as they could take the form of physical atoms, birds in a flock or fish in a school.
+In this present thesis we concern ourselves with many-body systems, treating particles in an abstract sense as they could take the form of physical atoms, birds in a flock or fish in a school.
 Other examples include ant colonies and swarms of insects such as locusts.
 A swarm of animals, a set of coordinated entities, brings many advantages for its members.
-For example, they share water resistance or it is easier to find a mate within the swarm than otherwise.
-They also often mimic larger animals to fend off predators and swarming behaviour (``swarm intelligence'') plays an important role in this process.
-There are some disadvantages as well, like the accelerated spread of diseases or when resources are scarce, some swarm species even begin cannibalistic behaviour \parencite{2017-maria-orsogna-swarm-video}.
+For example, birds are able to minimise drag when travelling in a tightly packed group and it is easier to find a mate within the swarm than otherwise.
+They also mimic larger animals to fend off predators and swarming behaviour (``swarm intelligence'') plays an important role in this process.
+There may be some disadvantages as well, like the accelerated spread of diseases \parencite{2017-maria-orsogna-swarm-video}.
+In this thesis, we explore a method to describe this swarming behaviour and the patterns emerging from it mathematically, using pairwise interaction potentials.
 
-From a more physical perspective, pair potentials $K: \R^+ \mapsto \R$ provide a simple and computationally efficient way to approximate the interaction between two particles based solely on their distance (cf. \Cref{fig:problem-setting,fig:potential-function} as a simple illustration).
+From a perspective more rooted in physics, \textit{pair potentials} $K: \R^+ \mapsto \R$ provide a simple and computationally efficient way to approximate the interaction between two particles based solely on their distance (cf. \Cref{fig:problem-setting,fig:potential-function} as a simple illustration).
 Pairwise potentials can be used to approximate a wide range of interactions, including interatomic potentials in physics and computational chemistry.
-Common examples of pair potentials include the Lennard-Jones potential and the Morse potential, which are widely used in molecular dynamics simulations to study the behaviour of atoms and molecules, as well as the Coulomb potential used to describe the interaction between two charges in electrodynamics.
+Examples of pair potentials include the Lennard-Jones potential and the Morse potential, which are widely used in molecular dynamics simulations to study the behaviour of atoms and molecules, as well as the Coulomb potential used to describe the interaction between two charges in electrodynamics.
+
+From here on, we will refer to said swarm entities, be it fish, birds or atoms, as \textit{particles}.
 
 \begin{figure}[H]
   \centering
   \begin{subfigure}[t]{0.47\textwidth}
     \centering
     \inputtikz{problem-setting}
-    \caption[]{$N = 8$ particles interacting with one another through the potential $K(r)$.}
+    \caption[]{$N_p = 8$ particles in open space interacting with one another through the pairwise potential $K(r)$ based on their distance $r$.}
     \label{fig:problem-setting}
   \end{subfigure}
   \hfill
   \begin{subfigure}[t]{0.47\textwidth}
     \centering
     \scalebox{0.68}{\inputtikz{potential-function}}
-    \caption[]{Plot of attractive-repulsive potential functions $K_{\alpha, \beta}(r) = \frac{r^\alpha}{\alpha} - \frac{r^\beta}{\beta}$ for different $\alpha, \beta$.}
+    \caption[]{Plot of attractive-repulsive potential functions $K_{\alpha, \beta}(r) = \frac{r^\alpha}{\alpha} - \frac{r^\beta}{\beta}$ for different $\alpha, \beta$. More can be found in \Cref{fig:comparing-potentials}.}
     \label{fig:potential-function}
   \end{subfigure}
 \end{figure}
 
-From here on, we will refer to said swarm entities, be it fish, birds or atoms, as \textit{particles}.
-
 Fractional differential operators act non-locally, contrary to a regular derivative which tells us very local behaviour of a function at one point.
 Changes far away from that point do not affect a regular derivative, while they certainly do affect a fractional derivative such as the fractional Laplacian.
-In the context of \gls{pde}s where equations are often set in terms of time, it is often said that fractional derivatives have ``memory''.
+In the context of solving \gls{pdes} where equations are often set in terms of time, it is often said that fractional derivatives have ``memory''.
+
+After providing a brief introduction to the setting of the problem considered in this dissertation along with motivation from a few biological and physical examples, we will now set up notational conventions.
 
 \section{Notational Conventions}
-Let $\N$ denote the natural numbers (positive integers) without $0$ and let $\N_0 := \N \cup \{0\}$.
-In the following, we will use \textbf{bold} notation for vectors, matrices will generally be denoted by a capital letter and scalars by a lowercase letter.
-We will frequently make use of the (Euclidean) 2-norm of a vector, as denoted by $\norm{\cdot}$.
-So for a $d$-dimensional vector $\vec{x} \in \R^d$ with entries $x_1, ..., x_d \in \R$ we have $\norm{\vec{x}} := \sqrt{\sum_{k=1}^d x_k^2}$.
-Also note that for readability, we will use the notation $\vec{x}^2 := \vec{x}^T \vec{x} = \norm{\vec{x}}^2 \in \R^+$.
+Let $\N$ denote the natural numbers without $0$ and let $\N_0 := \N \cup \{0\}$.
+In the following, we use capital letters, lowercase letters and \textbf{bold} lowercase letters to denote matrices, scalars and vectors, respectively.
+We frequently make use of the (Euclidean) 2-norm of a $d$-dimensional vector $\vec{x} \in \R^d$ with entries $x_1, ..., x_d \in \R$, as denoted by $\norm{\vec{x}} := \sqrt{\sum_{k=1}^d x_k^2}$.
+For readability, we use the notation $\vec{x}^2 := \vec{x}^T \vec{x} = \norm{\vec{x}}^2 \in \R^+$.
 Let $\vec{e}_1 := (1, 0, ..., 0)^T$ denote the unit vector in the direction of the first dimension.
-Let $\delta_{ij}$ denote the Kronecker delta with $\delta_{ij} = 1$ when $i=j$ and $0$ otherwise.
+Let $\delta_{ij}$ denote the Kronecker delta, that is, $\delta_{ij} = 1$ when $i=j$ and $0$ otherwise.
 
 One should also clarify the nature of a few of the integrals appearing in this thesis which are often performed over the closed unit ball $B_1(\vec{x}) := \{\vec{y} \in \R^d \;|\, \norm{\vec{x} - \vec{y}} \le 1\}$ centered at the origin $\vec{x} = \vec{0}$.
 These volume integrals (often ended by $\dd^d y$ or $\dd V$) over the $d$-dimensional unit ball shall be written as
