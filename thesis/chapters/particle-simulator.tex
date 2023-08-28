@@ -1,9 +1,9 @@
 \chapter{Particle Simulator}
 \label{chap:particle-simulator}
 
-The aforementioned many-body systems generally exert very complex behaviour when viewed as a whole.
+While local behaviour may be according to simple rules, the aforementioned many-body systems generally exhibit complex behaviour when viewed as a whole.
 This behaviour can be captured in mathematical terms but also from a simulation perspective.
-Particle simulations such as the ones depicted in \Cref{fig:simulation-quiver,fig:morse-3d-quiver} have been a subject of much attention in physics and scientific computing more generally.
+Particle simulations such as the ones depicted in \Cref{fig:simulation-quiver,fig:morse-3d-quiver} are well-studied in physics and scientific computing more generally.
 This class of simulations, in the context of intermolecular interactions, is often referred to as molecular dynamics.
 
 \begin{figure}[H]
@@ -34,7 +34,7 @@ In addition to the \textit{headless} simulation software, exporting state and re
 \end{figure}
 
 \section{Available Methods}
-As a particular important problem in the physical sciences, there is an abundant number of simulation or solution methods available for molecular dynamics problems.
+As a particular important problem in the physical sciences, there is an abundant number of simulation methods and solvers available for molecular dynamics problems.
 
 Among them are simple forward integrators (e.g. $\vec{x}_i(t + \tau) \approx \vec{x}_i(t) + \tau \vec{v}_i(t)$ for $t > 0$ and timestep $\tau \in \R^+$), a generalisation of which are multistep methods.
 Both essentially originate from expanding the position and velocity as Taylor series in time.
@@ -58,8 +58,8 @@ In particular, every particle $i$ at position $\vec{x}_i \in \R^d$ with velocity
   \vec{v}_i(\tau / 2)   & = \vec{v}_i(0)+\frac{\tau}{2} \cdot \vec{f}[\vec{x}_i(0), 0], & \quad\text{for}~ & t=0\,,
 \end{align*}
 where $\vec{f}_i[\vec{x}_i(t), t] \in \R^d$ denotes the acceleration (sum of contributions of all forces divided by particle mass $m_i$).
-Verlet integration methods are a very common technique in molecular dynamics for the integration of Newton's equations of motion and implemented in many solvers.
-Leapfrog integration can be improved to much higher accuracy using Yoshida coefficients \parencite{1973-yoshida-coefficients}.
+Verlet integration methods are a common technique in molecular dynamics for the integration of Newton's equations of motion and implemented in many solvers.
+Leapfrog integration can be improved to higher accuracy using Yoshida coefficients \parencite{1973-yoshida-coefficients}.
 % TODO: vielleicht eine kleine Figure zur Visualisierung des Leap-Frogs
 Our implementation can be found in \Cref{appendix:code-snippets}.
 
@@ -99,14 +99,14 @@ An exemplary velocity distribution is given in \Cref{fig:simulation-histogram}.
 One can obtain interesting patterns using the absolute-value potential $K_{||}(r)$ as given in \Cref{eq:absvalue-potential} in $d=3$ dimensions, cf. \Cref{fig:gyroscope-quiver-3d,fig:fcc-quiver-3d}.
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.7\linewidth]{results/gyroscope-3d/simulation-quiver-3d.pdf}
+  \includegraphics[width=0.63\linewidth]{results/gyroscope-3d/simulation-quiver-3d.pdf}
   \caption{When running with $K(r) = |1-r|$ as an interaction potential and hence, $F(r) = -\nabla K(r) = -\sign(1-r)$, in $d=3$ dimensions a gyroscopical shape will form.}
   \label{fig:gyroscope-quiver-3d}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.7\linewidth]{results/fcc-3d/simulation-quiver-3d.pdf}
+  \includegraphics[width=0.63\linewidth]{results/fcc-3d/simulation-quiver-3d.pdf}
   \caption{When running an $N_p = 250$ particle simulation with $K(r) = |1-r|$ as an interaction potential in $d=3$ dimensions the particles will align into an ``optimal packing''. In this case, almost equaling a \gls{fcc} array of spheres.}
   \label{fig:fcc-quiver-3d}
 \end{figure}
