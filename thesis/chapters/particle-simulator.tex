@@ -53,9 +53,9 @@ Except for minor changes in the way the velocity is updated, it is essentially t
 
 In particular, every particle $i$ at position $\vec{x}_i \in \R^d$ with velocity $\vec{v}_i \in \R^d$ is updated using
 \begin{align*}
-  \vec{x}_i(t+\tau)     & = \vec{x}_i(t)+\tau \cdot \vec{v}_i(t+\tau / 2)              & \quad & t=0, \tau, \ldots      \\
-  \vec{v}_i(t+\tau / 2) & = \vec{v}_i(t-\tau/2) + \tau \cdot \vec{f}[\vec{x}_i(t), t]  & \quad & t=\tau, 2 \tau, \ldots \\
-  \vec{v}_i(\tau / 2)   & = \vec{v}_i(0)+\frac{\tau}{2} \cdot \vec{f}[\vec{x}_i(0), 0] & \quad & t=0
+  \vec{x}_i(t+\tau)     & = \vec{x}_i(t)+\tau \cdot \vec{v}_i(t+\tau / 2),              & \quad\text{for}~ & t=0, \tau, \ldots\,,      \\
+  \vec{v}_i(t+\tau / 2) & = \vec{v}_i(t-\tau/2) + \tau \cdot \vec{f}[\vec{x}_i(t), t],  & \quad\text{for}~ & t=\tau, 2 \tau, \ldots\,, \\
+  \vec{v}_i(\tau / 2)   & = \vec{v}_i(0)+\frac{\tau}{2} \cdot \vec{f}[\vec{x}_i(0), 0], & \quad\text{for}~ & t=0\,,
 \end{align*}
 where $\vec{f}_i[\vec{x}_i(t), t] \in \R^d$ denotes the acceleration (sum of contributions of all forces divided by particle mass $m_i$).
 Verlet integration methods are a very common technique in molecular dynamics for the integration of Newton's equations of motion and implemented in many solvers.

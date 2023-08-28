@@ -31,12 +31,13 @@ for reference see, for example, \cite{2020-power-law-kernels, 2021-arbitrary-dim
 For now, we only consider the case without an external potential $V(\hatvec{x})$.
 
 \section{Continuous Limit}
-The evolution equation, in the continuous limit as $N_p \goesto \infty$, becomes
+The evolution equation \eqref{eq:evolution-equation} without friction or self-propulsion, in the mean-field limit as $N_p \goesto \infty$, becomes
 \begin{equation}
   \frac{\partial \hat{\rho}}{\partial t} = \nabla \cdot \left(\hat{\rho} \nabla K * \hat{\rho}\right)\,.
   \label{eq:continuous-evolution-equation}
 \end{equation}
-where $\hat{\rho}: \R \mapsto \R$ is the particle density function \parencite{2021-carillo-radial}.
+where $\hat{\rho}: \R \mapsto \R$ is the particle density function and $*$ denotes a convolution.
+More details are given in \cite{2014-carillo-derivation-of-mean-field, 2021-carillo-radial}.
 The solution $\hat{\rho}$ we are looking for within the scope of this dissertation is the \textit{equilibrium measure} (cf. \Cref{def:equilibrium-measure}) minimising the total potential $U$.
 
 \begin{definition}{Equilibrium Measure}{equilibrium-measure}
@@ -49,7 +50,8 @@ Also consider the total mass of the equilibrium distribution, given by
   M[\hat{\rho}] := \int \dd\hat{\rho} = \int_{\supp(\hat{\rho})} \hat{\rho}(\hatvec{x}) \,\dd\hatvec{x}\,,
   \label{eq:measure-mass}
 \end{equation}
-which, without loss of generality, we can choose as $M = 1$ to make $\hat{\rho}(\hatvec{x})$ a \textit{probability distribution}.
+which, without loss of generality, we can choose as $M = 1$ to make $\hat{\rho}(\hatvec{x})$ a \textit{probability distribution}, which provides a useful interpretation of values of $\hat{\rho}$:
+The probability of finding a particle in a volume $\mathcal{V} \subseteq B_R(\vec{0})$ is given by $\int_{\mathcal{V}} \hat{\rho}(\vec{x}) \,\dd\vec{x}$.
 Also note that, as the integrand of the above integrals, we sometimes refer to the interaction potential $K(r)$ as an integral kernel or simply \textit{kernel}.
 
 Due to the absence of an external potential, solutions usually have translational invariance, so one might as well choose them to be centered at the origin (i.e. on $D = B_R(\vec{0})$ instead of $B_R(\hatvec{x}_{\text{centre}})$).
@@ -73,7 +75,7 @@ $$U^{(\beta)}[\hat{\rho}] = R^{2d + \beta} U^{(\beta)}[\rho]\,.$$
 With these preliminaries in mind, we can now define \href{def:the-problem}{the problem}.
 
 \begin{definition}[colframe=gray, colbacktitle=gray!30]{The Problem}{the-problem}
-  Finding an equilibrium measure $\hat{\rho}: B_R(\vec{0}) \mapsto \R$ of mass $M = 1$ on a $d$-dimensional ball of radius $R \in \R^+$ that minimises the total potential $U_K[\hat{\rho}]$ given an interaction kernel $K: \R^+ \mapsto \R$.
+  Find an equilibrium measure $\hat{\rho}: B_R(\vec{0}) \mapsto \R$ of mass $M = 1$ on a $d$-dimensional ball of radius $R \in \R^+$ that minimises the total potential $U_K[\hat{\rho}]$ given an interaction kernel $K: \R^+ \mapsto \R$.
 \end{definition}
 
 The remaining chapter will briefly discuss (analytical) approaches taken in particle physics and computational biology to solve (a version of) the above problem.
@@ -98,7 +100,7 @@ Its equilibrium distance is at $r = 1$.
 % Some input from the Wolfson Particle Physicist
 The Lennard-Jones potential ($\alpha=-12, \beta=-6$), for example, is an \textbf{intermolecular} potential, so the relevant length-scale is between molecules.
 Therefore, the only relevant interaction is the electromagnetic force.
-Other forces, such as strong force which keeps protons in the nucleus together (a force much stronger than the electromagnetic one, but with much lower reach), need not be considered at this length-scale.
+Other forces, such as the strong force which keeps protons in the nucleus together (a force much stronger than the electromagnetic one, but effective only at much smaller distances), need not be considered at this length-scale.
 
 \subsection{Morse Potential}
 Another frequently used pairwise interaction is the \textit{Morse potential} $K_{C_a, l_a, C_r, l_r}: \R^+ \mapsto \R$ given by
