@@ -1,6 +1,8 @@
 # Spectral Methods for Equilibrium Measures
 My MMSC dissertation on general kernel spectral methods for equilibrium measures.
 
+👉 The document itself can be found [here](https://raw.githubusercontent.com/MrP01/Dissertation/master/thesis/thesis.pdf)!
+
 Attractive-repulsive equilibrium measure problems appear in the modeling of the continuous limit of
 pair-interacting particle systems, e.g. models of animal swarms or classical physical particulates.
 From a computing point of view they are a combination of integral equation and minimization problem
