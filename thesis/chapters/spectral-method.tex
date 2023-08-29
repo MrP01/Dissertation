@@ -9,7 +9,7 @@ Both versions are related by $\hat{\rho}(\hatvec{x}) = \rho(\vec{x})$ and $\hatv
 Can we put together a numerical method to solve for the equilibrium distribution (cf. \Cref{def:equilibrium-measure})?
 Let us consider the problem from the bottom up and start from the solution:
 The basic idea behind spectral methods is to assume a solution $\rho(\vec{x})$ of the form
-$$\rho(\vec{x}) = \sum_{k=0}^{N-1} \rho_k \varphi_k(\vec{x})\,,\quad \rho_k \in \R, \varphi_k: \R^d \mapsto \R\,,\quad k = 0, ..., N-1\,,$$
+$$\rho(\vec{x}) = \sum_{k=0}^{N-1} \rho_k \varphi_k(\vec{x})\,,\quad \rho_k \in \R, \varphi_k: \R^d \to \R\,,\quad k = 0, ..., N-1\,,$$
 with $N$ coefficients $\vec{\rho} := \left(\rho_0, ..., \rho_{N-1}\right)^T$ multiplying $N$ basis functions $\varphi_k$.
 
 \pagebreak
@@ -39,7 +39,7 @@ The Jacobi polynomials are then defined from ${}_2F_1$ as follows:
 
 % \pagebreak
 \section{Working Towards a Solution}
-Finally, now that we have established the basis functions, we can write down an ansatz $\rho: B_1(\vec{0}) \mapsto \R$ for the solution of \hyperref[def:the-problem]{the problem}, of the form
+Finally, now that we have established the basis functions, we can write down an ansatz $\rho: B_1(\vec{0}) \to \R$ for the solution of \hyperref[def:the-problem]{the problem}, of the form
 \begin{equation}
   \rho[\vec{\rho}](\vec{x}) = \rho(\vec{x}) := \left(1-\norm{\vec{x}}^{2}\right)^{m - \frac{\alpha + d}{2}} \sum_{k=0}^{N-1} \rho_k P_{k}^{\left(m - \frac{\alpha + d}{2},\frac{d-2}{2}\right)}(2 \norm{\vec{x}}^{2}-1)\,,
   \label{eq:ansatz}
@@ -52,7 +52,7 @@ In order to establish said linear system, we first need to introduce the \textit
 \input{chapters/bits/riesz-potential.tex}
 \input{chapters/bits/theorem216.tex}
 
-% \Cref{thm:theorem216} gives an explicit expression for the main integral \(\mathcal{Q}^{\beta}: L \mapsto L\), an operator from the function space \(L\) to the function space \(L\), we are interested in:
+% \Cref{thm:theorem216} gives an explicit expression for the main integral \(\mathcal{Q}^{\beta}: L \to L\), an operator from the function space \(L\) to the function space \(L\), we are interested in:
 % which is used to construct the spectral method operator \(Q^\beta\) (cf. \Cref{def:power-law-operator}), acting on the coefficients \(\vec{\rho}\).
 
 Adding to our collection of tools, in order to solve the problem given in \Cref{def:the-problem} we need to normalise the solution by its mass.

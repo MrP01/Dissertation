@@ -37,12 +37,12 @@ The evolution equation \eqref{eq:evolution-equation} without friction or self-pr
   \frac{\partial \hat{\rho}}{\partial t} = \nabla \cdot \left(\hat{\rho} \nabla K * \hat{\rho}\right)\,.
   \label{eq:continuous-evolution-equation}
 \end{equation}
-where $\hat{\rho}: \R \mapsto \R$ is the particle density function and $*$ denotes a convolution.
+where $\hat{\rho}: \R \to \R$ is the particle density function and $*$ denotes a convolution.
 More details are given in \cite{2014-carrillo-derivation-of-mean-field, 2021-carrillo-radial}.
 The solution $\hat{\rho}$ we are looking for within the scope of this dissertation is the \textit{equilibrium measure} (cf. \Cref{def:equilibrium-measure}), a particle density distribution function minimising the total potential $U$.
 
 \begin{definition}{Equilibrium Measure}{equilibrium-measure}
-  For a given pairwise interaction potential $K: \R \mapsto \R$, the equilibrium measure $\hat{\rho}: D \mapsto \R$ with $D \subseteq \R^d$ is a measure chosen such that
+  For a given pairwise interaction potential $K: \R \to \R$, the equilibrium measure $\hat{\rho}: D \to \R$ with $D \subseteq \R^d$ is a measure chosen such that
   $$U_K[\hat{\rho}] := \frac{1}{2} \iint K\left(\norm{\hatvec{x} - \hatvec{y}}\right) \,\dd\hat{\rho}(\hatvec{x})\,\dd\hat{\rho}(\hatvec{y})\,,$$
   is minimised, where $\dd\hat{\rho} = \hat{\rho}(\hatvec{x})\dd\hatvec{x}$.
 \end{definition}
@@ -65,15 +65,15 @@ The relationship between them is simply, $\hat{\rho}(\hatvec{x}) = \hat{\rho}(R\
 
 \begin{definition}{Space of Particle Density Distributions}{function-space}
   On the \textit{full domain} $B_R(\vec{0}) \subset \R^d$, let
-  $\functionspacehat := \{\rho: B_R(\vec{0}) \mapsto \R\}\,.$
+  $\functionspacehat := \{\rho: B_R(\vec{0}) \to \R\}\,.$
   On the \textit{normalised domain} $B_1(\vec{0})$ of radius $1$, let
-  $\functionspace := \{\rho: B_1(\vec{0}) \mapsto \R\}\,.$
+  $\functionspace := \{\rho: B_1(\vec{0}) \to \R\}\,.$
 \end{definition}
 
 For a given density distribution $\rho$, we define a utility operator to help with notation, the power law potential (\Cref{def:power-law-potential}).
 
 \begin{definition}{Power Law Potential Energy}{power-law-potential}
-  For a given equilibrium measure $\rho \in \functionspace$ and $\beta \in \R$, the power law potential operator $U_K: \functionspace \mapsto \R$ is given by
+  For a given equilibrium measure $\rho \in \functionspace$ and $\beta \in \R$, the power law potential operator $U_K: \functionspace \to \R$ is given by
   $$U^{(\beta)}[\rho] := \iint \norm{\vec{x}-\vec{y}}^\beta \,\dd\rho(\vec{x})\dd\rho(\vec{y})\,.$$
 \end{definition}
 
@@ -85,7 +85,7 @@ $$U^{(\beta)}[\hat{\rho}] = R^{2d + \beta} U^{(\beta)}[\rho]\,.$$
 With these preliminaries in mind, we can now formulate \href{def:the-problem}{the problem}.
 
 \begin{definition}[colframe=gray, colbacktitle=gray!30]{Particle Density Distribution Problem}{the-problem}
-  Given an interaction kernel $K: \R^+ \mapsto \R$, the density distribution problem is to find the equilibrium measure $\hat{\rho}: B_R(\vec{0}) \mapsto \R$ of mass $M = 1$ on a $d$-dimensional ball of radius $R \in \R^+$ that minimises the total potential $U_K[\hat{\rho}]$.
+  Given an interaction kernel $K: \R^+ \to \R$, the density distribution problem is to find the equilibrium measure $\hat{\rho}: B_R(\vec{0}) \to \R$ of mass $M = 1$ on a $d$-dimensional ball of radius $R \in \R^+$ that minimises the total potential $U_K[\hat{\rho}]$.
 \end{definition}
 
 \section{Interaction Potentials}
@@ -113,7 +113,7 @@ Therefore, the only relevant interaction is the electromagnetic force.
 Other forces, such as the strong force which keeps protons in the nucleus together (a force much stronger than the electromagnetic one, but effective only at much smaller distances), need not be considered at this length-scale.
 
 \subsection{Morse Potential}
-Another frequently used pairwise interaction is the \textit{Morse potential} $K_{C_a, l_a, C_r, l_r}: \R^+ \mapsto \R$ given by
+Another frequently used pairwise interaction is the \textit{Morse potential} $K_{C_a, l_a, C_r, l_r}: \R^+ \to \R$ given by
 \begin{equation}
   K_{C_a, l_a, C_r, l_r}(r) := C_a \e^{-r / l_a} - C_r \e^{-r / l_r}\,,
   \label{eq:morse-potential}

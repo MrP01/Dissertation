@@ -6,7 +6,7 @@ Substituting our ansatz given in \Cref{eq:ansatz} into $\mathcal{Q}^\beta[\rho]$
 \end{equation}
 luckily containing the integral evaluated in \Cref{thm:theorem216}.
 
-We are now interested in a numerical representation of the operator $\mathcal{Q}^\beta$ acting on the function $\rho \in \functionspace$, so an equivalent (linear) operator $Q^\beta: \R^N \mapsto \R^N$ acting on the coefficients $\rho_k \in \R,\, k = 0, ..., N-1$.
+We are now interested in a numerical representation of the operator $\mathcal{Q}^\beta$ acting on the function $\rho \in \functionspace$, so an equivalent (linear) operator $Q^\beta: \R^N \to \R^N$ acting on the coefficients $\rho_k \in \R,\, k = 0, ..., N-1$.
 As every finite-dimensional linear operator must have a matrix representation, we look for a $Q^\beta \in \R^{N \times N}$ such that
 $$\mathcal{Q}^\beta[\rho](\vec{x}) = \jacobivec{x} \cdot Q^\beta \vec{\rho}\,,$$
 where $\jacobivec{x} \in \R^N$ is the vector of radial Jacobi polynomials $P^{(a, b)}_0(x)$, $P^{(a, b)}_1(x)$, ..., $P^{(a, b)}_{N-1}(x)$ evaluated at $2\norm{\vec{x}}^2 - 1$ as introduced in and after \Cref{def:jacobi-polynomials}.
