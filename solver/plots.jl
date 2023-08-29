@@ -3,6 +3,8 @@ using SparseArrays
 using LaTeXStrings
 import CSV
 import DataFrames
+import Optim
+import SpecialFunctions
 
 include("./parameters.jl")
 include("./solver.jl")
@@ -298,19 +300,30 @@ function plotConvergenceToAnalytic(p=Params.knownAnalyticParams)
   Ns = 1:1:34
   env = Utils.createEnvironment(p)
   errors = zeros(length(Ns))
+  regerrors = zeros(length(Ns))
+  regerrors2 = zeros(length(Ns))
   R, analytic = AnalyticSolutions.explicitSolution(r_vec_noend; p=env.p)
   for k in eachindex(Ns)
     N = Ns[k]
     solution = Solver.solve(N, R, env)
     this = Utils.rho(r_vec_noend, solution, env)
+    thisreg = Utils.rho(r_vec_noend, Solver.solveWithRegularisation(N, R, env, 1e-9), env)
+    thisreg2 = Utils.rho(r_vec_noend, Solver.solveWithRegularisation(N, R, env, 1e-5), env)
     errors[k] = sum((this - analytic) .^ 2) / length(r_vec)
+    regerrors[k] = sum((thisreg - analytic) .^ 2) / length(r_vec)
+    regerrors2[k] = sum((thisreg2 - analytic) .^ 2) / length(r_vec)
   end
 
   fig = Figure(resolution=(800, 450))
   ax = Axis(fig[1, 1], yscale=log10, xlabel=L"N", ylabel=LT"Squared Error",
     title=L"\text{Convergence to analytic solution with}~%$(p2tex(p))")
   lines!(ax, Ns, errors)
-  scatter!(ax, Ns, errors, color=dissertationColours[4])
+  lines!(ax, Ns, regerrors2, color=dissertationColours[2])
+  lines!(ax, Ns, regerrors, color=dissertationColours[3])
+  scatter!(ax, Ns, regerrors2, color=dissertationColours[2], label=L"\text{With regularisation}~(s=10^{-5})")
+  scatter!(ax, Ns, regerrors, color=dissertationColours[3], label=L"\text{With regularisation}~(s=10^{-9})")
+  scatter!(ax, Ns, errors, color=dissertationColours[4], label=LT"Without regularisation")
+  axislegend(ax)
   saveFig(fig, "convergence-to-analytic", env.p)
   return fig
 end
@@ -531,14 +544,51 @@ function plotGeneralNGErrorMatrix(p=Params.morsePotiParams)
   return fig
 end
 
+function plotMultivariateEnergy(d=1, m=1)
+  alpha_vec = 0.5:0.11:(2+2*m-d)
+  beta = 0.4
+  R_vec = 0.02:0.05:2.2
+  E = zeros(length(alpha_vec), length(R_vec))
+  for k in eachindex(alpha_vec)
+    # p = Params.Parameters(d=d, m=m, potential=Params.AttractiveRepulsive(alpha=2 + 2 * m - d - 0.1, beta=alpha_vec[k]))
+    p = Params.Parameters(d=d, m=m, potential=Params.AttractiveRepulsive(alpha=alpha_vec[k], beta=beta))
+    Params.checkParameters(p)
+    env = Utils.createEnvironment(p)
+    F(R) = Utils.totalEnergy(Solver.solve(8, R, env), R, env)
+    E[k, :] = F.(R_vec)
+  end
+  println("Constructed E. Fitting.")
+
+  fitFunction(alpha, R; x) = x[1] + alpha * x[2] + alpha^2 * x[3] + alpha^3 * x[4] + log(alpha) * x[13] +
+                             R^alpha * x[5] + R^beta * x[6] + R * x[7] + R^2 * x[8] + R^3 * x[9] + R^4 * x[10] +
+                             R^(alpha - 1) * x[11] + R^(beta - 1) * x[12]
+  #  SpecialFunctions.beta(0.5, (3 - beta) / 2)^(1 / (beta - 2)) * x[14]
+  #  SpecialFunctions.beta(0.5, (3 - alpha) / 2)^(1 / (alpha - 2)) * x[15]
+  #  R^(4 - alpha) * SpecialFunctions.beta(0.5, (3 - alpha) / 2)^(1 / (alpha - 2)) * cos(alpha * pi / 2) * x[16]
+  squareError(x) = sum((fitFunction.(alpha_vec, R_vec'; x=x) - E) .^ 2)
+  result = Optim.optimize(squareError, zeros(14), method=Optim.LBFGS(), iterations=2000; autodiff=:forward)
+  @show result
+  @show result.minimizer, result.minimum
+
+  fig = Figure(resolution=(800, 600))
+  ax = Axis3(fig[1, 1], aspect=:data, perspectiveness=0.2, elevation=π / 9,
+    xzpanelcolor=(:black, 0.75), yzpanelcolor=(:black, 0.75), azimuth=0.2 * pi, viewmode=:stretch, protrusions=(50, 10, 30, 0),
+    zgridcolor=:grey, ygridcolor=:grey, xgridcolor=:grey, xlabel=L"\alpha", ylabel=L"R", zlabel=L"E(\alpha, R)")
+  Emin, Emax = minimum(E), maximum(E)
+  surface!(ax, alpha_vec, R_vec, E; colormap=:viridis, colorrange=(Emin, Emax), transparency=true)
+  scatter!(ax, alpha_vec, R_vec, fitFunction.(alpha_vec, R_vec'; x=result.minimizer); color=dissertationColours[1])
+  saveFig(fig, "multivariate-energy-3d", Params.defaultParams, throughEps=true)
+  return fig
+end
+
 function plotJacobiConvergence()
   B = Utils.defaultEnv.B
   P = Utils.defaultEnv.P
   f(x) = exp(x^2) # function we want to expand
   f_N = P[:, 1:10] \ f.(axes(P, 1))
-  fig = Figure(resolution=(800, 550))
-  ax = Axis(fig[1, 1], yscale=log10, xlabel=L"x", ylabel=LT"Absolute Error",
-    title=L"\text{Expansion of the function}~f(x) = \exp(x^2)~\text{in the}~P_k^{(%$(round(B.a, digits=2)), %$(round(B.b, digits=2)))}~\text{basis}")
+  fig = Figure(resolution=(800, 420))
+  ax = Axis(fig[1, 1], yscale=log10, xlabel=L"r", ylabel=LT"Absolute Error",
+    title=L"\text{Expansion of the function}~f(r) = \exp(r^2)~\text{in the radial}~P_k^{(%$(round(B.a, digits=2)), %$(round(B.b, digits=2)))}~\text{basis}")
   for k in 2:10
     lines!(ax, r_vec, vec(abs.(sum(f_N[1:k] .* P[r_vec, 1:k]', dims=1) - f.(r_vec)')), label=L"N = %$k")
     # lines!(ax, r_vec, vec(sum(f_N[1:k] .* P[r_vec, 1:k]', dims=1) - f.(r_vec)'), label=L"N = %$k")
@@ -546,11 +596,6 @@ function plotJacobiConvergence()
   axislegend(ax)
   saveFig(fig, "jacobi-expansions")
   return fig
-end
-
-function plotRegularisationErrorAnalytic()
-  # Timon says it makes sense to include this in the dissertation
-  plotConvergenceToAnalytic(Params.copyWithChanges(Params.knownAnalyticParams, s0=1e-7))
 end
 
 function plotAll()

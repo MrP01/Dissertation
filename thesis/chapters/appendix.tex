@@ -1,6 +1,45 @@
 \appendix
-\titleformat{\chapter}[block]{\normalfont\LARGE\bfseries}{Appendix \thechapter \;\textendash\;}{0ex}{\vspace{-4cm}}[\vspace{4.5cm}]
+\titleformat{\chapter}[block]{\vspace*{-2.5cm}\normalfont\Large\bfseries}{Appendix \thechapter \;\textendash\;}{0ex}{\vspace{-4cm}}[\vspace{4.5cm}]
 \titlespacing{\chapter}{0cm}{0cm}{0cm}
+
+\chapter{Exploring the Energy Function}
+\label{chap:memo-on-the-energy}
+In an attempt to find an explicit expression of the energy function $E(\alpha, \beta, R, d)$, we plotted and fitted the energy function in $\alpha$ and $R$ so that it can be visualised with $d = 1$ and $\beta = 0.4$ held constant.
+
+The fit of $E(\alpha, R)$ depicted in \Cref{fig:multivariate-energy-3d} is done by minimising the square error between energy values returned by the solver and the following function:
+\begin{align*}
+  E(\alpha, R; \vec{x}) = & x_{1} + \alpha \cdot x_{2} + \alpha^2 \cdot x_{3} + \alpha^3 \cdot x_{4} + R^\alpha \cdot x_{5} + R^\beta \cdot x_{6} \\
+                          & + R \cdot x_{7} + R^2 \cdot x_{8} + R^3 \cdot x_{9} + R^4 \cdot x_{10} + \log(\alpha) \cdot x_{11}\,.
+\end{align*}
+
+% [-3.2290656926194745, 4.191742247704756, -0.9901655688595846, 0.1054275395353191, -0.1508895211749961, -1.9114728748086454, 0.132376743248443, 0.6617933016251011, -0.12573696508776597, -0.02991876184227984, -3.1864697903599177]
+The resulting best-fit parameter combination is
+$$\vec{x}_{\rm min} = (
+  -3.22,
+  4.19,
+  -0.99,
+  0.11,
+  -0.15,
+  -1.91,
+  0.13,
+  0.66,
+  -0.13,
+  -0.03,
+  -3.18
+  )^T\,.$$
+as obtained through Optim.jl's \gls{lbfgs} minimisation routine \parencite{2023-optim-jl} with \gls{ad} for the gradient.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\linewidth]{results/attrep/multivariate-energy-3d.pdf}
+  \caption[Surface plot of the total potential energy $E(\alpha, R)$]{Surface plot of the total potential energy $E(\alpha, R)$, the blue scatter points represent the fit $E(\alpha, R; \vec{x}_{\rm min})$.}
+  \label{fig:multivariate-energy-3d}
+\end{figure}
+
+The conclusion seems to be that the behaviour is highly non-polynomial, even when using powers $R^\alpha$ and $R^\beta$, etc. instead of only monomials.
+One could expect this given the analytic energy expressions in \Cref{sec:analytical-solutions} and \cite{2017-explicit-solutions}.
+Even adding in some of the terms ($B(\cdot, \cdot) \cdot \cos(\cdot)$, etc.) from the analytical expressions did not help.
+We also tried higher orders in $\alpha$, $R$, more log terms, cross-terms, and we even experimented with the beta function.
 
 \chapter{Various Parameters}
 \label{chap:appendix}

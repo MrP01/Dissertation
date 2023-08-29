@@ -28,19 +28,14 @@ Also note that, as with all other orthogonal polynomials, by convention indices 
   using \Cref{remark:pochhammer-gamma}.
 \end{proof}
 
+Particularly useful properties of Jacobi polynomials for spectral methods are the explicit differentiation and three-term recurrence formulas.
+
 \paragraph{Special Cases:}
 The Gegenbauer (or ultraspherical) polynomials $C_n^{(\lambda)}$ are a special case of the Jacobi polynomials, namely when $a = b$,
 of which the Chebyshev polynomials of the first kind $T_n$ are another special case of.
 Namely, when $a = b = -1/2$.
 The Chebyshev polynomials of the second kind $U_n$, once again regulated by a prefactor, are given by $a = b = +1/2$.
 In the special case when $a = b = 0$, the Jacobi polynomials reduce to the Legendre polynomials $P_n(x) = P_n^{(0, 0)}(x)$, cf. \cite{2018-nist}.
-
-% Nice Spectral Properties:
-% \begin{itemize}
-%   \item Differentiation <-- TODO
-%   \item Three-Term Recurrence
-%   \item why are they better than just Chebyshev?
-% \end{itemize}
 
 \paragraph{Dot-product notation:}
 Note that in this manuscript we will use the dot-product notation between the vector of Jacobi polynomials and the coefficient vector,
@@ -63,12 +58,12 @@ So $\vec{P}^{(a, b)}(x) \in \R^N$ is the vector of Jacobi polynomials $P^{(a, b)
   See, for example, \cite{1995-jacobi-orthogonality-proof}.
 \end{proof}
 
-As shown by, for example, ``the ultraspherical method'' \parencite{2013-a-fast-and-well-conditioned-spectral-method}, the basis of Jacobi polynomials can yield a \textbf{sparse}, and in particular, \textbf{banded} operator.
-This is due to the excellent property that derivatives of orthogonal polynomials and in particular, the Gegenbauer polynomials, can be expressed as tridiagonal matrices acting on coefficient space.
+As shown by, for example, ``the ultraspherical method'' \parencite{2013-a-fast-and-well-conditioned-spectral-method}, the basis of Jacobi polynomials can yield a \textbf{sparse} (i.e., only $\mathcal{O}(1)$ non-zero entries per row), and in particular, \textbf{banded} operator (all non-zero entries $q_{ij}$ are confined to a diagonal band, so $q_{ij} = 0 \;\forall |i-j| > \tilde{b}$ for some \textit{bandedness} $\tilde{b}$).
+This is due to the excellent property that derivatives of orthogonal polynomials and in particular, the Gegenbauer (ultraspherical) polynomials, can be expressed as tridiagonal matrices acting on coefficient space.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.7\linewidth]{results/jacobi-expansions.pdf}
+  \includegraphics[width=0.75\linewidth]{results/jacobi-expansions.pdf}
   \caption[Convergence of Jacobi basis expansion]{Convergence of the Jacobi polynomial expansion $f_N(x) = \sum_{k=0}^{N-1} P_k^{(a, b)}(x)$ of an example function $f(x) = \e^{x^2}$ with $a = -\frac{3}{4}$ and $b = -\frac{1}{2}$. Each added term improves the absolute error between the function and its expansion by a factor, so we have exponential convergence. The number of ``arches'' of each solution error function, occurring from the roots of $f(x) - f_N(x)$, approximately equals the order $N$.}
   \label{fig:jacobi-expansions-error}
 \end{figure}

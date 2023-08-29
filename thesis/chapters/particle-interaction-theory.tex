@@ -153,11 +153,11 @@ The remaining chapter will briefly discuss analytical approaches taken in partic
 
 \section{Self-Propulsion and Friction}
 \label{sec:self-propulsion-friction}
-In order to model animals in a swarm, it makes sense to enable them to self-propell (a force accelerating the particle in the direction it is already going).
+In order to model animals in a swarm, it makes sense to consider the effect of self-propulsion (a force accelerating the particle in the direction it is already going).
 A set of particles with this ability are referred to as active matter - a number of individual agents within a medium.
 Friction is the opposite of that - a force acting against movement, cf. \Cref{eq:evolution-equation}.
 Self-propulsion and friction could be modelled as a quadratic of the form
-$$f(\hat{v}_i) = 1.6 - 0.5 \hat{v}_i^2\,,$$
+$$f(\hat{v}_i) = f_{\rm self-propulsion} - f_{\rm } \hat{v}_i^2\,,$$
 with $\hat{v}_i := \norm{\hatvec{v}_i} = \norm{\frac{\dd\hatvec{x}_i}{\ddt}}$ the absolute value of the velocity of particle $i$.
 Running a simulation using the Morse potential given in \Cref{eq:morse-potential} with this friction model results in a good archetype for animal swarming behaviour, as seen in \Cref{fig:simulation-quiver-illustration}.
 This approach is taken from \cite{2006-self-propelled} and we are able to reproduce their simulation results.
