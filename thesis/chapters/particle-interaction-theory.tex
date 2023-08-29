@@ -5,27 +5,27 @@ This chapter will give a brief introduction to the theory of systems of pairwise
 % particle simulations as well as a spectral method
 
 \section{A Many-Body System}
-An $N_p$-body system is a discrete set of particles with associated position $\vec{x}_i \in \R^d$ and velocity $\vec{v}_i := \frac{\dd\vec{x}_i}{\ddt} \in \R^d$ interacting with one another.
+An $N_p$-body system is a discrete set of particles with associated position $\vec{x_i} \in \R^d$ and velocity $\vec{v_i} := \frac{\dd\vec{x_i}}{\ddt} \in \R^d$ interacting with one another.
 Each particle individually is subject to inertia and its kinetic energy (``second moment'' \footnote{
-  In kinetic theory, the $0$th moment is the mass $m_i$ of a particle, the first moment is the momentum $\hatvec{p}_i$ and the second moment is its kinetic energy $E_{kin,i}$.
+  In kinetic theory, the $0$th moment is the mass $m_i$ of a particle, the first moment is the momentum $\vec{\hat{p}_i}$ and the second moment is its kinetic energy $E_{kin,i}$.
 }) is given by
-$$E_{\text{kin},i} = \frac{\hatvec{p}_i^2}{2m} = \frac{(m \hatvec{v}_i)^2}{2m} = \frac{1}{2} m \norm{\hatvec{v}_i}^2\,.$$
+$$E_{\text{kin},i} = \frac{\vec{\hat{p}_i}^2}{2m} = \frac{(m \vec{\hat{v}_i})^2}{2m} = \frac{1}{2} m \norm{\vec{\hat{v}_i}}^2\,.$$
 The second important ingredient is an interaction potential motivating pairwise forces $\vec{F_{ij}} \in \R^d$ between particles
-$$\vec{F}_{ij} = -\nabla U_{ij} = -\left(\partial x_1, ..., \partial x_d\right)^T U_{ij}\,.$$
+$$\vec{F_{ij}} = -\nabla U_{ij} = -\left(\partial x_1, ..., \partial x_d\right)^T U_{ij}\,.$$
 
 The total potential of a system of $N_p \ge 2$ particles $U \in \R$ can be calculated by summing up the pair potentials $U_{ij} \in \R$ between all pairs of particles
-$$U = \sum_{i=1}^{N_p}\sum_{j=1, j \neq i}^{N_p} U_{ij} = \sum_{i=1}^{N_p}\sum_{j=1, j \neq i}^{N_p} K\left(\norm{\hatvec{x}_i - \hatvec{x}_j}\right)\,,$$
-where $\hatvec{x}_i \in \R^d$ represents the $d$-dimensional position of particle $i$, respectively.
+$$U = \sum_{i=1}^{N_p}\sum_{j=1, j \neq i}^{N_p} U_{ij} = \sum_{i=1}^{N_p}\sum_{j=1, j \neq i}^{N_p} K\left(\norm{\vec{\hat{x}_i} - \vec{\hat{x}_j}}\right)\,,$$
+where $\vec{\hat{x}_i} \in \R^d$ represents the $d$-dimensional position of particle $i$, respectively.
 
 In the absence of an external potential $V$, the total energy of the particle system is given by $E = E_{\text{kin}} + U$, so
 \begin{equation}
-  E = \frac{1}{2} \sum_{i=1}^{N_p} m_i \hatvec{v}_i^2 + \sum_{i=1}^{N_p}\sum_{j=1, j \neq i}^{N_p} K\left(\norm{\hatvec{x}_i - \hatvec{x}_j}\right)\,.
+  E = \frac{1}{2} \sum_{i=1}^{N_p} m_i \vec{\hat{v}_i}^2 + \sum_{i=1}^{N_p}\sum_{j=1, j \neq i}^{N_p} K\left(\norm{\vec{\hat{x}_i} - \vec{\hat{x}_j}}\right)\,.
   \label{eq:total-energy}
 \end{equation}
 
-Following from Newton's equations of motion together with a model for friction and self-propulsion (cf. \Cref{sec:self-propulsion-friction}), each particle $i=1, ..., N_p$ at position $\hatvec{x}_i \in \R^d$ and time $t \in \R^+$ then follows
+Following from Newton's equations of motion together with a model for friction and self-propulsion (cf. \Cref{sec:self-propulsion-friction}), each particle $i=1, ..., N_p$ at position $\vec{\hat{x}_i} \in \R^d$ and time $t \in \R^+$ then follows
 \begin{equation}
-  \frac{\dd^2 \hatvec{x}_i}{\ddt^2} = f\left(\norm{\frac{\dd \hatvec{x}_i}{\ddt}}\right) \frac{\dd\hatvec{x}_i}{\ddt} - \frac{1}{N} \sum_{j=1, i\neq j}^{N} \nabla K\left(\norm{\hatvec{x}_i - \hatvec{x}_j}\right)\,,
+  \frac{\dd^2 \vec{\hat{x}_i}}{\ddt^2} = f\left(\norm{\frac{\dd \vec{\hat{x}_i}}{\ddt}}\right) \frac{\dd\vec{\hat{x}_i}}{\ddt} - \frac{1}{N} \sum_{j=1, i\neq j}^{N} \nabla K\left(\norm{\vec{\hat{x}_i} - \vec{\hat{x}_j}}\right)\,,
   \label{eq:evolution-equation}
 \end{equation}
 for reference see, for example, \cite{2020-power-law-kernels, 2021-arbitrary-dimensions, 2017-explicit-solutions}.
@@ -158,7 +158,7 @@ A set of particles with this ability are referred to as active matter - a number
 Friction is the opposite of that - a force acting against movement, cf. \Cref{eq:evolution-equation}.
 Self-propulsion and friction could be modelled as a quadratic of the form
 $$f(\hat{v}_i) = f_{\rm self-propulsion} - f_{\rm } \hat{v}_i^2\,,$$
-with $\hat{v}_i := \norm{\hatvec{v}_i} = \norm{\frac{\dd\hatvec{x}_i}{\ddt}}$ the absolute value of the velocity of particle $i$.
+with $\hat{v}_i := \norm{\vec{\hat{v}_i}} = \norm{\frac{\dd\vec{\hat{x}_i}}{\ddt}}$ the absolute value of the velocity of particle $i$.
 Running a simulation using the Morse potential given in \Cref{eq:morse-potential} with this friction model results in a good archetype for animal swarming behaviour, as seen in \Cref{fig:simulation-quiver-illustration}.
 This approach is taken from \cite{2006-self-propelled} and we are able to reproduce their simulation results.
 
@@ -201,7 +201,7 @@ Their study was carried out by individually tracking each starling in the flock 
 
 \subsection{Vicsek Model}
 The Vicsek model \parencite{1995-vicsek-model} is intended for the study of active matter, in particular it is suitable to describe the swarming behaviour of large groups of animals.
-The fundamental idea behind the model is to assume local alignment of velocities $\vec{v}_i$ within a swarm of animals, suggesting that birds or fish immitate the direction of their neighbours.
+The fundamental idea behind the model is to assume local alignment of velocities $\vec{v_i}$ within a swarm of animals, suggesting that birds or fish immitate the direction of their neighbours.
 It describes how large-scale, collective motion emerges from small-scale, local interactions.
 % \hierKoennteIhreWerbungStehen
 

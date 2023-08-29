@@ -4,7 +4,7 @@ That means, we are looking for $\vec{\rho} \in \R^N$ such that
 \begin{equation}
   \mathcal{Q}[\rho](\vec{x}) = \tilde{E}(\vec{x}) = E\,,
 \end{equation}
-where we can expand $\tilde{E}(\vec{x}) = \jacobivec{x} \cdot \vec{E}$ into Jacobi polynomials with coefficients $\vec{E} = E \vec{e}_1 = (E, 0, ..., 0)^T$ such that the energy is constant along the entire domain, so $\tilde{E}(\vec{x}) = E \cdot P_0^{(a, b)}\left(\jacobiarg{x}\right) = E$.
+where we can expand $\tilde{E}(\vec{x}) = \jacobivec{x} \cdot \vec{E}$ into Jacobi polynomials with coefficients $\vec{E} = E \vec{e_1} = (E, 0, ..., 0)^T$ such that the energy is constant along the entire domain, so $\tilde{E}(\vec{x}) = E \cdot P_0^{(a, b)}\left(\jacobiarg{x}\right) = E$.
 In matrix form, that is
 $$Q \vec{\rho} = \vec{E} \qLRq \begin{pmatrix}
     q_{00}    & \dots  & q_{0,N-1}   \\
@@ -21,9 +21,9 @@ $$Q \vec{\rho} = \vec{E} \qLRq \begin{pmatrix}
   \end{pmatrix}\,.$$
 
 This equation $Q \vec{\rho} = \vec{E}$ contains two unknowns, so we need a second equation to find the full solution $\rho \in \functionspace$ and, thereby, $\hat{\rho} \in \functionspacehat$.
-The second piece of information we are looking for is the mass given in \Cref{eq:measure-mass}, which is set to $M = 1$. We start by dividing $Q \vec{\rho} = E \vec{e}_1$ by the unknown energy $E$,
+The second piece of information we are looking for is the mass given in \Cref{eq:measure-mass}, which is set to $M = 1$. We start by dividing $Q \vec{\rho} = E \vec{e_1}$ by the unknown energy $E$,
 \begin{equation}
-  Q \frac{\vec{\rho}}{E} = Q \vec{\tilde{\rho}} = \vec{e}_1\,,
+  Q \frac{\vec{\rho}}{E} = Q \vec{\tilde{\rho}} = \vec{e_1}\,,
   \label{eq:the-linear-system}
 \end{equation}
 which we can efficiently solve using readily available linear system solvers.
@@ -43,13 +43,13 @@ with $\bar{I}_{m,n}^{\alpha,\alpha}$ the 0th coefficient of a Jacobi polynomial 
 For larger system sizes $N \gg 1$, numerical instability might become a concern because Fredholm equations of the first kind posed on Banach spaces are Hilbert-Schmidt and therefore compact, so in the infinite case they cannot be inverted \parencite{2021-arbitrary-dimensions}.
 One way to address this is by regularisation of the system, which turns the first-kind into a second-kind equation.
 
-Instead of solving the original linear system $Q \vec{\tilde{\rho}} = \vec{e}_1$, one can solve the normal system, a transformation from the original coordinates to a modified coordinate system.
+Instead of solving the original linear system $Q \vec{\tilde{\rho}} = \vec{e_1}$, one can solve the normal system, a transformation from the original coordinates to a modified coordinate system.
 Left-multiplying the conjugate transpose $Q^*$ of the operator, it is given by
-$$Q^* Q \vec{\tilde{\rho}} = Q^* \vec{e}_1\,.$$
+$$Q^* Q \vec{\tilde{\rho}} = Q^* \vec{e_1}\,.$$
 
 The simplest possible Tikhonov regularisation, also referred to as Ridge regression \parencite{1970-ridge-regression}, can be achieved by perturbing the normal equation by a small $s \in \R^+$, $s \ll 1$.
 The modified system therefore becomes
-$$(Q^* Q + sI) \vec{\tilde{\rho}} = Q^* \vec{e}_1\,,$$
+$$(Q^* Q + sI) \vec{\tilde{\rho}} = Q^* \vec{e_1}\,,$$
 with $I \in \R^{N \times N}$ the identity matrix.
 Solving it instead of the original system given in \Cref{eq:the-linear-system} results in a slight error in the solution, depending on the value of $s$, but the Tikhonov regularisation significantly improves the coefficient decay when adding more terms to the expansion.
 This coefficient decay is expected, after some $N$, further added Jacobi polynomials in the expansion should not make a significant difference, hence their coefficients should shrink for large $N$.

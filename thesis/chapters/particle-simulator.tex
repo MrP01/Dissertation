@@ -36,7 +36,7 @@ In addition to the \textit{headless} simulation software, exporting state and re
 \section{Available Methods}
 As a particular important problem in the physical sciences, there is an abundant number of simulation methods and solvers available for molecular dynamics problems.
 
-Among them are simple forward integrators (e.g. $\vec{x}_i(t + \tau) \approx \vec{x}_i(t) + \tau \vec{v}_i(t)$ for $t > 0$ and timestep $\tau \in \R^+$), a generalisation of which are multistep methods.
+Among them are simple forward integrators (e.g. $\vec{x_i}(t + \tau) \approx \vec{x_i}(t) + \tau \vec{v_i}(t)$ for $t > 0$ and timestep $\tau \in \R^+$), a generalisation of which are multistep methods.
 Both essentially originate from expanding the position and velocity as Taylor series in time.
 They work well in many general cases and error analysis is straightforward.
 
@@ -51,13 +51,13 @@ Another specialised method for the integration of Newton's equations of motion i
 The Leapfrog algorithm is a more effective forward integration method due to its high resistance to numerical round-off error.
 Except for minor changes in the way the velocity is updated, it is essentially the same as the velocity Verlet algorithm, a variant of Verlet integration with error on the order of $\mathcal{O}(\tau^4)$ with $\tau \in \R^+$ the timestep.
 
-In particular, every particle $i$ at position $\vec{x}_i \in \R^d$ with velocity $\vec{v}_i \in \R^d$ is updated using
+In particular, every particle $i$ at position $\vec{x_i} \in \R^d$ with velocity $\vec{v_i} \in \R^d$ is updated using
 \begin{align*}
-  \vec{x}_i(t+\tau)     & = \vec{x}_i(t)+\tau \cdot \vec{v}_i(t+\tau / 2),              & \quad\text{for}~ & t=0, \tau, \ldots\,,      \\
-  \vec{v}_i(t+\tau / 2) & = \vec{v}_i(t-\tau/2) + \tau \cdot \vec{f}[\vec{x}_i(t), t],  & \quad\text{for}~ & t=\tau, 2 \tau, \ldots\,, \\
-  \vec{v}_i(\tau / 2)   & = \vec{v}_i(0)+\frac{\tau}{2} \cdot \vec{f}[\vec{x}_i(0), 0], & \quad\text{for}~ & t=0\,,
+  \vec{x_i}(t+\tau)     & = \vec{x_i}(t)+\tau \cdot \vec{v_i}(t+\tau / 2),              & \quad\text{for}~ & t=0, \tau, \ldots\,,      \\
+  \vec{v_i}(t+\tau / 2) & = \vec{v_i}(t-\tau/2) + \tau \cdot \vec{f}[\vec{x_i}(t), t],  & \quad\text{for}~ & t=\tau, 2 \tau, \ldots\,, \\
+  \vec{v_i}(\tau / 2)   & = \vec{v_i}(0)+\frac{\tau}{2} \cdot \vec{f}[\vec{x_i}(0), 0], & \quad\text{for}~ & t=0\,,
 \end{align*}
-where $\vec{f}_i[\vec{x}_i(t), t] \in \R^d$ denotes the acceleration (sum of contributions of all forces divided by particle mass $m_i$).
+where $\vec{f_i}[\vec{x_i}(t), t] \in \R^d$ denotes the acceleration (sum of contributions of all forces divided by particle mass $m_i$).
 Verlet integration methods are a common technique in molecular dynamics for the integration of Newton's equations of motion and implemented in many solvers.
 Leapfrog integration can be improved to higher accuracy using Yoshida coefficients \parencite{1973-yoshida-coefficients}.
 % TODO: vielleicht eine kleine Figure zur Visualisierung des Leap-Frogs
