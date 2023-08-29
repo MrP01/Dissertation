@@ -106,16 +106,16 @@ function p2tex(p::Params.Parameters)
   return Params.potentialParamsToLatex(p.potential, true) * ",~d=$(p.d)"
 end
 function p2tex(p::Params.Parameters, R::Float64)
-  return Params.potentialParamsToLatex(p.potential, true) * ",~d=$(p.d),~R_{\\text{opt}}\\approx$(round(R_opt, digits=2))"
+  return Params.potentialParamsToLatex(p.potential, true) * ",~d=$(p.d),~R_{\\text{opt}}\\approx$(round(R, digits=2))"
 end
 macro LT_str(s::String)
   return latexstring(raw"\text{" * s * "}")
 end
 
 function plotDifferentOrderSolutions(p=Params.defaultParams)
-  fig = Figure(resolution=(800, 450))
+  fig = Figure(resolution=(900, 450))
   env = Utils.createEnvironment(p)
-  @show R_opt = Solver.outerOptimisation(42, env).minimizer[1]
+  @show R_opt = Solver.outerOptimisation(18, env).minimizer[1]
   ax = Axis(fig[1, 1], xlabel=L"\text{Radial Position}~x", ylabel=L"\text{Probability Density}~\rho(|x|)",
     title=L"\text{Solutions of different order}~N~\text{with}~%$(p2tex(p, R_opt))")
   # lines!(ax, x_vec_noends, obtainMeasure(x_vec_noends, 2), label="N = 2")
@@ -129,9 +129,9 @@ function plotDifferentOrderSolutions(p=Params.defaultParams)
 end
 
 function plotGeneralSolutionApproximation(p=Params.morsePotiParams)
-  fig = Figure(resolution=(800, 450))
+  fig = Figure(resolution=(900, 450))
   ax = Axis(fig[1, 1], xlabel=L"\text{Radial position}~x", ylabel=L"\text{Probability density}~\rho(|x|)",
-    title=L"\text{General Kernel Solution with Increasing Number of Monomial Terms}~%$(p2tex(p))")
+    title=L"\text{General Kernel Solution with}~G~\text{Monomial Terms}~%$(p2tex(p))")
   for M in 4:8
     env = Utils.createEnvironment(p, M)
     # env = Utils.createEnvironment(Params.Parameters(d=p.d, m=p.m, R0=p.R0, potential=p.potential, friction=p.friction, M=M))
@@ -267,11 +267,11 @@ function plotVaryingRSolutions(p=Params.morsePotiParams)
 end
 
 function plotAnalyticSolution(p=Params.knownAnalyticParams)
-  Ns = 2 .^ (0:7)
+  Ns = 2 .^ (1:7)
   fig = Figure(resolution=(800, 800))
   env = Utils.createEnvironment(p)
   R, analytic = AnalyticSolutions.explicitSolution(x_vec_noends; p=p)
-  OptR(N) = abs(Solver.outerOptimisation(N, env).minimizer[1] - R)
+  OptR(N) = abs(Solver.outerOptimisation(N - 1, env).minimizer[1] - R)
   OptRs = OptR.(Ns)
   ax = Axis(fig[1, 1], title=L"\text{Analytic Solution with}~%$(p2tex(p))", xlabel=L"x", ylabel=L"\rho(x)")
   lines!(ax, x_vec_noends, Utils.rho(x_vec_noends, Solver.solve(4, R, env), env), label=L"N = 4")
@@ -286,7 +286,7 @@ function plotAnalyticSolution(p=Params.knownAnalyticParams)
   lines!(ax, x_vec_noends, abs.(Utils.rho(x_vec_noends, Solver.solve(20, R, env), env) .- analytic), label=L"N = 20")
   lines!(ax, x_vec_noends, abs.(Utils.rho(x_vec_noends, Solver.solve(60, R, env), env) .- analytic), label=L"N = 60")
   axislegend(ax)
-  ax = Axis(fig[3, 1], title=LT"Absolute Error", xscale=log10, yscale=log10, xlabel=L"N", ylabel=L"|R_N - R|",
+  ax = Axis(fig[3, 1], title=LT"Optimal Support Radius Error", xscale=log10, yscale=log10, xlabel=L"N", ylabel=L"|R_N - R|",
     xticks=Ns, height=120)
   lines!(ax, Ns, OptRs)
   scatter!(ax, Ns, OptRs, color=dissertationColours[4])
@@ -442,7 +442,11 @@ function plot3dSimulationQuiver(p::Params.Parameters=Params.morsePotiSwarming3d;
     quiver!(ax, posidf[!, 1], posidf[!, 2], posidf[!, 3], velodf[!, 1] / f, velodf[!, 2] / f, velodf[!, 3] / f,
       color=velodf[!, 1], linewidth=0.007, arrowsize=Vec3f(0.3, 0.3, 0.4) * 0.07, fxaa=true)
   end
-  saveFig(fig, "simulation-quiver-3d", p; throughEps=true)
+  if fcc
+    saveFig(fig, "simulation-fcc-3d", p; throughEps=true)
+  else
+    saveFig(fig, "simulation-quiver-3d", p; throughEps=true)
+  end
   return fig
 end
 

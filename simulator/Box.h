@@ -4,11 +4,11 @@
 #include <stdlib.h>
 
 #ifndef PARTICLES
-#define PARTICLES 150 // number of particles
+#define PARTICLES 250 // number of particles
 #endif
 
 #ifndef DIMENSION
-#define DIMENSION 1 // dimension
+#define DIMENSION 3 // dimension
 #endif
 
 // be careful to set numeric values as floats here
