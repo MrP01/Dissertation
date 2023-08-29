@@ -1,27 +1,27 @@
 \chapter{Conclusion}
 \label{chap:conclusion}
 
-Here we summarise the work that has been presented in this dissertation and discuss possible areas for future work.
+% Here we summarise the work that has been presented in this dissertation and discuss possible areas for future work.
 
-\section{Summary}
+% \section{Summary}
 % Give a summary of what has been done. You might do this chapter by chapter but be sure to highlight all the important points.
 
-In the present thesis, we explored the surprisingly complex behaviour of many body systems arising from simple pairwise particle-particle interactions and, in some cases, self-propulsion and friction terms.
-For certain types of interactions, these systems approach equilibrium distributions $\rho(\vec{x})$ which we aim to solve for using a spectral method, assuming their radial symmetry (a natural supposition in the absence of an external potential).
+In the present thesis, we explored the surprisingly complex behaviour of many-body systems arising from simple pairwise particle-particle interactions and, in some cases, self-propulsion and friction terms.
+For certain types of interactions, these systems approach equilibrium distributions $\hat{\rho}(\vec{x})$ which we aim to solve for using a spectral method, assuming their radial symmetry (a natural supposition in the absence of an external potential).
 
 After introducing some theory in \Cref{chap:particle-interaction-theory} and setting up a particle simulator to verify our findings in \Cref{chap:particle-simulator}, we constructed a spectral method for power law interaction potentials in \Cref{chap:spectral-method} based on Jacobi polynomials.
 The resulting spectral method is a highly efficient direct method with excellent convergence properties and solvability due to the banded operators appearing in it.
 As an original extension, we introduced a numerical method for constructing the spectral solution for general kernels $K(r)$ in \Cref{chap:general-kernel-spectral-method}.
 Both methods reproduce analytical solutions to arbitrary precision and provide solutions for cases in which analytical solutions are unknown.
-We finally compared the numerical solution in the continuous situation with particle simulations in \Cref{chap:implementation-and-results}.
+Finally, we compared the numerical solution in the continuous situation with particle simulations in \Cref{chap:implementation-and-results}.
 
 Next to the written part, the reader will find an implementation of the particle simulator written in C++ online \parencite{2023-my-dissertation}, including a \gls{gui}, as well as the spectral method solver written in Julia.
 
-\section{Future Work}
-You don't actually have to list further work, but most people do this so it seems unusual not to. Just think what you would do next if you had more time on this project.
-Other approaches, such as the one in \cite{2015-spectral-method-for-boltzmann-equation} show similar results to our spectral method.
+% \section{Future Work}
+% You don't actually have to list further work, but most people do this so it seems unusual not to. Just think what you would do next if you had more time on this project.
+% Other approaches, such as the one in \cite{2015-spectral-method-for-boltzmann-equation} show similar results to our spectral method.
 % \hierKoennteIhreWerbungStehen
 
-\section{Conclusion}
-You might like to give a final conclusion so the reader is left remembering what you have done, rather than what you would do if there wasn't a submission deadline.
-This method is exponentially faster than previous techniques, requiring only minutes or seconds instead of days. Importantly, the detection time is not influenced by the system's complexity—a solution to the long-standing scalability challenge.
+% \section{Conclusion}
+% You might like to give a final conclusion so the reader is left remembering what you have done, rather than what you would do if there wasn't a submission deadline.
+% This method is exponentially faster than previous techniques, requiring only minutes or seconds instead of days. Importantly, the detection time is not influenced by the system's complexity—a solution to the long-standing scalability challenge.

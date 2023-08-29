@@ -8,7 +8,8 @@
 \setlength{\headheight}{19.53pt}
 \setlength{\headsep}{1.8em}
 \setlength{\belowcaptionskip}{-12pt}
-\renewcommand*{\chapterheadstartvskip}{\vspace*{-3cm}}
+\renewcommand*{\chapterheadstartvskip}{\vspace*{-1.5cm}}
+\renewcommand*{\chapterheadendvskip}{\vspace*{1cm}}
 \captionsetup{font=normal}
 
 % Colors:
@@ -28,7 +29,7 @@
 
 \makeatletter
 \renewcommand\listoffigures{
-  \section*{\listfigurename}
+  % \section*{\listfigurename}
   \@starttoc{lof}
 }
 \renewcommand\listoftables{
