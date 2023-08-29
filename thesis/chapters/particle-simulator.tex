@@ -73,7 +73,7 @@ For $d > 1$ dimension, it is possible to either only visualise the first compone
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.8\linewidth]{results/morse/phase-space-plot.pdf}
-  \caption[Phase Space Plots]{Position and velocity of $N_p = 500$ particles in a $d=1$ simulation visualised as phase space plots using the two different visualisation mechanisms. In the top plot, one can observe natural rotation around the origin $(0, 0)$ as positive velocity corresponds to movement to the right and negative velocity to leftwards movement.}
+  \caption[Phase Space Plots]{Position and velocity of $N_p = 500$ particles in a $d=1$ simulation visualised as phase space plots using the two different visualisation mechanisms. In the top plot, one can observe natural rotation around the origin $(0, 0)$ as positive velocity corresponds to movement to the right and negative velocity to leftwards movement. The color indicates the $x$-coordinate of the particle, respectively (shown to visualise correspondence between the upper and the lower plot).}
   \label{fig:phase-space-plot}
 \end{figure}
 
@@ -97,17 +97,20 @@ An exemplary velocity distribution is given in \Cref{fig:simulation-histogram}.
 
 \section{Further Experiments}
 One can obtain interesting patterns using the absolute-value potential $K_{||}(r)$ as given in \Cref{eq:absvalue-potential} in $d=3$ dimensions, cf. \Cref{fig:gyroscope-quiver-3d,fig:fcc-quiver-3d}.
+Because $K_{||}(r)$ is not continuously differentiable, the potential is not at all physical.
+However, due to its linear penalty (instead of exponentials or power laws) it allows for a wider range of intriguing shapes of the collection of particles.
+
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.63\linewidth]{results/gyroscope-3d/simulation-quiver-3d.pdf}
-  \caption{When running with $K(r) = |1-r|$ as an interaction potential and hence, $F(r) = -\nabla K(r) = -\sign(1-r)$, in $d=3$ dimensions a gyroscopical shape will form.}
+  \includegraphics[width=0.8\linewidth]{results/gyroscope-3d/simulation-quiver-3d.pdf}
+  \caption{When running with $K(r) = |1-r|$ as an interaction potential and hence, $F(r) = -\nabla K(r) = -\sign(1-r)$, in $d=3$ dimensions a gyroscopical shape will form. The two outlying points are actually many particles above one another (high concentration of mass) and they form the axis of the rotating circle of particles.}
   \label{fig:gyroscope-quiver-3d}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.63\linewidth]{results/gyroscope-3d/simulation-fcc-3d.pdf}
-  \caption{When running an $N_p = 250$ particle simulation with $K(r) = |1-r|$ as an interaction potential in $d=3$ dimensions the particles will align into an ``optimal packing''. In this case, almost equaling a \gls{fcc} array of spheres.}
+  \includegraphics[width=0.8\linewidth]{results/gyroscope-3d/simulation-fcc-3d.pdf}
+  \caption{When running an $N_p = 250$ particle simulation with $K(r) = |1-r|$ as an interaction potential in $d=3$ dimensions the particles will align into a stable ``optimal packing'' arrangement. In this case, they approximate a \gls{fcc} array of spheres, potentially providing a starting point for other algorithms.}
   \label{fig:fcc-quiver-3d}
 \end{figure}
 

@@ -44,7 +44,7 @@ For larger system sizes $N \gg 1$, numerical instability might become a concern 
 One way to address this is by regularisation of the system, which turns the first-kind into a second-kind equation.
 
 Instead of solving the original linear system $Q \vec{\tilde{\rho}} = \vec{e}_1$, one can solve the normal system, a transformation from the original coordinates to a modified coordinate system.
-Left-multiplying the matrix normal of the operator, it is given by
+Left-multiplying the conjugate transpose $Q^*$ of the operator, it is given by
 $$Q^* Q \vec{\tilde{\rho}} = Q^* \vec{e}_1\,.$$
 
 The simplest possible Tikhonov regularisation, also referred to as Ridge regression \parencite{1970-ridge-regression}, can be achieved by perturbing the normal equation by a small $s \in \R^+$, $s \ll 1$.

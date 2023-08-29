@@ -98,11 +98,11 @@ For a given $\alpha, \beta \in \R \backslash \{0\}$, it is given by
   K_{\alpha, \beta}(r) = \frac{r^\alpha}{\alpha} - \frac{r^\beta}{\beta}\,.
   \label{eq:attractive-repulsive-potential}
 \end{equation}
-One can even consider the case when either $\alpha$ or $\beta$ is 0 in order to arrive at a log-term \parencite{2017-explicit-solutions}, using the convention that $\frac{x^0}{0} := \log(x)$\footnote{
+One can even consider the case when either $\alpha$ or $\beta$ is 0 in order to arrive at a log-term \parencite{2017-explicit-solutions}, using $\frac{x^0}{0} := \log(x)$ as a convention\footnote{
   Consider the Laurent series expansion of $\frac{x^a}{a} = \frac{1}{a} + \log(x) + \frac{1}{2}a \log^2(x) + \mathcal{O}(a^2)$ in the limit as $a \goesto 0^+$.
   While this limit approaches $\infty$ coming from the right and $-\infty$ coming from the left due to the nature of the first term in the expansion, the only remaining term in it is $\log(x)$ which is thereby chosen as a convention.
 }.
-If the repulsive term is stronger (so $\beta > \alpha$), there is no equilibrium distribution as particles simply continue repelling each other out to infinity.
+If the repulsive term is stronger (i.e. $\beta > \alpha$), there is no equilibrium distribution as particles simply continue repelling each other out to infinity.
 Attractive-repulsive potentials in general describe pairwise interactions with separate attractive and repulsive terms.
 In our case however, we will only refer to attractive-repulsive \textit{powerlaw} potentials, specifically of the form in \Cref{eq:attractive-repulsive-potential}.
 Its equilibrium distance is at $r = 1$.
@@ -145,7 +145,7 @@ Because the function is not continuously differentiable, this potential is entir
 \begin{figure}[H]
   \centering
   \inputtikz{comparing-potentials}
-  \caption[Comparing potentials]{Comparing Potentials: The attractive-repulsive potential $K_{(\alpha,\beta)}(r)$ with $(\alpha,\beta) = (3.5, 1.6)$, the Morse potential $K_{(C_a, l_a, C_r, l_r)}(r)$ with $(C_a, l_a, C_r, l_r) = (1.5, 2.0, 1.0, 0.5)$, the mixed potential $K_{C, l, \bar{a}}$ with $(C, l, \bar{a}) = (1.0, 0.5, 1.8)$ and the absolute value potential $K_{||}(r)$.}
+  \caption[Comparing potentials]{Comparing Potentials: the attractive-repulsive potential $K_{(\alpha,\beta)}(r)$ with $(\alpha,\beta) = (3.5, 1.6)$, the Morse potential $K_{(C_a, l_a, C_r, l_r)}(r)$ with $(C_a, l_a, C_r, l_r) = (1.5, 2.0, 1.0, 0.5)$, the mixed potential $K_{C, l, \bar{a}}$ with $(C, l, \bar{a}) = (1.0, 0.5, 1.8)$ and the absolute value potential $K_{||}(r)$.}
   \label{fig:comparing-potentials}
 \end{figure}
 
