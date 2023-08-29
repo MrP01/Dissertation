@@ -460,12 +460,12 @@ function plotPhaseSpace(p=Params.defaultParams; runSim=true)
   posidf, velodf, dimension = loadSimulatorData()
   ax = Axis(fig[1, 1], xlabel=L"\text{First coordinate}~x", ylabel=L"\text{First velocity component}~v_x",
     title=L"\text{Simulation Output Phase Space with}~%$(p2tex(p))")
-  scatter!(ax, posidf[!, 1], velodf[!, 1])
+  scatter!(ax, posidf[!, 1], velodf[!, 1], color=posidf[!, 1])
   ax = Axis(fig[2, 1], xlabel=L"\text{Radial distance}~r", ylabel=L"\text{Velocity}~v",
     title=L"\text{Simulation Output Phase Space with}~%$(p2tex(p))")
   radialDistance = hypot.([posidf[!, k] for k in 1:dimension]...)
   velocity = hypot.([velodf[!, k] for k in 1:dimension]...)
-  scatter!(ax, radialDistance, velocity)
+  scatter!(ax, radialDistance, velocity, color=posidf[!, 1])
   saveFig(fig, "phase-space-plot", p)
   return fig
 end
