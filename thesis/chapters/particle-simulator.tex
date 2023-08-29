@@ -26,6 +26,9 @@ In addition to the \textit{headless} simulation software, exporting state and re
   \label{fig:gui-screenshot}
 \end{figure}
 
+The simulator can handle any number of dimensions $d$, even if that number must be known at compile-time so that the compiler can optimise for contiguous memory alignment which doubles the efficiency of accesses to the position and velocity arrays.
+Visualisations in the \gls{gui} are restricted to two dimensions of course, but using the export feature we can visualise simulation output in $d=3$ dimensions (cf. \Cref{fig:morse-3d-quiver}).
+
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.8\linewidth]{results/morse-3d/simulation-quiver-3d.pdf}

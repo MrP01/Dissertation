@@ -41,20 +41,24 @@ One could expect this given the analytical energy expressions in \Cref{sec:analy
 Even adding in some of the terms ($B(\cdot, \cdot) \cdot \cos(\cdot)$, etc.) from the analytical expressions did not help.
 We also tried higher orders in $\alpha$, $R$, more log terms, cross-terms, and we even experimented with the beta function.
 
-\chapter{Various Parameters}
-\label{chap:appendix}
+\chapter{Various Plots}
+\label{appendix:various-plots}
+\Cref{fig:bump-solutions} depicts a ``bump'' solution resulting from an attractive-repulsive interaction kernel.
+The pseudo energy dependence on position $\vec{x}$ (and due to radial symmetry, on $r$) for different support radii $R$ is given in \Cref{fig:spatial-energy-dependence}.
+Instead of taking energy as the average $\bar{I}_{m,n}^{(\alpha,\beta)}$, one can use ${I}_{m,n}^{(\alpha,\beta)}(\vec{x})$.
+\Cref{fig:varying-parameters} illustrates the effects of various parameters in the attractive-repulsive case.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.6\linewidth]{results/bump/solution-increasing-order}
+  \includegraphics[width=0.8\linewidth]{results/bump/solution-increasing-order}
   \caption[Bump parameter solutions]{Solutions with bump parameters.}
   \label{fig:bump-solutions}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.7\linewidth]{results/attrep/energy-dependence-on-r.pdf}
-  \caption[Spatial energy dependence on $r$]{Plot of the spatial energy dependence on $r$, for different values of the domain support radius $R$. As one can see, $\tilde{E}(\vec{x}) = \jacobivec{x} Q_{\alpha,\beta} \vec{\rho}$ constant and this figure is only present as visual proof to increase our confidence in the construction of the spectral method.}
+  \includegraphics[width=0.8\linewidth]{results/attrep/energy-dependence-on-r.pdf}
+  \caption[Spatial energy dependence on $r$]{Plot of the spatial energy dependence on $r$, for different values of the domain support radius $R$. As one can see, $\tilde{E}(\vec{x}) = \sum_{k=0}^{N-1} \rho_k {I}_{m,n}^{(\alpha,\beta)}(\vec{x})$ is roughly constant and this figure is only present as visual proof to increase our confidence in the construction of the spectral method.}
   \label{fig:spatial-energy-dependence}
 \end{figure}
 
@@ -74,6 +78,7 @@ We also tried higher orders in $\alpha$, $R$, more log terms, cross-terms, and w
 
 \chapter{Code Snippets}
 \label{appendix:code-snippets}
+\section{Leapfrog Integration}
 \begin{minted}{cpp}
 void ParticleBox::simulate(size_t timesteps) {
   double afterAccelerations[PARTICLES][DIMENSION];

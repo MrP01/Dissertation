@@ -12,7 +12,7 @@ The basic idea behind spectral methods is to assume a solution $\rho(\vec{x})$ o
 $$\rho(\vec{x}) = \sum_{k=0}^{N-1} \rho_k \varphi_k(\vec{x})\,,\quad \rho_k \in \R, \varphi_k: \R^d \to \R\,,\quad k = 0, ..., N-1\,,$$
 with $N$ coefficients $\vec{\rho} := \left(\rho_0, ..., \rho_{N-1}\right)^T$ multiplying $N$ basis functions $\varphi_k$.
 
-\pagebreak
+% \pagebreak
 \section{Special Functions}
 The following section will introduce a few necessary objects and tools to understand the basis of functions we are working with to construct the spectral method, the basis of Jacobi polynomials.
 
@@ -27,7 +27,7 @@ Using the Pochhammer symbol introduced in \Cref{def:rising-factorial}, we can no
 \input{chapters/bits/generalised-hypergeometric-series.tex}
 \input{chapters/bits/gaussian-hypergeometric-function.tex}
 
-\pagebreak
+% \pagebreak
 \section{Orthogonal Polynomials Forming a Basis}
 In order to efficiently construct a spectral method, we need an orthogonal basis.
 \input{chapters/bits/orthogonal-polynomials.tex}
@@ -59,13 +59,13 @@ Adding to our collection of tools, in order to solve the problem given in \Cref{
 The normalisation constant is given in \Cref{lemma:mass}, based only on a single coefficient $\rho_0$, allowing for a highly efficient re-normalisation.
 \input{chapters/bits/mass-of-solution.tex}
 
-\pagebreak
+% \pagebreak
 \section{Derivation of the Operator}
 \input{chapters/bits/operator.tex}
 \input{chapters/bits/derivation-of-operator-matrix.tex}
 \input{chapters/bits/full-attrep-operator.tex}
 
-\pagebreak
+% \pagebreak
 % Full Section:
 \input{chapters/bits/solving-a-linear-system.tex}
 
@@ -84,7 +84,7 @@ An overview of solutions for varying parameters in an attractive-repulsive setti
 % Full Section:
 \input{chapters/bits/outer-optimisation.tex}
 
-\pagebreak
+% \pagebreak
 % Full Section:
 \input{chapters/bits/comparison-with-analytic.tex}
 

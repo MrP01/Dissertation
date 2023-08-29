@@ -17,17 +17,21 @@ Simulating and solving for the same parameters, we can compare the radial distri
 \subsection{Well-Conditionedness}
 A common flaw of spectral (collocation) methods, one could think of them as the highest-order limit of finite difference schemes, is their problematic conditioning behaviour, often caused by to the ill-conditioning of spectral differentiation matrices \parencite{2019-atap}.
 
-Ideally, we would like the condition number $\kappa(Q) \in \R$ to be independent of the order $N$ to which we solve our problem.
+Ideally, we would like the condition number $\kappa_2(Q) \in \R$ to be independent of the order $N$ to which we solve our problem.
 For well-conditionedness of the operator, we need
-$$\kappa(Q) := \frac{\sigma_{\rm max}(Q)}{\sigma_{\rm min}(Q)} = \frac{\norm{Q}}{\norm{Q^{-1}}} = \mathcal{O}(1)$$
+$$\kappa_2(Q) := \frac{\sigma_{\rm max}(Q)}{\sigma_{\rm min}(Q)} = \frac{\norm{Q}}{\norm{Q^{-1}}} = \mathcal{O}(1)$$
 and not $\mathcal{O}(N)$ or even higher orders.
+The poor conditioning behaviour of the operators in the attractive-repulsive case can be seen in \Cref{fig:condition-number-growth}.
+Attempts at using a preconditioner similar to the proposal in \cite{2013-a-fast-and-well-conditioned-spectral-method} to improve the conditioning to $\kappa_2(Q) = \mathcal{O}(1)$ were unsuccessful.
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.8\linewidth]{results/attrep/condition-number-growth.pdf}
-  \caption[Growth of the condition number]{Growth of the 2-norm condition number $\kappa(Q)$ of the attractive-repulsive operators $Q^{(\alpha)}$, $Q^{(\beta)}$ and $Q_{\alpha,\beta}$ for growing system size $N$.}
+  \caption[Growth of the condition number]{Growth of the 2-norm condition number $\kappa_2(Q)$ of the attractive-repulsive operators $Q^{(\alpha)}$, $Q^{(\beta)}$ and $Q_{\alpha,\beta}$ for growing system size $N$.}
   \label{fig:condition-number-growth}
 \end{figure}
+
+The improvement of coefficient decay for high orders $N$ due to Tikhonov regularisation, as discussed in \Cref{sec:regularisation}, can be seen in \Cref{fig:coefficients}.
 
 \begin{figure}[H]
   \centering
