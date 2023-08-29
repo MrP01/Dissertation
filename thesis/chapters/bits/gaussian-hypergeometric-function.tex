@@ -1,12 +1,12 @@
 \begin{lemma}{Gaussian Hypergeometric Function}{gaussian-hypergeometric-function}
   The $p=2$, $q=1$ special case of the generalised hypergeometric series can also be evaluated by
   $${}_2F_1\left(\begin{matrix}a_{1}, -n \\b_{1}\end{matrix}; z\right) = \sum_{k=0}^n (-1)^k \binom{n}{k} \frac{(a_1)_k}{(b_1)_k}z^k\,,$$
-  when the second argument $a_2 = -n$ is a nonpositive integer, so $n \in \N_0$.
+  when the second argument $a_2 = -n$ is a non-positive integer, so $n \in \N_0$.
 \end{lemma}
 \begin{proof}
   Starting from the definition of the generalised hypergeometric series ${}_pF_q$ with $p=2$ and $q=1$ (\Cref{def:generalised-hypergeometric-series}),
   $${}_2F_1\left(\begin{matrix}a_{1}, -n \\b_{1}\end{matrix}; z\right) = \sum_{k=0}^{\infty} \frac{(a_1)_k (-n)_k}{(b_1)_k} \frac{z^k}{k!} = \sum_{k=0}^{n} \frac{(a_1)_k (-n)_k}{(b_1)_k} \frac{z^k}{k!}\,,$$
-  which can be terminated at $k=n$ due to \Cref{remark:nonpositive-pochhammer}, we can express
+  which can be terminated at $k=n$ due to \Cref{remark:non-positive-pochhammer}, we can express
   $$\frac{(-n)_k}{k!} = \binom{-n+k-1}{k} = (-1)^k \binom{1+n-k+k-1}{k} = (-1)^k \binom{n}{k}$$
   using a well-known relation between the Pochhammer symbol and the binomial coefficient \parencite{2001-pochhammer-binomial-relation,2018-nist} which immediately leads us to
   $${}_2F_1\left(\begin{matrix}a_{1}, -n \\b_{1}\end{matrix}; z\right) = \sum_{k=0}^n \binom{n}{k} \frac{(a_1)_k}{(b_1)_k}(-z)^k\,,$$

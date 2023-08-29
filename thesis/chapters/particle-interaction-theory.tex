@@ -104,7 +104,7 @@ One can even consider the case when either $\alpha$ or $\beta$ is 0 in order to 
 }.
 If the repulsive term is stronger (i.e. $\beta > \alpha$), there is no equilibrium distribution as particles simply continue repelling each other out to infinity.
 Attractive-repulsive potentials in general describe pairwise interactions with separate attractive and repulsive terms.
-In our case however, we will only refer to attractive-repulsive \textit{powerlaw} potentials, specifically of the form in \Cref{eq:attractive-repulsive-potential}.
+In our case however, we will only refer to attractive-repulsive \textit{power law} potentials, specifically of the form in \Cref{eq:attractive-repulsive-potential}.
 Its equilibrium distance is at $r = 1$.
 
 % Some input from the Wolfson Particle Physicist
@@ -124,7 +124,7 @@ Possible parameter ranges are given by $C_a l_a^{d-2} > 1, l_a < 1$ \parencite{2
 % \hierKoennteIhreWerbungStehen
 
 \subsection{Mixed Potential}
-Combining the above approaches of power-law and exponential decay interaction potentials, we can define
+Combining the above approaches of power law and exponential decay interaction potentials, we can define
 \begin{equation}
   K_{(C, l, \bar{a})}(r) := \frac{r^{\bar{a}}}{\bar{a}} + C e^{-r/l}\,,
   \label{eq:mixed-potential}
@@ -140,7 +140,7 @@ As part of an exploration of the various types of kernels, one can consider
 \end{equation}
 as depicted in \Cref{fig:comparing-potentials}.
 Its equilibrium distance is at $r = 1$.
-Because the function is not continuously differentiable, this potential is entirely unphysical but yields interesting results nonetheless (cf. \Cref{fig:gyroscope-quiver-3d}).
+Because the function is not continuously differentiable, this potential is entirely un-physical but yields interesting results nonetheless (cf. \Cref{fig:gyroscope-quiver-3d}).
 
 \begin{figure}[H]
   \centering
@@ -201,7 +201,7 @@ Their study was carried out by individually tracking each starling in the flock 
 
 \subsection{Vicsek Model}
 The Vicsek model \parencite{1995-vicsek-model} is intended for the study of active matter, in particular it is suitable to describe the swarming behaviour of large groups of animals.
-The fundamental idea behind the model is to assume local alignment of velocities $\vec{v_i}$ within a swarm of animals, suggesting that birds or fish immitate the direction of their neighbours.
+The fundamental idea behind the model is to assume local alignment of velocities $\vec{v_i}$ within a swarm of animals, suggesting that birds or fish imitate the direction of their neighbours.
 It describes how large-scale, collective motion emerges from small-scale, local interactions.
 % \hierKoennteIhreWerbungStehen
 
@@ -210,7 +210,7 @@ The approach we will take within the scope of this dissertation is to model anim
 
 \section{Analytical Solutions}
 \label{sec:analytical-solutions}
-\cite{2017-explicit-solutions} provides some analytic, radially symmetric solutions to \hyperref[def:the-problem]{the problem}, local minima of the energy.
+\cite{2017-explicit-solutions} provides some analytical, radially symmetric solutions to \hyperref[def:the-problem]{the problem}, local minima of the energy.
 More recently, \cite{2021-carrillo-radial} could show that the solution is indeed a global minimiser of the total energy.
 For example, with an attractive-repulsive potential as given in \Cref{eq:attractive-repulsive-potential}, when $\alpha = 2$ and $\beta \in [-1, 2]$, the equilibrium measure is given by
 \begin{equation}
