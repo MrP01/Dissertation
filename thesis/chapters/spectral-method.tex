@@ -35,8 +35,6 @@ In order to efficiently construct a spectral method, we need an orthogonal basis
 
 The Jacobi polynomials are then defined from ${}_2F_1$ as follows:
 \input{chapters/bits/jacobi-polynomials.tex}
-% \input{chapters/bits/gegenbauer-polynomials.tex}
-% \input{chapters/bits/chebyshev-polynomials.tex}
 \input{chapters/bits/jacobi-matrix.tex}
 
 % \pagebreak
@@ -46,8 +44,7 @@ Finally, now that we have established the basis functions, we can write down an 
   \rho[\vec{\rho}](\vec{x}) = \rho(\vec{x}) := \left(1-\norm{\vec{x}}^{2}\right)^{m - \frac{\alpha + d}{2}} \sum_{k=0}^{N-1} \rho_k P_{k}^{\left(m - \frac{\alpha + d}{2},\frac{d-2}{2}\right)}(2 \norm{\vec{x}}^{2}-1)\,,
   \label{eq:ansatz}
 \end{equation}
-with $P_k^{(a, b)}$ the Jacobi polynomials and $\{\rho_k\}_{k=0, ..., N-1}$ the coefficients and $m \in \N_0$ the smallest nonnegative integer such that $-d < \alpha < 2 +  2m - d$ in order to ensure that $a = m - \frac{\alpha+d}{2} > -1$.
-% TODO: is it alpha or beta in the exponent of (1-y\^{}2)?
+with $P_k^{(a, b)}$ the Jacobi polynomials and $\{\rho_k\}_{k=0, ..., N-1}$ the coefficients and $m \in \N_0$ the smallest nonnegative integer such that $-d < \alpha < 2 +  2m - d$ in order to ensure that $a = m - \frac{\alpha+d}{2} > -1$ due to \Cref{thm:jacobi-orthogonality-condition}.
 
 The spectral method can then be written as a linear system of the coefficients $\vec{\rho}$ as we will see in the next section.
 In order to establish said linear system, we first need to introduce the \textit{inverse fractional Laplacian}, helping us with the evaluation of the power law potential integral involving radial Jacobi polynomials given in \Cref{thm:theorem216}, the most important result of this chapter.
@@ -59,7 +56,7 @@ In order to establish said linear system, we first need to introduce the \textit
 % which is used to construct the spectral method operator \(Q^\beta\) (cf. \Cref{def:power-law-operator}), acting on the coefficients \(\vec{\rho}\).
 
 Adding to our collection of tools, in order to solve the problem given in \Cref{def:the-problem} we need to normalise the solution by its mass.
-The normalisation constant is given in \Cref{lemma:mass}, based only on a single coefficient $\rho_0$, allowing for a highly efficient renormalisation.
+The normalisation constant is given in \Cref{lemma:mass}, based only on a single coefficient $\rho_0$, allowing for a highly efficient re-normalisation.
 \input{chapters/bits/mass-of-solution.tex}
 
 \pagebreak

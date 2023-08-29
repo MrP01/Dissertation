@@ -8,7 +8,7 @@
   $${}_2F_1\left(\begin{matrix}a_{1}, -n \\b_{1}\end{matrix}; z\right) = \sum_{k=0}^{\infty} \frac{(a_1)_k (-n)_k}{(b_1)_k} \frac{z^k}{k!} = \sum_{k=0}^{n} \frac{(a_1)_k (-n)_k}{(b_1)_k} \frac{z^k}{k!}\,,$$
   which can be terminated at $k=n$ due to \Cref{remark:nonpositive-pochhammer}, we can express
   $$\frac{(-n)_k}{k!} = \binom{-n+k-1}{k} = (-1)^k \binom{1+n-k+k-1}{k} = (-1)^k \binom{n}{k}$$
-  using a well-known relation between the Pochhammer symbol and the binomial coefficient which immediately leads us to  % TODO: where can one find this well-known relation?
+  using a well-known relation between the Pochhammer symbol and the binomial coefficient \parencite{2001-pochhammer-binomial-relation,2018-nist} which immediately leads us to
   $${}_2F_1\left(\begin{matrix}a_{1}, -n \\b_{1}\end{matrix}; z\right) = \sum_{k=0}^n \binom{n}{k} \frac{(a_1)_k}{(b_1)_k}(-z)^k\,,$$
   concluding the proof.
 \end{proof}

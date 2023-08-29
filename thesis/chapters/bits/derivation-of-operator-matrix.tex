@@ -1,4 +1,4 @@
-We will start by only considering a single power law operator (out of two in the case of an attractive-repulsive interaction potential $K_{\alpha, \beta}$).
+We start by only considering a single power law operator (out of two in the case of an attractive-repulsive interaction potential $K_{\alpha, \beta}$).
 Substituting our ansatz given in \Cref{eq:ansatz} into $\mathcal{Q}^\beta[\rho]$, we obtain
 \begin{equation}
   \mathcal{Q}^{\beta}[\rho](x) = \sum_{k=0}^{N-1} \rho_{k} \int_{B_1(\vec{0})} \norm{\vec{x}-\vec{y}}^{\beta} \weight{y}\jacobi{y} \,\dd\vec{y}\,,
@@ -7,13 +7,14 @@ Substituting our ansatz given in \Cref{eq:ansatz} into $\mathcal{Q}^\beta[\rho]$
 luckily containing the integral evaluated in \Cref{thm:theorem216}.
 
 We are now interested in a numerical representation of the operator $\mathcal{Q}^\beta$ acting on the function $\rho \in \functionspace$, so an equivalent (linear) operator $Q^\beta: \R^N \mapsto \R^N$ acting on the coefficients $\rho_k \in \R,\, k = 0, ..., N-1$.
-As every finite-dimensional linear operator must have a matrix representation, we are looking for a $Q^\beta \in \R^{N \times N}$ such that
+As every finite-dimensional linear operator must have a matrix representation, we look for a $Q^\beta \in \R^{N \times N}$ such that
 $$\mathcal{Q}^\beta[\rho](\vec{x}) = \jacobivec{x} \cdot Q^\beta \vec{\rho}\,,$$
 where $\jacobivec{x} \in \R^N$ is the vector of radial Jacobi polynomials $P^{(a, b)}_0(x)$, $P^{(a, b)}_1(x)$, ..., $P^{(a, b)}_{N-1}(x)$ evaluated at $2\norm{\vec{x}}^2 - 1$ as introduced in and after \Cref{def:jacobi-polynomials}.
 Note that in the context of linear combinations of Jacobi polynomials, we will use zero-based indexing for vectors and matrices due to the convention that the first orthogonal polynomial is usually denoted by $p_0(x) = 1$, in line with $\deg(p_k) = k$.
 
 Based on the three-term recurrence relationship (cf. \Cref{thm:three-term-recurrence-relationship}), one can even determine an explicit relationship between the coefficients in the Jacobi expansion by considering the Jacobi matrix (cf. \Cref{remark:jacobi-matrix}).
 We use this recurrence relationship in our implementation to significantly speed up the construction of the operator (cf. \Cref{sec:runtime-analysis}).
+The recurrence coefficients used are due to \cite{2021-arbitrary-dimensions} and \cite{2023-olver-equilibrium-measures-jl}.
 
 % TODO: this section has weird indexing (start at 0 or 1?) and needs some work.
 Therefore, starting from \Cref{eq:theorem216-in-derivation}, we obtain
@@ -43,7 +44,7 @@ which we will rewrite in matrix-form,
   \end{pmatrix}                                                              \\
                                    & = \jacobivec{x} \cdot Q^\beta \vec{\rho}
 \end{align*}
-where we used $\vec{P}(\vec{x}) = \jacobivec{x}$ as a shorthand giving us the form of the operator matrix.
+where we use $\vec{P}(\vec{x}) = \jacobivec{x}$ as a shorthand giving us the form of the operator matrix.
 Its first row, the set of coefficients for the constant Jacobi polynomial $P_0^{(a,b)}$ of each expansion of $Q^\beta$, weighted by the solution coefficients, adds up to the total energy $E$ (coefficient of the constant polynomial).
 All remaining rows of $Q^\beta$ contain coefficients for polynomials of degree at least 1, so their weighted contributions must add up to 0 in order for the total energy $\tilde{E}(\vec{x})$ to remain constant.
 
