@@ -7,8 +7,8 @@
 \paragraph{Examples:}
 Following from this definition,
 \begin{align*}
-  P_0^{(a, b)}(x)   & = 1                            \\
-  P_{1}^{(a, b)}(x) & = (a+1)+(a+b+2){\frac{x-1}{2}}
+  P_0^{(a, b)}(x)   & = 1\,,                            \\
+  P_{1}^{(a, b)}(x) & = (a+1)+(a+b+2){\frac{x-1}{2}}\,,
 \end{align*}
 and so on.
 Also note that, as with all other orthogonal polynomials, by convention indices start at $0$ and therefore $\deg\left(P_k^{(a, b)}\right) = k$.
@@ -23,7 +23,7 @@ Also note that, as with all other orthogonal polynomials, by convention indices 
   \begin{align*}
     P_{n}^{(a, b)}(x) & = \frac{(a+1)_n}{n!} \sum_{k=0}^n (-1)^k \binom{n}{k} \frac{(1+a+b+n)_k}{(a+1)_k} \left(\frac{1-x}{2}\right)^k                                                                        \\
                       & = \frac{\Gamma(a+1+n)}{n! \cancel{\Gamma(a+1)}} \sum_{k=0}^n \binom{n}{k} \frac{\cancel{\Gamma(a+1)} \Gamma(1+a+b+n + k)}{\Gamma(a+1+k) \Gamma(1+a+b+n)} \left(\frac{x-1}{2}\right)^k \\
-                      & = \frac{\Gamma(a+1+n)}{n! \Gamma(1+a+b+n)} \sum_{k=0}^n \binom{n}{k} \frac{\Gamma(1+a+b+n + k)}{\Gamma(a+1+k) } \left(\frac{x-1}{2}\right)^k
+                      & = \frac{\Gamma(a+1+n)}{n! \Gamma(1+a+b+n)} \sum_{k=0}^n \binom{n}{k} \frac{\Gamma(1+a+b+n + k)}{\Gamma(a+1+k) } \left(\frac{x-1}{2}\right)^k\,,
   \end{align*}
   using \Cref{remark:pochhammer-gamma}.
 \end{proof}
