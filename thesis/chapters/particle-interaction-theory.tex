@@ -161,8 +161,10 @@ In order to model animals in a swarm, it makes sense to consider the effect of s
 A set of particles with this ability are referred to as active matter - a number of individual agents within a medium.
 Friction is the opposite of that - a force acting against movement, cf. \Cref{eq:evolution-equation}.
 Self-propulsion and friction could be modelled as a quadratic of the form
-$$f(\hat{v}_i) = f_{\rm self-propulsion} - f_{\rm } \hat{v}_i^2\,,$$
+$$f(\hat{v}_i) = f_{\rm sp} - f_{\rm f} \hat{v}_i^2\,,\quad f_{\rm sp}, f_{\rm f} \in \R^+\,,$$
 with $\hat{v}_i := \norm{\vec{\hat{v}_i}} = \norm{\frac{\dd\vec{\hat{x}_i}}{\ddt}}$ the absolute value of the velocity of particle $i$.
+Without friction, the system will oscillate between states of high kinetic and high potential energy.
+Hence, in all simulations shown within this manuscript, a small friction coefficient $f_{\rm f} = 0.5$ is present to dissipate kinetic energy.
 Running a simulation using the Morse potential given in \Cref{eq:morse-potential} with this friction model results in a good archetype for animal swarming behaviour, as seen in \Cref{fig:simulation-quiver-illustration}.
 This approach is taken from \cite{2006-self-propelled} and we are able to reproduce their simulation results.
 
