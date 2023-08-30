@@ -61,6 +61,16 @@ Instead of taking energy as the average $\bar{I}_{m,n}^{(\alpha,\beta)}$, one ca
   \caption[Spatial energy dependence on $r$]{Plot of the spatial energy dependence on $r$, for different values of the domain support radius $R$. As one can see, $\tilde{E}(\vec{x}) = \sum_{k=0}^{N-1} \rho_k {I}_{m,n}^{(\alpha,\beta)}(\vec{x})$ is roughly constant and this figure is only present as visual proof to increase our confidence in the construction of the spectral method.}
   \label{fig:spatial-energy-dependence}
 \end{figure}
+\pagebreak
+
+An example of collective motion arising from the mixed potential is given in \Cref{fig:mixed-2d-quiver}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\linewidth]{results/mixed-2d/simulation-quiver.pdf}
+  \caption[2D quiver plot for the mixed potential]{$N_p = 200$ particles interacting through the mixed potential $K_{(C, l, \bar{a})}(r) := \frac{r^{\bar{a}}}{\bar{a}} + C e^{-r/l}$ (cf. \Cref{eq:mixed-potential}) in \Cref{chap:particle-interaction-theory}.}
+  \label{fig:mixed-2d-quiver}
+\end{figure}
 
 \pagebreak
 \begin{figure}[H]
@@ -73,8 +83,6 @@ Instead of taking energy as the average $\bar{I}_{m,n}^{(\alpha,\beta)}$, one ca
   \label{fig:varying-parameters}
 \end{figure}
 \pagebreak
-
-% \chapter{Supplemental Proofs}
 
 \chapter{Code Snippets}
 \label{appendix:code-snippets}

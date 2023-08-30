@@ -48,7 +48,7 @@ function potentialParamsToLatex(pot, rounded=false)
   elseif isa(pot, MorsePotential)
     return "(C_a, l_a, C_r, l_r) = ($(pot.C_att), $(pot.l_att), $(pot.C_rep), $(pot.l_rep))"
   elseif isa(pot, MixedPotential)
-    return "(C, l, a) = ($(pot.morseC), $(pot.morsel), $(pot.a))"
+    return "(C, l, a) = ($(pot.morseC), $(pot.morsel), $(pot.attrepPower))"
   elseif isa(pot, AbsoluteValuePotential)
     return "K(r) = |1-r|"
   else
@@ -95,6 +95,7 @@ morsePotiSwarming2d = Parameters(potential=MorsePotential(), friction=QuadraticS
 morsePotiSwarming3d = Parameters(potential=MorsePotential(), friction=QuadraticSelfPropulsion(selfPropulsion=1.6), d=3, m=2, s0=1e-5, name="morse-3d")
 voidParams2d = Parameters(d=2, m=2, potential=AttractiveRepulsive(alpha=3.5, beta=1.6), name="void-2d")  # found in meeting with Timon
 bumpParams = Parameters(d=1, m=0, potential=AttractiveRepulsive(alpha=0.912, beta=0.881), R0=1.4, name="bump")  # 2020-power-law, fig. 11
+mixedParams1d = Parameters(d=1, m=0, potential=MixedPotential(), friction=QuadraticSelfPropulsion(selfPropulsion=1.6), name="mixed-1d")
 mixedParams = Parameters(d=2, m=0, potential=MixedPotential(), friction=QuadraticSelfPropulsion(selfPropulsion=1.6), name="mixed-2d")
 gyroscope3dParams = Parameters(d=3, potential=AbsoluteValuePotential(), friction=QuadraticSelfPropulsion(0.5, 0.5), name="gyroscope-3d")
 
@@ -107,4 +108,5 @@ checkParameters(morsePotiSwarming3d)
 checkParameters(voidParams2d)
 checkParameters(bumpParams)
 checkParameters(mixedParams)
+checkParameters(mixedParams1d)
 end

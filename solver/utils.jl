@@ -7,7 +7,7 @@ import SpecialFunctions
 import LinearAlgebra
 import ..Params
 
-GENERAL_ALPHA = 2.5  # probably, most dominant term in the monomial expansion, so maximum(abs(monomial))
+GENERAL_ALPHA = 2.5
 
 # These definitions allow the use of the radially shifted Jacobi bases
 struct QuadraticMap{T} <: Map{T} end
