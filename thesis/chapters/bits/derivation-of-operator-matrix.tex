@@ -13,7 +13,7 @@ where $\jacobivec{x} \in \R^N$ is the vector of radial Jacobi polynomials $P^{(a
 Note that in the context of linear combinations of Jacobi polynomials, we will use zero-based indexing for vectors and matrices due to the convention that the first orthogonal polynomial is usually denoted by $p_0(x) = 1$, in line with $\deg(p_k) = k$.
 
 Based on the three-term recurrence relationship (cf. \Cref{thm:three-term-recurrence-relationship}), one can even determine an explicit relationship between the coefficients in the Jacobi expansion by considering the Jacobi matrix (cf. \Cref{remark:jacobi-matrix}).
-We use this recurrence relationship in our implementation to significantly speed up the construction of the operator (cf. \Cref{sec:runtime-analysis}).
+We use this recurrence relationship in our implementation to significantly speed up the construction of the operator.
 The recurrence coefficients used are due to \cite{2021-arbitrary-dimensions} and \cite{2023-olver-equilibrium-measures-jl}.
 
 % TODO: this section has weird indexing (start at 0 or 1?) and needs some work.

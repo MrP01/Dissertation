@@ -35,17 +35,15 @@ The improvement of coefficient decay for high orders $N$ due to Tikhonov regular
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.8\linewidth]{results/morse/coefficients.pdf}
+  \includegraphics[width=0.75\linewidth]{results/morse/coefficients.pdf}
   \caption[Absolute value of the coefficients with and without regularisation]{Absolute value of the solution coefficients $\rho_k$ with and without Tikhonov regularisation after the solution of a $200 \times 200$ linear system.}
   \label{fig:coefficients}
 \end{figure}
 
 \section{Implementation Architecture}
 The spectral method solver is written in Julia \parencite{2017-julia} whereas the simulator is written in C++.
-
 To compile the simulator, please run \\
-\bashblock{conan install . ----output-folder=build ----build=missing} \\
-\bashblock{cd build; cmake .. -DCMAKE\_BUILD\_TYPE=Release} \\
+\bashblock{mkdir build; cd build/; cmake .. -DCMAKE\_BUILD\_TYPE=Release} \\
 \bashblock{make -j4}
 in a bash terminal.
 
@@ -56,7 +54,9 @@ in a bash terminal. In order to regenerate all plots at once, including simulati
 in a terminal.
 % \hierKoennteIhreWerbungStehen
 
-\section{Runtime Analysis}
-\label{sec:runtime-analysis}
-The following benchmarks were accumulated on an Intel\textregistered \, i7-5600U CPU running at \SI{2.6}{\giga\hertz} as the average over 3 individual runs with different test vectors, consistent across different parameter runs.
-% \hierKoennteIhreWerbungStehen
+In the attractive-repulsive case, the full solution process, including the construction of the operator and solving a linear system, takes \SI{2.68 \pm 0.02}{\milli\second} with a memory allocation estimate of around \SI{2}{\mega\byte}, for an operator of size $N=30$ (enough for most real-world applications).
+For an operator of size $N = 200$, it takes \SI{850 \pm 20}{\milli\second} with a memory estimate of about \SI{500}{\mega\beta}.
+In the case of the general kernel spectral method, the solution takes \SI{3.24 \pm 0.03}{\milli\second} for $N=30$.
+For $N=200$, it takes \SI{970 \pm 36}{\milli\second}.
+Both require a similar amount of memory as in the attractive-repulsive case.
+These benchmarks were accumulated on an Intel \textregistered \, i7-5600U CPU running at \SI{2.6}{\giga\hertz}, as the average over 50 individual runs.

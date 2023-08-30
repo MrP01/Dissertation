@@ -121,7 +121,6 @@ Another frequently used pairwise interaction is the \textit{Morse potential} $K_
 with attractive parameters $C_a \in \R^+$ and $l_a \in \R^+$ (a `natural length scale') and repulsive parameters $C_r, l_b \in \R^+$.
 Possible parameter ranges are given by $C_a l_a^{d-2} > 1, l_a < 1$ \parencite{2006-self-propelled,2014-explicit-flock-solutions-for-quasi-morse-potentials}.
 % TODO: Its equilibrium distance is at $r = ...$.
-% \hierKoennteIhreWerbungStehen
 
 \subsection{Mixed Potential}
 Combining the above approaches of power law and exponential decay interaction potentials, we can define
@@ -162,16 +161,12 @@ with $\hat{v}_i := \norm{\vec{\hat{v}_i}} = \norm{\frac{\dd\vec{\hat{x}_i}}{\ddt
 Running a simulation using the Morse potential given in \Cref{eq:morse-potential} with this friction model results in a good archetype for animal swarming behaviour, as seen in \Cref{fig:simulation-quiver-illustration}.
 This approach is taken from \cite{2006-self-propelled} and we are able to reproduce their simulation results.
 
-% \hierKoennteIhreWerbungStehen
-
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.8\linewidth]{results/morse-2d/simulation-quiver.pdf}
   \caption[Quiver plot of 120 particles in 2D interacting through the Morse potential]{Position and velocity of $N_p = 120$ particles $d = 2$ dimensions as obtained through the molecular dynamics simulation introduced in \Cref{chap:particle-simulator}. The interaction potential is a Morse potential with given parameters. Friction and self-propulsion terms are present as described in \cite{2006-self-propelled}, so using $f(v_i) = 1.6 - 0.5 v_i^2$, this figure reproduces their results.}
   \label{fig:simulation-quiver-illustration}
 \end{figure}
-
-% TODO: Friction Term -> Energy Dissipation -> Different Plot
 
 \section{Kinetic Theory: The Vlasov Equation}
 A common tool in plasma physics is the Vlasov equation,
@@ -203,7 +198,6 @@ Their study was carried out by individually tracking each starling in the flock 
 The Vicsek model \parencite{1995-vicsek-model} is intended for the study of active matter, in particular it is suitable to describe the swarming behaviour of large groups of animals.
 The fundamental idea behind the model is to assume local alignment of velocities $\vec{v_i}$ within a swarm of animals, suggesting that birds or fish imitate the direction of their neighbours.
 It describes how large-scale, collective motion emerges from small-scale, local interactions.
-% \hierKoennteIhreWerbungStehen
 
 \subsection{Long-Range Interaction Potentials}
 The approach we will take within the scope of this dissertation is to model animal swarms as a continuum and introduce long-range interactions where each particle not only interacts with its closest neighbours but also far-away particles, as suggested empirically in \cite{2010-starlings}.
