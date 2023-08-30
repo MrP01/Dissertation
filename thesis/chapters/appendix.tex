@@ -78,6 +78,7 @@ Instead of taking energy as the average $\bar{I}_{m,n}^{(\alpha,\beta)}$, one ca
 
 \chapter{Code Snippets}
 \label{appendix:code-snippets}
+
 \section{Leapfrog Integration}
 \begin{minted}{cpp}
 void ParticleBox::simulate(size_t timesteps) {
@@ -100,4 +101,24 @@ void ParticleBox::simulate(size_t timesteps) {
     reflectParticles();
   }
 }
+\end{minted}
+
+\pagebreak
+\section{Operator Construction without Recurrence}
+\begin{minted}{julia}
+OpMem = LRUCache.LRU{Tuple{Int64, Float64,SolutionEnvironment}, Matrix{BigFloat}}(maxsize=20)
+"""Creates a power-law operator given alpha and beta. Caches it."""
+function constructOperator(N::Int64, beta::Float64, env::SolutionEnvironment)::Matrix{BigFloat}
+  get!(OpMem, (N, beta, env)) do
+    Mat = zeros(BigFloat, N, N)
+    r_axis = axes(env.P, 1)
+    for n in 0:N-1
+      Function = Utils.theorem216.(r_axis; n=n, beta=beta, p=env.p)
+      ExpansionCoeffs = env.P[:, 1:N] \ Function  # expands the function in the P basis
+      Mat[:, n+1] .= ExpansionCoeffs
+    end
+    Utils.zeroOutTinyValues!(Mat)
+    Mat
+  end
+end
 \end{minted}

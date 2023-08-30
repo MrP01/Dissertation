@@ -131,14 +131,15 @@ function plotDifferentOrderSolutions(p=Params.defaultParams)
 end
 
 function plotGeneralSolutionApproximation(p=Params.morsePotiParams)
+  env = Utils.createEnvironment(p, 8)
   fig = Figure(resolution=(900, 450))
+  @show R_opt = Solver.outerOptimisation(19, env).minimizer[1]
   ax = Axis(fig[1, 1], xlabel=L"\text{Radial position}~x", ylabel=L"\text{Probability density}~\rho(|x|)",
-    title=L"\text{General Kernel Solution with}~G~\text{Monomial Terms}~%$(p2tex(p))")
-  for M in 4:8
-    env = Utils.createEnvironment(p, M)
-    # env = Utils.createEnvironment(Params.Parameters(d=p.d, m=p.m, R0=p.R0, potential=p.potential, friction=p.friction, M=M))
-    solution = Solver.solveWithRegularisation(8, p.R0, env, p.s0)
-    lines!(ax, x_vec_noends2, Utils.rho(x_vec_noends2, solution, env), label="G = $M")
+    title=L"\text{General Kernel Solution with}~G~\text{Monomial Terms}~%$(p2tex(p, R_opt))")
+  for G in 6:2:12
+    env = Utils.createEnvironment(p, G)
+    solution = Solver.solveWithRegularisation(19, R_opt, env, p.s0)
+    lines!(ax, x_vec_noends2, Utils.rho(x_vec_noends2, solution, env), label="G = $G")
   end
   axislegend(ax)
   saveFig(fig, "monomial-solutions", p)

@@ -5,7 +5,9 @@ That means, we are looking for $\vec{\rho} \in \R^N$ such that
   \mathcal{Q}[\rho](\vec{x}) = \tilde{E}(\vec{x}) = E\,,
 \end{equation}
 where we can expand $\tilde{E}(\vec{x}) = \jacobivec{x} \cdot \vec{E}$ into Jacobi polynomials with coefficients $\vec{E} = E \vec{e_1} = (E, 0, ..., 0)^T$ such that the energy is constant along the entire domain, so $\tilde{E}(\vec{x}) = E \cdot P_0^{(a, b)}\left(\jacobiarg{x}\right) = E$.
-In matrix form, that is
+Note that because the general kernel spectral method introduced in \Cref{chap:general-kernel-spectral-method} will have a different definition of the system operators, from here on, we will use $\mathcal{Q}$ and $Q$ to denote the power law operator and its matrix representation, respectively.
+For the attractive-repulsive case, $\mathcal{Q} = \mathcal{Q}_{\alpha,\beta}$ and $Q = Q_{\alpha,\beta}$, respectively.
+In matrix form, the linear system becomes
 $$Q \vec{\rho} = \vec{E} \qLRq \begin{pmatrix}
     q_{00}    & \dots  & q_{0,N-1}   \\
     \vdots    & \ddots & \vdots      \\
@@ -41,11 +43,12 @@ with $\bar{I}_{m,n}^{\alpha,\alpha}$ the 0th coefficient of a Jacobi polynomial 
 
 \subsection{Tikhonov Regularisation}
 \label{sec:regularisation}
-For larger system sizes $N \gg 1$, numerical instability might become a concern because Fredholm equations of the first kind posed on Banach spaces are Hilbert-Schmidt and therefore compact, so in the infinite case they cannot be inverted \parencite{2021-arbitrary-dimensions}.
+For larger system sizes $N \gg 1$, numerical instability might become a concern because Fredholm equations of the first kind posed on Banach spaces, such as the one in our case, are Hilbert-Schmidt and therefore compact.
+That is, in the infinite case they cannot be inverted \parencite{2021-arbitrary-dimensions}.
 One way to address this is by regularisation of the system, which turns the first-kind into a second-kind equation.
 
 Instead of solving the original linear system $Q \vec{\tilde{\rho}} = \vec{e_1}$, one can solve the normal system, a transformation from the original coordinates to a modified coordinate system.
-Left-multiplying the conjugate transpose $Q^*$ of the operator, it is given by
+Left-multiplying the conjugate transpose $Q^*$ of the matrix, it is given by
 $$Q^* Q \vec{\tilde{\rho}} = Q^* \vec{e_1}\,.$$
 
 The simplest possible Tikhonov regularisation, also referred to as Ridge regression \parencite{1970-ridge-regression}, can be achieved by perturbing the normal equation by a small $s \in \R^+$, $s \ll 1$.
