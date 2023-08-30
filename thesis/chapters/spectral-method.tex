@@ -47,6 +47,9 @@ Finally, now that we have established the basis functions, we can write down an 
 with $P_k^{(a, b)}$ the Jacobi polynomials and $\{\rho_k\}_{k=0, ..., N-1}$ the coefficients and $m \in \N_0$ the smallest non-negative integer such that $-d < \alpha < 2 +  2m - d$ in order to ensure that $a = m - \frac{\alpha+d}{2} > -1$ due to \Cref{thm:jacobi-orthogonality-condition}.
 
 The spectral method can then be written as a linear system of the coefficients $\vec{\rho}$ as we will see in the next section.
+For every support radius $R$, the linear system is solved and a unique density distribution $\rho$ is obtained.
+Minimising the total energy of the respective density distribution as a function of $R$ is equivalent to finding the function $\hat{\rho}(\vec{x})$ that minimises $U_K[\hat{\rho}]$ on an unbounded domain \parencite{2020-power-law-kernels, 2021-arbitrary-dimensions}.
+
 In order to establish said linear system, we first need to introduce the \textit{inverse fractional Laplacian}, helping us with the evaluation of the power law potential integral involving radial Jacobi polynomials given in \Cref{thm:theorem216}, the most important result of this chapter.
 
 \input{chapters/bits/riesz-potential.tex}

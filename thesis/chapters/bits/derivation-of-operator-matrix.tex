@@ -16,7 +16,6 @@ Based on the three-term recurrence relationship (cf. \Cref{thm:three-term-recurr
 We use this recurrence relationship in our implementation to significantly speed up the construction of the operator.
 The recurrence coefficients used are due to \cite{2021-arbitrary-dimensions} and \cite{2023-olver-equilibrium-measures-jl}.
 
-% TODO: this section has weird indexing (start at 0 or 1?) and needs some work.
 Therefore, starting from \Cref{eq:theorem216-in-derivation}, we obtain
 \begin{align*}
   \mathcal{Q}^\beta[\rho](\vec{x}) & = \sum_{k=0}^{N-1} \rho_k \mathcal{Q}^\beta[wP_k](\vec{x}) = \sum_{k=0}^{N-1} \rho_k \sum_{j=0}^{N-1} q^{\beta}_{kj} \jacobi{x} \\
@@ -50,7 +49,7 @@ All remaining rows of $Q^\beta$ contain coefficients for polynomials of degree a
 
 Our algorithm for the construction of $Q^\beta$ can be found in \Cref{appendix:code-snippets}.
 
-For the attractive-repulsive interaction potential $K_{\alpha,\beta}$, because each column consists of an expansion of the Jacobi polynomials, we have $q^{\beta}_{0k} = I_{m,k}^{\alpha,\beta}$.
+For the attractive-repulsive interaction potential $K_{\alpha,\beta}$, because each column consists of an expansion of the Jacobi polynomials, we have $q^{\beta}_{0,k} = I_{m,k}^{\alpha,\beta}$.
 
 \begin{figure}[H]
   \centering
