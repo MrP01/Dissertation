@@ -48,7 +48,7 @@ It does so by hierarchically clustering together particles based on position and
 \gls{fmm} is among the few methods with rigorous results available on the error.
 For long-range interactions however, as they are ubiquitous within this thesis (cf. the summary in \Cref{fig:comparing-potentials}), the \gls{fmm} is not applicable.
 
-Another specialised method for the integration of Newton's equations of motion is leapfrog integration, our method of choice for the C++ implementation of the $N_p$-body simulator.
+Another specialised method for the integration of Newton's equations of motion is Leapfrog integration, our method of choice for the C++ implementation of the $N_p$-body simulator.
 
 \subsection{Leapfrog Integration}
 The Leapfrog algorithm is a more effective forward integration method due to its high resistance to numerical round-off error.
@@ -61,12 +61,21 @@ In particular, every particle $i$ at position $\vec{x_i} \in \R^d$ with velocity
   \vec{v_i}(\tau / 2)   & = \vec{v_i}(0)+\frac{\tau}{2} \cdot \vec{f}[\vec{x_i}(0), 0], & \quad\text{for}~ & t=0\,,
 \end{align*}
 where $\vec{f_i}[\vec{x_i}(t), t] \in \R^d$ denotes the acceleration (sum of contributions of all forces divided by particle mass $m_i$).
+A diagram of the mechanism is given in \Cref{fig:leapfrog}.
+
+\begin{figure}[H]
+  \centering
+  \inputtikz{leapfrog}
+  \caption{Visualisation of the Leapfrog integration method, position and velocity are updated at times shifted by $\tau/2$, half the timestep.}
+  \label{fig:leapfrog}
+\end{figure}
+
 Verlet integration methods are a common technique in molecular dynamics for the integration of Newton's equations of motion and implemented in many solvers.
 Leapfrog integration can be improved to higher accuracy using Yoshida coefficients \parencite{1973-yoshida-coefficients}.
 % TODO: vielleicht eine kleine Figure zur Visualisierung des Leap-Frogs
 Our implementation can be found in \Cref{appendix:code-snippets}.
 
-% TODO: where we note that $\nabla f(\norm{\vec{x}}) = \frac{\vec{x}}{\norm{\vec{x}}} f'(\norm{\vec{x}})$.
+% where we note that $\nabla f(\norm{\vec{x}}) = \frac{\vec{x}}{\norm{\vec{x}}} f'(\norm{\vec{x}})$.
 
 \section{Phase Space}
 Each particle, at every point in time $t$, has a position and velocity value.
@@ -95,8 +104,6 @@ $$f(\hat{v})={\bigg(\frac{m}{2\pi k_B T}\bigg)}^{\frac {3}{2}}\,4\pi \hat{v}^{2}
 with $m$ the identical mass of each particle and velocity $\hat{v}$, $k_B$ the Boltzmann constant and $T \in \R^+$ is temperature, measured in Kelvin.
 An exemplary velocity distribution is given in \Cref{fig:simulation-histogram}.
 
-% \section{Runtime Analysis}
-% \hierKoennteIhreWerbungStehen
 \pagebreak
 
 \section{Further Experiments}
