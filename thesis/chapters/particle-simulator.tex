@@ -101,7 +101,14 @@ The behaviour of the phase space plot differs from potential to potential, most 
 In a physical setting with collision terms, the velocity distribution $f(\hat{v})$ would approach the shape of a Boltzmann distribution
 $$f(\hat{v})={\bigg(\frac{m}{2\pi k_B T}\bigg)}^{\frac {3}{2}}\,4\pi \hat{v}^{2}\exp \left(-{\frac {m \hat{v}^{2}}{2k_B T}}\right)\,,$$
 with $m$ the identical mass of each particle and velocity $\hat{v}$, $k_B$ the Boltzmann constant and $T \in \R^+$ is temperature, measured in Kelvin.
-An exemplary velocity distribution is given in \Cref{fig:simulation-histogram}.
+The velocity distribution arising in our (collisionless) case is given in \Cref{fig:simulation-histogram}.
+
+For certain interaction kernels, a void appears in the center of the domain.
+\begin{quote}
+  ``\textit{In fact, extensive particle simulations indicate that a void (a region with zero density) starts to appear near the origin}.''
+  - \cite{2013-void,2017-explicit-solutions}
+\end{quote}
+Our simulations confirm these findings for an attractive-repulsive interaction with $(\alpha,\beta) = (3.5, 1.6)$, cf. \Cref{fig:void-2d-quiver} in \Cref{appendix:various-plots}.
 
 \pagebreak
 

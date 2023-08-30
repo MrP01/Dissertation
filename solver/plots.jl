@@ -420,7 +420,7 @@ function plotSimulationAndSolverComparison(p::Params.Parameters=Params.known2dPa
   return fig
 end
 
-function plotSimulationQuiver(p::Params.Parameters=Params.known2dParams; iterations::Int64=4000, runSim=true)
+function plotSimulationQuiver(p::Params.Parameters=Params.known2dParams; iterations::Int64=4000, runSim=true, withQuiver=true)
   if runSim
     runSimulator(p, iterations, false)
   end
@@ -431,8 +431,10 @@ function plotSimulationQuiver(p::Params.Parameters=Params.known2dParams; iterati
   fig = Figure()
   ax = Axis(fig[1, 1], xlabel=L"x", ylabel=L"y", title=L"\text{Simulation Output with}~%$(p2tex(p))")
   scatter!(ax, posidf[!, 1], posidf[!, 2], color=dissertationColours[1])
-  quiver!(ax, posidf[!, 1], posidf[!, 2], velodf[!, 1] / f, velodf[!, 2] / f,
-    color=velodf[!, 1], linewidth=2)
+  if withQuiver
+    quiver!(ax, posidf[!, 1], posidf[!, 2], velodf[!, 1] / f, velodf[!, 2] / f,
+      color=velodf[!, 1], linewidth=2)
+  end
   saveFig(fig, "simulation-quiver", p)
   return fig
 end

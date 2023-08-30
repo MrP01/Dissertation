@@ -64,12 +64,21 @@ Instead of taking energy as the average $\bar{I}_{m,n}^{(\alpha,\beta)}$, one ca
 \pagebreak
 
 An example of collective motion arising from the mixed potential is given in \Cref{fig:mixed-2d-quiver}.
+Simulations indicate that for certain interaction kernels, a void forms in the center.
+We were able to reproduce this for an attractive-repulsive interaction kernel, cf. \Cref{fig:void-2d-quiver}.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.8\linewidth]{results/mixed-2d/simulation-quiver.pdf}
+  \includegraphics[width=0.7\linewidth]{results/mixed-2d/simulation-quiver.pdf}
   \caption[2D quiver plot for the mixed potential]{$N_p = 200$ particles interacting through the mixed potential $K_{(C, l, \bar{a})}(r) := \frac{r^{\bar{a}}}{\bar{a}} + C e^{-r/l}$ (cf. \Cref{eq:mixed-potential}) in \Cref{chap:particle-interaction-theory}.}
   \label{fig:mixed-2d-quiver}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\linewidth]{results/void-2d/simulation-quiver.pdf}
+  \caption[2D quiver plot with a void]{$N_p = 500$ particles interacting through an attractive-repulsive interaction potential in $d=2$ dimensions. For this interaction kernel, a void forms near the origin $(0, 0)$.}
+  \label{fig:void-2d-quiver}
 \end{figure}
 
 \pagebreak
