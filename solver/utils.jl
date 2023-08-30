@@ -7,7 +7,7 @@ import SpecialFunctions
 import LinearAlgebra
 import ..Params
 
-PARAMETER_TO_FIND = 2.5  # probably, most dominant term in the monomial expansion, so maximum(abs(monomial))
+GENERAL_ALPHA = 2.5  # probably, most dominant term in the monomial expansion, so maximum(abs(monomial))
 
 # These definitions allow the use of the radially shifted Jacobi bases
 struct QuadraticMap{T} <: Map{T} end
@@ -31,7 +31,7 @@ function createBasis(p::Params.Parameters)
   if isa(p.potential, Params.AttractiveRepulsive)
     alpha = p.potential.alpha
   elseif isa(p.potential, Params.MorsePotential)
-    alpha = PARAMETER_TO_FIND  # TODO: what should we put here?
+    alpha = GENERAL_ALPHA
   elseif isa(p.potential, Params.MixedPotential)
     alpha = p.potential.attrepPower
   else
@@ -89,7 +89,7 @@ function theorem216(r::Real; n::Int64, beta::Float64, p::Params.Parameters)::Big
   if isa(p.potential, Params.AttractiveRepulsive)
     alpha = p.potential.alpha
   elseif isa(p.potential, Params.MorsePotential)
-    alpha = PARAMETER_TO_FIND  # TODO: what should we put here?
+    alpha = GENERAL_ALPHA
   else
     error("Unkown potential")
   end

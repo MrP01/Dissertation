@@ -207,7 +207,6 @@ function plotStepByStepConvergence(p=Params.defaultParams)
   end
 
   fig = Figure(resolution=(800, 450))
-  # TODO: for all squared errors, give formula in the plot
   ax = Axis(fig[1, 1], yscale=log10, xlabel=L"N", ylabel=LT"Squared Error",
     title=L"\text{Step by Step Convergence with}~%$(p2tex(p))")
   lines!(ax, Ns, errors)
@@ -377,7 +376,6 @@ function plotSimulationHistograms(p=Params.defaultParams, runSim=true)
     title=L"\text{Simulation Output Positional Distribution with}~%$(p2tex(p))")
   hist!(ax, radialDistance, bins=0:0.02:(maximum(radialDistance)*1.05), color=dissertationColours[1])
 
-  # TODO:
   # df = CSV.read("/tmp/position-histogram.csv", DataFrames.DataFrame, header=["hist"])
   # ax = Axis(fig[2, 1], xlabel=L"\text{Radial distance}~r", ylabel=LT"Density",
   #   title=L"\text{Averaged Simulation Output Distribution over 20 runs}")
@@ -525,10 +523,6 @@ function plotCoefficients(p=Params.morsePotiParams; N=200)
   return fig
 end
 
-function plotAnalyticErrorVaryingRegularisation(p=Params.knownAnalyticParams)
-  # TODO
-end
-
 function plotGeneralNGErrorMatrix(p=Params.morsePotiParams)
   maxN = 15
   maxG = 15
@@ -538,7 +532,6 @@ function plotGeneralNGErrorMatrix(p=Params.morsePotiParams)
       errorMatrix[N, G] = 1
     end
   end
-  # TODO: do the same for runtime
 
   fig = enhancedSpyPlot(errorMatrix, L"N G \text{Error Matrix}")
   saveFig(fig, "N-G-error-matrix", p)

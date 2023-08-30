@@ -59,7 +59,7 @@ function recursivelyConstructOperator(N::Int64, beta::Float64, env::SolutionEnvi
     if isa(p.potential, Params.AttractiveRepulsive)
       alpha = p.potential.alpha
     elseif isa(p.potential, Params.MorsePotential)
-      alpha = Utils.PARAMETER_TO_FIND  # TODO: what should we put here?
+      alpha = Utils.GENERAL_ALPHA
     else
       error("Unkown potential")
     end
