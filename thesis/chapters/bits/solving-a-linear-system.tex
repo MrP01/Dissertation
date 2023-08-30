@@ -31,9 +31,6 @@ The second piece of information we are looking for is the mass given in \Cref{eq
 which we can efficiently solve using readily available linear system solvers.
 After solving, we ensure $M\left[\rho[\vec{\tilde{\rho}}]\right] = 1$, using \Cref{lemma:mass}, leading us to our final equilibrium distribution $\rho \in \functionspace$.
 
-% The linear system is solved using a QR-decomposition.
-% TODO: what would Yuji say?
-
 Hence the total potential (energy) of a given solution $\vec{\rho}$ is obtained by
 \begin{equation}
   E(R) = \{Q_{\alpha,\beta} \vec{\rho}\}_1 = \sum_{k=0}^{N-1} \rho_k \left(\frac{R^{\alpha+d}}{\alpha} \bar{I}_{m,k}^{\alpha,\alpha} - \frac{R^{\beta+d}}{\beta} \bar{I}_{m,k}^{\alpha,\beta}\right)\,,

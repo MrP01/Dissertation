@@ -107,7 +107,7 @@ void ParticleBox::simulate(size_t timesteps) {
 \section{Operator Construction without Recurrence}
 \begin{minted}{julia}
 OpMem = LRUCache.LRU{Tuple{Int64, Float64,SolutionEnvironment}, Matrix{BigFloat}}(maxsize=20)
-"""Creates a power-law operator given alpha and beta. Caches it."""
+"""Creates a power law operator given alpha and beta. Caches it."""
 function constructOperator(N::Int64, beta::Float64, env::SolutionEnvironment)::Matrix{BigFloat}
   get!(OpMem, (N, beta, env)) do
     Mat = zeros(BigFloat, N, N)

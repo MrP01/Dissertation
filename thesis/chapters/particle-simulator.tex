@@ -9,7 +9,7 @@ This class of simulations, in the context of intermolecular interactions, is oft
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.72\linewidth]{results/known-2d/simulation-quiver.pdf}
-  \caption[Quiver plot of 120 particles in 2D interacting through the attractive-repulsive potential]{Position and velocity of particles in the simulation at a point in time. Every particle, each of equal mass $m$, interacts with every other particle through the interaction potential $U_{ij} = K\left(\norm{\vec{x_i} - \vec{x_j}}\right)$ leading to $\mathcal{O}(N_p^2)$ interactions.}
+  \caption[Quiver plot of 120 particles in 2D interacting through $K_{\alpha,\beta}$]{Position and velocity of particles in the simulation at a point in time. Every particle, each of equal mass $m$, interacts with every other particle through the interaction potential $U_{ij} = K\left(\norm{\vec{x_i} - \vec{x_j}}\right)$ leading to $\mathcal{O}(N_p^2)$ interactions.}
   \label{fig:simulation-quiver}
 \end{figure}
 
@@ -66,13 +66,12 @@ A diagram of the mechanism is given in \Cref{fig:leapfrog}.
 \begin{figure}[H]
   \centering
   \inputtikz{leapfrog}
-  \caption{Visualisation of the Leapfrog integration method, position and velocity are updated at times shifted by $\tau/2$, half the timestep.}
+  \caption[Leapfrog Visualisation]{Visualisation of the Leapfrog integration method, position and velocity are updated at times shifted by $\tau/2$, half the timestep.}
   \label{fig:leapfrog}
 \end{figure}
 
 Verlet integration methods are a common technique in molecular dynamics for the integration of Newton's equations of motion and implemented in many solvers.
 Leapfrog integration can be improved to higher accuracy using Yoshida coefficients \parencite{1973-yoshida-coefficients}.
-% TODO: vielleicht eine kleine Figure zur Visualisierung des Leap-Frogs
 Our implementation can be found in \Cref{appendix:code-snippets}.
 
 % where we note that $\nabla f(\norm{\vec{x}}) = \frac{\vec{x}}{\norm{\vec{x}}} f'(\norm{\vec{x}})$.
@@ -90,12 +89,12 @@ For $d > 1$ dimension, it is possible to either only visualise the first compone
 \end{figure}
 
 The behaviour of the phase space plot differs from potential to potential, most importantly one can observe multiple centers of rotation for the Morse potential in addition to the origin, whereas an attractive-repulsive potential builds up to an elliptical shape in the phase space plot.
-% TODO: why is this? Local interactions?
+% why is this? Local interactions?
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.8\linewidth]{results/attrep/simulation-histogram.pdf}
-  \caption[Radial Distance and Velocity Histograms of attractive-repulsive Simulation Output in 1D]{Radial Distance ($r$) and Velocity ($v$) Histograms as obtained through a long-running simulation of $N_p = 500$ particles interacting through an attractive-repulsive potential $K_{\alpha, \beta}(r)$. The spectral method introduced in \Cref{chap:spectral-method} aims to solve for the particle density as a function of radial distance, hoping to predict the shape of the positional histogram.}
+  \caption[Radial distance and velocity histograms of simulation output in 1D]{Radial distance ($r$) and velocity ($v$) histograms as obtained through a long-running simulation of $N_p = 500$ particles interacting through an attractive-repulsive potential $K_{\alpha, \beta}(r)$. The spectral method introduced in \Cref{chap:spectral-method} aims to solve for the particle density as a function of radial distance, hoping to predict the shape of the positional histogram.}
   \label{fig:simulation-histogram}
 \end{figure}
 
