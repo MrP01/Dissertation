@@ -5,8 +5,8 @@ As part of a comparison between multiple optimisation approaches, \gls{lbfgs} ou
 While the downhill simplex method by \citeauthor{1965-nelder-mead} did not converge to the desired local minimum (cf. \Cref{fig:outer-optimisation}), the trust region method using Newton's method to solve a quadratic model for each subproblem \parencite{1982-trust-region} also converged in only 3 iterations with only 4 function, gradient and Hessian evaluations.
 Again, the values of the gradient and Hessian (in the case of a one-dimensional optimisation, simply the first and second derivatives), are obtained using \glstext{ad}.
 
-The \gls{lbfgs} method converged with $\norm{\nabla E(R)} \approx 10^{-11}$ while the Newton trust region method converged at $\norm{\nabla E(R)} \approx 10^{-9}$.
-The entire optimisation routine with \gls{lbfgs}, including function and gradient evaluations (solving a $12 \times 12$ linear system), takes \SI{28 \pm 4}{\milli\second} on an Intel\textregistered \, i7-5600U CPU running at \SI{2.6}{\giga\hertz}.
+In the attractive-repulsive case with $(\alpha,\beta) = (2.0,1.5)$ and $d = 1$ as depicted in \Cref{fig:outer-optimisation}, the \gls{lbfgs} method converged to $\norm{\nabla E(R)} \approx 10^{-11}$ while the Newton trust region method converged at $\norm{\nabla E(R)} \approx 10^{-9}$ with the same number of iterations (3).
+The entire optimisation routine with \gls{lbfgs}, including function and gradient evaluations (solving a $12 \times 12$ linear system), takes \SI{28 \pm 4}{\milli\second} of runtime on an Intel\textregistered \, i7-5600U CPU running at \SI{2.6}{\giga\hertz}.
 
 \begin{figure}[H]
   \centering
