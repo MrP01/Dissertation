@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 #ifndef PARTICLES
-#define PARTICLES 500 // number of particles
+#define PARTICLES 120 // number of particles
 #endif
 
 #ifndef DIMENSION
@@ -31,7 +31,7 @@ class AttractiveRepulsive : public InteractionPotential {
  public:
   double alpha = 2.0;
   double beta = 1.5;
-  double potential(double r) { return pow(r, alpha) / alpha - pow(r, beta) / beta; }
+  double potential(double r) { return pow(r, alpha) / alpha - pow(r, beta) / beta - (1 / alpha - 1 / beta); }
   double force(double r) { return pow(r, alpha - 1.0) - pow(r, beta - 1.0); }
 };
 
@@ -55,7 +55,7 @@ class MixedPotential : public InteractionPotential {
 };
 
 class AbsoluteValuePotential : public InteractionPotential {
-  double potential(double r) { return -abs(1.0 - r); }
+  double potential(double r) { return abs(1.0 - r); }
   // double force(double r) { return -sign(1.0 - 2 * r) + 0.5 * sign(2.0 - 2 * r) - sign(3.0 - 2 * r); }
   double force(double r) { return -sign(1.0 - r); }
 };

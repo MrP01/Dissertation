@@ -99,7 +99,7 @@ double ParticleBox::getLJPotential() {
       double r = distanceBetween(i, j);
       if (r < LJ_CUTOFF_DISTANCE)
         r = LJ_CUTOFF_DISTANCE;
-      energy -= interaction->potential(p.boxScaling * r);
+      energy += interaction->potential(p.boxScaling * r);
       // std::cout << r << ", " << energy << std::endl;
     }
   }

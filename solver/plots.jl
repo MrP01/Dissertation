@@ -430,7 +430,7 @@ function plotSimulationQuiver(p::Params.Parameters=Params.known2dParams; iterati
   f = (p.friction.selfPropulsion > 0) ? 20 : 2
   fig = Figure()
   ax = Axis(fig[1, 1], xlabel=L"x", ylabel=L"y", title=L"\text{Simulation Output with}~%$(p2tex(p))")
-  scatter!(ax, posidf[!, 1], posidf[!, 2], color=dissertationColours[1])
+  scatter!(ax, posidf[!, 1], posidf[!, 2], color=dissertationColours[1], markersize=16)
   if withQuiver
     quiver!(ax, posidf[!, 1], posidf[!, 2], velodf[!, 1] / f, velodf[!, 2] / f,
       color=velodf[!, 1], linewidth=2)
