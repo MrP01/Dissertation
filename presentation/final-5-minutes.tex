@@ -7,7 +7,6 @@
 \usepackage[toc, acronym, style=long3col, indexonlyfirst=true, nogroupskip=true]{glossaries}
 \usepackage{csquotes}
 \usepackage{fontawesome}
-\usepackage{cleveref}
 \addbibresource{../literature/sources.bib}
 \renewcommand{\figureloc}{../figures}  % for tikzfigures
 \graphicspath{{../figures}}  % for all other figures
@@ -27,6 +26,7 @@
 \setbeamercolor{block title}{fg=white, bg=lighterOxfordBlue} % or head
 \setbeamercolor{block body}{parent=normal text, bg=lightgrey} % or body, foot
 \setbeamercolor{alerted text}{fg=wongGreen}
+\renewcommand{\operatorcolor}{lighterOxfordBlue}
 
 % Also don't forget your slides for the first part of the viva when the examiners will ask you to describe in about 5 minutes the main aims and results of your dissertation. They recommend the slides might summarise: the problem formulation (the problem you are trying to solve and its mathematical formulation); analysis and results; any original contributions you have made; challenges faced and future work.
 
@@ -39,7 +39,7 @@
     \begin{figure}[H]
       \centering
       \includegraphics[width=0.56\linewidth]{results/morse-2d/simulation-quiver.pdf}
-      \caption[Quiver plot of 120 particles in 2D interacting through the Morse potential]{$N_p = 120$ particles in $d = 2$ dimensions. Morse potential, friction and self-propulsion terms are as given in \cite{2006-self-propelled}, this figure reproduces their results.}
+      \caption[Quiver plot of 120 particles in 2D interacting through the Morse potential]{$N_p = 120$ particles in $d = 2$ dimensions. Morse potential, friction and self-propulsion parameters are as given in \cite{2006-self-propelled}, reproducing their results.}
       \label{fig:simulation-quiver-illustration}
     \end{figure}
   \end{frame}
@@ -48,7 +48,7 @@
     \begin{definition}[Equilibrium Measure]
       For a given pairwise interaction potential $K: \R \to \R$, the equilibrium measure $\hat{\rho}: D \to \R$ with $D \subseteq \R^d$ is a measure chosen such that
       $$U_K[\hat{\rho}] := \frac{1}{2} \iint K\left(\norm{\hatvec{x} - \hatvec{y}}\right) \,\dd\hat{\rho}(\hatvec{x})\,\dd\hat{\rho}(\hatvec{y})\,,$$
-      is minimised, where $\dd\hat{\rho} = \hat{\rho}(\hatvec{x})\dd\hatvec{x}$.
+      is minimised, where $\dd\hat{\rho} = \hat{\rho}(\hatvec{x})\dd\hatvec{x}$ \parencite{2021-arbitrary-dimensions}.
     \end{definition}
     \pause
 
@@ -66,10 +66,10 @@
 
     We then consider a \alert{spectral method} with the following ansatz
     \begin{equation}
-      \rho[\vec{\rho}](\vec{x}) = \rho(\vec{x}) := \left(1-\norm{\vec{x}}^{2}\right)^{m - \frac{\alpha + d}{2}} \sum_{k=0}^{N-1} \rho_k P_{k}^{\left(m - \frac{\alpha + d}{2},\frac{d-2}{2}\right)}(2 \norm{\vec{x}}^{2}-1)\,,
+      \rho(\vec{x}) := \left(1-\norm{\vec{x}}^{2}\right)^{m - \frac{\alpha + d}{2}} \sum_{k=0}^{N-1} \rho_k P_{k}^{\left(m - \frac{\alpha + d}{2},\frac{d-2}{2}\right)}\left(2 \norm{\vec{x}}^{2}-1\right)\,,
       \label{eq:ansatz}
     \end{equation}
-    with $P_k^{(a, b)}$ and $\rho_k$ the $k$th Jacobi polynomial and its corresponding coefficient.
+    with $P_k^{(a, b)}$ the $k$th Jacobi polynomial and $\rho_k$ its corresponding coefficient.
   \end{frame}
 
   \begin{frame}{Spectral Method Operator}
@@ -78,7 +78,7 @@
       $$\mathcal{Q}^\beta[\rho](\vec{x}) := \int \norm{\vec{x}-\vec{y}}^\beta \,\dd\rho(\vec{y}) = \int_{\supp(\rho)} \norm{\vec{x}-\vec{y}}^\beta \rho(\vec{y}) \,\dd\vec{y}\,.$$
     \end{definition}
 
-    Applied to the ansatz given in \Cref{eq:ansatz}, we can evaluate the appearing integrals \alert{explicitly}.
+    Applied to the ansatz given in \eqref{eq:ansatz}, we can evaluate the appearing integrals \alert{explicitly}.
     For the attractive-repulsive interaction kernel $K_{\alpha,\beta}(r) = \frac{r^\alpha}{\alpha} - \frac{r^\beta}{\beta}$, the matrix representation of the operator becomes
     \begin{equation}
       Q_{\alpha, \beta} := \frac{R^{\alpha+d}}{\alpha} Q^\alpha - \frac{R^{\beta+d}}{\beta} Q^\beta\,.
@@ -94,12 +94,12 @@
       \label{fig:attractive-repulsive}
     \end{figure}
   \end{frame}
-  \begin{frame}{Analysis: Comparison with Analytic Solution}
-    \begin{columns}
+  \begin{frame}{Analysis: Comparison with Analytical Solution}
+    \begin{columns}[t]
       \begin{column}{0.6\textwidth}
         \begin{figure}[H]
           \centering
-          \includegraphics[width=\linewidth, trim={0 6.3cm 0 0}, clip]{results/known-analytic/analytic-solution.pdf}
+          \includegraphics[width=\linewidth, trim={0 6.35cm 0 0}, clip]{results/known-analytic/analytic-solution.pdf}
           \caption[Comparison with analytical solutions and error]{
             The analytical solution $\rho(x)$ compared to the (spectral method) solutions $\rho_N(x)$ of different order.
           }
@@ -107,22 +107,15 @@
         \end{figure}
       \end{column}
       \begin{column}{0.4\textwidth}
+        \vspace{1.5mm}
         \begin{figure}[H]
           \centering
           \includegraphics[width=\linewidth]{results/known-analytic/simulation-quiver.pdf}
           \caption[Comparison with analytical solutions and error]{Simulation output with $N_p = 150$ particles using the same attractive-repulsive kernel $K_{\alpha,\beta}(r)$.}
         \end{figure}
+        % $$K_{\alpha,\beta}(r) = \frac{r^{2.0}}{2.0} - \frac{r^{1.5}}{1.5}\,.$$
       \end{column}
     \end{columns}
-  \end{frame}
-  \begin{frame}{Results: Simulation and Solver Comparison}
-    \begin{figure}[H]
-      \centering
-      \includegraphics[width=0.6\linewidth]{results/morse/simulation-solver-comparison.pdf}
-      \caption[Comparison of histogram and spectral method solution]{Comparison of the radial distance histogram from the simulation output with the $G = 8$ general kernel solver's equilibrium measure $\rho_{12}(r)$ at $R$ given by the simulator.}
-      \label{fig:simulation-solver-comparison}
-      % for now
-    \end{figure}
   \end{frame}
 
   \begin{frame}{Original Contribution: General Kernel Spectral Method}
@@ -136,26 +129,42 @@
     \begin{equation*}
       \mathcal{Q}_G[\hat{\rho}](\hatvec{x})
       = \int_{B_R(\vec{0})} \sum_{l=0}^{G-1} g_l \norm{\hatvec{x}-\hatvec{y}}^l \hat{\rho}(\hatvec{y}) \,\dd\hatvec{y}
-      = \sum_{l=0}^{G-1} g_l R^{l+d} \mathcal{Q}^l[\rho](\vec{x})\,.
+      = \sum_{l=0}^{G-1} g_l R^{l+d} \mathcal{Q}^l[\hat{\rho}](\vec{x})\,.
     \end{equation*}
+  \end{frame}
+
+  \begin{frame}{Results: Simulation and Solver Comparison}
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.58\linewidth]{results/morse/simulation-solver-comparison.pdf}
+      \caption[Comparison of histogram and spectral method solution]{Comparison of simulation output with the $G = 8$ general kernel solver's equilibrium measure $\rho_{12}(r)$ at $R$ given by the simulator.}
+      \label{fig:simulation-solver-comparison}
+      % for now
+    \end{figure}
   \end{frame}
 
   \begin{frame}{Contributions, Challenges Faced \& Future Work}
     Contributions:
     \begin{itemize}
-      \item An original implementation.
+      \tightlist
+      \item Original implementation of simulator (+\glstext{gui}, in C++) and solver (in Julia).
       \item General kernel spectral method + implementation.
-      \item Lemma for initial guess of $R$.
+      \item Lemma for an initial guess of $R$.
     \end{itemize}
 
     Challenges:
     \begin{itemize}
-      \item Synchronisation of simulator and solver.
+      \tightlist
+      \item Proving Theorem 4.2, the power law integral of the Jacobi polynomials.
+      \item Synchronisation of simulation and solver (implementations).
+      \item Correct parameter choices for the general kernel spectral method.
     \end{itemize}
 
     Future Work:
     \begin{itemize}
+      \tightlist
       \item Describing phase-space distributions in a self-propulsion setup.
+      \item Modelling (constrained) boundaries and boundary conditions.
     \end{itemize}
   \end{frame}
 
@@ -166,5 +175,6 @@
   \begin{frame}[allowframebreaks]
     \frametitle{Bibliography}
     \printbibliography[heading=bibnumbered]
+    \printnoidxglossary[type=acronym, title={Acronyms}]
   \end{frame}
 \end{document}
