@@ -41,7 +41,7 @@ class MorsePotential : public InteractionPotential {
   double l_att = 2.0;
   double C_rep = 1.0;
   double l_rep = 0.5;
-  double potential(double r) { return C_rep * exp(-r / l_rep) - C_att * exp(-r / l_att); };
+  double potential(double r) { return -(C_rep * exp(-r / l_rep) - C_att * exp(-r / l_att)); };
   double force(double r) { return C_att / l_att * exp(-r / l_att) - C_rep / l_rep * exp(-r / l_rep); };
 };
 
