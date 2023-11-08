@@ -58,8 +58,8 @@
   \begin{frame}{Project Motivation and Goal}
     \vspace{0.4cm}
     \begin{itemize}
-      \item Interactions through (power law) attraction-repulsion potentials\footnote{If the repulsive term is stronger (so $\beta > \alpha$), there is no equilibium distribution as particles simply continue repelling each other out to infinity.}
-            $$K(r) = \frac{r^\alpha}{\alpha} - \frac{r^\beta}{\beta}\quad \text{ with parameters } \quad \alpha, \beta \in \R \backslash \{0\}\,.$$
+      \item Model interactions through (power law) attraction-repulsion potentials\footnote{If the repulsive term is stronger (so $\beta > \alpha$), there is no equilibium distribution as particles simply continue repelling each other out to infinity.}
+            $$\text{for example,}~K(r) = \frac{r^\alpha}{\alpha} - \frac{r^\beta}{\beta}\quad \text{ with parameters } \quad \alpha, \beta \in \R \backslash \{0\}\,.$$
       \item Each particle $i=1, ..., N$ at position $\vec{x_i} \in \R^d$ and time $t \in \R^+$ follows
             $$\frac{\dd^2 \vec{x_i}}{\ddt^2} = f\left(\norm{\frac{\dd \vec{x_i}}{\ddt}}\right) \frac{\dd\vec{x_i}}{\ddt} - \frac{1}{N} \sum_{j=1, i\neq j}^{N} \nabla K\left(\norm{\vec{x_i} - \vec{x_j}}\right)\,,$$
             for reference see, for example, \parencite{2020-power-law-kernels, 2021-arbitrary-dimensions}.
@@ -67,6 +67,24 @@
     \end{itemize}
   \end{frame}
   }
+
+  \begin{frame}{Various Interaction Potentials}
+    \begin{figure}[H]
+      \centering
+      \scalebox{0.8}{\inputtikz{comparing-potentials}}
+      \caption[Comparing potentials]{Comparison of different interaction potentials.}
+      \label{fig:comparing-potentials}
+    \end{figure}
+  \end{frame}
+
+  \begin{frame}{Connection to Swarming Behaviour}
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.56\linewidth]{results/morse-2d/simulation-quiver.pdf}
+      \caption[Quiver plot of 120 particles in 2D interacting through the Morse potential]{$N_p = 120$ particles in $d = 2$ dimensions. Morse potential, friction and self-propulsion parameters are as given in \cite{2006-self-propelled}, reproducing their results.}
+      \label{fig:simulation-quiver-illustration}
+    \end{figure}
+  \end{frame}
 
   \begin{frame}{Leapfrog Integration}
     Every particle $i$ at position $\vec{x_i} \in \R^d$ with velocity $\vec{v_i} \in \R^d$ is updated using
@@ -98,18 +116,32 @@
 
   \begin{frame}{An Integral Equation}
     \vspace{0.4cm}
-    The total potential energy of an $N$-particle system is then given by
-    $$E = \sum_{i=1}^{N} \sum_{j=1, j \neq i}^{N} K\left(\norm{\vec{x_i} - \vec{x_j}}\right)\,,$$
-    which, in the continuous limit as $N \goesto \infty$, becomes
+    The total potential energy of an $N_p$-particle system is then given by
+    $$E = \sum_{i=1}^{N_p} \sum_{j=1, j \neq i}^{N_p} K\left(\norm{\vec{x_i} - \vec{x_j}}\right)\,,$$
+    which, in the continuous limit as $N_p \goesto \infty$, becomes
     $$E = \frac{1}{2} \iint K\left(\norm{\vec{x} - \vec{y}}\right) \,\dd\rho(\vec{x})\,\dd\rho(\vec{y})\,,$$
     where $\dd\rho = \rho(\vec{x})\dd\vec{x}$ is a measure (the equilibrium distribution) chosen such that
     $$M = \int \dd\rho = \int_{\supp(\rho)} \rho(\vec{x}) \,\dd\vec{x} = 1\,.$$
   \end{frame}
 
+  \begin{frame}{Equilibrium Measures: A Definition}
+    \begin{definition}[Equilibrium Measure]
+      For a given pairwise interaction potential $K: \R \to \R$, the equilibrium measure $\hat{\rho}: D \to \R$ with $D \subseteq \R^d$ is a measure chosen such that
+      $$U_K[\hat{\rho}] := \frac{1}{2} \iint K\left(\norm{\hatvec{x} - \hatvec{y}}\right) \,\dd\hat{\rho}(\hatvec{x})\,\dd\hat{\rho}(\hatvec{y})\,,$$
+      is minimised, where $\dd\hat{\rho} = \hat{\rho}(\hatvec{x})\dd\hatvec{x}$ \parencite{2021-arbitrary-dimensions}.
+    \end{definition}
+    \pause
+
+    For example: in a two-particle system, $\hat{\rho}(\hatvec{x}) = \delta(\hatvec{x}-\hatvec{p_1}) + \delta(\hatvec{x}-\hatvec{p_2})$ to see that
+    $U_K[\hat{\rho}] = K(0) + K(\norm{\hatvec{p_1} - \hatvec{p_2}})\,,$
+    and hence, the total energy becomes
+    $$E = \frac{m}{2} \left(\norm{\hatvec{v_1}}^2 + \norm{\hatvec{v_2}}^2\right) + K(0) + K(\norm{\hatvec{p_1} - \hatvec{p_2}})\,.$$
+  \end{frame}
+
   \begin{frame}{Spectral Methods}
     \begin{itemize}
-      \item In order to find $\rho(\hatvec{x})$, we consider the following ansatz
-            $$\rho(\vec{x}) = \sum_{n=0}^{\infty} c_n P_n^{(a,b)}(\vec{x})\,,\quad c_n \in \R\,,$$
+      \item In order to find $\rho(\vec{x})$, we consider an ansatz of the following form:
+            $$\rho(\vec{x}) = \sum_{n=0}^{\infty} c_n \varphi_n(\vec{x})\,,\quad c_n \in \R\,,$$
             with which we construct a spectral method for the numerical solution of the above integral equation.
       \item Minimization routine of $E$ over coefficients in $\rho$, as a subroutine of outer minimisation over the bounds of the box (simpler case: use $[-r, r]$, $r \in \R^+$).
       \item By construction, we find that we do not need an iterative approach for the inner optimisation routine.
@@ -133,36 +165,13 @@
     \end{itemize}
   \end{frame}
 
-  \begin{frame}{Connection to Swarming Behaviour}
-    \begin{figure}[H]
-      \centering
-      \includegraphics[width=0.56\linewidth]{results/morse-2d/simulation-quiver.pdf}
-      \caption[Quiver plot of 120 particles in 2D interacting through the Morse potential]{$N_p = 120$ particles in $d = 2$ dimensions. Morse potential, friction and self-propulsion parameters are as given in \cite{2006-self-propelled}, reproducing their results.}
-      \label{fig:simulation-quiver-illustration}
-    \end{figure}
-  \end{frame}
-
-  \begin{frame}{Problem Setting}
-    \begin{definition}[Equilibrium Measure]
-      For a given pairwise interaction potential $K: \R \to \R$, the equilibrium measure $\hat{\rho}: D \to \R$ with $D \subseteq \R^d$ is a measure chosen such that
-      $$U_K[\hat{\rho}] := \frac{1}{2} \iint K\left(\norm{\hatvec{x} - \hatvec{y}}\right) \,\dd\hat{\rho}(\hatvec{x})\,\dd\hat{\rho}(\hatvec{y})\,,$$
-      is minimised, where $\dd\hat{\rho} = \hat{\rho}(\hatvec{x})\dd\hatvec{x}$ \parencite{2021-arbitrary-dimensions}.
-    \end{definition}
-    \pause
-
-    For example: in a two-particle system, $\hat{\rho}(\hatvec{x}) = \delta(\hatvec{x}-\hatvec{p_1}) + \delta(\hatvec{x}-\hatvec{p_2})$ to see that
-    $U_K[\hat{\rho}] = K(0) + K(\norm{\hatvec{p_1} - \hatvec{p_2}})\,,$
-    and hence, the total energy becomes
-    $$E = \frac{m}{2} \left(\norm{\hatvec{v_1}}^2 + \norm{\hatvec{v_2}}^2\right) + K(0) + K(\norm{\hatvec{p_1} - \hatvec{p_2}})\,.$$
-  \end{frame}
-
-  \begin{frame}{Problem Formulation}
+  \begin{frame}{Summary of the Above / Problem Formulation}
     \begin{definition}[Particle Density Distribution Problem]
       Given an interaction kernel $K: \R^+ \to \R$, the density distribution problem is to find the equilibrium measure $\hat{\rho}: B_R(\vec{0}) \to \R$ of mass $M = 1$ on a $d$-dimensional ball of radius $R \in \R^+$ that minimises the total potential $U_K[\hat{\rho}]$.
     \end{definition}
     \pause
 
-    We then consider a \alert{spectral method} with the following ansatz
+    As mentioned above, we will consider a \alert{spectral method} to solve this problem. More precisely, using the following ansatz:
     \begin{equation}
       \rho(\vec{x}) := \left(1-\norm{\vec{x}}^{2}\right)^{m - \frac{\alpha + d}{2}} \sum_{k=0}^{N-1} \rho_k P_{k}^{\left(m - \frac{\alpha + d}{2},\frac{d-2}{2}\right)}\left(2 \norm{\vec{x}}^{2}-1\right)\,,
       \label{eq:ansatz}
@@ -184,6 +193,26 @@
     \end{equation}
   \end{frame}
 
+  \begin{frame}{Evaluation of the Integral}
+    \begin{theorem}[Power Law Potential of the $n$th Jacobi Polynomial]
+      On the $d$-dimensional unit ball $B_1(\vec{0})$ the power law potential, with power $\alpha \in(-d,2+2m-d)$, $m\in\mathbb{N}_0$ and $\beta>-d$, of the $n$th weighted radial Jacobi polynomial $(1-\norm{\vec{y}}^2)^{m-\frac{\alpha+d}{2}}P_n^{\left(m-\frac{\alpha+d}{2},\frac{d-2}{2}\right)}\left(\jacobiarg{y}\right)$ reduces to a Gaussian hypergeometric function as follows:
+      \begin{align*}
+        I_{m,n}^{\alpha,\beta}(\vec{x}) & = \int_{B_1(\vec{0})} \norm{\vec{x}-\vec{y}}^\beta \left(1-\norm{\vec{y}}^2\right)^{m-\frac{\alpha+d}{2}} P_{n}^{\left(m-\frac{\alpha+d}{2},\frac{d-2}{2}\right)}\left(\jacobiarg{y}\right) \dd\vec{y}                                                                                                                                                                                                             \\
+                                        & = \tfrac{\pi ^{d/2} \Gamma \left(1+\frac{\beta}{2}\right) \Gamma \left(\frac{\beta+d}{2}\right) \Gamma \left(m+n-\frac{\alpha+d}{2}+1\right)}{\Gamma \left(\frac{d}{2}\right) \Gamma (n+1) \Gamma \left(\frac{\beta}{2}-n+1\right) \Gamma \left(\frac{\beta-\alpha}{2}+m+n+1\right)}{}_2F_1\left(\begin{matrix}n-\frac{\beta}{2}, -m-n+\frac{\alpha-\beta}{2} \\\frac{d}{2}\end{matrix};\norm{\vec{x}}^2\right)\,.
+      \end{align*}
+    \end{theorem}
+  \end{frame}
+
+  \begin{frame}{Normalisation of Solutions}
+    \begin{lemma}[Mass of the Solution]
+      For a given solution $\rho: B_1(\vec{0}) \to \R$, its \textit{mass} $M \in \R$ can be evaluated explicitly, provided the appropriate ansatz, an expansion of weighted radial Jacobi polynomials with coefficients $\rho_k$. The \textit{mass} is given by
+      \begin{align*}
+        M[\rho[\vec{\rho}]] = \int_{\supp(\rho)} \rho(y) \,\ddy = \frac{\pi^{{d/2}}\Gamma (a+1)}{\Gamma \left(a+{d/2}+1\right)}\, \rho_0\,,
+      \end{align*}
+      so solely depending on the first coefficient $\rho_0$.
+    \end{lemma}
+  \end{frame}
+
   \begin{frame}{Analysis: The Attractive-Repulsive Operator}
     \begin{figure}[H]
       \centering
@@ -192,6 +221,7 @@
       \label{fig:attractive-repulsive}
     \end{figure}
   \end{frame}
+
   \begin{frame}{Analysis: Comparison with Analytical Solution}
     \begin{columns}[t]
       \begin{column}{0.6\textwidth}
@@ -216,7 +246,7 @@
     \end{columns}
   \end{frame}
 
-  \begin{frame}{Contribution: General Kernel Spectral Method}
+  \begin{frame}{General Kernel Spectral Method}
     We express the general kernel as a polynomial, through reprojection from the Jacobi polynomials,
     \begin{equation}
       K_G(r) = \sum_{l=0}^{G-1} g_l r^l \approx K(r)\,,\quad \vec{g} := ({g}_0, ..., {g}_{G-1})^T \in \R^G\,.
@@ -241,6 +271,24 @@
     \end{figure}
   \end{frame}
 
+  \begin{frame}{Analysis: Well-Conditionedness}
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.65\linewidth]{results/attrep/condition-number-growth.pdf}
+      \caption[Growth of the condition number]{Growth of the 2-norm condition number $\kappa_2(Q)$ of the attractive-repulsive operators $Q^{(\alpha)}$, $Q^{(\beta)}$ and $Q_{\alpha,\beta}$ for growing system size $N$.}
+      \label{fig:condition-number-growth}
+    \end{figure}
+  \end{frame}
+
+  \begin{frame}{Analysis: Tikhonov Regularisation}
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.65\linewidth]{results/morse/coefficients.pdf}
+      \caption[Absolute value of the coefficients with and without regularisation]{Absolute value of the solution coefficients $\rho_k$ with and without Tikhonov regularisation after the solution of a $200 \times 200$ linear system.}
+      \label{fig:coefficients}
+    \end{figure}
+  \end{frame}
+
   \begin{frame}{Contributions, Challenges Faced \& Future Work}
     Contributions:
     \begin{itemize}
@@ -253,7 +301,7 @@
     Challenges:
     \begin{itemize}
       \tightlist
-      \item Proving Theorem 4.2, the power law integral of the Jacobi polynomials.
+      \item Proving Theorem 4.3, the power law integral of the Jacobi polynomials.
       \item Synchronisation of simulation and solver (implementations).
       \item Correct parameter choices for the general kernel spectral method.
     \end{itemize}
