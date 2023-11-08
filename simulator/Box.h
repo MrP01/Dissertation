@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 #ifndef PARTICLES
-#define PARTICLES 120 // number of particles
+#define PARTICLES 160 // number of particles
 #endif
 
 #ifndef DIMENSION
