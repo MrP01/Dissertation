@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 #ifndef PARTICLES
-#define PARTICLES 160 // number of particles
+#define PARTICLES 120 // number of particles
 #endif
 
 #ifndef DIMENSION
@@ -61,7 +61,7 @@ class AbsoluteValuePotential : public InteractionPotential {
 };
 
 struct Parameters {
-  double tau = 40.0e-4;          // time step
+  double tau = 60.0e-4;          // time step
   double boxScaling = 1.0;       // size of the box: [-1, 1] * boxScaling
   double initWindowLength = 1.0; // 0.0 < window length <= 2.0
   double selfPropulsion = 1.6;   // "alpha" parameter in 2006-self-propelled

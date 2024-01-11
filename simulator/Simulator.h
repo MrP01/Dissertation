@@ -21,7 +21,7 @@
 #include <QtCharts/QStackedBarSeries>
 #include <QtCharts/QValueAxis>
 
-#define STEPS_PER_FRAME 6        // number of timesteps per frame
+#define STEPS_PER_FRAME 2        // number of timesteps per frame
 #define FRAMES_PER_MEASUREMENT 2 // how often we measure
 #define STEPS_PER_MEASUREMENT (STEPS_PER_FRAME * FRAMES_PER_MEASUREMENT)
 #define MEASUREMENTS_IN_ENERGY_PLOT 800
@@ -30,6 +30,10 @@ class BoxSimulator : public ParticleBox, public QMainWindow {
  private:
   QChart *particleChart = new QChart();
   QScatterSeries *particleSeries = new QScatterSeries();
+
+  QPixmap fish;
+  QPixmap loonie;
+  bool fishView = true;
 
   QChart *energyChart = new QChart();
   QLineSeries *kineticEnergySeries = new QLineSeries();
@@ -64,6 +68,8 @@ class BoxSimulator : public ParticleBox, public QMainWindow {
   void measure();
   void step();
   void timerEvent(QTimerEvent *event);
+
+  void paintEvent(QPaintEvent *event);
 
   // very important:
   void setTheme(QChart::ChartTheme theme);

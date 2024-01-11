@@ -10,6 +10,9 @@ void BoxSimulator::buildUI() {
   const QColor wongPurple = QColor(204, 121, 167);
   const QColor powderBlue = QColor(158, 179, 194);
 
+  fish = QPixmap::fromImage(QImage("simulator/fish.png"));
+  loonie = QPixmap::fromImage(QImage("simulator/loonie-small.png"));
+
   particleSeries->setColor(lighterOxfordBlue);
   kineticEnergySeries->setColor(oxfordGolden);
   LJpotentialEnergySeries->setColor(wongPurple);
@@ -129,8 +132,8 @@ void BoxSimulator::buildUI() {
   }
   updateHistograms();
 
-  connect(stepBtn, &QPushButton::clicked, [=]() { step(); });
-  connect(controlBtn, &QPushButton::clicked, [=]() {
+  connect(stepBtn, &QPushButton::clicked, [this]() { step(); });
+  connect(controlBtn, &QPushButton::clicked, [this, particleView]() {
     if (controlBtn->text() == "Start") {
       _timerId = startTimer(10);
       particleView->chart()->setAnimationOptions(QChart::NoAnimation);
@@ -148,32 +151,32 @@ void BoxSimulator::buildUI() {
       controlBtn->setText("Start");
     }
   });
-  connect(liftBtn, &QPushButton::clicked, [=]() {
+  connect(liftBtn, &QPushButton::clicked, [this]() {
     for (size_t i = 0; i < PARTICLES; i++)
       positions[i][1] += 1 / 3;
     renderParticles();
     measure();
   });
-  connect(slowDownBtn, &QPushButton::clicked, [=]() {
+  connect(slowDownBtn, &QPushButton::clicked, [this]() {
     for (size_t i = 0; i < PARTICLES; i++) {
       velocities[i][0] = pow(abs(velocities[i][0]), 0.3);
       velocities[i][1] = pow(abs(velocities[i][1]), 0.3);
     }
     measure();
   });
-  connect(bringDownBtn, &QPushButton::clicked, [=]() {
+  connect(bringDownBtn, &QPushButton::clicked, [this]() {
     for (size_t i = 0; i < PARTICLES; i++)
       if (positions[i][1] > 0.8)
         positions[i][1] = pow(abs(positions[i][1]), 0.6);
     renderParticles();
     measure();
   });
-  connect(reinitBtn, &QPushButton::clicked, [=]() {
+  connect(reinitBtn, &QPushButton::clicked, [this]() {
     initRandomly();
     renderParticles();
     measure();
   });
-  connect(exportBtn, &QPushButton::clicked, [=]() { exportToCSV(); });
+  connect(exportBtn, &QPushButton::clicked, [this]() { exportToCSV(); });
 
   QComboBox *themeBox = new QComboBox();
   themeBox->addItem("Light");
@@ -181,7 +184,7 @@ void BoxSimulator::buildUI() {
   themeBox->addItem("Cerulean Blue");
   themeBox->addItem("Brown Sand");
   themeBox->addItem("Icy Blue");
-  connect(themeBox, &QComboBox::currentIndexChanged, [=]() {
+  connect(themeBox, &QComboBox::currentIndexChanged, [this, themeBox]() {
     std::cout << themeBox->currentIndex();
     switch (themeBox->currentIndex()) {
     case 0:
@@ -223,19 +226,42 @@ void BoxSimulator::buildUI() {
   buttonLayout->addWidget(exportBtn);
   buttonLayout->addWidget(themeBox);
   mainLayout->addLayout(buttonLayout, 3, 0, 1, 2);
+  mainWidget->setVisible(!fishView);
   setCentralWidget(mainWidget);
   setWindowTitle("Particle Box Simulator");
   controlBtn->setFocus();
 
   QShortcut *closeShortcut = new QShortcut(Qt::CTRL | Qt::Key_W, this);
-  QObject::connect(closeShortcut, &QShortcut::activated, this, [=]() { close(); });
-  QObject::connect(new QShortcut(Qt::Key_S, this), &QShortcut::activated, this, [=]() { controlBtn->click(); });
+  QObject::connect(closeShortcut, &QShortcut::activated, this, [this]() { close(); });
+  QObject::connect(new QShortcut(Qt::Key_S, this), &QShortcut::activated, this, [this]() { controlBtn->click(); });
+  QObject::connect(new QShortcut(Qt::Key_F, this), &QShortcut::activated, this, [this, mainWidget]() {
+    fishView = !fishView;
+    mainWidget->setVisible(!fishView);
+  });
 }
 
 void BoxSimulator::renderParticles() {
-  particleSeries->clear();
-  for (size_t i = 0; i < PARTICLES; i++)
-    *particleSeries << QPointF(positions[i][0], DIMENSION > 1 ? positions[i][1] : 0.0);
+  if (fishView) {
+    update();
+  } else {
+    particleSeries->clear();
+    for (size_t i = 0; i < PARTICLES; i++)
+      *particleSeries << QPointF(positions[i][0], DIMENSION > 1 ? positions[i][1] : 0.0);
+  }
+}
+
+void BoxSimulator::paintEvent(QPaintEvent *event) {
+  if (fishView) {
+    auto painter = QPainter(this);
+    for (size_t i = 0; i < PARTICLES; i++) {
+      auto transform = QTransform();
+      transform.rotate(atan2(velocities[i][1], velocities[i][0]) * 180 / M_PI + 180);
+      // auto pix = (i == 0) ? loonie : fish;
+      auto pix = fish;
+      painter.drawPixmap((positions[i][0] + 1.0) * 680, ((DIMENSION > 1 ? positions[i][1] : 0.0) + 1.0) * 360,
+                         pix.transformed(transform));
+    }
+  }
 }
 
 void BoxSimulator::updateHistograms() {

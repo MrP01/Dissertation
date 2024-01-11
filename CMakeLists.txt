@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(dissertation)
 
-add_definitions("-std=c++11")
+add_definitions("-std=c++23")
 add_definitions("-O3")
 add_definitions("-g")  # gcc adds debug information (confer `man gcc`)
 set(CMAKE_CXX_STANDARD 17)
